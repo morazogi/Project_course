@@ -1,25 +1,26 @@
 package DomainLayer.Roles;
-import DomainLayer.Roles.Jobs.Job;
+
 import DomainLayer.Store;
-import ServiceLayer.JobService;
+import DomainLayer.User;
 
-import java.util.List;
-
-
-
-public class SystemManager extends RegisteredUser {
-    private String SystemManagerID;
-    private JobService jobService;
-
-
-    public SystemManager(String json) {
-        super(json);
+public class SystemManager extends User {
+    private String systemManagerID;
+    public SystemManager(String name) {
+        super(name);
+        this.systemManagerID = this.getID(); // Using the user ID as the system manager ID
     }
 
-    public SystemManager(List<Job> jobs, String name) {
-        super(jobs, name);
+    public String getSystemManagerID() {
+        return systemManagerID;
     }
-    public void closeStore(Store store){
-        jobService.closeStore(store,this);
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SystemManager: \n");
+        sb.append("User ID: ").append(this.getID()).append("\n");
+        sb.append("Name: ").append(this.getName()).append("\n");
+        sb.append("System Manager ID: ").append(this.systemManagerID).append("\n");
+        return sb.toString();
     }
 }

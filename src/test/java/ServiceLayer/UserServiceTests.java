@@ -6,22 +6,16 @@ import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingCart;
-import DomainLayer.Store;
-import infrastructureLayer.JobRepository;
 import infrastructureLayer.ProductRepository;
 import infrastructureLayer.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class ExtendedUserServiceTest {
 
@@ -33,7 +27,6 @@ class ExtendedUserServiceTest {
     private UserService userService;
     private StoreService storeService;
     private ProductService productService;
-    private JobService jobService;
     private ObjectMapper mapper = new ObjectMapper();
 
     private RegisteredUser testUser;
@@ -48,8 +41,7 @@ class ExtendedUserServiceTest {
         tokenService = new TokenService();
         productService = new ProductService(productRepo);
         storeService = new StoreService(storeRepo, productService);
-        jobService = new JobService(jobRepo, storeService);
-        userService = new UserService(userRepo, tokenService, storeService, jobService, productService);
+        userService = new UserService(userRepo, tokenService, storeService, productService);
 
         testUser = userService.signUp("yaniv", "password");
         validToken = testUser.getToken();

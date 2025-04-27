@@ -8,5 +8,4 @@ public class ProxyShipping implements IShipping{
     public void processShipping(String state, String city, String street, String homeNumber) throws Exception {
         shippingSystem.processShipping(state, city, street, homeNumber);
     }
-
 }

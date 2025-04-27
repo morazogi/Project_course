@@ -76,8 +76,8 @@ public class MockPayment implements IPayment {
         }
         String stringMonth = expirationDate.substring(0, 2);
         String stringYear = expirationDate.substring(3, 5);
-        Integer month = new Integer(stringMonth);
-        Integer year = new Integer(stringYear);
+        Integer month = Integer.parseInt(stringMonth);
+        Integer year = Integer.parseInt(stringYear);
         return 1 <= month & month <= 12 & year >= 25 & (expirationDate.charAt(2) == '/' | expirationDate.charAt(2) == '.' | expirationDate.charAt(2) == '\'');
     }
 

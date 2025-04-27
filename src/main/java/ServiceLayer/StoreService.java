@@ -24,8 +24,8 @@ public class StoreService{
         StoreRepository.addStore(store);
     }
 
-    public Store createStore(){
-        Store store = new Store();
+    public Store createStore(String founderID){
+        Store store = new Store(founderID);
         store.setId(id);
         int numericId = Integer.parseInt(id);
         numericId++;
@@ -42,4 +42,7 @@ public class StoreService{
         store.setRating(rating);
     }
 
+    public void closeStore(Store store) {
+        store.closeTheStore();
+    }
 }

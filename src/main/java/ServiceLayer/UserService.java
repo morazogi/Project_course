@@ -3,10 +3,8 @@ package ServiceLayer;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.Roles.Guest;
-import DomainLayer.Roles.Jobs.Job;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,7 +12,6 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Optional;
 import utils.ProductKeyModule;
-
 import DomainLayer.Store;
 import org.mindrot.jbcrypt.BCrypt;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,16 +22,14 @@ public class UserService {
     private final TokenService tokenService;
     private final IUserRepository userRepo;
     private final ObjectMapper mapper = new ObjectMapper();
-    private final JobService jobService;
     private final StoreService storeService;
     private final ProductService productService;
 
-    public UserService(IUserRepository repository, TokenService tokenService, StoreService storeService, JobService jobService, ProductService productService) {
+    public UserService(IUserRepository repository, TokenService tokenService, StoreService storeService, ProductService productService) {
         this.productService = productService;
         this.storeService = storeService;
         this.userRepo = repository;
         this.tokenService = tokenService;
-        this.jobService = jobService;
         this.mapper.registerModule(new ProductKeyModule());
     }
 
@@ -186,56 +181,9 @@ public class UserService {
         if (!tokenService.validateToken(token)) {
             return "Invalid or expired token";
         }
-        this.jobService.createStore(user);
+        this.storeService.createStore(user.getID());
         return null;
     }
-    public void sendAppointNewOwnerRequest(String token ,Store store, RegisteredUser oldOwner, RegisteredUser newOwner){
-        boolean accepted=false;
-        if(!this.jobService.UserIsOwnerOfStore(store.getId(), newOwner.getID())){
-            StringBuilder requestText = new StringBuilder();
-            requestText.append("hi, ").append(newOwner.getName()).append(".\n").append("I would like for you to be an owner in my store: ").append(store.getId());
-            accepted = newOwner.receivedOwnershipRequest(requestText.toString());
-        }
-        //insert listener for the users answer
-        if (accepted){
-            jobService.addNewOwnerToStore(store,oldOwner,newOwner);
-        }
-    }
-    public void sendAppointNewManagerRequest(Store store, RegisteredUser oldOwner, RegisteredUser newManager, boolean[] permissions){
-        boolean accepted=false;
-        if(!this.jobService.UserIsManagerOfStore(store.getId(), newManager.getID())){
-            StringBuilder requestText = new StringBuilder();
-            requestText.append("hi, ").append(newManager.getName()).append(".\n").append("I would like for you to be a manager at my store: ").append(store.getId());
-            accepted = newManager.receivedManagingRequest(requestText.toString());
-        }
-        //insert listener for the users answer
-        if (accepted){
-            jobService.addNewManagerToStore(store,oldOwner,newManager,permissions);
-        }
-    }
-
-    public void fireFromMyStore(Store store, RegisteredUser superior, RegisteredUser subordinate) {
-        jobService.fireFromMyStore(store,superior,subordinate);
-    }
-    public void changeManagerPermissions(Store store, RegisteredUser owner, RegisteredUser Manager,boolean[] permissions){
-        jobService.changeManagerPermissions(store, owner, Manager, permissions);
-    }
-    public void closeStore(Store store, RegisteredUser founder){
-        jobService.closeStore(store,founder);
-    }
-    public void openStore(Store store, RegisteredUser founder){
-        jobService.openStore(store,founder);
-    }
-    public String getInfoJobsInStore(Store store, RegisteredUser owner){
-        return jobService.getInfoJobsInStore(store,owner);
-    }
-    public String getInfoOrdersInStore(Store store, RegisteredUser owner){
-        return jobService.getInfoOrdersInStore(store,owner);
-    }
-    public void respondToBuyer(Store store, RegisteredUser owner, RegisteredUser customer,String query){
-        customer.acceptQueryResponse(jobService.respondToBuyer(store,owner,query));
-    }
-
     // public String addToCart(String token,RegisteredUser u , Product product, int quantity) {
     //     if (!tokenService.validateToken(token)) {
     //         throw new RuntimeException("Invalid or expired token");

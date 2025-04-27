@@ -16,7 +16,7 @@ public class MockShipping implements IShipping {
             throw new Exception("Empty street");
         }
         try {
-            Integer intHomeNumber = new Integer(homeNumber);
+            Integer intHomeNumber = Integer.valueOf(homeNumber);
             if(intHomeNumber < 1) {
                 throw new Exception("negative home number");
             }
