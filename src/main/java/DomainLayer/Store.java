@@ -312,6 +312,15 @@ public class Store {
             subordinates.add(owner.getID());
         }
     }
+
+    // Helper method to get all owners of a store by ID
+    public List<String> getOwnerIds() {
+        List<String> ownerIds = new ArrayList<>();
+        for (Owner owner : owners) {
+            ownerIds.add(owner.getID());
+        }
+        return ownerIds;
+    }
     public void removeOwner(Owner owner) {
         owners.remove(owner);
 
@@ -436,6 +445,27 @@ public class Store {
 
         // Remove from relationship data structures
         managerToSuperiorOwner.remove(manager.getID());
+    }
+
+    // Helper method to get all managers of a store by ID
+    public List<String> getManagerIds() {
+        List<String> managerIds = new ArrayList<>();
+        for (Manager manager : managers) {
+            managerIds.add(manager.getID());
+        }
+        return managerIds;
+    }
+
+    // Helper method to get all managers appointed by a specific owner
+    public List<String> getManagerIdsAppointedBy(String ownerId) {
+        List<String> managerIds = new ArrayList<>();
+        for (Manager manager : managers) {
+            String superiorId = managerToSuperiorOwner.get(manager.getID());
+            if (superiorId != null && superiorId.equals(ownerId)) {
+                managerIds.add(manager.getID());
+            }
+        }
+        return managerIds;
     }
     public List<Manager> getManagers() {
         return managers;

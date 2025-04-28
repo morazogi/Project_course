@@ -7,30 +7,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StoreRepository implements IStoreRepository {
-    private Map<Store, String> Stores = new HashMap<>();
+    // Changed to Map<String, Store> for more efficient lookups by ID
+    private Map<String, Store> stores = new HashMap<>();
 
     public void addStore(Store store) {
-        for (Store existingStore : Stores.keySet()) {
-            if (existingStore.getId().equals(store.getId())) {
-                return;
-            }
+        // Simplified check since we're using store ID as the key
+        if (!stores.containsKey(store.getId())) {
+            stores.put(store.getId(), store);
         }
-        Stores.put(store, store.getId());
     }
-
 
     public void removeStore(Store store) {
-        Store storeToRemove = null;
-        for (Store existingStore : Stores.keySet()) {
-            if (existingStore.getId().equals(store.getId())) {
-                storeToRemove = existingStore;
-                break;
-            }
-        }
-
-        if (storeToRemove != null) {
-            Stores.remove(storeToRemove);
-        }
+        // Simplified removal since we're using store ID as the key
+        stores.remove(store.getId());
     }
 
+    @Override
+    public Store getStoreById(String storeId) {
+        return stores.get(storeId);
+    }
 }

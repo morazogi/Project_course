@@ -1,20 +1,40 @@
 package DomainLayer.Roles;
 
 import DomainLayer.Store;
+import DomainLayer.IStoreRepository;
 
 import java.util.HashMap;
 
 public class Manager extends RegisteredUser {
-    private Store store;
+    private String storeId;
     private HashMap<String, Boolean> permissions;
+    private static IStoreRepository storeRepository;
+
+    // Static method to set the store repository
+    public static void setStoreRepository(IStoreRepository repository) {
+        storeRepository = repository;
+    }
 
     public Manager(String name, Store store, Owner superior, boolean[] permissions) {
         super(name);
-        this.store = store;
+        this.storeId = store.getId();
         this.permissions = new HashMap<>();
         initializePermissions(permissions);
         // Register with store
         store.addManager(this, superior);
+    }
+
+    // Constructor with storeId instead of Store
+    public Manager(String name, String storeId, Owner superior, boolean[] permissions) {
+        super(name);
+        this.storeId = storeId;
+        this.permissions = new HashMap<>();
+        initializePermissions(permissions);
+        // Register with store
+        Store store = getStore();
+        if (store != null) {
+            store.addManager(this, superior);
+        }
     }
 
     private void initializePermissions(boolean[] permissions) {
@@ -26,10 +46,21 @@ public class Manager extends RegisteredUser {
     }
 
     public Store getStore() {
-        return store;
+        if (storeRepository == null) {
+            return null;
+        }
+        return storeRepository.getStoreById(storeId);
+    }
+
+    public String getStoreId() {
+        return storeId;
     }
 
     public Owner getSuperior() {
+        Store store = getStore();
+        if (store == null) {
+            return null;
+        }
         return store.getManagerSuperiorOwner(this.getID());
     }
 
@@ -43,7 +74,10 @@ public class Manager extends RegisteredUser {
 
     public void addNewProduct(String name, int quantity) {
         if (hasPermission("addNewProduct")) {
-            store.addNewProduct(name, quantity);
+            Store store = getStore();
+            if (store != null) {
+                store.addNewProduct(name, quantity);
+            }
         } else {
             sendErrorMessage("you do not have the right permissions for this action\n");
         }
@@ -51,7 +85,10 @@ public class Manager extends RegisteredUser {
 
     public void changeProductQuantity(String productID, int quantity) {
         if (hasPermission("changeProductQuantity")) {
-            store.changeProductQuantity(productID, quantity);
+            Store store = getStore();
+            if (store != null) {
+                store.changeProductQuantity(productID, quantity);
+            }
         } else {
             sendErrorMessage("you do not have the right permissions for this action\n");
         }
@@ -59,7 +96,10 @@ public class Manager extends RegisteredUser {
 
     public void removeProductFromInventory(String productID) {
         if (hasPermission("removeProductFromInventory")) {
-            store.removeProduct(productID);
+            Store store = getStore();
+            if (store != null) {
+                store.removeProduct(productID);
+            }
         } else {
             sendErrorMessage("you do not have the right permissions for this action\n");
         }

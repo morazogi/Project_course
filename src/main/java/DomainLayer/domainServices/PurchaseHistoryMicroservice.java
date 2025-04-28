@@ -1,4 +1,4 @@
-package DomainLayer.MicroServices;
+package DomainLayer.domainServices;
 
 import java.util.List;
 import java.util.Map;

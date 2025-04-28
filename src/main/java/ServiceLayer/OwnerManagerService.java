@@ -1,6 +1,6 @@
 package ServiceLayer;
 
-import DomainLayer.MicroServices.*;
+import DomainLayer.domainServices.*;
 
 
 import java.util.List;
