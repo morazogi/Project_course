@@ -306,4 +306,12 @@ public class Store {
         //returns an order history
         return "";
     }
+
+    public void close() {
+        openNow = false;
+    }
+
+    public void setProductService(ProductService mockProductService) {
+        productService=mockProductService;
+    }
 }

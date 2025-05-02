@@ -1,136 +1,119 @@
-// package DomainLayer;
+package DomainLayer;
 
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-// import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-// import static org.junit.jupiter.api.Assertions.*;
-// import static org.mockito.Mockito.*;
+class ShoppingCartTest {
 
-// class ShoppingCartTest {
+    private Store store;
+    private ShoppingCart shoppingCart;
+    private Product apple;
+    private Product banana;
 
-//     private Store store;
-//     private ShoppingCart shoppingCart;
+    @BeforeEach
+    void setUp() {
+        store = new Store();
+        store.setId("123"); // ✔️ sets the ID manually
+        store.setRating(5); // optional, if you need a rating
 
-//     @BeforeEach
-//     void setUp() {
-//         store = new Store();
-//         shoppingCart = new ShoppingCart("1");
-//     }
+        shoppingCart = new ShoppingCart("user1");
 
-//     @Test
-//     void addNewProductInNewStore_Successful() {
-//         Product product = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
+        apple = new Product("1", "123", "Apple", "Fresh red apple", 250, 10, 4.7);
+        banana = new Product("2", "123", "Banana", "Organic banana", 175, 20, 4.5);
 
-//         shoppingCart.addProduct(store, product);
+    }
 
-//         assertTrue(shoppingCart.getShoppingBags().size() == 1 & shoppingCart.getShoppingBags().get(0).getProducts().get(product) == 1);
-//     }
+    @Test
+    void testAddNewProductToNewStore() {
+        shoppingCart.addProduct(store, apple);
 
-//     @Test
-//     void addNewProductInExistingStore_Successful() {
-//         Product product1 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         Product product2 = new Product("1", "9", "bgdfbf", "bdfgbfgds", 321, 3);
+        assertEquals(1, shoppingCart.getShoppingBags().size());
+        assertEquals(1, shoppingCart.getShoppingBags().get(0).getProducts().get(apple));
+    }
 
-//         shoppingCart.addProduct(store, product1);
-//         shoppingCart.addProduct(store, product2);
+    @Test
+    void testAddSameProductTwiceIncrementsQuantity() {
+        shoppingCart.addProduct(store, apple);
+        shoppingCart.addProduct(store, apple);
 
-//         assertTrue(shoppingCart.getShoppingBags().size() == 1 & shoppingCart.getShoppingBags().get(0).getProducts().size() == 2);
-//     }
+        assertEquals(2, shoppingCart.getShoppingBags().get(0).getProducts().get(apple));
+    }
 
+    @Test
+    void testAddTwoDifferentProductsToSameStore() {
+        shoppingCart.addProduct(store, apple);
+        shoppingCart.addProduct(store, banana);
 
-//     @Test
-//     void addExistingProduct_Successful() {
-//         Product product = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
+        assertEquals(2, shoppingCart.getShoppingBags().get(0).getProducts().size());
+    }
 
-//         shoppingCart.addProduct(store, product);
-//         shoppingCart.addProduct(store, product);
+    @Test
+    void testRemoveProductDecreasesQuantityOrRemovesProduct() {
+        shoppingCart.addProduct(store, apple);
+        shoppingCart.addProduct(store, apple);
 
-//         assertTrue(shoppingCart.getShoppingBags().size() == 1 & shoppingCart.getShoppingBags().get(0).getProducts().get(product) == 2);
-//     }
+        shoppingCart.removeProduct(store, apple);
 
-//     @Test
-//     void removeExistingProductLastInBag_Successful() {
-//         Product product = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         store.increaseProduct(product, 3);
-//         shoppingCart.addProduct(store, product);
-//         shoppingCart.removeProduct(store, product);
+        assertEquals(1, shoppingCart.getShoppingBags().get(0).getProducts().get(apple));
+    }
 
-//         assertEquals(0, shoppingCart.getShoppingBags().size());
-//     }
+    @Test
+    void testRemoveLastProductRemovesBag() {
+        shoppingCart.addProduct(store, apple);
+        shoppingCart.removeProduct(store, apple);
 
-//     @Test
-//     void removeExistingProductNotLastInBag_Successful() {
-//         Product product1 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         Product product2 = new Product("1", "9", "bgdfbf", "bdfgbfgds", 321, 3);
-//         store.increaseProduct(product1, 3);
-//         store.increaseProduct(product2, 3);
-//         shoppingCart.addProduct(store, product1);
-//         shoppingCart.addProduct(store, product2);
-//         shoppingCart.removeProduct(store, product1);
+        assertTrue(shoppingCart.getShoppingBags().isEmpty());
+    }
 
-//         assertTrue(shoppingCart.getShoppingBags().size() == 1 & shoppingCart.getShoppingBags().get(0).getProducts().size() == 1);
-//     }
+    @Test
+    void testRemoveNonExistingProductReturnsFalse() {
+        assertFalse(shoppingCart.removeProduct(store, banana));
+    }
 
-//     @Test
-//     void purchaseShoppingCart_Successful() {
-//         Product product1 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         Product product2 = new Product("1", "9", "bgdfbf", "bdfgbfgds", 321, 3);
-//         store.increaseProduct(product1, 3);
-//         store.increaseProduct(product2, 3);
-//         shoppingCart.addProduct(store, product1);
-//         shoppingCart.addProduct(store, product2);
-//         double price = shoppingCart.calculatePurchaseCart();
-//         assertTrue(price == 642 & shoppingCart.getShoppingBags().isEmpty());
-//     }
+    @Test
+    void testCalculatePurchaseTotal_Success() {
+        store.increaseProduct(apple, 10);
+        store.increaseProduct(banana, 10);
+        shoppingCart.addProduct(store, apple);
+        shoppingCart.addProduct(store, banana);
 
-//     @Test
-//     void purchaseShoppingCartWithUnavailableProduct_Failure() {
-//         Product product1 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         Product product2 = new Product("1", "9", "bgdfbf", "bdfgbfgds", 321, 3);
-//         store.increaseProduct(product1, 3);
-//         store.increaseProduct(product2, 3);
-//         shoppingCart.addProduct(store, product1);
-//         shoppingCart.addProduct(store, product2);
-//         store.increaseProduct(product2, 3);
-//         double price = shoppingCart.calculatePurchaseCart();
-//         assertTrue(price == -1);
-//     }
+        double total = shoppingCart.calculatePurchaseCart();
+        assertEquals(4.25, total);
+        assertTrue(shoppingCart.getShoppingBags().isEmpty());
+    }
 
-//     @Test
-//     void purchaseShoppingCartWithClosedStore_Failure() {
-//         Product product1 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         Product product2 = new Product("1", "9", "bgdfbf", "bdfgbfgds", 321, 3);
-//         store.increaseProduct(product1, 3);
-//         store.increaseProduct(product2, 3);
-//         shoppingCart.addProduct(store, product1);
-//         shoppingCart.addProduct(store, product2);
-//         store = null;
-//         double price = shoppingCart.calculatePurchaseCart();
-//         assertTrue(price == -1);
-//     }
+    @Test
+    void testCalculatePurchaseTotal_ProductUnavailable_Failure() {
+        store.increaseProduct(apple, 0); // Not enough stock
+        shoppingCart.addProduct(store, apple);
 
+        double total = shoppingCart.calculatePurchaseCart();
+        assertEquals(-1, total);
+    }
 
-//     @Test
-//     void removeNonExistingProduct_Failure() {
-//         Product product1 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         Product product2 = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         shoppingCart.addProduct(store, product2);
-//         boolean result = shoppingCart.removeProduct(store, product2);
+    @Test
+    void testCalculatePurchaseTotal_StoreClosed_Failure() {
+        store.close();
+        shoppingCart.addProduct(store, apple);
 
-//         assertFalse(result);
-//     }
+        double total = shoppingCart.calculatePurchaseCart();
+        assertEquals(-1, total);
+    }
 
-//     @Test
-//     void removeExistingProductInANonExistentStore() {
-//         Product product = new Product("1", "1", "bgdfbf", "bdfgbfgds", 321, 3);
-//         boolean result = shoppingCart.removeProduct(store, product);
+    @Test
+    void testEmptyCartReturnsZeroTotal() {
+        assertEquals(0, shoppingCart.calculatePurchaseCart());
+    }
 
-//         assertFalse(result);
-//     }
+    @Test
+    void testProductQuantityDoesNotExceedInventoryLimit() {
+        store.increaseProduct(apple, 1);
+        shoppingCart.addProduct(store, apple);
+        shoppingCart.addProduct(store, apple); // should not add the second time
 
+        assertEquals(1, shoppingCart.getShoppingBags().get(0).getProducts().get(apple));
+    }
 
-
-
-// }
+}
