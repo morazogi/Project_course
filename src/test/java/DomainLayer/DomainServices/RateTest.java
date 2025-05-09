@@ -72,7 +72,7 @@ class RateTest {
     @Test
     void rateStore_userNotExist_throws() throws Exception {
         // prepare a valid store JSON
-        Store store = new Store(STORE_ID);
+        Store store = new Store(STORE_ID , "");
         String storeJson = mapper.writeValueAsString(store);
         when(storeRepository.getStore(STORE_ID)).thenReturn(storeJson);
 

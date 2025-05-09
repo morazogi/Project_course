@@ -6,6 +6,7 @@ import DomainLayer.IOrderRepository;
 import DomainLayer.IProductRepository;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import DomainLayer.User;
 import DomainLayer.DomainServices.History;
 import DomainLayer.DomainServices.toNotify;
 import DomainLayer.DomainServices.OpenStore;
@@ -17,31 +18,30 @@ import DomainLayer.DomainServices.UserConnectivity;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+
+@Service
 public class RegisteredService {
     private final IToken tokenService;
-    private final IUserRepository userRepo;
-    private final IStoreRepository storeRepo;
-    private final IProductRepository productRepo;
-    private final IOrderRepository orderRepo;
-    private final INotificationRepository notificationRepo;
     private final UserConnectivity userConnectivity;
     private final Rate rateService;
     private final History history;
     private final OpenStore opener;
     private final toNotify notifyService;
 
-    public RegisteredService(IUserRepository userRepo, IToken tokenService , IStoreRepository storeRepo, IProductRepository productRepo , IOrderRepository orderRepo , INotificationRepository notificationRepo) {
-        this.notificationRepo = notificationRepo;
-        this.orderRepo = orderRepo;
-        this.storeRepo = storeRepo;
-        this.productRepo = productRepo;
-        this.userRepo = userRepo;
+    public RegisteredService(IToken tokenService,
+                             IStoreRepository storeRepository,
+                             IUserRepository userRepository,
+                             IProductRepository productRepository,
+                             IOrderRepository orderRepository,
+                             INotificationRepository notificationRepository) {
         this.tokenService = tokenService;
-        this.userConnectivity = new UserConnectivity(tokenService, userRepo);
-        this.rateService = new Rate(tokenService, storeRepo , userRepo, productRepo);
-        this.history = new History(tokenService, orderRepo, userRepo);
-        this.opener = new OpenStore(tokenService, storeRepo, userRepo);
-        this.notifyService = new toNotify(notificationRepo, tokenService);
+        this.userConnectivity = new UserConnectivity(tokenService, userRepository);
+        this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);
+        this.history = new History(tokenService, orderRepository , userRepository);
+        this.opener = new OpenStore(tokenService, storeRepository, userRepository);
+        this.notifyService = new toNotify(notificationRepository, tokenService);
     }
 
 
@@ -61,7 +61,7 @@ public class RegisteredService {
         String username = tokenService.extractUsername(token);
         try {
             EventLogger.logEvent(username, "OPEN_STORE");
-            return opener.openStore(token);
+            return opener.openStore(token, username);
         } catch (IllegalArgumentException e) {
             EventLogger.logEvent(username, "OPEN_STORE_FAILED");
             throw new RuntimeException("Invalid token");
@@ -123,4 +123,6 @@ public class RegisteredService {
             throw new RuntimeException("Invalid token");
         }
     }
+
+
 }

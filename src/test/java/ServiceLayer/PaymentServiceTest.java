@@ -31,7 +31,7 @@ class PaymentServiceTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        store = new Store("founderID");
+        store = new Store("founderID" , "storeName");
         storeRepository = new StoreRepository();
         productRepository = new ProductRepository();
         storeRepository.addStore(store.getId() , mapper.writeValueAsString(store));

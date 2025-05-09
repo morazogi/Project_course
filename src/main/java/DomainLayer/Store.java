@@ -27,10 +27,11 @@ public class Store {
     private Map<String,String> managersToSuperior = new HashMap<>();
     private Map<String,List<String>> ownerToSubordinates = new HashMap<>();
 
-    private String ownerId;
+    private String name;
 
 
-    public Store(String founderID) {
+    public Store(String founderID , String name) {
+        this.name = name;
         founder = founderID;
         openNow = true;
     }
@@ -60,6 +61,13 @@ public class Store {
 
     }
 
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     public Double getRating(){
         return rating;
     }

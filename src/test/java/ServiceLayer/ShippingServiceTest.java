@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
     @BeforeEach
     void setUp() {
-        store = new Store("founderID");
+        store = new Store("founderID" , "storeName");
         Product product = new Product("1", store.getId(), "bgdfbf", "bdfgbfgds", 321, 3, 1.0, "1223r");
         store.addNewProduct(product.getId(), 3);
         tokenService = new TokenService();

@@ -26,17 +26,13 @@ public class UserCart {
     private IUserRepository userRepository;
     private IProductRepository productRepository;
     private IOrderRepository orderRepository;
-    private IPayment paymentSystem;
-    private IShipping shippingSystem;
 
-    public UserCart(IToken Tokener , IUserRepository userRepository, IStoreRepository storeRepository , IProductRepository productRepository , IPayment paymentSystem , IOrderRepository orderRepository , IShipping shippingSystem) {
-        this.shippingSystem = shippingSystem;
+    public UserCart(IToken Tokener , IUserRepository userRepository, IStoreRepository storeRepository ,  IProductRepository productRepository, IOrderRepository orderRepository) {
         this.orderRepository = orderRepository;
         this.Tokener = Tokener;
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
-        this.paymentSystem = paymentSystem;
     }
 
     public void removeFromCart(String token , String storeId , String productId , Integer quantity) throws JsonProcessingException {

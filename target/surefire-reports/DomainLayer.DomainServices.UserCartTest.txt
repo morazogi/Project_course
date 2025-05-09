@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: DomainLayer.DomainServices.UserCartTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.491 s -- in DomainLayer.DomainServices.UserCartTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.170 s -- in DomainLayer.DomainServices.UserCartTest

@@ -17,7 +17,7 @@ public class OpenStore {
         this.userRepository = userRepository;
     }
 
-    public String openStore(String token) throws Exception {
+    public String openStore(String token , String name) throws Exception {
         if (token == null) {
             throw new IllegalArgumentException("Invalid input");
         }
@@ -26,7 +26,7 @@ public class OpenStore {
         if (userRepository.getUser(username) == null) {
             throw new IllegalArgumentException("User does not exist");
         }
-        Store store = new Store(username);
+        Store store = new Store(username , name);
         storeRepository.addStore(store.getId(), mapper.writeValueAsString(store));
         return store.getId();
     }

@@ -25,7 +25,7 @@ public class PaymentService {
             EventLogger.logEvent(tokenService.extractUsername(token), "Successfully payed for cart");
         return true;
         } catch (Exception e) {
-            ErrorLogger.logError(tokenService.extractUsername(token), "Failed to pay"     , e.getMessage());
+            ErrorLogger.logError(tokenService.extractUsername(token), "Failed to pay " , e.getMessage());
             return false;
         }
     }

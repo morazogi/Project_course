@@ -37,7 +37,7 @@ class OpenStoreTest {
     void openStore_nullToken_throws() {
         IllegalArgumentException ex = assertThrows(
             IllegalArgumentException.class,
-            () -> openStoreService.openStore(null)
+            () -> openStoreService.openStore(null , "storeName")
         );
         assertEquals("Invalid input", ex.getMessage());
     }
@@ -48,7 +48,7 @@ class OpenStoreTest {
 
         IllegalArgumentException ex = assertThrows(
             IllegalArgumentException.class,
-            () -> openStoreService.openStore(TOKEN)
+            () -> openStoreService.openStore(TOKEN , "storeName")
         );
         assertEquals("User does not exist", ex.getMessage());
     }
@@ -59,7 +59,7 @@ class OpenStoreTest {
         when(userRepository.getUser(USERNAME)).thenReturn("{\"dummy\":\"json\"}");
 
         // call
-        String newStoreId = openStoreService.openStore(TOKEN);
+        String newStoreId = openStoreService.openStore(TOKEN , "storeName");
 
         // verify token validation and extraction
         verify(tokener).validateToken(TOKEN);
