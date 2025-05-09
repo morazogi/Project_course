@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 import DomainLayer.IStoreRepository;
 import DomainLayer.Product;
 import DomainLayer.Store;
@@ -24,6 +24,7 @@ public class StoreRepository implements IStoreRepository {
     public String getStore(String storeId) {
         return stores.get(storeId);
     }
+
 
 
     public void updateStore(String storeId, String storeJson) {

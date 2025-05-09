@@ -1,4 +1,4 @@
-package DomainLayer.DomainServices;
+package DomainLayer.domainServices;
 
 import DomainLayer.*;
 import ServiceLayer.UserService;
