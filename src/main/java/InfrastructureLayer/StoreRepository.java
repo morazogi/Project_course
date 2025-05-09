@@ -1,6 +1,5 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 import DomainLayer.IStoreRepository;
-import DomainLayer.Product;
 import DomainLayer.Store;
 
 import java.util.HashMap;

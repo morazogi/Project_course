@@ -1,9 +1,6 @@
 package ServiceLayer;
 import DomainLayer.IStoreRepository;
 import DomainLayer.Store;
-import infrastructureLayer.StoreRepository;
-
-import java.util.*;
 
 public class StoreService{
     IStoreRepository StoreRepository;

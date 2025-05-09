@@ -1,8 +1,6 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 import DomainLayer.IUserRepository;
 import DomainLayer.Store;
-import DomainLayer.User;
-import io.micrometer.observation.Observation.Event;
 import ServiceLayer.EventLogger;
 
 import java.util.HashMap;

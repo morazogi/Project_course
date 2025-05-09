@@ -2,8 +2,7 @@ package ServiceLayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import infrastructureLayer.UserRepository;
-import io.micrometer.observation.Observation.Event;
+import InfrastructureLayer.UserRepository;
 import utils.ProductKeyModule;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,13 +19,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import java.io.IO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
