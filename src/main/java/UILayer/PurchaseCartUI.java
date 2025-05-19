@@ -26,6 +26,7 @@ public class PurchaseCartUI extends VerticalLayout {
 
     private final ProductService productService;
     private final RegisteredService registeredService;
+<<<<<<< HEAD
     private final IProductRepository productRepository;
     private final IToken tokenService;
     private final IUserRepository userRepository;
@@ -33,6 +34,12 @@ public class PurchaseCartUI extends VerticalLayout {
 
     @Autowired
     public PurchaseCartUI(ProductService productService, RegisteredService registeredService, IProductRepository productRepository, IToken tokenService, IUserRepository userRepository) {
+=======
+    private final infrastructureLayer.ProductRepository productRepository;
+
+    @Autowired
+    public PurchaseCartUI(ProductService productService, RegisteredService registeredService, infrastructureLayer.ProductRepository productRepository) {
+>>>>>>> 9d74460 (Add presenter classes for user, product, and permissions)
         this.productService = productService;
         this.registeredService = registeredService;
         this.productRepository = productRepository;
