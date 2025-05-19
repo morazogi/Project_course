@@ -6,3 +6,17 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# Java
+*.class
+/out/
+/build/
+/target/
+
+# IntelliJ
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
