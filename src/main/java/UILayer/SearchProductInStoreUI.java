@@ -1,9 +1,7 @@
 package UILayer;
 
 import DomainLayer.Product;
-import DomainLayer.Store;
-import DomainLayer.User;
-import ServiceLayer.ProductService;
+import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -21,15 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Route("/searchproduct/:storeid")
 public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnterObserver {
 
-    private final ProductService productService;
+    private final UserService userService;
+    private final ObjectMapper mapper = new ObjectMapper();
     @Autowired
-    public SearchProductInStoreUI(ProductService configuredProductService, String storeId) {
-        this.productService = configuredProductService;
+    public SearchProductInStoreUI(UserService configuredUserService, String storeId) {
+        this.userService = configuredUserService;
 
         TextField lowestPrice = new TextField("lowest price");
         TextField highestPrice = new TextField("highest price");
@@ -41,11 +39,11 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
         Button searchProduct = new Button("search product by name", e -> {
             try {
                 String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                Optional<Product> items = productService.getProductByName(productName.getValue());
+                List<String> items = userService.findProduct(token, productName.getValue(), "");
                 List<Product> products = items.stream().map(item -> {
                             try {
-                                if (item.getStoreId().equals(storeId)) {
-                                    return item;
+                                if (mapper.readValue(item, Product.class).getStoreId().equals(storeId)) {
+                                    return mapper.readValue(item, Product.class);
                                 }
                                 return null;
                             } catch (Exception exception) {
@@ -69,11 +67,11 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
         Button searchProductByCategory = new Button("search product by category", e -> {
             try {
                 String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                List<Product> items = productService.getProductByCategory(categoryName.getValue());
+                List<String> items = userService.findProduct(token, "", categoryName.getValue());
                 List<Product> products = items.stream().map(item -> {
                             try {
-                                if (item.getStoreId().equals(storeId)) {
-                                    return item;
+                                if (mapper.readValue(item, Product.class).getStoreId().equals(storeId)) {
+                                    return mapper.readValue(item, Product.class);
                                 }
                                 return null;
                             } catch (Exception exception) {

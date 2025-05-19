@@ -1,10 +1,8 @@
 package UILayer;
 
-import DomainLayer.Product;
 import DomainLayer.ShoppingBag;
 import DomainLayer.ShoppingCart;
 import DomainLayer.Store;
-import ServiceLayer.ProductService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -19,14 +17,12 @@ import java.util.Map;
 public class ProductListUI extends HorizontalLayout {
 
     private final ShoppingCart shoppingCart;
-    private final ProductService productService;
     private final UserService userService;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public ProductListUI(ShoppingCart configuredShoppingCart, ProductService configuredProductService, UserService configuredUserService) {
+    public ProductListUI(ShoppingCart configuredShoppingCart, UserService configuredUserService) {
         this.shoppingCart = configuredShoppingCart;
-        this.productService = configuredProductService;
         this.userService = configuredUserService;
         add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
         double totalPayment = 0;
@@ -43,8 +39,8 @@ public class ProductListUI extends HorizontalLayout {
                 Notification.show("store with id: " + shoppingBag.getStoreId() + "does not exist");
             }
             for (Map.Entry<String, Integer> product : shoppingBag.getProducts().entrySet()) {
-                productList.add(new Span(productService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" +productService.getProductById(product.getKey()).get().getPrice()));
-                totalPayment = totalPayment + product.getValue()  * productService.getProductById(product.getKey()).get().getPrice();
+                productList.add(new Span(userService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" + userService.getProductById(product.getKey()).get().getPrice()));
+                totalPayment = totalPayment + product.getValue()  * userService.getProductById(product.getKey()).get().getPrice();
             }
             add(productList, new Span("total payment :" + totalPayment));
         }

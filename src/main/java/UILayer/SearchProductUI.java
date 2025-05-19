@@ -2,7 +2,6 @@ package UILayer;
 
 import DomainLayer.Product;
 import DomainLayer.Store;
-import ServiceLayer.ProductService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,19 +16,15 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Route("/searchproduct")
 public class SearchProductUI extends VerticalLayout {
 
-    private final ProductService productService;
     private final UserService userService;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public SearchProductUI(ProductService configuredProductService, UserService configuredUserService) {
-        this.productService = configuredProductService;
+    public SearchProductUI(UserService configuredUserService) {
         this.userService = configuredUserService;
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         TextField lowestPrice = new TextField("lowest price");
@@ -43,14 +38,14 @@ public class SearchProductUI extends VerticalLayout {
         TextField productName = new TextField("product name");
         Button searchProduct = new Button("search product by name", e -> {
             try {
-                Optional<Product> items = productService.getProductByName(productName.getValue());
+                List<String> items = userService.findProduct(token, productName.getValue(), "");
                 List<Product> products = items.stream().map(item -> {
-                    try {
-                        return item;
-                    } catch (Exception exception) {
-                        return null;
-                    }
-                }).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice.getValue()))
+                            try {
+                                return mapper.readValue(item, Product.class);
+                            } catch (Exception exception) {
+                                return null;
+                            }
+                        }).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice.getValue()))
                         .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice.getValue()))
                         .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating.getValue()))
                         .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating.getValue()))
@@ -83,10 +78,10 @@ public class SearchProductUI extends VerticalLayout {
         TextField categoryName = new TextField("category name");
         Button searchProductByCategory = new Button("search product by category", e -> {
             try {
-                List<Product> items = productService.getProductByCategory(categoryName.getValue());
+                List<String> items = userService.findProduct(token, productName.getValue(), "");
                 List<Product> products = items.stream().map(item -> {
                             try {
-                                return item;
+                                return mapper.readValue(item, Product.class);
                             } catch (Exception exception) {
                                 return null;
                             }

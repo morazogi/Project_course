@@ -1,1 +1,9 @@
 [2025-05-14 20:24:42] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"

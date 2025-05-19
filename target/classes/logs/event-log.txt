@@ -413,3 +413,13 @@
 [2025-05-19 18:42:49] User: a | Event: Event | Description: LOGIN
 [2025-05-19 18:42:49] User: a | Event: Event | Description: TokenService
 [2025-05-19 18:42:49] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-19 19:28:04] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: Successfully payed for cart
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService
+[2025-05-19 19:28:05] User: username | Event: Event | Description: TokenService

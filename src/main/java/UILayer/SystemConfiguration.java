@@ -78,11 +78,6 @@ public class SystemConfiguration {
     };
 
     @Bean
-    public ProductService ProductService() {
-        return new ProductService(ProductRepository());
-    };
-
-    @Bean
     public ShippingService ShippingService() {
         return new ShippingService(ProxyShipping(), TokenService(), UserRepository());
     };

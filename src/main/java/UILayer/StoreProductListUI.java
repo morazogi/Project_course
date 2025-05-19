@@ -1,7 +1,7 @@
 package UILayer;
 
 import DomainLayer.Product;
-import ServiceLayer.ProductService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -13,13 +13,14 @@ import java.util.Objects;
 public class StoreProductListUI extends HorizontalLayout {
 
     private final String storeId;
-    private final ProductService productService;
+    private final UserService userService;
 
     @Autowired
-    public StoreProductListUI(String configuredStoreId, ProductService configuredProductService) {
+    public StoreProductListUI(String configuredStoreId, UserService configuredUserService) {
         this.storeId = configuredStoreId;
-        this.productService = configuredProductService;
-        List<Product> items = productService.getAllProducts();
+        this.userService = configuredUserService;
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        List<Product> items = userService.getAllProducts(token);
         List<Product> products = items.stream().map(item -> {
             try {
                 if (item.getStoreId().equals(storeId)) {

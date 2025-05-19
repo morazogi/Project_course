@@ -179,4 +179,15 @@ public class UserService {
         }
     }
 
+    public Optional<Product> getProductById(String id) {
+        try {
+            return productRepository.findById(id);
+        } catch (Exception e) {
+            System.out.println("ERROR finding product by ID:" + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+
+
 }

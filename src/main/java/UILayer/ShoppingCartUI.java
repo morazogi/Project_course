@@ -4,7 +4,6 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
-import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,16 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ShoppingCartUI extends VerticalLayout {
 
     private final RegisteredService registeredService;
-    private final ProductService productService;
     private final UserService userService;
     private final IToken tokenService;
     private final IUserRepository userRepository;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public ShoppingCartUI(RegisteredService configuredRegisteredService, ProductService configuredProductService, UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public ShoppingCartUI(RegisteredService configuredRegisteredService, UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
         this.registeredService = configuredRegisteredService;
-        this.productService = configuredProductService;
         this.userService = configuredUserService;
         Button signOut = new Button("Sign out", e -> {
             try {
@@ -64,7 +61,7 @@ public class ShoppingCartUI extends VerticalLayout {
 
         ShoppingCart shoppingCart = user.getShoppingCart();
 
-        add(new ProductListUI(shoppingCart, productService, userService));
+        add(new ProductListUI(shoppingCart, userService));
 
         add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecart");}));
 

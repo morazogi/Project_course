@@ -1,9 +1,7 @@
 package UILayer;
 
 import DomainLayer.Product;
-import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
-import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,24 +17,21 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParameters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @Route("/product/:productid/:storeid")
 public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver {
 
-    private ProductService productService;
     private UserService userService;
     private RegisteredService registeredService;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public ProductPageUI(ProductService configuredProductService, UserService configuredUserService, RegisteredService configuredRegisteredService, String productId, String storeId) {
-        this.productService = configuredProductService;
+    public ProductPageUI(UserService configuredUserService, RegisteredService configuredRegisteredService, String productId, String storeId) {
         this.userService = configuredUserService;
         this.registeredService = configuredRegisteredService;
-        if (productService.getProductById(productId).isPresent()) {
-            Product product = productService.getProductById(productId).get();
+        if (userService.getProductById(productId).isPresent()) {
+            Product product = userService.getProductById(productId).get();
             String token = (String) UI.getCurrent().getSession().getAttribute("token");
             String storeName = null;
             try {
