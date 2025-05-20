@@ -1,6 +1,9 @@
 package UILayer;
 
+import DomainLayer.IToken;
+import DomainLayer.IUserRepository;
 import DomainLayer.Store;
+import PresentorLayer.ProductPresenter;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -18,33 +21,16 @@ import java.util.Optional;
 @Route("/searchstore")
 public class SearchStoreUI extends VerticalLayout {
 
-    private final UserService userService;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ProductPresenter productPresenter;
 
     @Autowired
-    public SearchStoreUI(UserService configuredUserService) {
-
-        this.userService = configuredUserService;
+    public SearchStoreUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 
         TextField storeName = new TextField("store name");
         Button searchStore = new Button("search store", e -> {
-            try {
-                String jsonItems = userService.searchStoreByName(storeName.getValue(), token);
-                List<String> items = (List<String>) mapper.readValue(jsonItems, List.class);
-                List<Store> stores = items.stream().map(item -> {
-                    try {
-                        return mapper.readValue(item, Store.class);
-                    } catch (Exception exception) {
-                        return null;
-                    }
-                }).toList();
-                for (Store store : stores) {
-                    add(new Button(store.getName() , choose -> {UI.getCurrent().navigate("/store/" + store.getId());}));
-                }
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
+            productPresenter.searchStore(storeName.getValue(), token);
         });
 
         add(storeName, searchStore);

@@ -1,6 +1,9 @@
 package UILayer;
 
+import DomainLayer.IToken;
+import DomainLayer.IUserRepository;
 import DomainLayer.Product;
+import PresentorLayer.ProductPresenter;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -23,72 +26,27 @@ import java.util.Objects;
 @Route("/searchproduct/:storeid")
 public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnterObserver {
 
-    private final UserService userService;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ProductPresenter productPresenter;
     @Autowired
-    public SearchProductInStoreUI(UserService configuredUserService, String storeId) {
-        this.userService = configuredUserService;
-
+    public SearchProductInStoreUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository, String storeId) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
         TextField lowestPrice = new TextField("lowest price");
         TextField highestPrice = new TextField("highest price");
         TextField lowestProductRating = new TextField("lowest product rating");
         TextField highestProductRating = new TextField("highest product rating");
         TextField category = new TextField("category");
+        TextField lowestStoreRating = new TextField("lowest store rating");
+        TextField highestStoreRating = new TextField("highest store rating");
 
         TextField productName = new TextField("product name");
         Button searchProduct = new Button("search product by name", e -> {
-            try {
-                String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                List<String> items = userService.findProduct(token, productName.getValue(), "");
-                List<Product> products = items.stream().map(item -> {
-                            try {
-                                if (mapper.readValue(item, Product.class).getStoreId().equals(storeId)) {
-                                    return mapper.readValue(item, Product.class);
-                                }
-                                return null;
-                            } catch (Exception exception) {
-                                return null;
-                            }
-                        }).filter(Objects::isNull).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating.getValue()))
-                        .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating.getValue()))
-                        .filter(item -> category.equals("") ? true : item.getCategory().equals(category.getValue()))
-                        .toList();
-                for (Product product : products) {
-                    add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
-                }
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
+            add(productPresenter.searchProductInStoreByName(token, productName.getValue(), lowestPrice.getValue(), highestPrice.getValue(), lowestProductRating.getValue(), highestProductRating.getValue(), category.getValue(),lowestStoreRating.getValue(), highestStoreRating.getValue(), storeId));
         });
 
         TextField categoryName = new TextField("category name");
         Button searchProductByCategory = new Button("search product by category", e -> {
-            try {
-                String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                List<String> items = userService.findProduct(token, "", categoryName.getValue());
-                List<Product> products = items.stream().map(item -> {
-                            try {
-                                if (mapper.readValue(item, Product.class).getStoreId().equals(storeId)) {
-                                    return mapper.readValue(item, Product.class);
-                                }
-                                return null;
-                            } catch (Exception exception) {
-                                return null;
-                            }
-                        }).filter(Objects::isNull).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating.getValue()))
-                        .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating.getValue()))
-                        .filter(item -> category.equals("") ? true : item.getCategory().equals(category.getValue()))
-                        .toList();
-                for (Product product : products) {
-                    add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
-                }
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
+            add(productPresenter.searchProductInStoreByCategory(token, productName.getValue(), lowestPrice.getValue(), highestPrice.getValue(), lowestProductRating.getValue(), highestProductRating.getValue(), category.getValue(),lowestStoreRating.getValue(), highestStoreRating.getValue(), storeId));
         });
 
 

@@ -1,6 +1,9 @@
 package UILayer;
 
+import DomainLayer.IToken;
+import DomainLayer.IUserRepository;
 import DomainLayer.Store;
+import PresentorLayer.ProductPresenter;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -19,25 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/store/:storeid")
 public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
 
-    private final UserService userService;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ProductPresenter productPresenter;
 
     @Autowired
-    public StorePageUI(UserService configuredUserService, String storeId) {
-        this.userService = configuredUserService;
+    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository , String storeId) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        if (!userService.getStoreById(storeId, token).isEmpty()) {
-            try {
-                Store store = mapper.readValue(userService.getStoreById(storeId, token), Store.class);
-                add(new HorizontalLayout(new H1(store.getName()), new Button("search in store", e -> {
-                    UI.getCurrent().navigate("/" + "searchproduct" + "/" + storeId);
-                })), new StoreProductListUI(store.getId(), userService));
-            } catch (Exception e) {
-                Notification.show(e.getMessage());
-            }
-        } else {
-            add(new Span("this store does not exist"));
-        }
+        add(productPresenter.getStorePage(token, storeId));
+        setPadding(true);
+        setAlignItems(Alignment.CENTER);
     }
 
     @Override

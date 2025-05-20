@@ -5,6 +5,8 @@ import DomainLayer.IUserRepository;
 import DomainLayer.ManagerPermissions;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.User;
+import PresentorLayer.ButtonPresenter;
+import ServiceLayer.RegisteredService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -19,13 +21,15 @@ public class UserHomePageUI extends VerticalLayout {
 
     private final IToken tokenService;
     private final IUserRepository userRepository;
+    private final ButtonPresenter buttonPresenter;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public UserHomePageUI(IToken tokenService, IUserRepository userRepository) {
+    public UserHomePageUI(IToken tokenService, IUserRepository userRepository, RegisteredService registeredService) {
         // Get current user from session
         this.tokenService = tokenService;
         this.userRepository = userRepository;
+        this.buttonPresenter = new ButtonPresenter(registeredService);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String username = tokenService.extractUsername(token);
         String jsonUser = userRepository.getUser(username);
@@ -42,11 +46,8 @@ public class UserHomePageUI extends VerticalLayout {
 
         // Header bar
         H1 title = new H1("🛍️ Store Manager Dashboard");
-        Button homeBtn = new Button("🏠 Home", e -> UI.getCurrent().navigate(""));
-        Button signOutBtn = new Button("🔐 Sign Out", e -> {
-            UI.getCurrent().getSession().setAttribute("token", null);
-            UI.getCurrent().navigate("");
-        });
+        Button homeBtn = buttonPresenter.homePageButton();
+        Button signOutBtn = buttonPresenter.signOutButton(token);
 
         HorizontalLayout header = new HorizontalLayout(
                 new H4("👤 Hello, " + user.getUsername()),

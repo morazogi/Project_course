@@ -1,7 +1,11 @@
 package UILayer;
 
+import DomainLayer.IToken;
+import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.Store;
+import PresentorLayer.ButtonPresenter;
+import PresentorLayer.ProductPresenter;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,61 +26,19 @@ import org.springframework.web.client.RestTemplate;
 @Route("/product/:productid/:storeid")
 public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver {
 
-    private UserService userService;
-    private RegisteredService registeredService;
+    private final ProductPresenter productPresenter;
+    private final ButtonPresenter buttonPresenter;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public ProductPageUI(UserService configuredUserService, RegisteredService configuredRegisteredService, String productId, String storeId) {
-        this.userService = configuredUserService;
-        this.registeredService = configuredRegisteredService;
-        if (userService.getProductById(productId).isPresent()) {
-            Product product = userService.getProductById(productId).get();
-            String token = (String) UI.getCurrent().getSession().getAttribute("token");
-            String storeName = null;
-            try {
-                String jsonStore = userService.getStoreById(token, storeId);
-                Store store = mapper.readValue(jsonStore, Store.class);
-                storeName = store.getName();
-            } catch (Exception e) {
-                Notification.show("store with id: " + storeId + "does not exist");
-            }
-            Button signOut = new Button("Sign out", e -> {
-                try {
-                    UI.getCurrent().getSession().setAttribute("token", registeredService.logoutRegistered(token));
-                    UI.getCurrent().navigate("");
-                } catch (Exception exception) {
-                    Notification.show(exception.getMessage());
-                }
-            }
-            );
-
-            Button homePage = new Button("Home page", e -> {
-                UI.getCurrent().navigate("/:token");
-            });
-
-            HorizontalLayout upwardsPage = new HorizontalLayout(signOut, new H1(product.getName()),new H1(storeName), homePage);
-            upwardsPage.setAlignItems(Alignment.CENTER);
-
-            add(upwardsPage);
-
-            Button addToCart = new Button("add to cart", e -> {
-                Notification.show(userService.addToCart(token, storeId, productId, 1));
-            });
-
-            HorizontalLayout bottomDescription = new HorizontalLayout(new Span(product.getDescription()), new Span("" + product.getPrice()));
-
-            add(new VerticalLayout(addToCart, bottomDescription));
-
-            setPadding(true);
-            setAlignItems(Alignment.CENTER);
-
-        } else {
-            add(new Span("No product with id:" + productId));
-        }
-        RestTemplate restTemplate = new RestTemplate();
-        //ResponseEntity<ApiResponse<Product>> responseEntity = restTemplate.getForEntity("/product/{productid}", ApiResponse.class, productId);
-
+    public ProductPageUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository, RegisteredService configuredRegisteredService, String productId, String storeId) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
+        buttonPresenter = new ButtonPresenter(configuredRegisteredService);
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        add(new HorizontalLayout(buttonPresenter.signOutButton(token), buttonPresenter.homePageButton()));
+        add(productPresenter.getProductPage(productId, storeId));
+        setPadding(true);
+        setAlignItems(Alignment.CENTER);
     }
 
 
