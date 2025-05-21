@@ -10,7 +10,7 @@ import ServiceLayer.EventLogger;
 public class Store {
     private String id= UUID.randomUUID().toString();
     private PurchasePolicy purchasePolicy = new PurchasePolicy();
-    private DiscountPolicy discountPolicy = new DiscountPolicy();
+    private List<String> discounts = new ArrayList<>();
     private List<String> users = new ArrayList<>();
     private Map<String, Integer> products = new HashMap<>();
     private Map<String, Integer> reservedProducts = new HashMap<>();
@@ -108,6 +108,9 @@ public class Store {
     public synchronized void setId(UUID id) {
         this.id = id.toString();
     }
+    public synchronized void setDiscountPolicy(List<String> discounts) {
+        this.discounts = discounts;
+    }
     @JsonIgnore
     public PurchasePolicy getPurchasePolicy() {
         return purchasePolicy;
@@ -116,13 +119,12 @@ public class Store {
     public synchronized void setPurchasePolicy(PurchasePolicy purchasePolicy) {
         this.purchasePolicy = purchasePolicy;
     }
-    @JsonIgnore
-    public DiscountPolicy getDiscountPolicy() {
-        return discountPolicy;
+    public List<String> getDiscountPolicy() {
+        return discounts;
     }
     @JsonIgnore
-    public synchronized void setDiscountPolicy(DiscountPolicy discountPolicy) {
-        this.discountPolicy = discountPolicy;
+    public synchronized void setDiscouns(List<String> discounts) {
+        this.discounts = discounts;
     }
 
 
@@ -501,27 +503,22 @@ public class Store {
 
 
 
-    public boolean removeDiscount(String discountId){
-        return discountPolicy.removeDiscount(discountId);
+    public boolean removeDiscount(String id) {
+        if (id == null) {
+            return false;
+        }
+        return discounts.remove(id);
     }
 
 
 
-    public boolean addDiscount(
-            String Id,
-            float level,
-            float logicComposition,
-            float numericalComposition,
-            List<String> discounts,
-            float percentDiscount,
-            String discounted,
-            float conditional,
-            float limiter,
-            String conditionalDiscounted
-    ){
-        discountPolicy.addDiscount(Id, level, logicComposition, numericalComposition, discounts, percentDiscount, discounted, conditional, limiter, conditionalDiscounted);
-        return true;
+    public boolean addDiscount(String discountId) {
+        if (discountId == null) {
+            return false;
+        }
+        return discounts.add(discountId);
     }
+
 
     /**
      * Terminates the ownership of the specified owner by removing their associated

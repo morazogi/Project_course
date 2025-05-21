@@ -25,14 +25,14 @@ public class OwnerManagerService {
     private final QueryMicroservice notificationService;
     private final DomainLayer.domainServices.PurchaseHistoryMicroservice purchaseHistoryService;
 
-    public OwnerManagerService(IUserRepository userRepository, IStoreRepository storeRepository, IProductRepository productRepository, IOrderRepository orderRepository) {
+    public OwnerManagerService(IUserRepository userRepository, IStoreRepository storeRepository, IProductRepository productRepository, IOrderRepository orderRepository, IDiscountRepository discountRepository) {
         // Initialize repositories
         ICustomerInquiryRepository inquiryRepository = new CustomerInquiryRepository();
 
         // Initialize existing microservices
         this.inventoryService = new InventoryManagementMicroservice(storeRepository, productRepository);
         this.purchasePolicyService = new PurchasePolicyMicroservice();
-        this.discountPolicyService = new DiscountPolicyMicroservice(storeRepository,userRepository);
+        this.discountPolicyService = new DiscountPolicyMicroservice(storeRepository,userRepository, productRepository, discountRepository);
         this.storeManagementService = new StoreManagementMicroservice(storeRepository, userRepository);
         this.notificationService = new QueryMicroservice(inquiryRepository);
         this.purchaseHistoryService = new PurchaseHistoryMicroservice();

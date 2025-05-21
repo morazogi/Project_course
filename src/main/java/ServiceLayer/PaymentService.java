@@ -12,8 +12,8 @@ public class PaymentService {
     private PaymentConnectivity paymentConnectivity;
     private IToken tokenService;
 
-    public PaymentService(IUserRepository userRepository, IProductRepository productRepository, IPayment proxyPayment, IToken tokenService) {
-        this.paymentConnectivity = new PaymentConnectivity(proxyPayment, userRepository, productRepository);
+    public PaymentService(IUserRepository userRepository, IProductRepository productRepository, IPayment proxyPayment, IToken tokenService, IDiscountRepository discountRepository, IStoreRepository storeRepository) {
+        this.paymentConnectivity = new PaymentConnectivity(proxyPayment, userRepository, productRepository, storeRepository, discountRepository);
         this.tokenService = tokenService;
     }
 

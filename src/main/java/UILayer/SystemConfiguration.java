@@ -13,6 +13,12 @@ public class SystemConfiguration {
 
 
     @Bean
+    public DiscountRepository DiscountRepository() {
+        return new DiscountRepository();
+    };
+
+
+    @Bean
     public OrderRepository OrderRepository() {
         return new OrderRepository();
     };
@@ -38,7 +44,7 @@ public class SystemConfiguration {
     };
 
     @Bean
-    public IStoreRepository StoreRepository() {
+    public StoreRepository StoreRepository() {
         return new StoreRepository();
     };
 
@@ -69,12 +75,12 @@ public class SystemConfiguration {
 
     @Bean
     public OwnerManagerService OwnerManagerService() {
-        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository());
+        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository(), DiscountRepository());
     };
 
     @Bean
-    public PaymentService PaymentService() {
-        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService());
+    public PaymentService PaymentService(DiscountRepository discountRepository) {
+        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository() );
     };
 
     @Bean
@@ -90,7 +96,7 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService());
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(DiscountRepository()));
     };
 
     @Bean

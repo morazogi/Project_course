@@ -20,6 +20,8 @@ class OwnerManagerServiceTest {
 
     // Mocked repositories
     @Mock
+    private IDiscountRepository discountRepository;
+    @Mock
     private IUserRepository userRepository;
     @Mock
     private IStoreRepository storeRepository;
@@ -52,7 +54,7 @@ class OwnerManagerServiceTest {
         MockitoAnnotations.openMocks(this);
 
         // Create a test instance with constructor injection
-        ownerManagerService = new OwnerManagerService(userRepository, storeRepository,productRepository, orderRepository);
+        ownerManagerService = new OwnerManagerService(userRepository, storeRepository,productRepository, orderRepository, discountRepository);
 
         // Replace the microservices with mocks using reflection
         try {
