@@ -59,4 +59,8 @@ public class ShoppingCart {
             shoppingBag.sold();
         }
     }
+
+    public void clear() {
+        shoppingBags.clear();
+    }
 }

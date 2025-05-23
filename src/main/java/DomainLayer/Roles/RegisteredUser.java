@@ -69,4 +69,12 @@ public class RegisteredUser extends User {
     public void setAnswers(Map<String, String> answers) {
         this.answers = answers;
     }
+
+    public Map<String, String> getAnswers() {
+        return answers;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
 }

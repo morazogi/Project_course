@@ -26,6 +26,7 @@ class UserServiceAllPathsTest {
     /* ---- ctor dependencies ---- */
     @Mock IToken             tokenSrv;
     @Mock IStoreRepository   storeRepo;
+    @Mock IDiscountRepository discountRepo;
     @Mock IUserRepository    userRepo;
     @Mock IProductRepository prodRepo;
     @Mock IOrderRepository   orderRepo;
@@ -271,7 +272,7 @@ class UserServiceAllPathsTest {
     // -------------------------------------------------------------------------
     private UserService newSvc() {
         return new UserService(tokenSrv, storeRepo, userRepo,
-                               prodRepo, orderRepo, shipSrv, paySrv);
+            prodRepo, orderRepo, discountRepo, shipSrv, paySrv);
     }
 
     private void initCart() throws Exception { initCart(c -> {}); }

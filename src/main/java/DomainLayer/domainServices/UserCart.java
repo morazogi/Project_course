@@ -1,5 +1,6 @@
 package DomainLayer.domainServices;
 import ServiceLayer.EventLogger;
+import DomainLayer.IDiscountRepository;
 import DomainLayer.IOrderRepository;
 import DomainLayer.IPayment;
 import DomainLayer.IProductRepository;
@@ -18,6 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class UserCart {
@@ -27,8 +30,10 @@ public class UserCart {
     private IUserRepository userRepository;
     private IProductRepository productRepository;
     private IOrderRepository orderRepository;
+    private IDiscountRepository discountRepository;
 
-    public UserCart(IToken Tokener , IUserRepository userRepository, IStoreRepository storeRepository ,  IProductRepository productRepository, IOrderRepository orderRepository) {
+    public UserCart(IToken Tokener , IUserRepository userRepository, IStoreRepository storeRepository ,  IProductRepository productRepository, IOrderRepository orderRepository , IDiscountRepository discountRepository) {
+        this.discountRepository = discountRepository;
         this.orderRepository = orderRepository;
         this.Tokener = Tokener;
         this.userRepository = userRepository;
@@ -41,6 +46,7 @@ public class UserCart {
             EventLogger.logEvent(Tokener.extractUsername(token), "REMOVE_FROM_CART_FAILED - NULL");
             throw new IllegalArgumentException("Token cannot be null");
         }
+        Tokener.validateToken(token);
         if (storeId == null) {
             EventLogger.logEvent(Tokener.extractUsername(token), "REMOVE_FROM_CART_FAILED - NULL");
             throw new IllegalArgumentException("StoreId cannot be null");
@@ -64,7 +70,6 @@ public class UserCart {
             throw new IllegalArgumentException("User not found");
         }
         RegisteredUser user = mapper.readValue(userJson, RegisteredUser.class);
-        Tokener.validateToken(token);
         user.removeProduct(storeId, productId , quantity);
         userRepository.update(username, mapper.writeValueAsString(user));
         EventLogger.logEvent(user.getUsername(), "REMOVE_FROM_CART_SUCCESS");
@@ -206,10 +211,22 @@ public class UserCart {
                 orderRepository.addOrder(mapper.writeValueAsString(order) , storeId, username);
             }
         }
-        // create an order
-//        orderRepository.addOrder(new Order(mapper.writeValueAsString(cart), username , totalPrice));
         user.setCartReserved(false);
-//        user.getShoppingCart().clearBags();
+        user.getShoppingCart().clear();
         userRepository.update(username, mapper.writeValueAsString(user));
+    }
+
+
+    public Double getCartPrice(String username) throws JsonProcessingException {
+        RegisteredUser user = mapper.readValue(userRepository.getUser(username), RegisteredUser.class);
+        ShoppingCart cart = user.getShoppingCart();
+        List<ShoppingBag> shoppingBags = cart.getShoppingBags();
+        double totalPrice = 0;
+        for (ShoppingBag shoppingBag : shoppingBags) {
+            DiscountPolicyMicroservice discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
+            String storeId = shoppingBag.getStoreId();
+            totalPrice += discountPolicy.calculatePrice(storeId, shoppingBag.getProducts());
+        }
+        return totalPrice;
     }
 }  

@@ -8,6 +8,7 @@ import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.IProductRepository;
+import DomainLayer.IDiscountRepository;
 import DomainLayer.IOrderRepository;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
@@ -46,6 +47,7 @@ public class UserService {
                        IUserRepository userRepository,
                        IProductRepository productRepository,
                        IOrderRepository orderRepository,
+                       IDiscountRepository discountRepository,
                        ShippingService shippingService,
                        PaymentService paymentService){
         this.productRepository = productRepository;
@@ -54,7 +56,7 @@ public class UserService {
         this.shippingService = shippingService;
         this.paymentService = paymentService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository);
-        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository);    
+        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository , discountRepository);
         this.search = new Search(productRepository, storeRepository);   
     }
 
@@ -127,6 +129,16 @@ public class UserService {
         } catch (Exception e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "PURCHASE_CART_FAILED " + e.getMessage());
             throw new RuntimeException("Failed to purchase cart");
+        }
+    }
+
+    public Double getCartPrice(String token) {
+        try{
+            tokenService.validateToken(token);
+            return userCart.getCartPrice(tokenService.extractUsername(token));
+        } catch (Exception e) {
+            EventLogger.logEvent(tokenService.extractUsername(token), "GET_CART_PRICE_FAILED");
+            throw new RuntimeException("Failed to get cart price");
         }
     }
 

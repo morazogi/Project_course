@@ -96,7 +96,7 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(DiscountRepository()));
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository() , DiscountRepository(), ShippingService(), PaymentService(DiscountRepository()));
     };
 
     @Bean

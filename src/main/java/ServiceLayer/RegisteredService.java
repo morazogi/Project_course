@@ -114,12 +114,25 @@ public class RegisteredService {
 
 
     public void sendNotificationToStore(String token, String storeId, String message) throws Exception {
+        tokenService.validateToken(token);
         String username = tokenService.extractUsername(token);
         try {
             EventLogger.logEvent(username, "SEND_NOTIFICATION_TO_STORE");
             notifyService.sendNotificationToStore(token, storeId, message);
         } catch (Exception e) {
             EventLogger.logEvent(username, "SEND_NOTIFICATION_TO_STORE_FAILED " + e.getMessage());
+            throw new RuntimeException("Invalid token");
+        }
+    }
+
+    public void sendNotificationToUser(String token, String userId, String message) throws Exception {
+        tokenService.validateToken(token);
+        String username = tokenService.extractUsername(token);
+        try {
+            EventLogger.logEvent(username, "SEND_NOTIFICATION_TO_USER");
+            notifyService.sendNotificationToUser(token, userId, message);
+        } catch (Exception e) {
+            EventLogger.logEvent(username, "SEND_NOTIFICATION_TO_USER_FAILED " + e.getMessage());
             throw new RuntimeException("Invalid token");
         }
     }

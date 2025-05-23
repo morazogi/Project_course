@@ -1,25 +1,14 @@
-[2025-05-14 20:24:42] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 19:28:05] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-19 20:29:57] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-20 09:25:30] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"
+[2025-05-23 14:00:14] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
+[2025-05-23 14:00:14] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"
+[2025-05-23 14:00:14] User: username | Error: Error in shipping | Details: Invalid home number
+[2025-05-23 14:00:14] User: username | Error: Error in shipping | Details: Empty state
+[2025-05-23 14:00:14] User: username | Error: Error in shipping | Details: Empty street
+[2025-05-23 14:00:14] User: username | Error: Error in shipping | Details: Invalid home number
+[2025-05-23 14:00:14] User: username | Error: Error in shipping | Details: Empty city

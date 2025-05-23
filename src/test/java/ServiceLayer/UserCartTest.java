@@ -15,6 +15,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.yaml.snakeyaml.events.Event.ID;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -38,6 +39,7 @@ class UserCartRepositoryContentTest {
     @Mock IToken           tokenSvc;
     @Mock IUserRepository  userRepo;
     @Mock IStoreRepository storeRepo;
+    @Mock IDiscountRepository discountRepo;
     @Captor ArgumentCaptor<String> jsonCaptor;     // capture JSON sent to updateStore
 
     /* real repos */
@@ -94,7 +96,7 @@ class UserCartRepositoryContentTest {
         when(storeRepo.getStore(STORE_ID)).thenReturn("{}");
         lenient().doNothing().when(storeRepo).updateStore(eq(STORE_ID), jsonCaptor.capture());
 
-        sut = new UserCart(tokenSvc, userRepo, storeRepo, productRepo, orderRepo);
+        sut = new UserCart(tokenSvc, userRepo, storeRepo, productRepo, orderRepo , discountRepo);
         Field f = UserCart.class.getDeclaredField("mapper");
         f.setAccessible(true);
         f.set(sut, mapperSpy);

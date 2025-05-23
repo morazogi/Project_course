@@ -2,7 +2,6 @@ package UILayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +23,6 @@ import java.util.Map;
 @Route("/purchasecart")
 public class PurchaseCartUI extends VerticalLayout {
 
-    private final ProductService productService;
     private final RegisteredService registeredService;
     private final IProductRepository productRepository;
     private final IToken tokenService;
@@ -32,8 +30,7 @@ public class PurchaseCartUI extends VerticalLayout {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public PurchaseCartUI(ProductService productService, RegisteredService registeredService, IProductRepository productRepository, IToken tokenService, IUserRepository userRepository) {
-        this.productService = productService;
+    public PurchaseCartUI(RegisteredService registeredService, IProductRepository productRepository, IToken tokenService, IUserRepository userRepository) {
         this.registeredService = registeredService;
         this.productRepository = productRepository;
         this.tokenService = tokenService;
@@ -91,12 +88,11 @@ public class PurchaseCartUI extends VerticalLayout {
         totalField.setLabel("Total");
         double payment = 0;
         for (ShoppingBag shoppingBag : shoppingBags) {
-            DiscountPolicy discountPolicy = new DiscountPolicy();
             Map<Product, Integer> products = new HashMap<Product, Integer>();
             for (String product : shoppingBag.getProducts().keySet()) {
                 products.put(productRepository.getProduct(product), shoppingBag.getProducts().get(product));
             }
-            payment = payment + discountPolicy.applyDiscounts(products);
+            payment = payment;
         }
 
         totalField.setValue("$" + payment); // Assuming getTotalPrice() exists
