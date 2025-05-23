@@ -104,14 +104,13 @@ public class UserCart {
         EventLogger.logEvent(user.getUsername(), "ADD_TO_CART_SUCCESS");
     }
 
-    public Double reserveCart(String token) throws JsonProcessingException {
+    public synchronized Double reserveCart(String token) throws JsonProcessingException {
         if (token == null) {
             EventLogger.logEvent(Tokener.extractUsername(token), "PURCHASE_CART_FAILED - NULL");
             throw new IllegalArgumentException("Token cannot be null");
         }
         String username = Tokener.extractUsername(token);
         Tokener.validateToken(token);
-        double totalPrice = 0;
         RegisteredUser user = mapper.readValue(userRepository.getUser(username), RegisteredUser.class);
         ShoppingCart cart = user.getShoppingCart();
         Map<String, Integer> reservedProducts = new HashMap<>();
@@ -145,13 +144,12 @@ public class UserCart {
                 }
                 storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
                 productRepository.save(product);
-                totalPrice += product.getPrice() * quantity;
             }
         }
 
         user.setCartReserved(true);
         userRepository.update(username, mapper.writeValueAsString(user));
-        return totalPrice;
+        return getCartPrice(username);
     }
 
     public void unreserveCart(Map<String, Integer> reservedProducts ,String username) throws JsonProcessingException {

@@ -10,6 +10,7 @@ DomainLayer/ShoppingCartTest.class
 DomainLayer/DomainServices/OpenStoreTest.class
 DomainLayer/DiscountPolicyTest$InMemoryUserRepository.class
 DomainLayer/DomainServices/SearchTest$2.class
+DomainLayer/DomainServices/UserCartTest.class
 DomainLayer/DiscountPolicyTest$InMemoryProductRepository.class
 DomainLayer/DiscountPolicyTest$InMemoryStoreRepository.class
 DomainLayer/RegisteredUserTest.class
@@ -17,6 +18,7 @@ ServiceLayer/ShippingServiceTest.class
 DomainLayer/DomainServices/HistoryTest.class
 ServiceLayer/PaymentServiceTest.class
 DomainLayer/DomainServices/UserConnectivityTest.class
+ServiceLayer/UserCartRepositoryContentTest.class
 ServiceLayer/OwnerManagerServiceTest.class
 ServiceLayer/UserServiceAllPathsTest.class
 DomainLayer/BidTest.class

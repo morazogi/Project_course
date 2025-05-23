@@ -93,6 +93,17 @@
             <version>0.4</version>
         </dependency>
 
+
+        <dependency>
+
+           <groupId>org.springframework</groupId>
+
+           <artifactId>spring-tx</artifactId>
+
+           <version>5.3.30</version>
+
+         </dependency>
+
         <!-- JWT (JSON Web Token) for Authentication -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

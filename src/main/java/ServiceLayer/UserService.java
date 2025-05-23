@@ -29,6 +29,7 @@ import DomainLayer.domainServices.UserConnectivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -112,6 +113,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void purchaseCart(String token ,
                              String paymentMethod ,
                              String cardNumber,
