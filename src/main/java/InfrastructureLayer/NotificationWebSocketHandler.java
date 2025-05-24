@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;

@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 import DomainLayer.IOrderRepository;
 import DomainLayer.Order;
 import ServiceLayer.EventLogger;
