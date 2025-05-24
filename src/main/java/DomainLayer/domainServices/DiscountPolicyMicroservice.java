@@ -2,7 +2,7 @@ package DomainLayer.domainServices;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import InfrastructureLayer.DiscountRepository;
+import infrastructureLayer.DiscountRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
