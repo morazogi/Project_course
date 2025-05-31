@@ -4,7 +4,7 @@ import DomainLayer.Product;
 import DomainLayer.IProductRepository;
 import DomainLayer.IStoreRepository;
 import DomainLayer.Store;
-import DomainLayer.domainServices.Search;
+import DomainLayer.DomainServices.Search;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

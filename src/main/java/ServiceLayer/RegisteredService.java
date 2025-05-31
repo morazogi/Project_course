@@ -7,17 +7,11 @@ import DomainLayer.IProductRepository;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.User;
-import DomainLayer.domainServices.History;
-import DomainLayer.domainServices.toNotify;
-import DomainLayer.domainServices.OpenStore;
-import DomainLayer.domainServices.Rate;
-import DomainLayer.domainServices.UserConnectivity;
-import DomainLayer.domainServices.History;
-import DomainLayer.domainServices.Rate;
-import DomainLayer.domainServices.UserConnectivity;
+import DomainLayer.DomainServices.*;
 
 import java.util.List;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 
@@ -45,6 +39,7 @@ public class RegisteredService {
     }
 
 
+    @Transactional
     public String logoutRegistered(String token) throws Exception {
         String username = tokenService.extractUsername(token);
         try {
@@ -57,6 +52,7 @@ public class RegisteredService {
         }
     }
 
+    @Transactional
     public String openStore(String token) throws Exception {
         String username = tokenService.extractUsername(token);
         try {
@@ -68,6 +64,7 @@ public class RegisteredService {
         }
     }
 
+    @Transactional
     public boolean rateStore(String token, String storeId, int rate) throws Exception {
         try {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_STORE");
@@ -78,6 +75,7 @@ public class RegisteredService {
         }
     }
 
+    @Transactional
     public boolean rateProduct(String token, String productId, int rate) throws Exception {
         try {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_PRODUCT");
@@ -88,6 +86,7 @@ public class RegisteredService {
         }
     }
 
+    @Transactional
     public boolean rateStoreAndProduct(String token, String storeId, String productId, int storeRate, int productRate) throws Exception {
         try {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_STORE_AND_PRODUCT");
@@ -100,7 +99,7 @@ public class RegisteredService {
         }
     }
 
-
+    @Transactional
     public List<String> getUserOrderHistory(String token) throws Exception {
         String username = tokenService.extractUsername(token);
         try {
@@ -112,7 +111,7 @@ public class RegisteredService {
         }
     }
 
-
+    @Transactional
     public void sendNotificationToStore(String token, String storeId, String message) throws Exception {
         String username = tokenService.extractUsername(token);
         try {
@@ -123,6 +122,4 @@ public class RegisteredService {
             throw new RuntimeException("Invalid token");
         }
     }
-
-
 }

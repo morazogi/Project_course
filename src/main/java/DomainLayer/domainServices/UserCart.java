@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 import ServiceLayer.EventLogger;
 import DomainLayer.IOrderRepository;
 import DomainLayer.IPayment;
@@ -122,7 +122,7 @@ public class UserCart {
             for (Map.Entry<String, Integer> entry : bag.getProducts().entrySet()) {
                 String productId = entry.getKey();
                 Integer quantity = entry.getValue();
-                Product product = productRepository.getProduct(productId);
+                Product product = productRepository.getReferenceById(productId);
                 if (product == null) {
                     EventLogger.logEvent(user.getUsername(), "PURCHASE_CART_FAILED - PRODUCT_NOT_FOUND");
                     throw new IllegalArgumentException("Product not found");
@@ -153,7 +153,7 @@ public class UserCart {
         for(Map.Entry<String, Integer> entry : reservedProducts.entrySet()) {
             String productId = entry.getKey();
             Integer quantity = entry.getValue();
-            Product product = productRepository.getProduct(productId);
+            Product product = productRepository.getReferenceById(productId);
             if (product == null) {
                 EventLogger.logEvent(username, "UNRESERVE_CART_FAILED - PRODUCT_NOT_FOUND");
                 throw new IllegalArgumentException("Product not found");
@@ -196,7 +196,7 @@ public class UserCart {
             for (Map.Entry<String, Integer> entry : bag.getProducts().entrySet()) {
                 String productId = entry.getKey();
                 Integer quantity = entry.getValue();
-                Product product = productRepository.getProduct(productId);
+                Product product = productRepository.getReferenceById(productId);
                 if (product == null) {
                     EventLogger.logEvent(user.getUsername(), "PURCHASE_CART_FAILED - PRODUCT_NOT_FOUND");
                     throw new IllegalArgumentException("Product not found");

@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 
 import java.util.List;
@@ -22,8 +22,8 @@ public class toNotify {
     }
 
     public List<String> getUserNotifications(String token) {
-        String reciever = tokenService.extractUsername(token);
-        return notificationRepo.getMyNotification(reciever);
+        String receiver = tokenService.extractUsername(token);
+        return notificationRepo.getMyNotification(receiver);
     }
 
     public List<String> getStoreNotifications(String StoreId) {

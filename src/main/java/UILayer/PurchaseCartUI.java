@@ -2,7 +2,7 @@ package UILayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.domainServices.DiscountPolicyMicroservice;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import InfrastructureLayer.StoreRepository;
 import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
@@ -99,9 +99,8 @@ public class PurchaseCartUI extends VerticalLayout {
             DiscountPolicyMicroservice discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
             Map<Product, Integer> products = new HashMap<Product, Integer>();
             for (String product : shoppingBag.getProducts().keySet()) {
-                products.put(productRepository.getProduct(product), shoppingBag.getProducts().get(product));
+                products.put(productRepository.getReferenceById(product), shoppingBag.getProducts().get(product));
             }
-
 
             Product firstProduct = products.keySet().iterator().next();
             Map<String, Integer> productsString = new HashMap<>();

@@ -1,33 +1,168 @@
 package DomainLayer;
 
+import ServiceLayer.EventLogger;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Generated;
+import jakarta.persistence.*;
+import org.testng.annotations.Ignore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import io.micrometer.observation.Observation.Event;
-import ServiceLayer.EventLogger;
+@Entity
+@Table(name = "stores")
 public class Store {
-    private String id= UUID.randomUUID().toString();
-    private PurchasePolicy purchasePolicy = new PurchasePolicy();
-    private List<String> discounts = new ArrayList<>();
-    private List<String> users = new ArrayList<>();
-    private Map<String, Integer> products = new HashMap<>();
-    private Map<String, Integer> reservedProducts = new HashMap<>();
-    private Map<String, String> questions = new HashMap<>();
-    private boolean openNow;
-    private double rating = 0;
-    private Map<String , Double> raterId = new HashMap<>();
 
-    // fields for managment control
-    private String founder;
-    private List<String> owners = new ArrayList<>();
-    private Map<String,ManagerPermissions> managers = new HashMap<>();
-    private Map<String,String> ownersToSuperior = new HashMap<>();
-    private Map<String,String> managersToSuperior = new HashMap<>();
-    private Map<String,List<String>> ownerToSubordinates = new HashMap<>();
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    private String id = UUID.randomUUID().toString();
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "founder", nullable = false)
+    private String founder;
+
+    @Column(name = "open_now")
+    private boolean openNow;
+
+    @Column(name = "rating")
+    private double rating;
+
+    @Transient
+    private PurchasePolicy purchasePolicy = new PurchasePolicy();
+
+    @ElementCollection
+    @CollectionTable(name = "store_discounts", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "discount_id")
+    private List<String> discounts = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_users", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "user_id")
+    private List<String> users = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_products", joinColumns = @JoinColumn(name = "store_id"))
+    @MapKeyColumn(name = "product_id")
+    @Column(name = "products_quantity")
+    private Map<String, Integer> products = new HashMap<>();
+
+    //does reserved products should be in the database? todo
+    @ElementCollection
+    @CollectionTable(name = "reserved_products", joinColumns = @JoinColumn(name = "store_id"))
+    @MapKeyColumn(name = "product_id")
+    @Column(name = "quantity")
+    private Map<String, Integer> reservedProducts = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_questions", joinColumns = @JoinColumn(name = "store_id"))
+    @MapKeyColumn(name = "query_asker_ID")
+    @Column(name = "question")
+    private Map<String, String> questions = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_ratings", joinColumns = @JoinColumn(name = "store_id"))
+    @MapKeyColumn(name = "rater_id")
+    @Column(name = "rating")
+    private Map<String, Double> raterId = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
+    @Column(name = "owner_id")
+    private List<String> owners = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapKeyColumn(name = "manager_id")
+    @JoinColumn(name = "store_id")
+    private Map<String, ManagerPermissions> managers = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "owners_to_superior", joinColumns = @JoinColumn(name = "store_id"))
+    @MapKeyColumn(name = "owner_id")
+    @Column(name = "superior_id")
+    private Map<String, String> ownersToSuperior = new HashMap<>();
+
+    @ElementCollection
+    @CollectionTable(name = "managers_to_superior", joinColumns = @JoinColumn(name = "store_id"))
+    @MapKeyColumn(name = "manager_id")
+    @Column(name = "superior_id")
+    private Map<String, String> managersToSuperior = new HashMap<>();
+
+//    /**
+//     * Maps store owners to their subordinates using a more normalized approach
+//     * with proper JPA collection handling.
+//     */
+//    @ElementCollection
+//    @CollectionTable(
+//            name = "owner_subordinates",
+//            joinColumns = @JoinColumn(name = "store_id")
+//    )
+//    @MapKeyColumn(name = "owner_id")
+//    @OrderColumn(name = "subordinate_index") // Preserves list order
+//    @Column(name = "subordinate_id")
+//    private Map<String, List<String>> ownerToSubordinates = new HashMap<>();
+
+    /**
+     * Maps store owners to their subordinates using a wrapper embeddable
+     */
+    @ElementCollection
+    @CollectionTable(
+            name = "owner_subordinates",
+            joinColumns = @JoinColumn(name = "store_id")
+    )
+    @MapKeyColumn(name = "owner_id")
+    private Map<String, SubordinatesList> ownerToSubordinates = new HashMap<>();
+
+    // Helper methods for easier access
+    public List<String> getSubordinatesForOwner(String ownerId) {
+        SubordinatesList list = ownerToSubordinates.get(ownerId);
+        return list != null ? list.getSubordinates() : new ArrayList<>();
+    }
+
+    public void setSubordinatesForOwner(String ownerId, List<String> subordinates) {
+        ownerToSubordinates.put(ownerId, new SubordinatesList(subordinates));
+    }
+
+    public void addSubordinateToOwner(String ownerId, String subordinateId) {
+        ownerToSubordinates.computeIfAbsent(ownerId, k -> new SubordinatesList())
+                .getSubordinates()
+                .add(subordinateId);
+    }
+
+    /**
+     * Wrapper entity to handle the list of subordinates
+     */
+    @Embeddable
+    class SubordinatesList {
+        @ElementCollection
+        @CollectionTable(name = "subordinate_entries")
+        @OrderColumn(name = "subordinate_index")
+        @Column(name = "subordinate_id")
+        private List<String> subordinates = new ArrayList<>();
+
+        // Constructors
+        public SubordinatesList() {}
+
+        public SubordinatesList(List<String> subordinates) {
+            this.subordinates = subordinates != null ? subordinates : new ArrayList<>();
+        }
+
+        // Getters and setters
+        public List<String> getSubordinates() {
+            return subordinates;
+        }
+
+        public void setSubordinates(List<String> subordinates) {
+            this.subordinates = subordinates != null ? subordinates : new ArrayList<>();
+        }
+        public void addSubordinate(String newSubordinate) {
+            this.subordinates.add(newSubordinate);
+        }
+        public void removeSubordinate(String subordinateId) {
+            this.subordinates.remove(subordinateId);
+        }
+    }
 
 
     public Store(String founderID , String name) {
@@ -67,7 +202,7 @@ public class Store {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public Double getRating(){
         return rating;
     }
@@ -87,6 +222,7 @@ public class Store {
     public synchronized void setUsers(List<String> users) {
         this.users = users;
     }
+
     public Map<String, Integer> getProducts() {
         return products;
     }
@@ -119,14 +255,15 @@ public class Store {
     public synchronized void setPurchasePolicy(PurchasePolicy purchasePolicy) {
         this.purchasePolicy = purchasePolicy;
     }
+
     public List<String> getDiscountPolicy() {
         return discounts;
     }
-    @JsonIgnore
+
+
     public synchronized void setDiscouns(List<String> discounts) {
         this.discounts = discounts;
     }
-
 
     public Boolean registerUser(String userId) {
         if(users.contains(userId)) {
@@ -222,7 +359,6 @@ public class Store {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
-
         if (!reservedProducts.containsKey(productId)) {
             throw new IllegalArgumentException("Product not reserved");
         }
@@ -372,7 +508,6 @@ public class Store {
         return true;
     }
 
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -410,8 +545,8 @@ public class Store {
     public void addOwner(String appointerId, String userId) {
         owners.add(userId);
         ownersToSuperior.put(userId, appointerId);
-        ownerToSubordinates.put(userId, new ArrayList<>());
-        ownerToSubordinates.get(appointerId).add(userId);
+        ownerToSubordinates.put(userId, new SubordinatesList());
+        ownerToSubordinates.get(appointerId).addSubordinate(userId);
     }
 
     public boolean userIsOwner(String userId) {
@@ -421,7 +556,6 @@ public class Store {
     public boolean userIsManager(String userId) {
         return managers.containsKey(userId);
     }
-
 
     /**
      * Determines if a user is a superior of another user within a management hierarchy.
@@ -485,7 +619,7 @@ public class Store {
         LinkedList<String> subordinates = new LinkedList<>();
 
         // Check if the owner exists and has subordinates
-        List<String> directSubordinates = ownerToSubordinates.get(ownerId);
+        List<String> directSubordinates = ownerToSubordinates.get(ownerId).getSubordinates();
         if (directSubordinates == null) {
             return subordinates;
         }
@@ -569,7 +703,7 @@ public class Store {
         String appointingOwner = this.managersToSuperior.get(managerId);
         this.managersToSuperior.remove(managerId);
         if (appointingOwner != null) {
-            this.ownerToSubordinates.get(appointingOwner).remove(managerId);
+            this.ownerToSubordinates.get(appointingOwner).removeSubordinate(managerId);
         }
     }
 
@@ -589,7 +723,7 @@ public class Store {
 
         // Get all subordinates (both owners and managers)
         List<String> subordinates = new ArrayList<>();
-        List<String> ownerSubordinates = ownerToSubordinates.getOrDefault(founderID, new ArrayList<>());
+        List<String> ownerSubordinates = ownerToSubordinates.get(founderID).getSubordinates();
         if (ownerSubordinates != null) {
             subordinates.addAll(ownerSubordinates);
         }

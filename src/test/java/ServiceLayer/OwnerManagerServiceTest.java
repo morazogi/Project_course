@@ -1,7 +1,7 @@
 package ServiceLayer;
 
 import DomainLayer.*;
-import DomainLayer.domainServices.*;
+import DomainLayer.DomainServices.*;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

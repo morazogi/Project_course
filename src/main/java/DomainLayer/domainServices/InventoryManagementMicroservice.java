@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,8 +17,6 @@ public class InventoryManagementMicroservice {
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
     }
-
-
 
     /**
      * Set the repositories for this microservice

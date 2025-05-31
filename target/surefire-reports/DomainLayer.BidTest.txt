@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: DomainLayer.DiscountPolicyTest
+Test set: DomainLayer.BidTest
 -------------------------------------------------------------------------------
-Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.104 s -- in DomainLayer.DiscountPolicyTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.169 s -- in DomainLayer.BidTest

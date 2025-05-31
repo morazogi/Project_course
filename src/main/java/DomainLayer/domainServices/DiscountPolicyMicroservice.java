@@ -1,15 +1,15 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import InfrastructureLayer.DiscountRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+@Service
 public class DiscountPolicyMicroservice {
 
     private IStoreRepository storeRepository;
@@ -52,8 +52,8 @@ public class DiscountPolicyMicroservice {
         if (productRepository == null) {
             throw new IllegalArgumentException("Didnt set productRepository");
         }
-        Product product = productRepository.getProduct(ProductId);
-        if (productRepository.getProduct(ProductId) == null) {
+        Product product = productRepository.getReferenceById(ProductId);
+        if (productRepository.getReferenceById(ProductId) == null) {
             throw new IllegalArgumentException("Store does not exist");
         }
         return product;
@@ -61,7 +61,7 @@ public class DiscountPolicyMicroservice {
 
 
     private Discount getDiscountById(String DiscountId){
-        return discountRepository.find(DiscountId);
+        return discountRepository.getReferenceById(DiscountId);
     }
 
     private boolean checkPermission(String userId, String storeId, String permissionType) {
@@ -93,16 +93,14 @@ public class DiscountPolicyMicroservice {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.discountRepository = discountRepository;
-
     }
-
 
     public boolean removeDiscountFromDiscountPolicy(String ownerId, String storeId, String discountId) {
         if (checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)) {
             Store store =  getStoreById(storeId);
             if (store != null) {
                 store.removeDiscount(discountId);
-                discountRepository.remove(discountId);
+                discountRepository.deleteById(discountId);
                 try {
                     storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
                 } catch (JsonProcessingException e) {
@@ -126,17 +124,29 @@ public class DiscountPolicyMicroservice {
                                         String conditionalDiscounted) {
 
 
-        if(checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)){
-            Store store =  getStoreById(storeId);
+        if (checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)) {
+            Store store = getStoreById(storeId);
             if (store != null) {
+
+                // 1. create & save the discount
+                Discount discount = new Discount(
+                        Id, storeId,
+                        level, logicComposition, numericalComposition,
+                        discountsId, percentDiscount, discounted,
+                        conditional, limiter, conditionalDiscounted
+                );
+                if (discountRepository.save(discount) == null) {
+                    return false;
+                }
+
                 store.addDiscount(discountId);
+
                 try {
                     storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
-                Discount discount = new Discount(Id, storeId, level, logicComposition, numericalComposition, discountsId, percentDiscount, discounted, conditional, limiter, conditionalDiscounted);
-                return discountRepository.add(discount);
+                return true;
             }
         }
         return false;
@@ -150,7 +160,7 @@ public class DiscountPolicyMicroservice {
                 if (discountId == null) {
                     continue;
                 }
-                discountRepository.remove(discountId);
+                discountRepository.deleteById(discountId);
                 try {
                     storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
                 } catch (JsonProcessingException e) {
@@ -247,12 +257,12 @@ public class DiscountPolicyMicroservice {
     private boolean removeDiscount(String discountId) {
         boolean removed = false;
 
-        Discount discount = discountRepository.find(discountId);
+        Discount discount = discountRepository.getReferenceById(discountId);
         List<String> discountsString = discount.getDiscounts();
 
         List<Discount> discounts = new ArrayList<>();
         for (String id : discountsString) {
-            Discount d = discountRepository.find(id);
+            Discount d = discountRepository.getReferenceById(id);
             if (d != null) discounts.add(d);
         }
 
@@ -279,12 +289,12 @@ public class DiscountPolicyMicroservice {
         boolean removed = false;
 
 
-        Discount discount = discountRepository.find(discountId);
+        Discount discount = discountRepository.getReferenceById(discountId);
         List<String> discountsString = discount.getDiscounts();
 
         List<Discount> discounts = new ArrayList<>();
         for (String id : discountsString) {
-            Discount d = discountRepository.find(id);
+            Discount d = discountRepository.getReferenceById(id);
             if (d != null) discounts.add(d);
         }
 

@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.User;
 import DomainLayer.Roles.RegisteredUser;
@@ -29,8 +29,6 @@ public class UserConnectivity {
         this.Tokener = Tokener;
     }
 
-
-    
     public String login(String username, String password) {
         if (username == null || password == null ) {
             EventLogger.logEvent(username, "LOGIN_FAILED - NULL");

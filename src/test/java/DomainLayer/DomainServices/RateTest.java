@@ -3,7 +3,7 @@ package DomainLayer.DomainServices;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import DomainLayer.domainServices.Rate;
+import DomainLayer.DomainServices.Rate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import DomainLayer.IProductRepository;
@@ -131,7 +131,7 @@ class RateTest {
 
     @Test
     void rateProduct_productNotExist_throws() {
-        when(productRepository.getProduct(PRODUCT_ID)).thenReturn(null);
+        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class,
             () -> rateService.rateProduct(TOKEN, PRODUCT_ID, 4.0));
@@ -141,7 +141,7 @@ class RateTest {
     void rateProduct_userNotExist_throws() {
         // prepare a valid product
         Product product = mock(Product.class);
-        when(productRepository.getProduct(PRODUCT_ID)).thenReturn(product);
+        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(product);
         // user repo returns null
         when(userRepository.getUser(USER)).thenReturn(null);
 
@@ -153,7 +153,7 @@ class RateTest {
     void rateProduct_addRatingTrue_savesAndReturnsTrue() {
         // prepare a valid product
         Product product = mock(Product.class);
-        when(productRepository.getProduct(PRODUCT_ID)).thenReturn(product);
+        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(product);
         when(userRepository.getUser(USER)).thenReturn("someUserJson");
         when(product.addRating(USER, 5.0)).thenReturn(true);
 
@@ -168,7 +168,7 @@ class RateTest {
     void rateProduct_addRatingFalse_returnsFalse() {
         // prepare a valid product
         Product product = mock(Product.class);
-        when(productRepository.getProduct(PRODUCT_ID)).thenReturn(product);
+        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(product);
         when(userRepository.getUser(USER)).thenReturn("someUserJson");
         when(product.addRating(USER, 3.5)).thenReturn(false);
 

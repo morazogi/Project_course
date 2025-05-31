@@ -1,9 +1,10 @@
 package ServiceLayer;
 
-import DomainLayer.domainServices.AdminOperationsMicroservice;
-import DomainLayer.domainServices.QueryMicroservice;
+import DomainLayer.DomainServices.AdminOperationsMicroservice;
+import DomainLayer.DomainServices.QueryMicroservice;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
+import jakarta.transaction.Transactional;
 
 public class AdminService {
     // Add new microservice
@@ -29,6 +30,7 @@ public class AdminService {
      * @param storeId ID of the store to close
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean adminCloseStore(String adminId, String storeId) {
         try {
             EventLogger.logEvent(adminId, "ADMIN_CLOSE_STORE_START");
@@ -49,6 +51,7 @@ public class AdminService {
      * @param userId ID of the user to remove
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean adminSuspendMember(String adminId, String userId) {
         try {
             EventLogger.logEvent(adminId, "ADMIN_REMOVE_MEMBER_START");
@@ -65,7 +68,7 @@ public class AdminService {
             return false;
         }
     }
-
+    @Transactional
     public boolean adminUnSuspendMember(String adminId, String userId) {
         try {
             EventLogger.logEvent(adminId, "ADMIN_REMOVE_MEMBER_START");
@@ -82,6 +85,4 @@ public class AdminService {
             return false;
         }
     }
-
-
 }

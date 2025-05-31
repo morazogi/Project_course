@@ -1,6 +1,7 @@
 package ServiceLayer;
 import DomainLayer.*;
-import DomainLayer.domainServices.ShippingConnectivity;
+import DomainLayer.DomainServices.ShippingConnectivity;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class ShippingService {
         this.tokenService = tokenService;
     }
 
+    @Transactional
     public boolean processShipping(String token, String state, String city, String street, String homeNumber) {
         try {
             String username = tokenService.extractUsername(token);

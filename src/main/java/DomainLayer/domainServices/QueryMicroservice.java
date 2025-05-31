@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.ICustomerInquiryRepository;
 import InfrastructureLayer.CustomerInquiryRepository;

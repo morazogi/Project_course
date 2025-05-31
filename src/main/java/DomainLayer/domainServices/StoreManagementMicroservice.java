@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import java.util.HashMap;
 import java.util.LinkedList;

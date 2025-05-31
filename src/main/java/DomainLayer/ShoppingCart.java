@@ -1,9 +1,23 @@
 package DomainLayer;
 import java.util.*;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "shopping_carts")
 public class ShoppingCart {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Column(name = "user_id", nullable = false)
     private String userId;
-    private List<ShoppingBag> shoppingBags;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cart_id")
+    private List<ShoppingBag> shoppingBags = new ArrayList<>();
 
     public ShoppingCart(String userId) {
         this.userId = userId;

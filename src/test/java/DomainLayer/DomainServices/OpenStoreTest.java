@@ -3,7 +3,7 @@ package DomainLayer.DomainServices;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import DomainLayer.domainServices.OpenStore;
+import DomainLayer.DomainServices.OpenStore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IToken;

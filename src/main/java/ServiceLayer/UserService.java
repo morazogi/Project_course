@@ -1,9 +1,9 @@
 package ServiceLayer;
 
 import DomainLayer.IToken;
-import DomainLayer.domainServices.Search;
-import DomainLayer.domainServices.UserCart;
-import DomainLayer.domainServices.UserConnectivity;
+import DomainLayer.DomainServices.Search;
+import DomainLayer.DomainServices.UserCart;
+import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
 import utils.ProductKeyModule;
 
 import DomainLayer.Store;
 import DomainLayer.User;
-import DomainLayer.domainServices.UserCart;
-import DomainLayer.domainServices.UserConnectivity;
+import DomainLayer.DomainServices.UserCart;
+import DomainLayer.DomainServices.UserConnectivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
@@ -58,8 +60,7 @@ public class UserService {
         this.search = new Search(productRepository, storeRepository);   
     }
 
-
-
+    @Transactional
     public String login(String username, String password) throws JsonProcessingException {
         try {
             EventLogger.logEvent(username , "LOGIN");
@@ -70,6 +71,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void signUp(String username, String password)  throws Exception {
         try {
             userConnectivity.signUp(username, password);
@@ -79,7 +81,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public void removeFromCart(String token, String storeId, String productId, Integer quantity) {
         try{
             userCart.removeFromCart(token, storeId, productId, quantity);
@@ -90,6 +92,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public String addToCart(String token, String storeId, String productId, Integer quantity) {
         try{
             userCart.addToCart(token, storeId, productId, quantity);
@@ -101,6 +104,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Double reserveCart(String token) {
         try{
             return userCart.reserveCart(token);
@@ -110,6 +114,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void purchaseCart(String token ,
                              String paymentMethod ,
                              String cardNumber,
@@ -130,6 +135,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public List<String> findProduct(String token, String name , String category){
         try {
             tokenService.validateToken(token);
@@ -140,7 +146,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public List<Product> getAllProducts(String token) {
         try {
             tokenService.validateToken(token);
@@ -150,7 +156,8 @@ public class UserService {
             return new ArrayList<>();
         }
     }
-    
+
+    @Transactional
     public List<String> getStoreByName(String token , String name) {
         try {
             tokenService.validateToken(token);
@@ -161,6 +168,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public String searchStoreByName(String token, String storeName) {
         try {
             return search.searchStoreByName(storeName);
@@ -170,6 +178,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public String getStoreById(String token, String storeId) {
         try {
             return search.getStoreById(storeId);

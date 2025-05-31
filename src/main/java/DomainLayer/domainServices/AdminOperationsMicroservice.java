@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
@@ -22,7 +22,6 @@ public class AdminOperationsMicroservice {
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.notificationService = new QueryMicroservice();
-
     }
 
     private Store getStoreById(String storeId) {

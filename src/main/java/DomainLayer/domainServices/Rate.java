@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -49,7 +49,7 @@ public class Rate {
         }
         Tokener.validateToken(token);
         String username = Tokener.extractUsername(token);
-        Product product = productRepository.getProduct(productId);
+        Product product = productRepository.getReferenceById(productId);
         if (product == null) {
             throw new IllegalArgumentException("Product does not exist");
         }

@@ -1,13 +1,14 @@
 package DomainLayer;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface IProductRepository {
-    void save(Product product);
+public interface IProductRepository extends JpaRepository<Product, String> {
+    @Override
     Optional<Product> findById(String id);
     Optional<Product> findByName(String name);
-    List<Product> findAll();
-    void deleteById(String id);
-    Product getProduct(String id);
+    List<Product> findByCategory(String category);
+    List<Product> findByStoreId(String storeId);
 }

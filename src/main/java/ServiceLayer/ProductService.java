@@ -3,8 +3,6 @@ package ServiceLayer;
 import DomainLayer.IProductRepository;
 import DomainLayer.Product;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.*;
 
 @Service
@@ -14,17 +12,6 @@ public class ProductService {
     public ProductService(IProductRepository productRepo){
 
         this.productRepo = productRepo;
-
-    }
-
-    public boolean addProduct(Product product) {
-        try {
-            productRepo.save(product);
-            return true;
-        } catch (Exception e) {
-            System.out.println("ERROR adding product:" + e.getMessage());
-            return false;
-        }
     }
 
     public Optional<Product> getProductById(String id) {

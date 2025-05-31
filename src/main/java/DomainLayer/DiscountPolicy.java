@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 
 
+
 public class DiscountPolicy {
 
     private List<Discount> discounts = new ArrayList<>();
@@ -152,9 +153,6 @@ class Discount {
         MIN_PRICE,      // minimum total price
         MIN_QUANTITY    // minimum quantity of items
     }
-
-
-
 
 
     // Tracks if this discount has been applied (prevents reuse in 'Maximum' composition)

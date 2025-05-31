@@ -1,6 +1,7 @@
 package ServiceLayer;
 import DomainLayer.IOrderRepository;
 import DomainLayer.Order;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 
@@ -11,9 +12,11 @@ public class OrderService{
 
 
     public OrderService(IOrderRepository OrderRepository) {
+
         this.OrderRepository = OrderRepository;
     }
 
+    @Transactional
     public void addOrder(Order order){
         order.setId(id);
         int numericId = Integer.parseInt(id);
@@ -22,6 +25,7 @@ public class OrderService{
         OrderRepository.addOrder(order.toString(), order.getStoreId(), order.getUserId());
     }
 
+    @Transactional
     public void removeOrder(Order order){
         OrderRepository.addOrder(order.toString(), order.getStoreId(), order.getUserId());
     }

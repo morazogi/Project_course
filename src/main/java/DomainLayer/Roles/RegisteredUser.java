@@ -1,20 +1,37 @@
 package DomainLayer.Roles;
 
+import jakarta.persistence.*;
 import java.util.*;
+
 import DomainLayer.ShoppingCart;
 import DomainLayer.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Entity
+@Table(name = "registered_users")
 public class RegisteredUser extends User {
 
-    ObjectMapper mapper = new ObjectMapper();
+    @Transient
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @ElementCollection
+    @CollectionTable(name = "user_answers", joinColumns = @JoinColumn(name = "user_id"))
+    @MapKeyColumn(name = "question")
+    @Column(name = "answer")
     private Map<String, String> answers = new HashMap<>();
+
+    @Column(name = "name", nullable = false)
     private String name;
-    private LinkedList<String> ownedStores = new LinkedList<String>();
-    private LinkedList<String> managedStores = new LinkedList<String>();
 
+    @ElementCollection
+    @CollectionTable(name = "owned_stores", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "store_id")
+    private LinkedList<String> ownedStores = new LinkedList<>();
 
+    @ElementCollection
+    @CollectionTable(name = "managed_stores", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "store_id")
+    private LinkedList<String> managedStores = new LinkedList<>();
 
     public RegisteredUser(String username) {
         super();
