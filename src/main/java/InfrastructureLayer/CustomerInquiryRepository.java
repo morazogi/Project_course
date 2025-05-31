@@ -1,4 +1,4 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 
 import DomainLayer.ICustomerInquiryRepository;
 import org.springframework.stereotype.Repository;

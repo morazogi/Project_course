@@ -1,10 +1,7 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 import DomainLayer.IStoreRepository;
-import DomainLayer.Product;
-import DomainLayer.Store;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

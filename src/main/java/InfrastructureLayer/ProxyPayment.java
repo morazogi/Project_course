@@ -1,7 +1,6 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 
 import DomainLayer.IPayment;
-import ServiceLayer.ErrorLogger;
 import org.springframework.stereotype.Repository;
 
 @Repository

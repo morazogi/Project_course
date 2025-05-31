@@ -1,9 +1,7 @@
 package UILayer;
 
-import DomainLayer.IStoreRepository;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
-import com.vaadin.flow.server.VaadinServletContext;
 import com.vaadin.flow.spring.SpringServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

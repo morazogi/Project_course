@@ -1,7 +1,7 @@
 package DomainLayer.domainServices;
 
 import DomainLayer.ICustomerInquiryRepository;
-import infrastructureLayer.CustomerInquiryRepository;
+import InfrastructureLayer.CustomerInquiryRepository;
 import java.util.*;
 
 /**

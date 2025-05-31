@@ -1,4 +1,4 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;

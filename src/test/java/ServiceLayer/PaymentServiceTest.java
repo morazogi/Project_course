@@ -5,16 +5,14 @@ import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
 import DomainLayer.User;
-import infrastructureLayer.DiscountRepository;
+import InfrastructureLayer.DiscountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import infrastructureLayer.ProductRepository;
+import InfrastructureLayer.ProductRepository;
 import Mocks.MockPayment;
-import infrastructureLayer.StoreRepository;
-import infrastructureLayer.UserRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 

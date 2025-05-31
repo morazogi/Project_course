@@ -1,12 +1,6 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 import DomainLayer.IUserRepository;
-import DomainLayer.Store;
-import DomainLayer.User;
-import DomainLayer.Roles.RegisteredUser;
-import io.micrometer.observation.Observation.Event;
-import ServiceLayer.EventLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

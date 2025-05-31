@@ -5,8 +5,8 @@ package ServiceLayer;
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.domainServices.UserCart;
-import infrastructureLayer.OrderRepository;
-import infrastructureLayer.ProductRepository;
+import InfrastructureLayer.OrderRepository;
+import InfrastructureLayer.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.yaml.snakeyaml.events.Event.ID;
 
 import java.lang.reflect.Field;
 import java.util.List;

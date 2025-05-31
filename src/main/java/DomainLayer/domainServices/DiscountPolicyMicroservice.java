@@ -2,12 +2,10 @@ package DomainLayer.domainServices;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import infrastructureLayer.DiscountRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class DiscountPolicyMicroservice {

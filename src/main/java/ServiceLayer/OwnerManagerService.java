@@ -3,7 +3,7 @@ package ServiceLayer;
 
 import DomainLayer.*;
 import DomainLayer.domainServices.*;
-import infrastructureLayer.CustomerInquiryRepository;
+import InfrastructureLayer.CustomerInquiryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

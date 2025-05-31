@@ -1,14 +1,10 @@
 package DomainLayer.domainServices;
 
 import DomainLayer.*;
-import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import infrastructureLayer.StoreRepository;
-import infrastructureLayer.UserRepository;
 import utils.ProductKeyModule;
 
 import java.util.List;
-import java.util.Map;
 
 public class ShippingConnectivity {
 

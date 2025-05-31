@@ -1,12 +1,8 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 
 import DomainLayer.IShipping;
-import DomainLayer.Product;
-import DomainLayer.Store;
-import DomainLayer.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Map;
 
 @Repository

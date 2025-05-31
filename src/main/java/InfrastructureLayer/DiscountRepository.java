@@ -1,4 +1,4 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 
 import DomainLayer.*;
 import org.springframework.stereotype.Repository;
