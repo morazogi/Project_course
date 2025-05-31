@@ -14,15 +14,15 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @EnableWebSocket
 public class WebSocketConfigure implements WebSocketConfigurer {
 
-//    @Autowired
-//    private NotificationWebSocketHandler notificationWebSocketHandler;
+      @Autowired
+    private NotificationWebSocketHandler notificationWebSocketHandler;
 
     public WebSocketConfigure() {
     }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new TextWebSocketHandler(),"/server").setAllowedOrigins("*").addInterceptors(new HttpSessionHandshakeInterceptor());
+        registry.addHandler(notificationWebSocketHandler,"/ds-").setAllowedOrigins("*").withSockJS();;
     }
 
 //    @Bean

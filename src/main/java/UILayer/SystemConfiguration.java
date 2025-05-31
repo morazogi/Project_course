@@ -3,6 +3,10 @@ package UILayer;
 import DomainLayer.IStoreRepository;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
+import com.vaadin.flow.server.VaadinServletContext;
+import com.vaadin.flow.spring.SpringServlet;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -118,5 +122,12 @@ public class SystemConfiguration {
     public NotificationWebSocketHandler NotificationWebSocketHandler() {
         return new NotificationWebSocketHandler();
     };
+
+    @Bean
+    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
+        // configure other properties as needed
+        SpringServlet servlet = new SpringServlet(context, true);
+        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
+    }
 
 }

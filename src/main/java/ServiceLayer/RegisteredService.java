@@ -57,11 +57,11 @@ public class RegisteredService {
         }
     }
 
-    public String openStore(String token) throws Exception {
+    public String openStore(String token, String storeName) throws Exception {
         String username = tokenService.extractUsername(token);
         try {
             EventLogger.logEvent(username, "OPEN_STORE");
-            return opener.openStore(token, username);
+            return opener.openStore(token, storeName);
         } catch (IllegalArgumentException e) {
             EventLogger.logEvent(username, "OPEN_STORE_FAILED");
             throw new RuntimeException("Invalid token");
