@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 import DomainLayer.IStoreRepository;
 import DomainLayer.Product;
 import DomainLayer.Store;

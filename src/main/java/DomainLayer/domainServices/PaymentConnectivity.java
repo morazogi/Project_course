@@ -1,10 +1,10 @@
 package DomainLayer.domainServices;
 
 import DomainLayer.*;
-import InfrastructureLayer.DiscountRepository;
-import InfrastructureLayer.ProductRepository;
+import infrastructureLayer.DiscountRepository;
+import infrastructureLayer.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import InfrastructureLayer.ProxyPayment;
+import infrastructureLayer.ProxyPayment;
 import utils.ProductKeyModule;
 
 import java.util.HashMap;

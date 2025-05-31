@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 
 import org.atmosphere.websocket.WebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;

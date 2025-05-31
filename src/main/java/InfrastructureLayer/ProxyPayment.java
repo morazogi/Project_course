@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 
 import DomainLayer.IPayment;
 import ServiceLayer.ErrorLogger;

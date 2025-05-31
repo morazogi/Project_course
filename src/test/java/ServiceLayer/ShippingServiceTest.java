@@ -4,7 +4,7 @@ import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import Mocks.MockShipping;
-import InfrastructureLayer.UserRepository;
+import infrastructureLayer.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

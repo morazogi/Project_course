@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 
 import DomainLayer.IShipping;
 import DomainLayer.Product;
