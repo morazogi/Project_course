@@ -1,10 +1,7 @@
 package UILayer;
 
-import DomainLayer.IToken;
-import DomainLayer.IUserRepository;
-import DomainLayer.ManagerPermissions;
+import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.User;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.PermissionsPresenter;
 import ServiceLayer.OwnerManagerService;
@@ -32,7 +29,7 @@ public class UserHomePageUI extends VerticalLayout {
     private final PermissionsPresenter pp;
 
     @Autowired
-    public UserHomePageUI(OwnerManagerService ownerManager, IToken tokenService, IUserRepository userRepository, RegisteredService registeredService) {
+    public UserHomePageUI(OwnerManagerService ownerManager, IToken tokenService, IUserRepository userRepository, RegisteredService registeredService, IStoreRepository storeRepository) {
         // Get current user from session
         this.tokenService = tokenService;
         this.userRepository = userRepository;
@@ -51,6 +48,21 @@ public class UserHomePageUI extends VerticalLayout {
         if (user == null) {
             UI.getCurrent().navigate("");
             return;
+        }
+        Store store = new Store();
+        store.setId("saqw");
+        store.addOwner(user.getID(), user.getID());
+        boolean[] arr = new boolean[7];
+        arr[0] = true;
+        arr[1] = true;
+        store.addManager(user.getID(), user.getID(), arr);
+        store.setName("name");
+        System.out.println(store.userIsManager(user.getID()));
+        try {
+            storeRepository.addStore(store.getId(), mapper.writeValueAsString(store));
+            System.out.println("Serialized store JSON:\n" + mapper.writeValueAsString(store));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
         // Header bar
@@ -84,8 +96,8 @@ public class UserHomePageUI extends VerticalLayout {
         map1.put("PERM_UPDATE_PRODUCT", false);
 
         // Permissions and actions
-        if(storeDropdown.getValue() != null)
-            map1 = this.pp.getPremissions(user.getID(), storeDropdown.getValue(), user.getID());; //user.getManagerPermissions();
+        //if(storeDropdown.getValue() != null)
+            map1 = this.pp.getPremissions(user.getID(), store.getName(), user.getID());; //user.getManagerPermissions();
 
         boolean[] permsArray=  {
             map1.get("PERM_MANAGE_INVENTORY"),

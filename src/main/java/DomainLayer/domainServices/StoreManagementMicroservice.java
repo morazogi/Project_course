@@ -3,6 +3,8 @@ package DomainLayer.domainServices;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
+
 import DomainLayer.Store;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.IStoreRepository;
@@ -35,7 +37,9 @@ public class StoreManagementMicroservice {
     }
     // Helper methods to get entities from repositories
     private Store getStoreById(String storeId) {
+        System.out.println("1");
         if (storeRepository == null) {
+            System.out.println("2");
             return null;
         }
         try {
@@ -316,13 +320,16 @@ public class StoreManagementMicroservice {
         for(Map.Entry<String, String> entry : this.storeRepository.getStores().entrySet()){
             if(entry.getValue().contains(storename)){
                 key = entry.getKey();
-                EventLogger.logEvent(managerId,"got the key that macthes to the store named "+storename);
+                EventLogger.logEvent(managerId,"got the key that macthes to the store named "+storename + key);
             }
 
         }
-        if(key == "") return null;
+        //if(Objects.equals(key, "")) return null;
         Store store = getStoreById(key);
+        System.out.println("here");
+        System.out.println(store.userIsManager(managerId));
         if (store.userIsManager(managerId)){
+            System.out.println(store.getPremissions(managerId));
             return store.getPremissions(managerId);
         }
         Map<String, Boolean> fakeAnswer = new HashMap<>();

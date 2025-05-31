@@ -131,3 +131,218 @@
 [2025-05-31 08:47:50] User: a | Event: Event | Description: LOGIN_SUCCESS
 [2025-05-31 08:47:51] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
 [2025-05-31 08:47:51] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:06:28] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:06:28] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:06:28] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:06:29] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:06:29] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:35:28] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:35:29] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:35:29] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:35:30] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:35:30] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:37:11] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:37:11] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:37:11] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:37:12] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:37:12] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:40:12] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:40:12] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:40:12] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:40:13] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:40:13] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:41:25] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:41:25] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:41:25] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:41:26] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:41:26] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:42:58] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:42:58] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:42:58] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:42:59] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:42:59] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:44:57] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:44:57] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:44:57] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:44:58] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:44:58] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:46:14] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:46:15] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:46:15] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:46:16] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:46:16] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:47:51] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:47:51] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:47:51] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:47:52] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:47:52] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:47:54] User: 8f33c394-9abf-45e3-b8e1-120581abe169 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 12:47:54] User: 8f33c394-9abf-45e3-b8e1-120581abe169 | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 12:47:54] User: 8f33c394-9abf-45e3-b8e1-120581abe169 | Event: Event | Description: we return a fake answer as a hash map name
+[2025-05-31 12:47:54] User: 8f33c394-9abf-45e3-b8e1-120581abe169 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 12:56:02] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:56:02] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:56:02] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:56:03] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:56:03] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:56:05] User: 1d2e6042-a5c8-4b51-8852-cee6b88c5544 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 12:56:05] User: 1d2e6042-a5c8-4b51-8852-cee6b88c5544 | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 12:56:05] User: 1d2e6042-a5c8-4b51-8852-cee6b88c5544 | Event: Event | Description: we return a fake answer as a hash map name
+[2025-05-31 12:56:05] User: 1d2e6042-a5c8-4b51-8852-cee6b88c5544 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:03:28] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:03:28] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:03:28] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:03:29] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:03:29] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:03:31] User: a40dc675-47a7-4b20-b010-3148307f6815 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:03:31] User: a40dc675-47a7-4b20-b010-3148307f6815 | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 13:03:31] User: a40dc675-47a7-4b20-b010-3148307f6815 | Event: Event | Description: we return a fake answer as a hash map name
+[2025-05-31 13:03:31] User: a40dc675-47a7-4b20-b010-3148307f6815 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:05:25] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:05:25] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:05:25] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:05:26] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:05:26] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:05:28] User: 7e220a79-55d5-4659-9783-7afe5a3e1102 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:05:28] User: 7e220a79-55d5-4659-9783-7afe5a3e1102 | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 13:05:28] User: 7e220a79-55d5-4659-9783-7afe5a3e1102 | Event: Event | Description: we return a fake answer as a hash map name
+[2025-05-31 13:05:28] User: 7e220a79-55d5-4659-9783-7afe5a3e1102 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:13:31] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:13:32] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:13:32] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:13:32] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:13:32] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:13:34] User: e136fbbc-308a-4ea4-b8fe-c9957042c400 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:13:34] User: e136fbbc-308a-4ea4-b8fe-c9957042c400 | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 13:13:34] User: e136fbbc-308a-4ea4-b8fe-c9957042c400 | Event: Event | Description: we return a fake answer as a hash map name
+[2025-05-31 13:13:34] User: e136fbbc-308a-4ea4-b8fe-c9957042c400 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:16:40] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:16:40] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:16:40] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:16:41] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:16:41] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:16:43] User: 7598dd41-cd16-496d-85a8-43a0757d1609 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:16:43] User: 7598dd41-cd16-496d-85a8-43a0757d1609 | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 13:16:43] User: 7598dd41-cd16-496d-85a8-43a0757d1609 | Event: Event | Description: we return a fake answer as a hash map name
+[2025-05-31 13:16:43] User: 7598dd41-cd16-496d-85a8-43a0757d1609 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:21:44] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:21:44] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:21:44] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:21:45] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:21:45] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:21:47] User: c5307d63-1d03-417e-a623-71675490326e | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:21:47] User: c5307d63-1d03-417e-a623-71675490326e | Event: Event | Description: got the key that macthes to the store named name
+[2025-05-31 13:24:24] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:24:24] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:24:25] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:24:26] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:24:26] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:24:27] User: 18aafbd8-f27f-41ed-8bce-5adf4948f995 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:24:27] User: 18aafbd8-f27f-41ed-8bce-5adf4948f995 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:26:31] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:26:31] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:26:31] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:26:32] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:26:32] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:26:34] User: 08ee0ad7-af51-41ff-8f2c-c9db4189a3cf | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:26:34] User: 08ee0ad7-af51-41ff-8f2c-c9db4189a3cf | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:27:39] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:27:40] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:27:40] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:27:41] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:27:41] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:27:43] User: f4556179-40ac-4aaf-a7e3-93fc16a5b0e6 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:27:43] User: f4556179-40ac-4aaf-a7e3-93fc16a5b0e6 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:33:43] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:33:43] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:33:43] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:33:44] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:33:44] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:33:46] User: 347276fa-d010-4b6a-bd5a-fca5fb2721a6 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:33:46] User: 347276fa-d010-4b6a-bd5a-fca5fb2721a6 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:34:29] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:34:29] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:34:29] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:34:31] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:34:31] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:34:32] User: 9e1e09fc-f99c-4e62-86c9-7cb52a6d224a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:34:32] User: 9e1e09fc-f99c-4e62-86c9-7cb52a6d224a | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:36:50] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:36:50] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:36:50] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:36:51] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:36:51] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:36:52] User: 4e3f295f-28b8-4f30-9ddb-305a7e7c61cc | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:36:52] User: 4e3f295f-28b8-4f30-9ddb-305a7e7c61cc | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:40:25] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:40:25] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:40:25] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:40:27] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:40:27] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:40:28] User: d81eb390-6db7-4cad-ad56-5cad4ee7e75a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:40:28] User: d81eb390-6db7-4cad-ad56-5cad4ee7e75a | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:43:06] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:43:06] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:43:06] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:43:07] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:43:07] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:43:09] User: bb11aaf6-c641-4486-9f89-7cf5c22fdd5d | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:43:09] User: bb11aaf6-c641-4486-9f89-7cf5c22fdd5d | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:45:36] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:45:36] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:45:36] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:45:37] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:45:37] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:45:38] User: fb924fed-2a29-4f80-8579-df443598854f | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:45:38] User: fb924fed-2a29-4f80-8579-df443598854f | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:48:24] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:48:24] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:48:24] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:48:25] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:48:26] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:48:27] User: 745118c0-5a9f-4d46-89a4-6131da2eaef5 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:48:27] User: 745118c0-5a9f-4d46-89a4-6131da2eaef5 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:48:27] User: 745118c0-5a9f-4d46-89a4-6131da2eaef5 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:50:13] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:50:13] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:50:13] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:50:13] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:50:13] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:50:15] User: 03af278a-fff4-4679-810e-22bc0c13fdbe | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:50:15] User: 03af278a-fff4-4679-810e-22bc0c13fdbe | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:50:15] User: 03af278a-fff4-4679-810e-22bc0c13fdbe | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:52:06] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:52:06] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:52:06] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:52:08] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:52:08] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:52:09] User: 1c37beb8-de04-4c1f-9ff8-d51fec800b04 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:52:09] User: 1c37beb8-de04-4c1f-9ff8-d51fec800b04 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:52:09] User: 1c37beb8-de04-4c1f-9ff8-d51fec800b04 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:52:09] User: 1c37beb8-de04-4c1f-9ff8-d51fec800b04 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:52:09] User: 1c37beb8-de04-4c1f-9ff8-d51fec800b04 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:52:09] User: 1c37beb8-de04-4c1f-9ff8-d51fec800b04 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:53:54] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:53:54] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:53:54] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:53:55] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:53:55] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:53:56] User: 86502e9c-7a4e-4ccd-bd64-c500a849d2ba | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:53:56] User: 86502e9c-7a4e-4ccd-bd64-c500a849d2ba | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:53:56] User: 86502e9c-7a4e-4ccd-bd64-c500a849d2ba | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:55:04] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:55:04] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:55:04] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:55:05] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:55:05] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:55:07] User: edb45249-0847-4ce8-aec2-87aa3267ae22 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:55:07] User: edb45249-0847-4ce8-aec2-87aa3267ae22 | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:55:07] User: edb45249-0847-4ce8-aec2-87aa3267ae22 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-05-31 13:57:15] User: a | Event: Event | Description: LOGIN
+[2025-05-31 13:57:16] User: a | Event: Event | Description: TokenService
+[2025-05-31 13:57:16] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 13:57:16] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 13:57:16] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 13:57:18] User: 187d148e-3b15-49ae-8db6-4e23693bd4dc | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-05-31 13:57:18] User: 187d148e-3b15-49ae-8db6-4e23693bd4dc | Event: Event | Description: got the key that macthes to the store named namesaqw
+[2025-05-31 13:57:18] User: 187d148e-3b15-49ae-8db6-4e23693bd4dc | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS

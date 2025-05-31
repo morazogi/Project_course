@@ -14,8 +14,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import infrastructureLayer.ProductRepository;
-import infrastructureLayer.StoreRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
