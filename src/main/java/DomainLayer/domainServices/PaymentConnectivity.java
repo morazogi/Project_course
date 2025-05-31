@@ -1,6 +1,7 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.*;
+import DomainLayer.IPayment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.ProductKeyModule;
 
@@ -35,7 +36,9 @@ public class PaymentConnectivity {
                 Map<Product, Integer> products = new HashMap<Product, Integer>();
                 double payment = 0;
                 for (String product : shoppingBag.getProducts().keySet()) {
-                    products.put(productRepository.getProduct(product), shoppingBag.getProducts().get(product));
+                    Product p = productRepository.findById(product)
+                            .orElseThrow(() -> new IllegalArgumentException("Product not found: " + product));
+                    products.put(p, shoppingBag.getProducts().get(product));
                 }
                 Product firstProduct = products.keySet().iterator().next();
                 Map<String, Integer> productsString = new HashMap<>();

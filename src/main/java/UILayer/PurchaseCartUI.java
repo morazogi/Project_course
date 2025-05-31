@@ -2,6 +2,9 @@ package UILayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
+import InfrastructureLayer.StoreRepository;
+import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,16 +26,21 @@ import java.util.Map;
 @Route("/purchasecart")
 public class PurchaseCartUI extends VerticalLayout {
 
+    private final ProductService productService;
     private final RegisteredService registeredService;
     private final IProductRepository productRepository;
     private final IToken tokenService;
     private final IUserRepository userRepository;
+    private final IDiscountRepository discountRepository;
+    private final StoreRepository storeRepository;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public PurchaseCartUI(RegisteredService registeredService, IProductRepository productRepository, IToken tokenService, IUserRepository userRepository) {
+    public PurchaseCartUI(ProductService productService, RegisteredService registeredService, IProductRepository productRepository, IToken tokenService, IUserRepository userRepository, StoreRepository storeRepository, IDiscountRepository discountRepository) {
+        this.productService = productService;
         this.registeredService = registeredService;
         this.productRepository = productRepository;
+        this.discountRepository = discountRepository;
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
@@ -88,11 +96,19 @@ public class PurchaseCartUI extends VerticalLayout {
         totalField.setLabel("Total");
         double payment = 0;
         for (ShoppingBag shoppingBag : shoppingBags) {
+            DiscountPolicyMicroservice discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
             Map<Product, Integer> products = new HashMap<Product, Integer>();
             for (String product : shoppingBag.getProducts().keySet()) {
-                products.put(productRepository.getProduct(product), shoppingBag.getProducts().get(product));
+                products.put(productRepository.getReferenceById(product), shoppingBag.getProducts().get(product));
             }
-            payment = payment;
+
+            Product firstProduct = products.keySet().iterator().next();
+            Map<String, Integer> productsString = new HashMap<>();
+            for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+                String storeId = entry.getKey().getStoreId();  // Extract key
+                productsString.put(storeId, entry.getValue()); // Preserve value
+            }
+            payment = payment + discountPolicy.calculatePrice(firstProduct.getStoreId(), productsString);
         }
 
         totalField.setValue("$" + payment); // Assuming getTotalPrice() exists
@@ -104,5 +120,6 @@ public class PurchaseCartUI extends VerticalLayout {
 
         setPadding(true);
         setAlignItems(Alignment.CENTER);
+        this.storeRepository = storeRepository;
     }
 }

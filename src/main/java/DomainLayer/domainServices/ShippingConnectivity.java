@@ -1,4 +1,4 @@
-package DomainLayer.domainServices;
+package DomainLayer.DomainServices;
 
 import DomainLayer.*;
 import com.fasterxml.jackson.databind.ObjectMapper;

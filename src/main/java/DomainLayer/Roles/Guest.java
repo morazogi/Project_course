@@ -9,20 +9,33 @@ import DomainLayer.Store;
 import io.micrometer.observation.Observation.Event;
 import ServiceLayer.EventLogger;
 
+import jakarta.persistence.*;
+import java.util.UUID;
+
+@Entity
+@Table(name = "guests")
 public class Guest {
 
-    protected String id = UUID.randomUUID().toString();
-    protected ShoppingCart shoppingCart = new ShoppingCart((id));
-    protected static int counter = 0;
-    protected String username = "Guest"+ counter++;
-    protected Boolean cartReserved = false;
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    private String id = UUID.randomUUID().toString();
 
+    @Column(name = "username", nullable = false, unique = true)
+    private String username = "Guest" + counter++;
+
+    @Column(name = "cart_reserved")
+    private Boolean cartReserved = false;
+
+    @Transient
+    protected ShoppingCart shoppingCart = new ShoppingCart(id);
+
+    @Transient
+    protected static int counter = 0;
 
     public Guest() {
     }
 
-
-    public void addProduct(String storeId, String productId , Integer quantity) {
+    public void addProduct(String storeId, String productId, Integer quantity) {
         boolean found = false;
         for (ShoppingBag shoppingBag : shoppingCart.getShoppingBags()) {
             if (shoppingBag.getStoreId().equals(storeId)) {

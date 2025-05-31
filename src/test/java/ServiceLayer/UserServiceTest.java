@@ -1,8 +1,8 @@
 package ServiceLayer;
 
 import DomainLayer.*;
-import DomainLayer.domainServices.UserCart;
-import DomainLayer.domainServices.UserConnectivity;
+import DomainLayer.DomainServices.UserCart;
+import DomainLayer.DomainServices.UserConnectivity;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;

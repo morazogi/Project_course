@@ -1,7 +1,8 @@
 package ServiceLayer;
 
 import DomainLayer.*;
-import DomainLayer.domainServices.PaymentConnectivity;
+import DomainLayer.DomainServices.PaymentConnectivity;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +18,12 @@ public class PaymentService {
         this.tokenService = tokenService;
     }
 
+    @Transactional
     public boolean processPayment(String token, String paymentService, String creditCardNumber, String expirationDate, String backNumber) {
         try {
             paymentConnectivity.processPayment(tokenService.extractUsername(token), creditCardNumber, expirationDate, backNumber, paymentService);
             EventLogger.logEvent(tokenService.extractUsername(token), "Successfully payed for cart");
-        return true;
+            return true;
         } catch (Exception e) {
             ErrorLogger.logError(tokenService.extractUsername(token), "Failed to pay " , e.getMessage());
             return false;

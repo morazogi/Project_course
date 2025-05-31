@@ -1,20 +1,42 @@
 package DomainLayer;
-import java.util.HashMap;
+
+import jakarta.persistence.*;
 import java.util.UUID;
 
+@Entity
+@Table(name = "products")
 public class Product {
+
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
     private String id = UUID.randomUUID().toString();
+
+    @ManyToOne
+    @JoinColumn(name = "storeID", referencedColumnName = "id")
     private String storeId;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "price", nullable = false)
     private float price;
+
+    @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @Column(name = "rating")
     private double rating;
-    private HashMap<String , Double> raterId = new HashMap<>();
+
+    @Column(name = "category")
     private String category;
 
+    // Constructors
     public Product(String id, String storeId, String name, String description, float price , int quantity, double rating, String category) {
         if(quantity > 0) {
+            this.id = id;
             this.storeId = storeId;
             this.name = name;
             this.description = description;
@@ -22,59 +44,36 @@ public class Product {
             this.quantity = quantity;
             this.rating = rating;
             this.category = category;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Product must have at least 1 quantity");
         }
     }
 
     public Product() {
-        //needed for Jackson
+        // Needed for JPA / Jackson
     }
-    
-    //getters
-    public String getId() {
-        return id;
-    }
-    public String getStoreId() {return storeId; }
-    public String getName() {
-        return name;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public float getPrice() {
-        return price;
-    }
+
+    // Getters
+    public String getId() { return id; }
+    public String getStoreId() { return storeId; }
+    public String getName() { return name; }
+    public String getDescription() { return description; }
+    public float getPrice() { return price; }
     public int getQuantity() { return quantity; }
     public double getRating() { return rating; }
     public String getCategory() { return category; }
 
-    //setters
-    public synchronized void setId(String id) {this.id = id; }
+    // Setters
+    public synchronized void setId(String id) { this.id = id; }
     public synchronized void setStoreId(String storeId) { this.storeId = storeId; }
-    public synchronized void changeName(String name) { this.name = name; }
-    public synchronized void setDescription(String description) {this.description = description;}
-    public synchronized void changePrice(int price) { this.price = price; }
+    public synchronized void setName(String name) { this.name = name; }
+    public synchronized void setDescription(String description) { this.description = description; }
+    public synchronized void setPrice(int price) { this.price = price; }
     public synchronized void setQuantity(int quantity) { this.quantity = quantity; }
     public synchronized void setRating(double rating) { this.rating = rating; }
     public synchronized void setCategory(String category) { this.category = category; }
 
-    public synchronized boolean addRating(String username, double rating) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
-        }
-        if(raterId.containsKey(username)) {
-            this.rating = (rating - raterId.get(username) + rating) / raterId.size();
-        } 
-        else {
-            this.rating = (this.rating * raterId.size() + rating) / (raterId.size() + 1);
-
-        }
-        raterId.put(username, rating);
-        return true;
-    }
-
+    @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
@@ -88,8 +87,7 @@ public class Product {
                 '}';
     }
 
-    public void setName(String name2) {
-        this.name = name2;
+    public boolean addRating(String username, double rate) {
+        return false;
     }
-
 }

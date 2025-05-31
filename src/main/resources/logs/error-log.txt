@@ -1,42 +1,42 @@
-[2025-05-23 14:10:42] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-23 14:10:42] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"
-[2025-05-23 14:10:42] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-23 14:10:42] User: username | Error: Error in shipping | Details: Empty state
-[2025-05-23 14:10:42] User: username | Error: Error in shipping | Details: Empty street
-[2025-05-23 14:10:42] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-23 14:10:42] User: username | Error: Error in shipping | Details: Empty city
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: Unknown credit card company
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid credit card number
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: ""
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: Invalid expiration date
-[2025-05-25 03:54:56] User: username | Error: Failed to pay  | Details: Exception for payment: For input string: "kfjeowia0"
-[2025-05-31 13:21:47] User: c5307d63-1d03-417e-a623-71675490326e | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["c5307d63-1d03-417e-a623-71675490326e"],"managers":{"c5307d63-1d03-417e-a623-71675490326e":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"c5307d63-1d03-417e-a623-71675490326e":"c5307d63-1d03-417e-a623-71675490326e"},"managersToSuperior":{"c5307d63-1"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:24:27] User: 18aafbd8-f27f-41ed-8bce-5adf4948f995 | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["18aafbd8-f27f-41ed-8bce-5adf4948f995"],"managers":{"18aafbd8-f27f-41ed-8bce-5adf4948f995":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"18aafbd8-f27f-41ed-8bce-5adf4948f995":"18aafbd8-f27f-41ed-8bce-5adf4948f995"},"managersToSuperior":{"18aafbd8-f"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:26:34] User: 08ee0ad7-af51-41ff-8f2c-c9db4189a3cf | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["08ee0ad7-af51-41ff-8f2c-c9db4189a3cf"],"managers":{"08ee0ad7-af51-41ff-8f2c-c9db4189a3cf":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"08ee0ad7-af51-41ff-8f2c-c9db4189a3cf":"08ee0ad7-af51-41ff-8f2c-c9db4189a3cf"},"managersToSuperior":{"08ee0ad7-a"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:27:43] User: f4556179-40ac-4aaf-a7e3-93fc16a5b0e6 | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["f4556179-40ac-4aaf-a7e3-93fc16a5b0e6"],"managers":{"f4556179-40ac-4aaf-a7e3-93fc16a5b0e6":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"f4556179-40ac-4aaf-a7e3-93fc16a5b0e6":"f4556179-40ac-4aaf-a7e3-93fc16a5b0e6"},"managersToSuperior":{"f4556179-4"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:33:46] User: 347276fa-d010-4b6a-bd5a-fca5fb2721a6 | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["347276fa-d010-4b6a-bd5a-fca5fb2721a6"],"managers":{"347276fa-d010-4b6a-bd5a-fca5fb2721a6":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"347276fa-d010-4b6a-bd5a-fca5fb2721a6":"347276fa-d010-4b6a-bd5a-fca5fb2721a6"},"managersToSuperior":{"347276fa-d"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:34:32] User: 9e1e09fc-f99c-4e62-86c9-7cb52a6d224a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["9e1e09fc-f99c-4e62-86c9-7cb52a6d224a"],"managers":{"9e1e09fc-f99c-4e62-86c9-7cb52a6d224a":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"9e1e09fc-f99c-4e62-86c9-7cb52a6d224a":"9e1e09fc-f99c-4e62-86c9-7cb52a6d224a"},"managersToSuperior":{"9e1e09fc-f"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:36:52] User: 4e3f295f-28b8-4f30-9ddb-305a7e7c61cc | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["4e3f295f-28b8-4f30-9ddb-305a7e7c61cc"],"managers":{"4e3f295f-28b8-4f30-9ddb-305a7e7c61cc":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"4e3f295f-28b8-4f30-9ddb-305a7e7c61cc":"4e3f295f-28b8-4f30-9ddb-305a7e7c61cc"},"managersToSuperior":{"4e3f295f-2"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:40:28] User: d81eb390-6db7-4cad-ad56-5cad4ee7e75a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["d81eb390-6db7-4cad-ad56-5cad4ee7e75a"],"managers":{"d81eb390-6db7-4cad-ad56-5cad4ee7e75a":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"d81eb390-6db7-4cad-ad56-5cad4ee7e75a":"d81eb390-6db7-4cad-ad56-5cad4ee7e75a"},"managersToSuperior":{"d81eb390-6"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:43:09] User: bb11aaf6-c641-4486-9f89-7cf5c22fdd5d | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["bb11aaf6-c641-4486-9f89-7cf5c22fdd5d"],"managers":{"bb11aaf6-c641-4486-9f89-7cf5c22fdd5d":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"bb11aaf6-c641-4486-9f89-7cf5c22fdd5d":"bb11aaf6-c641-4486-9f89-7cf5c22fdd5d"},"managersToSuperior":{"bb11aaf6-c"[truncated 219 chars]; line: 1, column: 1]
-[2025-05-31 13:45:38] User: fb924fed-2a29-4f80-8579-df443598854f | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Conflicting setter definitions for property "permissions": DomainLayer.ManagerPermissions#setPermissions(java.util.Map) vs DomainLayer.ManagerPermissions#setPermissions([Z)
- at [Source: (String)"{"id":"saqw","users":[],"products":{},"reservedProducts":{},"openNow":false,"rating":0.0,"founder":null,"owners":["fb924fed-2a29-4f80-8579-df443598854f"],"managers":{"fb924fed-2a29-4f80-8579-df443598854f":{"permissions":{"removeProduct":false,"addProduct":false,"updateProduct":false,"manageInventory":true,"updatePolicy":false,"viewStore":false,"manageStaff":true}}},"ownersToSuperior":{"fb924fed-2a29-4f80-8579-df443598854f":"fb924fed-2a29-4f80-8579-df443598854f"},"managersToSuperior":{"fb924fed-2"[truncated 219 chars]; line: 1, column: 1]
+[2025-05-24 22:04:31] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
+[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_MANAGER_PERMISSIONS_FAILED | Details: Failed to update manager permissions
+[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_REMOVE_PRODUCT_FAILED | Details: Failed to remove product
+[2025-05-24 22:04:31] User: owner1 | Error: ADD_PRODUCT_FAILED | Details: Failed to add product
+[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_STORE_OWNER_FAILED | Details: Failed to remove store owner
+[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_PURCHASE_POLICY_FAILED | Details: Failed to remove purchase policy
+[2025-05-24 22:04:31] User: manager1 | Error: RELINQUISH_MANAGEMENT_FAILED | Details: Failed to relinquish management
+[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: Failed to update purchase policy
+[2025-05-24 22:04:31] User: founder1 | Error: REOPEN_STORE_FAILED | Details: Failed to reopen store
+[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_ADD_PRODUCT_FAILED | Details: Failed to add product
+[2025-05-24 22:04:31] User: founder1 | Error: CLOSE_STORE_FAILED | Details: Failed to close store
+[2025-05-24 22:04:31] User: user1 | Error: SEND_OWNERSHIP_PROPOSAL_FAILED | Details: Failed to send ownership proposal
+[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_PRODUCT_QUANTITY_FAILED | Details: Failed to update product quantity
+[2025-05-24 22:04:31] User: user1 | Error: RESPOND_TO_MANAGER_APPOINTMENT_FAILED | Details: Failed to respond to manager appointment
+[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_STORE_MANAGER_FAILED | Details: Failed to remove store manager
+[2025-05-24 22:04:31] User: owner1 | Error: GET_CUSTOMER_INQUIRIES_FAILED | Details: Failed to get customer inquiries
+[2025-05-24 22:04:31] User: owner1 | Error: APPOINT_STORE_MANAGER_FAILED | Details: Failed to appoint store manager
+[2025-05-24 22:04:31] User: owner1 | Error: RELINQUISH_OWNERSHIP_FAILED | Details: Failed to relinquish ownership
+[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_UPDATE_PRODUCT_DETAILS_FAILED | Details: Failed to update product details
+[2025-05-24 22:04:31] User: owner1 | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Failed to get manager permissions
+[2025-05-24 22:04:31] User: user1 | Error: SEND_MANAGEMENT_PROPOSAL_FAILED | Details: Failed to send management proposal
+[2025-05-24 22:04:31] User: owner1 | Error: GET_STORE_ROLE_INFO_FAILED | Details: Failed to get store role info
+[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_UPDATE_PRODUCT_QUANTITY_FAILED | Details: Failed to update product quantity
+[2025-05-24 22:04:31] User: owner1 | Error: DEFINE_PURCHASE_POLICY_FAILED | Details: Failed to define purchase policy
+[2025-05-24 22:04:31] User: owner1 | Error: RESPOND_TO_CUSTOMER_INQUIRY_FAILED | Details: Failed to respond to customer inquiry
+[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_PRODUCT_FAILED | Details: Failed to remove product
+[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_PRODUCT_DETAILS_FAILED | Details: Failed to update product details
+[2025-05-24 22:04:32] User: owner1 | Error: APPOINT_STORE_OWNER_FAILED | Details: Failed to appoint store owner
+[2025-05-24 22:04:32] User: user1 | Error: RESPOND_TO_OWNER_APPOINTMENT_FAILED | Details: Failed to respond to owner appointment
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Invalid home number
+[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Empty state
+[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Empty street
+[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Invalid home number
+[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Empty city

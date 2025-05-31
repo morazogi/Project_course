@@ -6,13 +6,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import ServiceLayer.EventLogger;
-
 import io.micrometer.observation.Observation.Event;
+import jakarta.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
-
+@Entity
+@Table(name = "shopping_bags")
 public class ShoppingBag {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Column(name = "store_id", nullable = false)
     private String storeId;
-    private Map<String, Integer> products;       //String repressent product Id
+
+    @ElementCollection
+    @CollectionTable(name = "shopping_bag_products", joinColumns = @JoinColumn(name = "bag_id"))
+    @MapKeyColumn(name = "product_id")
+    @Column(name = "quantity")
+    private Map<String, Integer> products = new HashMap<>();
 
     public ShoppingBag( String storeId) {
         this.storeId = storeId;

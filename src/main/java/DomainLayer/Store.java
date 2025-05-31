@@ -119,10 +119,12 @@ public class Store {
     public synchronized void setPurchasePolicy(PurchasePolicy purchasePolicy) {
         this.purchasePolicy = purchasePolicy;
     }
+
     public List<String> getDiscountPolicy() {
         return discounts;
     }
-    @JsonIgnore
+
+
     public synchronized void setDiscouns(List<String> discounts) {
         this.discounts = discounts;
     }
@@ -601,7 +603,7 @@ public class Store {
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {
-        managers.get(managerId).setPermissionsFromAarray(permissions);
+        managers.get(managerId).setPermissions(permissions);
     }
 
     public void terminateManagment(String managerId) {

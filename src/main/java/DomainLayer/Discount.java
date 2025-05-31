@@ -1,9 +1,11 @@
 package DomainLayer;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Entity
 public class Discount {
 
     enum Level {
@@ -38,23 +40,28 @@ public class Discount {
     public boolean alreadyUsed = false;
 
     // Unique identifier for the discount instance
+    @Id
     public String Id;
 
-    public String storeId;
+    @Column(name = "store_id", nullable = false)
+    private String storeId;
 
     // Scope of the discount:
     // 1 = Product-level, 2 = Category-level, 3 = Store-wide
+    @Enumerated(EnumType.STRING)
     public Level level;
 
     // Logical combination with nested discounts:
     // 1 = XOR (exactly one condition must be true),
     // 2 = AND (all conditions must be true),
     // 3 = OR (any condition can be true)
+    @Enumerated(EnumType.STRING)
     public LogicComposition logicComposition;
 
     // How discount percentages are combined numerically:
     // 1 = Maximum (use highest discount),
     // 2 = Multiplication (stack discounts multiplicatively)
+    @Enumerated(EnumType.STRING)
     public NumericalComposition numericalComposition;
 
     // Nested discounts for complex discount combinations
@@ -73,6 +80,7 @@ public class Discount {
     // -1 = No condition,
     // 1 = Minimum total price,
     // 2 = Minimum quantity of items
+    @Enumerated(EnumType.STRING)
     public ConditionalType conditional;
 
     // Threshold value for the condition:
@@ -85,6 +93,9 @@ public class Discount {
     // - For quantity condition: product name to check
     public String conditionalDiscounted = "";
 
+    public Discount() {
+        // Required by JPA
+    }
 
     public Discount(
             String Id,
@@ -107,14 +118,14 @@ public class Discount {
             this.level = Level.CATEGORY;
         } else if (level == 3) {
             this.level = Level.STORE;
-        } else {
-            this.level = Level.UNDEFINED;
-        }
+         } else {
+                        this.level = Level.UNDEFINED;
+                    }
 
-        if (logicComposition == 1) {
-            this.logicComposition = LogicComposition.XOR;
-        } else if (logicComposition == 2) {
-            this.logicComposition = LogicComposition.AND;
+                    if (logicComposition == 1) {
+                        this.logicComposition = LogicComposition.XOR;
+                    } else if (logicComposition == 2) {
+                       this.logicComposition = LogicComposition.AND;
         } else if (logicComposition == 3) {
             this.logicComposition = LogicComposition.OR;
         } else {

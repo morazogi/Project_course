@@ -13,12 +13,10 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 @Configuration
 public class SystemConfiguration {
 
-
     @Bean
     public DiscountRepository DiscountRepository() {
         return new DiscountRepository();
     };
-
 
     @Bean
     public OrderRepository OrderRepository() {

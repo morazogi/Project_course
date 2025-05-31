@@ -2,12 +2,15 @@ package ServiceLayer;
 
 
 import DomainLayer.*;
-import DomainLayer.domainServices.*;
+import DomainLayer.DomainServices.*;
 import InfrastructureLayer.CustomerInquiryRepository;
+import java.util.List;
+import java.util.UUID;
+
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +26,7 @@ public class OwnerManagerService {
     private final DiscountPolicyMicroservice discountPolicyService;
     private final StoreManagementMicroservice storeManagementService;
     private final QueryMicroservice notificationService;
-    private final DomainLayer.domainServices.PurchaseHistoryMicroservice purchaseHistoryService;
+    private final PurchaseHistoryMicroservice purchaseHistoryService;
 
     public OwnerManagerService(IUserRepository userRepository, IStoreRepository storeRepository, IProductRepository productRepository, IOrderRepository orderRepository, IDiscountRepository discountRepository) {
         // Initialize repositories
@@ -51,6 +54,7 @@ public class OwnerManagerService {
      * @param category Category of the product
      * @return Product ID if successful, null otherwise
      */
+    @Transactional
     public String addProduct(String ownerId, String storeId, String productName, String description, double price, int quantity, String category) {
         try {
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_START");
@@ -70,6 +74,7 @@ public class OwnerManagerService {
      * @param productId ID of the product to remove
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean removeProduct(String ownerId, String storeId, String productId) {
         try {
             EventLogger.logEvent(ownerId, "REMOVE_PRODUCT_START");
@@ -93,6 +98,7 @@ public class OwnerManagerService {
      * @param category New category (null if unchanged)
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean updateProductDetails(String ownerId, String storeId, String productId, String productName, String description, double price, String category) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_PRODUCT_DETAILS_START");
@@ -113,6 +119,7 @@ public class OwnerManagerService {
      * @param newQuantity New quantity
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean updateProductQuantity(String ownerId, String storeId, String productId, int newQuantity) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_PRODUCT_QUANTITY_START");
@@ -135,6 +142,7 @@ public class OwnerManagerService {
      * @param policyParams Parameters for the policy
      * @return Policy ID if successful, null otherwise
      */
+    @Transactional
     public String definePurchasePolicy(String ownerId, String storeId, String policyType, Map<String, Object> policyParams) {
         try {
             EventLogger.logEvent(ownerId, "DEFINE_PURCHASE_POLICY_START");
@@ -155,6 +163,7 @@ public class OwnerManagerService {
      * @param policyParams New parameters for the policy
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean updatePurchasePolicy(String ownerId, String storeId, String policyId, Map<String, Object> policyParams) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_PURCHASE_POLICY_START");
@@ -174,6 +183,7 @@ public class OwnerManagerService {
      * @param policyId ID of the policy to remove
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean removePurchasePolicy(String ownerId, String storeId, String policyId) {
         try {
             EventLogger.logEvent(ownerId, "REMOVE_PURCHASE_POLICY_START");
@@ -185,7 +195,7 @@ public class OwnerManagerService {
             return false;
         }
     }
-
+    @Transactional
     public boolean defineDiscountPolicy(String ownerId, String storeId, String discountId,
                                         String Id,
                                         float level,
@@ -199,8 +209,9 @@ public class OwnerManagerService {
                                         String conditionalDiscounted) {
         try {
             EventLogger.logEvent(ownerId, "DEFINE_DISCOUNT_POLICY_START");
+            String id = UUID.randomUUID().toString();
             boolean result = discountPolicyService.addDiscountToDiscountPolicy(ownerId,storeId,discountId,
-                                                                                Id,
+                                                                                id,
                                                                                 level,
                                                                                 logicComposition,
                                                                                 numericalComposition,
@@ -218,7 +229,7 @@ public class OwnerManagerService {
         }
     }
 
-
+    @Transactional
     public boolean removeDiscountFromDiscountPolicy(String ownerId, String storeId, String discountId) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_DISCOUNT_POLICY_START");
@@ -237,6 +248,7 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean removeDiscountPolicy(String ownerId, String storeId) {
         try {
             EventLogger.logEvent(ownerId, "REMOVE_DISCOUNT_POLICY_START");
@@ -258,6 +270,7 @@ public class OwnerManagerService {
      * @param userId ID of the user to appoint
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean appointStoreOwner(String appointerId, String storeId, String userId) {
         try {
             EventLogger.logEvent(appointerId, "APPOINT_STORE_OWNER_START");
@@ -278,6 +291,7 @@ public class OwnerManagerService {
      * @param storeId The unique identifier of the store for which the ownership is being proposed.
      * @param proposalText The text containing the details of the ownership proposal.
      */
+    @Transactional
     public void sendOwnershipProposal(String userId, String storeId, String proposalText) {
         try {
             EventLogger.logEvent(userId, "SEND_OWNERSHIP_PROPOSAL_START");
@@ -295,6 +309,7 @@ public class OwnerManagerService {
      * @param accept true to accept, false to reject
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean respondToOwnerAppointment(String userId, String storeID, boolean accept) {
         try {
             EventLogger.logEvent(userId, "RESPOND_TO_OWNER_APPOINTMENT_START");
@@ -316,6 +331,7 @@ public class OwnerManagerService {
      * @param ownerId ID of the owner to remove
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean removeStoreOwner(String removerId, String storeId, String ownerId) {
         try {
             EventLogger.logEvent(removerId, "REMOVE_STORE_OWNER_START");
@@ -336,6 +352,7 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean relinquishOwnership(String ownerId, String storeId) {
         try {
             EventLogger.logEvent(ownerId, "RELINQUISH_OWNERSHIP_START");
@@ -358,6 +375,7 @@ public class OwnerManagerService {
      * @param permissions Array of permissions (view, edit inventory, edit policies, etc.)
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
         try {
             EventLogger.logEvent(appointerId, "APPOINT_STORE_MANAGER_START");
@@ -377,6 +395,7 @@ public class OwnerManagerService {
      * @param storeId the unique identifier of the store to receive the proposal
      * @param proposalText the content of the management proposal being sent
      */
+    @Transactional
     public void sendManagementProposal(String userId, String storeId, String proposalText) {
         try {
             EventLogger.logEvent(userId, "SEND_MANAGEMENT_PROPOSAL_START");
@@ -394,6 +413,7 @@ public class OwnerManagerService {
      * @param accept true to accept, false to reject
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean respondToManagerAppointment(String userId, String appointmentId, boolean accept) {
         try {
             EventLogger.logEvent(userId, "RESPOND_TO_MANAGER_APPOINTMENT_START");
@@ -416,6 +436,7 @@ public class OwnerManagerService {
      * @param permissions Array of new permissions
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean updateManagerPermissions(String ownerId, String storeId, String managerId, boolean[] permissions) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_MANAGER_PERMISSIONS_START");
@@ -437,6 +458,7 @@ public class OwnerManagerService {
      * @param managerId ID of the manager to remove
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean removeStoreManager(String ownerId, String storeId, String managerId) {
         try {
             EventLogger.logEvent(ownerId, "REMOVE_STORE_MANAGER_START");
@@ -448,6 +470,7 @@ public class OwnerManagerService {
             return false;
         }
     }
+    @Transactional
     public boolean relinquishManagement(String managerID, String storeId) {
         try {
             EventLogger.logEvent(managerID, "RELINQUISH_MANAGEMENT_START");
@@ -469,6 +492,7 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean closeStore(String founderId, String storeId) {
         try {
             EventLogger.logEvent(founderId, "CLOSE_STORE_START");
@@ -489,6 +513,7 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean reopenStore(String founderId, String storeId) {
         try {
             EventLogger.logEvent(founderId, "REOPEN_STORE_START");
@@ -509,6 +534,7 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @return Map of role information if successful, null otherwise
      */
+    @Transactional
     public String getStoreRoleInfo(String ownerId, String storeId) {
         try {
             EventLogger.logEvent(ownerId, "GET_STORE_ROLE_INFO_START");
@@ -528,6 +554,7 @@ public class OwnerManagerService {
      * @param managerId ID of the manager
      * @return Array of permissions if successful, null otherwise
      */
+    @Transactional
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
         try {
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_START");
@@ -548,6 +575,7 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @return List of inquiries if successful, null otherwise
      */
+    @Transactional
     public List<Map<String, Object>> getCustomerInquiries(String ownerId, String storeId) {
         try {
             EventLogger.logEvent(ownerId, "GET_CUSTOMER_INQUIRIES_START");
@@ -568,6 +596,7 @@ public class OwnerManagerService {
      * @param response Response text
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean respondToCustomerInquiry(String ownerId, String storeId, String inquiryId, String response) {
         try {
             EventLogger.logEvent(ownerId, "RESPOND_TO_CUSTOMER_INQUIRY_START");
@@ -590,6 +619,7 @@ public class OwnerManagerService {
      * @param endDate End date for the history (null for current date)
      * @return List of purchase records if successful, null otherwise
      */
+    @Transactional
     public List<String> getStorePurchaseHistory(String ownerId, String storeId, Date startDate, Date endDate) {
         try {
             EventLogger.logEvent(ownerId, "GET_STORE_PURCHASE_HISTORY_START");
@@ -615,6 +645,7 @@ public class OwnerManagerService {
      * @param category Category of the product
      * @return Product ID if successful, null otherwise
      */
+    @Transactional
     public String managerAddProduct(String managerId, String storeId, String productName, String description, double price, int quantity, String category) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_ADD_PRODUCT_START");
@@ -638,6 +669,7 @@ public class OwnerManagerService {
      * @param category New category (null if unchanged)
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean managerUpdateProductDetails(String managerId, String storeId, String productId, String productName, String description, double price, String category) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_UPDATE_PRODUCT_DETAILS_START");
@@ -658,6 +690,7 @@ public class OwnerManagerService {
      * @param newQuantity New quantity
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean managerUpdateProductQuantity(String managerId, String storeId, String productId, int newQuantity) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_UPDATE_PRODUCT_QUANTITY_START");
@@ -677,6 +710,7 @@ public class OwnerManagerService {
      * @param productId ID of the product to remove
      * @return true if successful, false otherwise
      */
+    @Transactional
     public boolean managerRemoveProduct(String managerId, String storeId, String productId) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_REMOVE_PRODUCT_START");
@@ -688,5 +722,4 @@ public class OwnerManagerService {
             return false;
         }
     }
-
 }

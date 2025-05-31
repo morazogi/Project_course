@@ -1,14 +1,13 @@
 package ServiceLayer;
 
 import DomainLayer.IToken;
-import DomainLayer.domainServices.Search;
-import DomainLayer.domainServices.UserCart;
-import DomainLayer.domainServices.UserConnectivity;
+import DomainLayer.DomainServices.Search;
+import DomainLayer.DomainServices.UserCart;
+import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.IProductRepository;
-import DomainLayer.IDiscountRepository;
 import DomainLayer.IOrderRepository;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
@@ -20,16 +19,17 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
 import utils.ProductKeyModule;
 
 import DomainLayer.Store;
 import DomainLayer.User;
-import DomainLayer.domainServices.UserCart;
-import DomainLayer.domainServices.UserConnectivity;
+import DomainLayer.DomainServices.UserCart;
+import DomainLayer.DomainServices.UserConnectivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -48,7 +48,6 @@ public class UserService {
                        IUserRepository userRepository,
                        IProductRepository productRepository,
                        IOrderRepository orderRepository,
-                       IDiscountRepository discountRepository,
                        ShippingService shippingService,
                        PaymentService paymentService){
         this.productRepository = productRepository;
@@ -57,12 +56,11 @@ public class UserService {
         this.shippingService = shippingService;
         this.paymentService = paymentService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository);
-        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository , discountRepository);
+        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository);    
         this.search = new Search(productRepository, storeRepository);   
     }
 
-
-
+    @Transactional
     public String login(String username, String password) throws JsonProcessingException {
         try {
             EventLogger.logEvent(username , "LOGIN");
@@ -73,6 +71,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void signUp(String username, String password)  throws Exception {
         try {
             userConnectivity.signUp(username, password);
@@ -82,7 +81,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public void removeFromCart(String token, String storeId, String productId, Integer quantity) {
         try{
             userCart.removeFromCart(token, storeId, productId, quantity);
@@ -93,6 +92,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public String addToCart(String token, String storeId, String productId, Integer quantity) {
         try{
             userCart.addToCart(token, storeId, productId, quantity);
@@ -104,6 +104,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Double reserveCart(String token) {
         try{
             return userCart.reserveCart(token);
@@ -134,16 +135,7 @@ public class UserService {
         }
     }
 
-    public Double getCartPrice(String token) {
-        try{
-            tokenService.validateToken(token);
-            return userCart.getCartPrice(tokenService.extractUsername(token));
-        } catch (Exception e) {
-            EventLogger.logEvent(tokenService.extractUsername(token), "GET_CART_PRICE_FAILED");
-            throw new RuntimeException("Failed to get cart price");
-        }
-    }
-
+    @Transactional
     public List<String> findProduct(String token, String name , String category){
         try {
             tokenService.validateToken(token);
@@ -154,7 +146,7 @@ public class UserService {
         }
     }
 
-
+    @Transactional
     public List<Product> getAllProducts(String token) {
         try {
             tokenService.validateToken(token);
@@ -164,7 +156,8 @@ public class UserService {
             return new ArrayList<>();
         }
     }
-    
+
+    @Transactional
     public List<String> getStoreByName(String token , String name) {
         try {
             tokenService.validateToken(token);
@@ -175,6 +168,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public String searchStoreByName(String token, String storeName) {
         try {
             return search.searchStoreByName(storeName);
@@ -184,6 +178,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public String getStoreById(String token, String storeId) {
         try {
             return search.getStoreById(storeId);
@@ -192,16 +187,5 @@ public class UserService {
             throw new RuntimeException("Failed to search store");
         }
     }
-
-    public Optional<Product> getProductById(String id) {
-        try {
-            return productRepository.findById(id);
-        } catch (Exception e) {
-            System.out.println("ERROR finding product by ID:" + e.getMessage());
-            return Optional.empty();
-        }
-    }
-
-
 
 }

@@ -1,7 +1,7 @@
 package DomainLayer.DomainServices;
 
 import DomainLayer.*;
-import DomainLayer.domainServices.Search;
+import DomainLayer.DomainServices.Search;
 import ServiceLayer.EventLogger;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,8 +91,8 @@ class SearchTest {
 
         Store store = store("s1","Tech-Shop", Map.of("p1",10,"p2",5));
         when(storeRepo.getStore("s1")).thenReturn(mapper.writeValueAsString(store));
-        when(productRepo.getProduct("p1")).thenReturn(p1);
-        when(productRepo.getProduct("p2")).thenReturn(p2);
+        when(productRepo.getReferenceById("p1")).thenReturn(p1);
+        when(productRepo.getReferenceById("p2")).thenReturn(p2);
 
         try (MockedStatic<EventLogger> logs = mockStatic(EventLogger.class)) {
             String json = sut.getProductsByStore("s1");

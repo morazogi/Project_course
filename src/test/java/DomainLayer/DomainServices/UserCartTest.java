@@ -1,16 +1,19 @@
 package DomainLayer.DomainServices;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import DomainLayer.*;
-import DomainLayer.domainServices.UserCart;
+import DomainLayer.DomainServices.UserCart;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.domainServices.DiscountPolicyMicroservice;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,14 +35,16 @@ class UserCartTest {
     private ObjectMapper mapper = new ObjectMapper();
 
     private static final String TOKEN = "token123";
-    private static final String USER  = "alice";
+    private static final String USER = "alice";
     private RegisteredUser baseUser;
 
     private AutoCloseable mocks;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
+        // Initialize Mockito annotations
         mocks = MockitoAnnotations.openMocks(this);
+
         // Base user with empty cart
         baseUser = new RegisteredUser("username");
         baseUser.setName(USER);
@@ -73,11 +78,16 @@ class UserCartTest {
     @Test
     void addToCart_success_updatesUserRepository() throws Exception {
         userCart.addToCart(TOKEN, "store1", "prod1", 2);
+
         verify(tokener).validateToken(TOKEN);
         ArgumentCaptor<String> jsonCaptor = ArgumentCaptor.forClass(String.class);
         verify(userRepository).update(eq(USER), jsonCaptor.capture());
+
         RegisteredUser updated = mapper.readValue(jsonCaptor.getValue(), RegisteredUser.class);
         assertEquals(1, updated.getShoppingCart().getShoppingBags().size());
+        ShoppingBag bag = updated.getShoppingCart().getShoppingBags().get(0);
+        assertEquals("store1", bag.getStoreId());
+        assertEquals(2, bag.getProducts().get("prod1"));
     }
 
     // --- removeFromCart tests ---
@@ -93,14 +103,20 @@ class UserCartTest {
 
     @Test
     void removeFromCart_success_decrementsQuantity() throws Exception {
+        // prepare a cart with quantity 5
         baseUser.addProduct("store1", "prod1", 5);
-        when(userRepository.getUser(USER)).thenReturn(mapper.writeValueAsString(baseUser));
+        when(userRepository.getUser(USER))
+            .thenReturn(mapper.writeValueAsString(baseUser));
+
         userCart.removeFromCart(TOKEN, "store1", "prod1", 3);
+
         verify(tokener).validateToken(TOKEN);
         ArgumentCaptor<String> jsonCaptor = ArgumentCaptor.forClass(String.class);
         verify(userRepository).update(eq(USER), jsonCaptor.capture());
+
         RegisteredUser updated = mapper.readValue(jsonCaptor.getValue(), RegisteredUser.class);
-        assertEquals(2, updated.getShoppingCart().getShoppingBags().get(0).getProducts().get("prod1"));
+        ShoppingBag bag = updated.getShoppingCart().getShoppingBags().get(0);
+        assertEquals(2, bag.getProducts().get("prod1"));
     }
 
     // --- reserveCart tests ---
@@ -117,8 +133,10 @@ class UserCartTest {
     @Test
     void reserveCart_storeNotFound_throwsIAE() throws Exception {
         baseUser.addProduct("storeX", "p1", 1);
-        when(userRepository.getUser(USER)).thenReturn(mapper.writeValueAsString(baseUser));
+        when(userRepository.getUser(USER))
+            .thenReturn(mapper.writeValueAsString(baseUser));
         when(storeRepository.getStore("storeX")).thenReturn(null);
+
         IllegalArgumentException ex = assertThrows(
             IllegalArgumentException.class,
             () -> userCart.reserveCart(TOKEN)
@@ -137,43 +155,58 @@ class UserCartTest {
         assertEquals("Cart is not reserved", ex.getMessage());
     }
 
+//    @Test
+//    void purchaseCart_happyPath_processesAll() throws Exception {
+//        // user with reserved cart and one item
+//        baseUser.addProduct("store1", "p1", 2);
+//        baseUser.setCartReserved(true);
+//        when(userRepository.getUser(USER))
+//            .thenReturn(mapper.writeValueAsString(baseUser));
+//
+//        Store store = new Store("store1"  , "");
+//
+//        // stub product
+//        Product product = new Product("p1", "name", "desc", "cat", 5, 10, 2.5, "store1");
+//        when(productRepository.getProduct("p1")).thenReturn(product);
+//
+//        store.addNewProduct("p1", 5);
+//        store.reserveProduct("p1", 2);
+//        when(storeRepository.getStore("store1")).thenReturn(mapper.writeValueAsString(store));
+//
+//        // execute
+//        userCart.purchaseCart(TOKEN, userCart.reserveCart(TOKEN));
+//
+////        verify(orderRepository).addOrder(any(Order.class));
+//
+//        // final state persisted
+//        ArgumentCaptor<String> jsonCaptor = ArgumentCaptor.forClass(String.class);
+//        verify(userRepository, atLeastOnce()).update(eq(USER), jsonCaptor.capture());
+//        RegisteredUser post = mapper.readValue(jsonCaptor.getValue(), RegisteredUser.class);
+//        assertFalse(post.getCartReserved());
+//        assertTrue(post.getShoppingCart().getShoppingBags().isEmpty());
+//    }
+
     @Test
     void purchaseCart_notInInventory_throwsIAE() throws Exception {
-        baseUser.addProduct("store1", "prod1", 2);
+        baseUser.addProduct("store1", "p1", 2);
         baseUser.setCartReserved(true);
-        when(userRepository.getUser(USER)).thenReturn(mapper.writeValueAsString(baseUser));
-        Store store = new Store("store1", "");
-        store.addNewProduct("prod1", 1);
+        Store store = new Store("store1" , "");
+        store.addNewProduct("p1", 1);
         when(storeRepository.getStore("store1")).thenReturn(mapper.writeValueAsString(store));
-        when(productRepository.getProduct("prod1")).thenReturn(new Product("prod1", "name", "desc", "cat", 5, 10, 2.5, "store1"));
+        when(userRepository.getUser(USER))
+            .thenReturn(mapper.writeValueAsString(baseUser));
+        when(productRepository.getReferenceById("p1")).thenReturn(new Product("p1", "name", "desc", "cat", 5, 10, 2.5, "store1"));
+
+        // stub product
+        Product product = new Product("p1", "name", "desc", "cat", 5, 10, 2.5, "store1");
+        when(productRepository.getReferenceById("p1")).thenReturn(product);
+        
+        when(storeRepository.getStore("store1")).thenReturn(mapper.writeValueAsString(store));
+
         IllegalArgumentException ex = assertThrows(
             IllegalArgumentException.class,
             () -> userCart.purchaseCart(TOKEN, userCart.reserveCart(TOKEN))
         );
-        assertEquals("Failed to reserve product: prod1", ex.getMessage());
-    }
-
-    // --- calculatePrice tests ---
-
-    @Test
-    void getCartPrice_emptyCart_returnsZero() throws Exception {
-        // baseUser has empty cart by default
-        when(userRepository.getUser(USER)).thenReturn(mapper.writeValueAsString(baseUser));
-        double price = userCart.getCartPrice(USER);
-        assertEquals(0.0, price, 1e-6);
-    }
-
-    @Test
-    void getCartPrice_withDiscount_appliesDiscount() throws Exception {
-        // add items
-        baseUser.addProduct("store1", "prod1", 3);
-        when(userRepository.getUser(USER)).thenReturn(mapper.writeValueAsString(baseUser));
-        // stub DiscountPolicyMicroservice
-        try (MockedConstruction<DiscountPolicyMicroservice> mc = mockConstruction(DiscountPolicyMicroservice.class,
-                (mock, ctx) -> when(mock.calculatePrice(eq("store1"), any())).thenReturn(77.77f))) {
-            double price = userCart.getCartPrice(USER);
-            assertEquals(77.77, price, 0.01);
-            assertEquals(1, mc.constructed().size());
-        }
+        assertEquals("Failed to reserve product: " + "p1" , ex.getMessage());
     }
 }

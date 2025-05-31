@@ -2,13 +2,34 @@ package DomainLayer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "bids")
 public class Bid {
-    private final LocalDateTime bidTime;
-    private final BigDecimal minPrice;
-    private final BigDecimal increment;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Column(name = "bid_time", nullable = false)
+    private LocalDateTime bidTime;
+
+    @Column(name = "min_price", nullable = false, precision = 15, scale = 2)
+    private BigDecimal minPrice;
+
+    @Column(name = "increment", nullable = false, precision = 15, scale = 2)
+    private BigDecimal increment;
+
+    @Column(name = "last_bid", precision = 15, scale = 2)
     private BigDecimal lastBid;
+
+    @Column(name = "highest_bidder")
     private String highestBidder;
+
+    public Bid() {}
 
     public Bid(LocalDateTime bidTime, BigDecimal minPrice, BigDecimal increment) {
         if (bidTime.isBefore(LocalDateTime.now())) {
