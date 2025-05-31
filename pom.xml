@@ -33,26 +33,26 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Vaadin Dependencies -->
+        <!-- Vaadin UI -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Spring Boot Web Dependency (optional if Vaadin handles it) -->
+        <!-- Web layer -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Micrometer for Observability -->
+        <!-- Observability -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-observation</artifactId>
             <version>1.10.4</version>
         </dependency>
 
-        <!-- Jakarta Servlet API -->
+        <!-- Servlet API -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
@@ -60,7 +60,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Testing Dependencies -->
+        <!-- Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -79,21 +79,15 @@
             <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.17.5</version>
-            <scope>test</scope>
-        </dependency>
 
-        <!-- BCrypt for Password Encryption -->
+        <!-- BCrypt -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
 
-        <!-- JWT (JSON Web Token) for Authentication -->
+        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -112,7 +106,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Jackson for JSON Binding -->
+        <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -129,57 +123,46 @@
             <version>2.15.2</version>
         </dependency>
 
+        <!-- TestNG (compile-time) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>7.11.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- WebSocket support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
-
-        <!-- Optional: Prometheus registry for exporting metrics -->
-        <!-- <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency> -->
-
-        <!-- Hibernate Core - המימוש של JPA -->
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.4.1.Final</version>
-        </dependency>
-
-        <!-- JPA API -->
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
-        <!-- דרייבר למסד נתונים - כאן לדוגמה MySQL -->
+        <!-- MySQL driver (runtime only if you switch from H2) -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
         </dependency>
 
-        <!-- Logger (אופציונלי, אבל מאוד מומלץ כדי להבין מה קורה) -->
+        <!-- In-memory H2 for local runs -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Logging -->
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
             <version>3.5.3.Final</version>
         </dependency>
 
+        <!-- Spring Data JPA starter (brings Hibernate + Byte Buddy transitively) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -190,6 +173,7 @@
                 <version>3.11.0</version>
                 <configuration>
                     <release>17</release>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
                 </configuration>
             </plugin>
 
@@ -205,33 +189,23 @@
                 <version>3.1.2</version>
             </plugin>
 
-
-            <!-- ── JaCoCo code-coverage plug-in ───────────────────────────── -->
+            <!-- JaCoCo -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.13</version>
                 <executions>
-                    <!-- Attach JaCoCo agent before tests -->
                     <execution>
                         <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
+                        <goals><goal>prepare-agent</goal></goals>
                     </execution>
-                    <!-- Generate HTML + XML reports in verify phase -->
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
+                        <goals><goal>report</goal></goals>
                     </execution>
                 </executions>
             </plugin>
-            <!-- ───────────────────────────────────────────────────────────── -->
-
-
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>
