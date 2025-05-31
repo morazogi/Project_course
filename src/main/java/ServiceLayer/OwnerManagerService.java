@@ -531,7 +531,7 @@ public class OwnerManagerService {
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
         try {
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_START");
-            Map<String, Boolean> result = storeManagementService.getManagerPermissions(ownerId, storeId, managerId);
+            Map<String, Boolean> result = storeManagementService.getManagerPermissions(storeId, managerId); // testing the clone
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_SUCCESS");
             return result;
         } catch (Exception e) {

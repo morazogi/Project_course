@@ -6,15 +6,21 @@ import DomainLayer.ManagerPermissions;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.User;
 import PresentorLayer.ButtonPresenter;
+import PresentorLayer.PermissionsPresenter;
+import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Route("/userhomepage")
 public class UserHomePageUI extends VerticalLayout {
@@ -23,15 +29,18 @@ public class UserHomePageUI extends VerticalLayout {
     private final IUserRepository userRepository;
     private final ButtonPresenter buttonPresenter;
     private final ObjectMapper mapper = new ObjectMapper();
+    private final PermissionsPresenter pp;
 
     @Autowired
-    public UserHomePageUI(IToken tokenService, IUserRepository userRepository, RegisteredService registeredService) {
+    public UserHomePageUI(OwnerManagerService ownerManager, IToken tokenService, IUserRepository userRepository, RegisteredService registeredService) {
         // Get current user from session
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         this.buttonPresenter = new ButtonPresenter(registeredService);
+        this.pp = new PermissionsPresenter(ownerManager, tokenService, userRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String username = tokenService.extractUsername(token);
+
         String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
@@ -57,10 +66,40 @@ public class UserHomePageUI extends VerticalLayout {
         header.setWidthFull();
         header.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
-        add(header, new Hr(), title);
+        ComboBox<String> storeDropdown = new ComboBox<>("Store");
+        storeDropdown.setItems("Store 1", "Store 2", "Store 3"); // TODO add stores as a list or use it as an input?
+        storeDropdown.setPlaceholder("Select Store");
+
+        add(header, new Hr(), title, storeDropdown);
+
+
+        // in case storeDropdown.getValue() == null
+        Map<String, Boolean> map1 = new HashMap<>();
+        map1.put("PERM_MANAGE_INVENTORY", false);
+        map1.put("PERM_MANAGE_STAFF", false);
+        map1.put("PERM_VIEW_STORE", false);
+        map1.put("PERM_UPDATE_POLICY", false);
+        map1.put("PERM_ADD_PRODUCT", false);
+        map1.put("PERM_REMOVE_PRODUCT", false);
+        map1.put("PERM_UPDATE_PRODUCT", false);
 
         // Permissions and actions
-        ManagerPermissions perms = null; //user.getManagerPermissions();
+        if(storeDropdown.getValue() != null)
+            map1 = this.pp.getPremissions(user.getID(), storeDropdown.getValue(), user.getID());; //user.getManagerPermissions();
+
+        boolean[] permsArray=  {
+            map1.get("PERM_MANAGE_INVENTORY"),
+            map1.get("PERM_MANAGE_STAFF"),
+            map1.get("PERM_VIEW_STORE"),
+            map1.get("PERM_UPDATE_POLICY"),
+            map1.get("PERM_ADD_PRODUCT"),
+            map1.get("PERM_REMOVE_PRODUCT"),
+            map1.get("PERM_UPDATE_PRODUCT")};
+
+        // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
+        // work over the store name -> store ID
+
+        ManagerPermissions perms = new ManagerPermissions(permsArray);
         boolean hasAnyPermission = false;
         HorizontalLayout buttonLayout1 = new HorizontalLayout();
         HorizontalLayout buttonLayout2 = new HorizontalLayout();
@@ -94,7 +133,8 @@ public class UserHomePageUI extends VerticalLayout {
             hasAnyPermission = true;
         }
 
-        add(buttonLayout1, buttonLayout2);
+        if(map1 != null)
+            add(buttonLayout1, buttonLayout2);
 
         if (!hasAnyPermission) {
             add(new Paragraph("⚠️ You currently don’t have permissions for any store management actions. Contact the store owner to update your role."));

@@ -7,6 +7,7 @@ import DomainLayer.Store;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
+import ServiceLayer.EventLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -307,6 +308,28 @@ public class StoreManagementMicroservice {
         Map<String, Boolean> fakeAnswer = new HashMap<>();
         return fakeAnswer;
     }
+
+    // testing a clone of the function above:
+    public Map<String, Boolean> getManagerPermissions(String storename, String managerId) {
+        String key = "";
+        this.storeRepository.getStores();
+        for(Map.Entry<String, String> entry : this.storeRepository.getStores().entrySet()){
+            if(entry.getValue().contains(storename)){
+                key = entry.getKey();
+                EventLogger.logEvent(managerId,"got the key that macthes to the store named "+storename);
+            }
+
+        }
+        if(key == "") return null;
+        Store store = getStoreById(key);
+        if (store.userIsManager(managerId)){
+            return store.getPremissions(managerId);
+        }
+        Map<String, Boolean> fakeAnswer = new HashMap<>();
+        EventLogger.logEvent(managerId,"we return a fake answer as a hash map "+storename);
+        return fakeAnswer;
+    }
+
     public boolean relinquishManagement(String managerID, String storeId) {
         Store store = getStoreById(storeId);
         if(!store.isFounder(managerID)&&store.userIsManager(managerID)){

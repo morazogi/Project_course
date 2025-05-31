@@ -131,8 +131,3 @@
 [2025-05-31 08:47:50] User: a | Event: Event | Description: LOGIN_SUCCESS
 [2025-05-31 08:47:51] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
 [2025-05-31 08:47:51] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-05-31 12:06:28] User: a | Event: Event | Description: LOGIN
-[2025-05-31 12:06:28] User: a | Event: Event | Description: TokenService
-[2025-05-31 12:06:28] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-05-31 12:06:29] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-05-31 12:06:29] User: a | Event: Event | Description: SIGNUP_FAILED

@@ -2,6 +2,7 @@ package PresentorLayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
+import ServiceLayer.EventLogger;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +14,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import infrastructureLayer.ProductRepository;
+import infrastructureLayer.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -25,6 +28,7 @@ public class ProductPresenter {
     private final ObjectMapper mapper = new ObjectMapper();
     private IToken tokenService;
     private IUserRepository userRepository;
+
 
     @Autowired
     public ProductPresenter(UserService userService, IToken tokenService, IUserRepository userRepository) {
@@ -330,5 +334,19 @@ public class ProductPresenter {
         }
         return storePage;
     }
+
+    //public boolean addProduct(String name, String description,double price, int quantity, double rating, String category, String storeName){
+     //   String storeId = "";
+    //    for(Map.Entry<String, String> entry : this.storeRepository.getStores().entrySet()){
+    //        if (entry.getValue().contains(storeName)) {
+    //            storeId = entry.getKey();
+     //       }
+    //    }
+    //    if (storeId.equals("")) {
+    //        EventLogger.logEvent("", "adding product failed we found no store named " + storeName);
+    //    }
+    //    this.storeRepository.
+    //    this.productRepository.save();
+    //}
 
 }
