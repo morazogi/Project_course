@@ -7,6 +7,8 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
+import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
@@ -79,7 +81,7 @@ public class SystemConfiguration {
     };
 
     @Bean
-    public PaymentService PaymentService(DiscountRepository discountRepository) {
+    public PaymentService PaymentService() {
         return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository() );
     };
 
@@ -96,34 +98,35 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository() , DiscountRepository(), ShippingService(), PaymentService(DiscountRepository()));
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(), DiscountRepository());
     };
 
-    @Bean
-    public NotificationClientRepository NotificationClientRepository() {
-        return new NotificationClientRepository();
-    };
+//    @Bean
+//    public NotificationClientRepository NotificationClientRepository() {
+//        return new NotificationClientRepository();
+//    };
+//
+//    @Bean
+//    public WebSocketConfigure WebSocketConfigure() {
+//        return new WebSocketConfigure();
+//    };
+//
+//    @Bean
+//    public WebSocketClient WebSocketClient() {
+//        return new StandardWebSocketClient();
+//    };
+//
+//    @Bean
+//    public NotificationWebSocketHandler NotificationWebSocketHandler() {
+//        return new NotificationWebSocketHandler();
+//    };
+//
+//    @Bean
+//    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
+//        // configure other properties as needed
+//        SpringServlet servlet = new SpringServlet(context, true);
+//        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
+//    }
 
-    @Bean
-    public WebSocketConfigure WebSocketConfigure() {
-        return new WebSocketConfigure();
-    };
-
-    @Bean
-    public WebSocketClient WebSocketClient() {
-        return new StandardWebSocketClient();
-    };
-
-    @Bean
-    public NotificationWebSocketHandler NotificationWebSocketHandler() {
-        return new NotificationWebSocketHandler();
-    };
-
-    @Bean
-    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
-        // configure other properties as needed
-        SpringServlet servlet = new SpringServlet(context, true);
-        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
-    }
 
 }

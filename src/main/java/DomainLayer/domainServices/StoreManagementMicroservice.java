@@ -326,10 +326,7 @@ public class StoreManagementMicroservice {
         }
         //if(Objects.equals(key, "")) return null;
         Store store = getStoreById(key);
-        System.out.println("here");
-        System.out.println(store.userIsManager(managerId));
         if (store.userIsManager(managerId)){
-            System.out.println(store.getPremissions(managerId));
             return store.getPremissions(managerId);
         }
         Map<String, Boolean> fakeAnswer = new HashMap<>();

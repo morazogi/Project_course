@@ -44,7 +44,7 @@ public class UserConnectivityPresenter {
     }
 
     public void addStore(String token, String storeName) throws Exception {
-        registeredService.openStore(token, storeName);
+        registeredService.openStore(token);
     }
 
     public String addNewProductToStore(String token, String storeName, String productName, String description, String stringPrice, String stringQuantity, String category) {

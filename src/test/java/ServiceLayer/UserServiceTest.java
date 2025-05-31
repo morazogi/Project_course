@@ -272,7 +272,7 @@ class UserServiceAllPathsTest {
     // -------------------------------------------------------------------------
     private UserService newSvc() {
         return new UserService(tokenSrv, storeRepo, userRepo,
-            prodRepo, orderRepo, discountRepo, shipSrv, paySrv);
+            prodRepo, orderRepo, shipSrv, paySrv, discountRepo);
     }
 
     private void initCart() throws Exception { initCart(c -> {}); }

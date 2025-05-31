@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ManagerPermissions {
-
     public static final String PERM_MANAGE_INVENTORY = "PERM_MANAGE_INVENTORY";
     public static final String PERM_MANAGE_STAFF = "PERM_MANAGE_STAFF";
     public static final String PERM_VIEW_STORE = "PERM_VIEW_STORE";

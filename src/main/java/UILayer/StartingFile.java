@@ -14,13 +14,5 @@ public class StartingFile {
         SpringApplication.run(StartingFile.class, args);
     }
 
-    @Bean
-    public ServletWebServerFactory webServerFactory() {
-        // Set the server port to 8080 or any other port
-        ConfigurableServletWebServerFactory factory = new TomcatServletWebServerFactory();
-        factory.setPort(8080);  // Ensure this is the port your WebSocket is expecting
-        return factory;
-    }
-
 
 }

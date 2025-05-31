@@ -1,17 +1,10 @@
 package ServiceLayer;
 
-import DomainLayer.IToken;
+import DomainLayer.*;
 import DomainLayer.DomainServices.Search;
 import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.UserConnectivity;
-import DomainLayer.IStoreRepository;
-import DomainLayer.IUserRepository;
-import DomainLayer.Product;
-import DomainLayer.IProductRepository;
-import DomainLayer.IOrderRepository;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingCart;
-import DomainLayer.ShoppingBag;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,11 +13,10 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Optional;
 
+import InfrastructureLayer.DiscountRepository;
 import jakarta.transaction.Transactional;
 import utils.ProductKeyModule;
 
-import DomainLayer.Store;
-import DomainLayer.User;
 import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.UserConnectivity;
 
@@ -43,20 +35,21 @@ public class UserService {
     private final UserCart userCart;
     private final Search search;
 
-    public UserService(IToken tokenService, 
+    public UserService(IToken tokenService,
                        IStoreRepository storeRepository,
                        IUserRepository userRepository,
                        IProductRepository productRepository,
                        IOrderRepository orderRepository,
                        ShippingService shippingService,
-                       PaymentService paymentService){
+                       PaymentService paymentService,
+                       IDiscountRepository discountRepository){
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.tokenService = tokenService;
         this.shippingService = shippingService;
         this.paymentService = paymentService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository);
-        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository);    
+        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository, discountRepository);
         this.search = new Search(productRepository, storeRepository);   
     }
 
@@ -187,5 +180,15 @@ public class UserService {
             throw new RuntimeException("Failed to search store");
         }
     }
+
+    public Optional<Product> getProductById(String id) {
+        try {
+            return productRepository.findById(id);
+        } catch (Exception e) {
+            System.out.println("ERROR finding product by ID:" + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
 
 }

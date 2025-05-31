@@ -603,7 +603,7 @@ public class Store {
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {
-        managers.get(managerId).setPermissions(permissions);
+        managers.get(managerId).setPermissionsFromAarray(permissions);
     }
 
     public void terminateManagment(String managerId) {
