@@ -64,3 +64,75 @@
 [2025-05-23 14:10:43] User: removeProduct | Event: Event | Description: Product not found in cart
 [2025-05-23 14:10:43] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
 [2025-05-23 14:10:43] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-05-24 19:52:06] User: Guest | Event: Event | Description: TokenService
+[2025-05-24 19:53:29] User: a | Event: Event | Description: LOGIN
+[2025-05-24 19:53:29] User: a | Event: Event | Description: TokenService
+[2025-05-24 19:53:29] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-24 19:53:37] User: 1 | Event: Event | Description: TokenService
+[2025-05-24 19:53:40] User: 1 | Event: Event | Description: TokenService
+[2025-05-24 19:53:45] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:53:45] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:53:48] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:53:48] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:53:51] User: a | Event: Event | Description: LOGIN
+[2025-05-24 19:53:51] User: a | Event: Event | Description: TokenService
+[2025-05-24 19:53:51] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-24 19:54:19] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:54:19] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:56:53] User: Guest | Event: Event | Description: TokenService
+[2025-05-24 19:57:10] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:57:10] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:57:13] User: a | Event: Event | Description: LOGIN
+[2025-05-24 19:57:13] User: a | Event: Event | Description: TokenService
+[2025-05-24 19:57:13] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-24 19:57:14] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:57:14] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:57:16] User: Guest | Event: Event | Description: TokenService
+[2025-05-24 19:57:23] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:57:23] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:57:26] User: a | Event: Event | Description: LOGIN
+[2025-05-24 19:57:26] User: a | Event: Event | Description: TokenService
+[2025-05-24 19:57:26] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-24 19:57:27] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-24 19:57:27] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-24 19:57:42] User: Guest | Event: Event | Description: TokenService
+[2025-05-24 19:58:06] User: Guest | Event: Event | Description: TokenService
+[2025-05-30 10:49:54] User: Guest | Event: Event | Description: TokenService
+[2025-05-30 10:50:09] User: a | Event: Event | Description: LOGIN
+[2025-05-30 10:50:09] User: a | Event: Event | Description: TokenService
+[2025-05-30 10:50:09] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-30 10:50:10] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-30 10:50:10] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-30 10:52:22] User: a | Event: Event | Description: LOGIN
+[2025-05-30 10:52:22] User: a | Event: Event | Description: TokenService
+[2025-05-30 10:52:22] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-30 10:52:23] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-30 10:52:23] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-30 12:17:36] User: a | Event: Event | Description: LOGIN
+[2025-05-30 12:17:36] User: a | Event: Event | Description: TokenService
+[2025-05-30 12:17:36] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-30 12:17:37] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-30 12:17:37] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-30 12:21:08] User: a | Event: Event | Description: LOGIN
+[2025-05-30 12:21:09] User: a | Event: Event | Description: TokenService
+[2025-05-30 12:21:09] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-30 12:21:10] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-30 12:21:10] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 08:43:53] User: a | Event: Event | Description: LOGIN
+[2025-05-31 08:43:53] User: a | Event: Event | Description: TokenService
+[2025-05-31 08:43:53] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 08:43:54] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 08:43:54] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 08:44:35] User: Guest | Event: Event | Description: TokenService
+[2025-05-31 08:47:47] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 08:47:47] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 08:47:50] User: a | Event: Event | Description: LOGIN
+[2025-05-31 08:47:50] User: a | Event: Event | Description: TokenService
+[2025-05-31 08:47:50] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 08:47:51] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 08:47:51] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-05-31 12:06:28] User: a | Event: Event | Description: LOGIN
+[2025-05-31 12:06:28] User: a | Event: Event | Description: TokenService
+[2025-05-31 12:06:28] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-05-31 12:06:29] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-05-31 12:06:29] User: a | Event: Event | Description: SIGNUP_FAILED

@@ -45,9 +45,11 @@ public class EditStorePageUI extends VerticalLayout {
         NumberField productQuantity = new NumberField("Quantity");
         NumberField productRating = new NumberField("Rating");
         TextField productCategory = new TextField("Category");
+        TextField productStore = new TextField("Store");
 
         Button addProductButton = new Button("Add Product", e -> {
-            // Add product logic here (using Product constructor)
+            // need to give all this parameters to the contracture of the product, but i dont find the store handler
+
         });
 
         VerticalLayout addProductForm = new VerticalLayout(
