@@ -32,7 +32,8 @@ public class Search {
         return mapper.writeValueAsString(matches);
     }
 
-    public String searchStoreByName(String partialName) throws JsonProcessingException {
+    public List<String> searchStoreByName(String partialName) throws JsonProcessingException {
+        System.out.println(storeRepository.findAll().get(0));
         List<String> matches = storeRepository.findAll().stream()
                 .filter(p -> {try {
                     if(mapper.readValue(p, Store.class).getName().toLowerCase().contains(partialName.toLowerCase())) {
@@ -40,7 +41,7 @@ public class Search {
                 .toList();
 
         EventLogger.logEvent("SEARCH_STORE_BY_NAME", "Query=" + partialName + " Matches=" + matches.size());
-        return mapper.writeValueAsString(matches);
+        return matches;
     }
 
     public String getStoreById(String Id) throws JsonProcessingException {

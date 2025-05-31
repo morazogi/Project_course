@@ -1,5 +1,8 @@
 package UILayer;
 
+import PresentorLayer.ButtonPresenter;
+import ServiceLayer.RegisteredService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
@@ -10,19 +13,22 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("/edit-store")
 public class EditStorePageUI extends VerticalLayout {
 
-    public EditStorePageUI() {
+    private final ButtonPresenter buttonPresenter;
+
+    @Autowired
+    public EditStorePageUI(RegisteredService registeredService) {
+        this.buttonPresenter = new ButtonPresenter(registeredService);
         // Store Selection and Sign-out Section
         ComboBox<String> storeDropdown = new ComboBox<>("Store");
         storeDropdown.setItems("Store 1", "Store 2", "Store 3"); // Example store names
         storeDropdown.setPlaceholder("Select Store");
-
-        Button signOutButton = new Button("Sign Out", e -> {
-            // Handle sign-out logic here (e.g., session invalidate)
-        });
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        Button signOutButton = buttonPresenter.signOutButton(token);
 
         HorizontalLayout topBar = new HorizontalLayout(
                 new H2("Store Manager Dashboard"),
@@ -39,9 +45,11 @@ public class EditStorePageUI extends VerticalLayout {
         NumberField productQuantity = new NumberField("Quantity");
         NumberField productRating = new NumberField("Rating");
         TextField productCategory = new TextField("Category");
+        TextField productStore = new TextField("Store");
 
         Button addProductButton = new Button("Add Product", e -> {
-            // Add product logic here (using Product constructor)
+            // need to give all this parameters to the contracture of the product, but i dont find the store handler
+
         });
 
         VerticalLayout addProductForm = new VerticalLayout(

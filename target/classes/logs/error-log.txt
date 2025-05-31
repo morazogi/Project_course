@@ -1,73 +1,55 @@
-[2025-05-24 21:48:03] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
-[2025-05-24 21:48:03] User: owner1 | Error: UPDATE_MANAGER_PERMISSIONS_FAILED | Details: Failed to update manager permissions
-[2025-05-24 21:48:03] User: manager1 | Error: MANAGER_REMOVE_PRODUCT_FAILED | Details: Failed to remove product
-[2025-05-24 21:48:03] User: owner1 | Error: ADD_PRODUCT_FAILED | Details: Failed to add product
-[2025-05-24 21:48:03] User: owner1 | Error: REMOVE_STORE_OWNER_FAILED | Details: Failed to remove store owner
-[2025-05-24 21:48:03] User: owner1 | Error: REMOVE_PURCHASE_POLICY_FAILED | Details: Failed to remove purchase policy
-[2025-05-24 21:48:03] User: manager1 | Error: RELINQUISH_MANAGEMENT_FAILED | Details: Failed to relinquish management
-[2025-05-24 21:48:03] User: owner1 | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: Failed to update purchase policy
-[2025-05-24 21:48:03] User: founder1 | Error: REOPEN_STORE_FAILED | Details: Failed to reopen store
-[2025-05-24 21:48:03] User: manager1 | Error: MANAGER_ADD_PRODUCT_FAILED | Details: Failed to add product
-[2025-05-24 21:48:03] User: founder1 | Error: CLOSE_STORE_FAILED | Details: Failed to close store
-[2025-05-24 21:48:03] User: user1 | Error: SEND_OWNERSHIP_PROPOSAL_FAILED | Details: Failed to send ownership proposal
-[2025-05-24 21:48:03] User: owner1 | Error: UPDATE_PRODUCT_QUANTITY_FAILED | Details: Failed to update product quantity
-[2025-05-24 21:48:03] User: user1 | Error: RESPOND_TO_MANAGER_APPOINTMENT_FAILED | Details: Failed to respond to manager appointment
-[2025-05-24 21:48:03] User: owner1 | Error: REMOVE_STORE_MANAGER_FAILED | Details: Failed to remove store manager
-[2025-05-24 21:48:03] User: owner1 | Error: GET_CUSTOMER_INQUIRIES_FAILED | Details: Failed to get customer inquiries
-[2025-05-24 21:48:03] User: owner1 | Error: APPOINT_STORE_MANAGER_FAILED | Details: Failed to appoint store manager
-[2025-05-24 21:48:03] User: owner1 | Error: RELINQUISH_OWNERSHIP_FAILED | Details: Failed to relinquish ownership
-[2025-05-24 21:48:03] User: manager1 | Error: MANAGER_UPDATE_PRODUCT_DETAILS_FAILED | Details: Failed to update product details
-[2025-05-24 21:48:03] User: owner1 | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Failed to get manager permissions
-[2025-05-24 21:48:03] User: user1 | Error: SEND_MANAGEMENT_PROPOSAL_FAILED | Details: Failed to send management proposal
-[2025-05-24 21:48:03] User: owner1 | Error: GET_STORE_ROLE_INFO_FAILED | Details: Failed to get store role info
-[2025-05-24 21:48:04] User: manager1 | Error: MANAGER_UPDATE_PRODUCT_QUANTITY_FAILED | Details: Failed to update product quantity
-[2025-05-24 21:48:04] User: owner1 | Error: DEFINE_PURCHASE_POLICY_FAILED | Details: Failed to define purchase policy
-[2025-05-24 21:48:04] User: owner1 | Error: RESPOND_TO_CUSTOMER_INQUIRY_FAILED | Details: Failed to respond to customer inquiry
-[2025-05-24 21:48:04] User: owner1 | Error: REMOVE_PRODUCT_FAILED | Details: Failed to remove product
-[2025-05-24 21:48:04] User: owner1 | Error: UPDATE_PRODUCT_DETAILS_FAILED | Details: Failed to update product details
-[2025-05-24 21:48:04] User: owner1 | Error: APPOINT_STORE_OWNER_FAILED | Details: Failed to appoint store owner
-[2025-05-24 21:48:04] User: user1 | Error: RESPOND_TO_OWNER_APPOINTMENT_FAILED | Details: Failed to respond to owner appointment
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:04] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 21:48:04] User: username | Error: Error in shipping | Details: Empty state
-[2025-05-24 21:48:04] User: username | Error: Error in shipping | Details: Empty street
-[2025-05-24 21:48:04] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 21:48:04] User: username | Error: Error in shipping | Details: Empty city
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:55] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:56] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:48:56] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:49:38] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 21:49:38] User: username | Error: Error in shipping | Details: Empty state
-[2025-05-24 21:49:38] User: username | Error: Error in shipping | Details: Empty street
-[2025-05-24 21:49:38] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 21:49:38] User: username | Error: Error in shipping | Details: Empty city
-[2025-05-24 21:50:39] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:50:57] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 21:50:57] User: username | Error: Error in shipping | Details: Empty state
-[2025-05-24 21:50:57] User: username | Error: Error in shipping | Details: Empty street
-[2025-05-24 21:50:57] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 21:50:57] User: username | Error: Error in shipping | Details: Empty city
-[2025-05-24 21:53:43] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 21:58:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:04] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
+[2025-05-31 16:54:02] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
+[2025-05-31 17:03:51] User: 9976e134-0aee-473c-b611-bc9a07aa9caf | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: argument "content" is null
+[2025-05-31 19:37:02] User: 5bb96681-9f24-49f8-a640-57c9cab445a3 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 19:41:25] User: d4ef5ca5-770c-44fb-8928-c6a74e543ba4 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 19:44:06] User: 6a0abba1-d243-4d43-91f8-07adc8967481 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 19:53:39] User: 30f5ecb8-4c17-48d1-8bc8-7dc1b3b207be | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:01:00] User: 92c1daa3-1d7a-4533-9ae1-7ea62a01aecd | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:09:28] User: 854edb33-6e8c-4580-85d9-ae3e08eb8fbe | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:12:37] User: 40125367-df7d-4b8e-886e-f2f274bd3334 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:13:25] User: e4ddfbc9-24a8-43da-82a0-50b99df7f732 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:14:36] User: 3aa9512e-ca4c-4021-8383-cfad348acd06 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:14:36] User: 3aa9512e-ca4c-4021-8383-cfad348acd06 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:21:25] User: f7cdceec-0090-4850-9d2d-0f806f5bf146 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:21:25] User: f7cdceec-0090-4850-9d2d-0f806f5bf146 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:22:09] User: 02ee05fb-0831-47fa-8332-20edf3b8dd75 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:22:09] User: 02ee05fb-0831-47fa-8332-20edf3b8dd75 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:24:35] User: 0d32dbf5-b58d-45b5-9fb9-35182bac4dbb | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:24:35] User: 0d32dbf5-b58d-45b5-9fb9-35182bac4dbb | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:27:36] User: a2619ae4-3b84-4cb6-b896-794ad7f4501d | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:27:36] User: a2619ae4-3b84-4cb6-b896-794ad7f4501d | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:28:51] User: 043ac00f-5976-496e-955f-e89ed5ed922b | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:28:51] User: 043ac00f-5976-496e-955f-e89ed5ed922b | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:30:40] User: e33da0ce-0cbf-459e-827b-d77aa2443a28 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:30:40] User: e33da0ce-0cbf-459e-827b-d77aa2443a28 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:32:30] User: 36182a85-f512-4114-b35d-c99aaf954365 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:32:30] User: 36182a85-f512-4114-b35d-c99aaf954365 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:33:36] User: f732a996-1fc1-44e6-baa9-ad6fa3f1c522 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:33:36] User: f732a996-1fc1-44e6-baa9-ad6fa3f1c522 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:34:54] User: a00c840c-b4e5-442b-9518-07e6d3148ed0 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:34:54] User: a00c840c-b4e5-442b-9518-07e6d3148ed0 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:36:28] User: 1a51bae5-10b7-4463-876e-705f3e1f5cf1 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:36:28] User: 1a51bae5-10b7-4463-876e-705f3e1f5cf1 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:37:36] User: 09a37926-35cd-44c6-8d84-a4d23077700d | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:37:36] User: 09a37926-35cd-44c6-8d84-a4d23077700d | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:38:42] User: 3a7aaa76-d724-4397-8cd1-0984a9d3c8d7 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:38:42] User: 3a7aaa76-d724-4397-8cd1-0984a9d3c8d7 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:40:05] User: 2418c31f-5d8b-443a-afa4-7e21ee98792c | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:40:05] User: 2418c31f-5d8b-443a-afa4-7e21ee98792c | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:42:07] User: f737e5ef-d605-47a9-bc11-ed00c0ed40f8 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:42:07] User: f737e5ef-d605-47a9-bc11-ed00c0ed40f8 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:46:56] User: 30d527c3-4360-4052-8fa3-dbed1f07f5cb | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:46:56] User: 30d527c3-4360-4052-8fa3-dbed1f07f5cb | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 20:48:00] User: 21f50494-fa75-449e-a44f-9f6ece503392 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 20:48:00] User: 21f50494-fa75-449e-a44f-9f6ece503392 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 23:04:13] User: 4cbb34dd-b333-4068-be30-c142917f4347 | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 23:04:13] User: 4cbb34dd-b333-4068-be30-c142917f4347 | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 23:07:08] User: 3b39495b-8e7b-48c7-8bfa-7c611547d4de | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 23:07:08] User: 3b39495b-8e7b-48c7-8bfa-7c611547d4de | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 23:22:54] User: f140c611-9a91-4959-955b-f970fbc3f68d | Error: APPOINT_STORE_OWNER_FAILED | Details: argument "content" is null
+[2025-05-31 23:22:54] User: f140c611-9a91-4959-955b-f970fbc3f68d | Error: APPOINT_STORE_MANAGER_FAILED | Details: argument "content" is null
+[2025-05-31 23:36:53] User: 79ff2a6c-060b-493e-9617-a45f1ae3929d | Error: APPOINT_STORE_OWNER_FAILED | Details: User does not exist
+[2025-05-31 23:36:53] User: 79ff2a6c-060b-493e-9617-a45f1ae3929d | Error: APPOINT_STORE_MANAGER_FAILED | Details: User does not exist
+[2025-05-31 23:45:02] User: 48770c15-518e-4793-a4b1-3210ff6852d4 | Error: APPOINT_STORE_MANAGER_FAILED | Details: User does not exist
+[2025-05-31 23:51:58] User: 6805107a-7014-4f07-bbca-75711fa915ab | Error: APPOINT_STORE_MANAGER_FAILED | Details: User does not exist
+[2025-06-01 00:14:15] User: e2a6784c-eac2-4ffc-904a-161318480bd1 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct

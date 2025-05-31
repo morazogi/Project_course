@@ -1,8 +1,12 @@
 package UILayer;
 
+import DomainLayer.IToken;
 import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.User;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import PresentorLayer.UserConnectivityPresenter;
 import ServiceLayer.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -18,11 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/login")
 public class LoginUI extends VerticalLayout {
 
-    private final UserService userService;
+    private final UserConnectivityPresenter userConnectivityPresenter;
 
     @Autowired
-    public LoginUI(UserService configuredUserService) {
-        this.userService = configuredUserService;
+    public LoginUI(UserService userService, RegisteredService registeredService, OwnerManagerService ownerManagerService, IToken tokenService, UserRepository userRepository, StoreRepository storeRepository) {
+        this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
+
         try {
             userService.signUp("a", "1");
             userService.signUp("b", "y");
@@ -34,9 +39,9 @@ public class LoginUI extends VerticalLayout {
         Span error = new Span("");
         Button login = new Button("login",e -> {
             try {
-                String token = userService.login(username.getValue(), password.getValue());
+                String token = userConnectivityPresenter.login(username.getValue(), password.getValue());
                 UI.getCurrent().getSession().setAttribute("token", token);
-                UI.getCurrent().navigate("/notification");
+                UI.getCurrent().navigate("/userhomepage");
                 //UI.getCurrent().navigate("/" + token);
             } catch (Exception exception) {
                 error.setText(exception.getMessage());

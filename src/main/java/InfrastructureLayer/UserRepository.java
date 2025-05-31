@@ -39,14 +39,31 @@ public class UserRepository implements IUserRepository {
 
     public boolean update(String name, String s) {
 
-        if(!rep.containsKey(s)){
+        if(!rep.containsKey(name)){
             return false;
         }
         rep.replace(name , s);
+        System.out.println(rep);
         return true;
     }
 
     public String getUser(String username) {
         return rep.get(username);
     }
+
+    public String getUserById(String userId) {
+        for (String username : rep.keySet()) {
+            RegisteredUser user = null;
+            try {
+                user = mapper.readValue(rep.get(username), RegisteredUser.class);
+                if (userId.equals(user.getID())) {
+                    return rep.get(username);
+                }
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
 }

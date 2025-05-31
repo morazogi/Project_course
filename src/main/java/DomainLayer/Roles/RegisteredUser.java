@@ -86,4 +86,12 @@ public class RegisteredUser extends User {
     public void setAnswers(Map<String, String> answers) {
         this.answers = answers;
     }
+
+    public void setOwnedStores(LinkedList<String> ownedStores) {
+        this.ownedStores = ownedStores;
+    }
+    public void setManagedStores(LinkedList<String> managedStores) {
+        this.managedStores = managedStores;
+    }
+
 }

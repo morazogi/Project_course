@@ -1,104 +1,59 @@
 package DomainLayer;
 
-import jakarta.persistence.*;
-
 import java.util.Map;
+import java.util.HashMap;
 
-@Entity
-@Table(name = "manager_permissions")
 public class ManagerPermissions {
-    public static final String PERM_MANAGE_INVENTORY = "manageInventory";
-    public static final String PERM_MANAGE_STAFF = "manageStaff";
-    public static final String PERM_VIEW_STORE = "viewStore";
-    public static final String PERM_UPDATE_POLICY = "updatePolicy";
-    public static final String PERM_ADD_PRODUCT = "addProduct";
-    public static final String PERM_REMOVE_PRODUCT = "removeProduct";
-    public static final String PERM_UPDATE_PRODUCT = "updateProduct";
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    public static final String PERM_MANAGE_INVENTORY = "PERM_MANAGE_INVENTORY";
+    public static final String PERM_MANAGE_STAFF = "PERM_MANAGE_STAFF";
+    public static final String PERM_VIEW_STORE = "PERM_VIEW_STORE";
+    public static final String PERM_UPDATE_POLICY = "PERM_UPDATE_POLICY";
+    public static final String PERM_ADD_PRODUCT = "PERM_ADD_PRODUCT";
+    public static final String PERM_REMOVE_PRODUCT = "PERM_REMOVE_PRODUCT";
+    public static final String PERM_UPDATE_PRODUCT = "PERM_UPDATE_PRODUCT";
 
-    @Column(name = "manage_inventory")
-    private boolean manageInventory;
+    private Map<String, Boolean> permissions;
 
-    @Column(name = "manage_staff")
-    private boolean manageStaff;
-
-    @Column(name = "view_store")
-    private boolean viewStore;
-
-    @Column(name = "update_policy")
-    private boolean updatePolicy;
-
-    @Column(name = "add_product")
-    private boolean addProduct;
-
-    @Column(name = "remove_product")
-    private boolean removeProduct;
-
-    @Column(name = "update_product")
-    private boolean updateProduct;
-
-    public ManagerPermissions() {}
-
-    public ManagerPermissions(boolean[] perm) {
-        this.manageInventory = perm[0];
-        this.manageStaff = perm[1];
-        this.viewStore = perm[2];
-        this.updatePolicy = perm[3];
-        this.addProduct = perm[4];
-        this.removeProduct = perm[5];
-        this.updateProduct = perm[6];
+    // ✅ Default constructor needed by Jackson
+    public ManagerPermissions() {
+        this.permissions = new HashMap<>();
+        this.permissions.put(PERM_MANAGE_INVENTORY, false);
+        this.permissions.put(PERM_MANAGE_STAFF, false);
+        this.permissions.put(PERM_VIEW_STORE, false);
+        this.permissions.put(PERM_UPDATE_POLICY, false);
+        this.permissions.put(PERM_ADD_PRODUCT, false);
+        this.permissions.put(PERM_REMOVE_PRODUCT, false);
+        this.permissions.put(PERM_UPDATE_PRODUCT, false);
     }
 
-    public boolean isManageInventory() { return manageInventory; }
-    public boolean isManageStaff() { return manageStaff; }
-    public boolean isViewStore() { return viewStore; }
-    public boolean isUpdatePolicy() { return updatePolicy; }
-    public boolean isAddProduct() { return addProduct; }
-    public boolean isRemoveProduct() { return removeProduct; }
-    public boolean isUpdateProduct() { return updateProduct; }
+    // Custom constructor (still useful)
+    public ManagerPermissions(boolean[] perm) {
+        this();
+        setPermissionsFromAarray(perm);
+    }
 
-    public void setPermissions(boolean[] perm) {
-        this.manageInventory = perm[0];
-        this.manageStaff = perm[1];
-        this.viewStore = perm[2];
-        this.updatePolicy = perm[3];
-        this.addProduct = perm[4];
-        this.removeProduct = perm[5];
-        this.updateProduct = perm[6];
+    // ✅ Getter that Jackson will use
+    public Map<String, Boolean> getPermissions() {
+        return permissions;
+    }
+
+    // ✅ Setter that Jackson will use
+    public void setPermissions(Map<String, Boolean> permissions) {
+        this.permissions = permissions;
     }
 
     public boolean getPermission(String permission) {
-        switch (permission) {
-            case PERM_MANAGE_INVENTORY:
-                return manageInventory;
-            case PERM_MANAGE_STAFF:
-                return manageStaff;
-            case PERM_VIEW_STORE:
-                return viewStore;
-            case PERM_UPDATE_POLICY:
-                return updatePolicy;
-            case PERM_ADD_PRODUCT:
-                return addProduct;
-            case PERM_REMOVE_PRODUCT:
-                return removeProduct;
-            case PERM_UPDATE_PRODUCT:
-                return updateProduct;
-            default:
-                return false;
-        }
+        return permissions.getOrDefault(permission, false);
     }
 
-    public Map<String, Boolean> getPermissions() {
-        return Map.of(
-                PERM_MANAGE_INVENTORY, manageInventory,
-                PERM_MANAGE_STAFF, manageStaff,
-                PERM_VIEW_STORE, viewStore,
-                PERM_UPDATE_POLICY, updatePolicy,
-                PERM_ADD_PRODUCT, addProduct,
-                PERM_REMOVE_PRODUCT, removeProduct,
-                PERM_UPDATE_PRODUCT, updateProduct
-        );
+    // Extra: allow setting via boolean array if needed
+    public void setPermissionsFromAarray(boolean[] perm) {
+        this.permissions.put(PERM_MANAGE_INVENTORY, perm[0]);
+        this.permissions.put(PERM_MANAGE_STAFF, perm[1]);
+        this.permissions.put(PERM_VIEW_STORE, perm[2]);
+        this.permissions.put(PERM_UPDATE_POLICY, perm[3]);
+        this.permissions.put(PERM_ADD_PRODUCT, perm[4]);
+        this.permissions.put(PERM_REMOVE_PRODUCT, perm[5]);
+        this.permissions.put(PERM_UPDATE_PRODUCT, perm[6]);
     }
 }

@@ -695,7 +695,7 @@ public class Store {
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {
-        managers.get(managerId).setPermissions(permissions);
+        managers.get(managerId).setPermissionsFromAarray(permissions);
     }
 
     public void terminateManagment(String managerId) {
@@ -745,5 +745,41 @@ public class Store {
     public boolean closeByAdmin() {
         //todo: implement
         return false;
+    }
+
+    public Map<String, ManagerPermissions> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(Map<String, ManagerPermissions> managers) {
+        this.managers = managers;
+    }
+
+    public List<String> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(List<String> owners) {
+        this.owners = owners;
+    }
+
+    public Map<String, String> getOwnersToSuperior() {
+        return ownersToSuperior;
+    }
+
+    public void setOwnersToSuperior(Map<String, String> ownersToSuperior) {
+        this.ownersToSuperior = ownersToSuperior;
+    }
+
+    public Map<String, String> getManagersToSuperior() {
+        return managersToSuperior;
+    }
+
+    public void setManagersToSuperior(Map<String, String> managersToSuperior) {
+        this.managersToSuperior = managersToSuperior;
+    }
+
+    public void setFounder(String founder) {
+        this.founder = founder;
     }
 }

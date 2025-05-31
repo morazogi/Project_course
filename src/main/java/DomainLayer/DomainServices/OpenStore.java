@@ -27,6 +27,7 @@ public class OpenStore {
             throw new IllegalArgumentException("User does not exist");
         }
         Store store = new Store(username , name);
+        store.setId(Math.random() * 1000 + "");
         storeRepository.addStore(store.getId(), mapper.writeValueAsString(store));
         return store.getId();
     }

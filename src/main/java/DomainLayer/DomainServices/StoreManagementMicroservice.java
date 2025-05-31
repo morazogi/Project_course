@@ -3,10 +3,11 @@ package DomainLayer.DomainServices;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import DomainLayer.Store;
+
+import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.IStoreRepository;
-import DomainLayer.IUserRepository;
+import InfrastructureLayer.UserRepository;
+import ServiceLayer.EventLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,20 +18,23 @@ public class StoreManagementMicroservice {
     // Add standard permission constants
     private IStoreRepository storeRepository;
     private IUserRepository userRepository;
+    private IToken tokenService;
     private ObjectMapper mapper = new ObjectMapper();
 
-    public StoreManagementMicroservice(IStoreRepository storeRepository,IUserRepository userRepository) {
+    public StoreManagementMicroservice(IStoreRepository storeRepository,IUserRepository userRepository, IToken tokenService) {
         this.storeRepository = storeRepository;
         this.userRepository = userRepository;
+        this.tokenService = tokenService;
     }
     /**
      * Set the repositories for this microservice
      * @param storeRepository Repository for stores
      * @param userRepository Repository for users
      */
-    public void setRepositories(IStoreRepository storeRepository, IUserRepository userRepository) {
+    public void setRepositories(IStoreRepository storeRepository, IUserRepository userRepository, IToken tokenService) {
         this.storeRepository = storeRepository;
         this.userRepository = userRepository;
+        this.tokenService = tokenService;
     }
     // Helper methods to get entities from repositories
     private Store getStoreById(String storeId) {
@@ -42,18 +46,21 @@ public class StoreManagementMicroservice {
             if (storeRepository.getStore(storeId) == null) {
                 throw new IllegalArgumentException("Store does not exist");
             }
+            System.out.println("store");
             return store;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
-    private RegisteredUser getUserById(String userId) {
+    public RegisteredUser getUserById(String userId) {
         if (userRepository == null) {
             return null;
         }
         try {
-            RegisteredUser user = mapper.readValue(userRepository.getUser(userId), RegisteredUser.class);
-            if (userRepository.getUser(userId) == null) {
+            System.out.println("sa");
+            RegisteredUser user = mapper.readValue(userRepository.getUserById(userId), RegisteredUser.class);
+            System.out.println("fdea");
+            if (userRepository.getUserById(userId) == null) {
                 throw new IllegalArgumentException("User does not exist");
             }
             return user;
@@ -92,7 +99,14 @@ public class StoreManagementMicroservice {
         synchronized (store) {
             if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
             store.addOwner(appointerId, userId);
-            getUserById(userId).addOwnedStore(storeId);
+            storeRepository.removeStore(store.getId());
+            try {
+                storeRepository.addStore(storeId, mapper.writeValueAsString(store));
+                RegisteredUser user = getUserById(userId);
+                user.addOwnedStore(storeId);
+                userRepository.update(user.getUsername(), mapper.writeValueAsString(user));
+            } catch (Exception e) {}
+            System.out.println("fgvewdgersHTEFRHBERQ");
             return true;
         }
     }
@@ -166,17 +180,28 @@ public class StoreManagementMicroservice {
         return false;
     }
     public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
-        if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
-            return false;
-        }
+//        if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
+//            return false;
+//        }
 
+        System.out.println(2);
         Store store = getStoreById(storeId);
         synchronized (store) {
-            if (store.userIsOwner(userId) || store.userIsManager(userId)) {
+            if (store.userIsManager(userId)) {
+                System.out.println("!");
                 return false;
             }
             store.addManager(appointerId, userId, permissions);
-            getUserById(userId).addManagedStore(storeId);
+            storeRepository.removeStore(store.getId());
+            try {
+                storeRepository.addStore(storeId, mapper.writeValueAsString(store));
+                RegisteredUser user = getUserById(userId);
+                user.addManagedStore(storeId);
+                userRepository.update(user.getUsername(), mapper.writeValueAsString(user));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            System.out.println("here");
             return true;
         }
     }
@@ -292,21 +317,27 @@ public class StoreManagementMicroservice {
         }
         return "";
     }
-    /**
-     * Get manager permissions
-     * @param ownerId ID of the requesting owner
-     * @param storeId ID of the store
-     * @param managerId ID of the manager
-     * @return Array of permissions if successful, null otherwise
-     */
-    public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
-        Store store = getStoreById(storeId);
-        if (store.checkIfSuperior(ownerId,managerId)&&store.userIsManager(managerId)){
+
+    public Map<String, Boolean> getManagerPermissions(String storename, String managerId) {
+        String key = "";
+        this.storeRepository.getStores();
+        for(Map.Entry<String, String> entry : this.storeRepository.getStores().entrySet()){
+            if(entry.getValue().contains(storename)){
+                key = entry.getKey();
+                EventLogger.logEvent(managerId,"got the key that macthes to the store named "+storename + key);
+            }
+
+        }
+        //if(Objects.equals(key, "")) return null;
+        Store store = getStoreById(key);
+        if (store.userIsManager(managerId)){
             return store.getPremissions(managerId);
         }
         Map<String, Boolean> fakeAnswer = new HashMap<>();
+        EventLogger.logEvent(managerId,"we return a fake answer as a hash map "+storename);
         return fakeAnswer;
     }
+
     public boolean relinquishManagement(String managerID, String storeId) {
         Store store = getStoreById(storeId);
         if(!store.isFounder(managerID)&&store.userIsManager(managerID)){
@@ -318,5 +349,14 @@ public class StoreManagementMicroservice {
         }
         return false;
 
+    }
+
+    public boolean appointStoreFounder(String founderId, String storeId) {
+        Store store = getStoreById(storeId);
+        if (store.getFounder() != null) {
+            return false;
+        }
+        store.setFounder(founderId);
+        return true;
     }
 }

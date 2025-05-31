@@ -9,4 +9,5 @@ public interface IUserRepository {
     public boolean isUserExist(String username);
     public boolean update(String name ,String s);
     public String getUser(String username);
+    String getUserById(String userId);
 }

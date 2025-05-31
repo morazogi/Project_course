@@ -169,7 +169,7 @@ public class UserService {
     }
 
     @Transactional
-    public String searchStoreByName(String token, String storeName) {
+    public List<String> searchStoreByName(String token, String storeName) {
         try {
             return search.searchStoreByName(storeName);
         } catch (Exception e) {
@@ -187,5 +187,15 @@ public class UserService {
             throw new RuntimeException("Failed to search store");
         }
     }
+
+    public Optional<Product> getProductById(String id) {
+        try {
+            return productRepository.findById(id);
+        } catch (Exception e) {
+            System.out.println("ERROR finding product by ID:" + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
 
 }
