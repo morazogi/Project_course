@@ -84,7 +84,7 @@ public class InventoryManagementMicroservice {
      * @param category    Category of the product
      * @return Product ID if successful, null otherwise
      */
-    public String addProduct(String userId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String addProduct(String userId, String storeId, String productName, String description, float price, int quantity, String category) {
         // Check if user has permission
         if (!checkPermission(userId, storeId, ManagerPermissions.PERM_ADD_PRODUCT)) {
             return null; // No permission
@@ -94,10 +94,11 @@ public class InventoryManagementMicroservice {
         if (store == null) {
             return null;
         }
-
-        return store.addProduct(productName, description, price, quantity, category);
-
+        Product product = new Product("", storeId, productName, description, price, quantity, -1, category);
+        productRepository.save(product);
+        return store.addProduct(product.getId(), product.getQuantity());
     }
+
 
     /**
      * Remove a product from the store inventory
