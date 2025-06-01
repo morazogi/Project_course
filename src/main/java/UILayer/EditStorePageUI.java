@@ -124,9 +124,13 @@ public class EditStorePageUI extends VerticalLayout {
 
         VerticalLayout addDiscountForm = new VerticalLayout(
                 new Span("Set New Discount"),
+                storeId,
+                discountId,
+                Id,
                 discountLevel,
                 logicComposition,
                 numericalComposition,
+                discountsId,
                 percentDiscount,
                 discountedItem,
                 discountCondition,
