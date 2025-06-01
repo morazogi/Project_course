@@ -37,7 +37,7 @@ public class AddProductToStoreUI extends VerticalLayout {
             result.setText(userConnectivityPresenter.addNewProductToStore(token, storeName.getValue(), productName.getValue(), description.getValue(), price.getValue(), quantity.getValue(), category.getValue()));
         });
 
-        add(new H1("add store"), new HorizontalLayout(storeName, productName, description, price, quantity, category), addNewProductToStore, result);
+        add(new H1("add product"), new HorizontalLayout(storeName, productName, description, price, quantity, category), addNewProductToStore, result);
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }

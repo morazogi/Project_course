@@ -53,3 +53,15 @@
 [2025-05-31 23:45:02] User: 48770c15-518e-4793-a4b1-3210ff6852d4 | Error: APPOINT_STORE_MANAGER_FAILED | Details: User does not exist
 [2025-05-31 23:51:58] User: 6805107a-7014-4f07-bbca-75711fa915ab | Error: APPOINT_STORE_MANAGER_FAILED | Details: User does not exist
 [2025-06-01 00:14:15] User: e2a6784c-eac2-4ffc-904a-161318480bd1 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:49] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:58] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:58] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:59] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:59] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:59] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:18:59] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:19:00] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:19:00] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:19:00] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:22:48] User: db176004-1875-471d-895e-f34c4cdefc96 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:22:48] User: db176004-1875-471d-895e-f34c4cdefc96 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct

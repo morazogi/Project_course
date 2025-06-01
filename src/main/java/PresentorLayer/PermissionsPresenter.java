@@ -2,9 +2,12 @@ package PresentorLayer;
 
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import DomainLayer.Roles.RegisteredUser;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.notification.Notification;
 
 import java.util.Map;
 
@@ -27,5 +30,21 @@ public class PermissionsPresenter {
             return null;
         }
         return this.manager.getManagerPermissions(ownerId, storeId, managerId);
+    }
+
+    public Map<String, Boolean> getPremissions(String token, String storeId) {
+        if(storeId == null || storeId.isEmpty()){
+            return null;
+        }
+        String username = tokenService.extractUsername(token);
+
+        String jsonUser = userRepository.getUser(username);
+        RegisteredUser user = null;
+        try {
+            user = mapper.readValue(jsonUser, RegisteredUser.class);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+        return this.manager.getManagerPermissions(user.getID(), storeId, user.getID());
     }
 }

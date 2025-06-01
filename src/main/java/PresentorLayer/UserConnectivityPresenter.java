@@ -111,6 +111,7 @@ public class UserConnectivityPresenter {
                 return e.getMessage();
             }
             if (store.getName().equals(storeName)) {
+                System.out.println("!!!!!!!!!!!!!!!!!!!" + ownerManagerService.addProduct(user.getID(), store.getId(), productName, description, price, quantity, category));
                 return ownerManagerService.addProduct(user.getID(), store.getId(), productName, description, price, quantity, category);
             }
         }

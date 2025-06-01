@@ -2,8 +2,11 @@ package UILayer;
 
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import DomainLayer.ManagerPermissions;
 import DomainLayer.Store;
+import PresentorLayer.PermissionsPresenter;
 import PresentorLayer.ProductPresenter;
+import ServiceLayer.OwnerManagerService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -19,14 +22,18 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Map;
+
 @Route("/store/:storeid")
 public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
 
     private final ProductPresenter productPresenter;
+    private final PermissionsPresenter permissionsPresenter;
 
     @Autowired
-    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository, OwnerManagerService ownerManagerService) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
+        permissionsPresenter = new PermissionsPresenter(ownerManagerService, configuredTokenService, configuredUserRepository);
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }
@@ -41,5 +48,31 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
         }
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         add(productPresenter.getStorePage(token, (String) UI.getCurrent().getSession().getAttribute("storeId")));
+
+        Map<String, Boolean> perms = permissionsPresenter.getPremissions(token, (String) UI.getCurrent().getSession().getAttribute("storeId"));
+        HorizontalLayout buttonLayout1 = new HorizontalLayout();
+        HorizontalLayout buttonLayout2 = new HorizontalLayout();
+
+        if (perms != null) {
+            if (perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY) != null && perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
+                buttonLayout1.add(new Button("📦 Manage Inventory"));
+            }
+            if (perms.get(ManagerPermissions.PERM_MANAGE_STAFF) != null && perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
+                buttonLayout1.add(new Button("👥 Manage Staff"));
+            }
+            if (perms.get(ManagerPermissions.PERM_ADD_PRODUCT) != null && perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
+                buttonLayout2.add(new Button("➕ Add Product", e -> {UI.getCurrent().navigate("/addnewproduct");}));
+            }
+            if (perms.get(ManagerPermissions.PERM_REMOVE_PRODUCT) != null && perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
+                buttonLayout2.add(new Button("❌ Remove Product"));
+            }
+            if (perms.get(ManagerPermissions.PERM_UPDATE_PRODUCT) != null && perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
+                buttonLayout2.add(new Button("✏️ Update Product"));
+            }
+            if (perms.get(ManagerPermissions.PERM_UPDATE_POLICY) != null && perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
+                buttonLayout2.add(new Button("📝 Update Policy"));
+            }
+            add(buttonLayout1, buttonLayout2);
+        }
     }
 }
