@@ -530,8 +530,9 @@ public class Store {
         return (owners.contains(userId) || managers.get(userId).getPermission(permission));
     }
 
-    public String addProduct(String productName, String description, double price, int quantity, String category) {
-        throw new UnsupportedOperationException("Not supported yet. - store.addProduct");
+    public String addProduct(String productID,int quantity) {
+        this.products.put(productID, quantity);
+        return productID;
     }
 
     public boolean updateProductDetails(String productId, String productName, String description, double price, String category) {
@@ -689,7 +690,7 @@ public class Store {
     }
 
     public void addManager(String appointerId, String userId, boolean[] permissions) {
-        ManagerPermissions mp = new ManagerPermissions(permissions);
+        ManagerPermissions mp = new ManagerPermissions(permissions,userId);
         managers.put(userId, mp);
         managersToSuperior.put(userId, appointerId);
     }

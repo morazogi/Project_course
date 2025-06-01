@@ -1,8 +1,9 @@
 package DomainLayer;
 
+import jakarta.persistence.*;
 import java.util.Map;
 import java.util.HashMap;
-
+@Entity
 public class ManagerPermissions {
     public static final String PERM_MANAGE_INVENTORY = "PERM_MANAGE_INVENTORY";
     public static final String PERM_MANAGE_STAFF = "PERM_MANAGE_STAFF";
@@ -11,7 +12,15 @@ public class ManagerPermissions {
     public static final String PERM_ADD_PRODUCT = "PERM_ADD_PRODUCT";
     public static final String PERM_REMOVE_PRODUCT = "PERM_REMOVE_PRODUCT";
     public static final String PERM_UPDATE_PRODUCT = "PERM_UPDATE_PRODUCT";
+    @Id
+    @Column(name = "manager_id")
+    public String managerId;
 
+    @ElementCollection
+    @CollectionTable(name = "manager_permission_entries",
+            joinColumns = @JoinColumn(name = "manager_id"))
+    @MapKeyColumn(name = "permission_name")
+    @Column(name = "permission_value")
     private Map<String, Boolean> permissions;
 
     // ✅ Default constructor needed by Jackson
@@ -27,9 +36,10 @@ public class ManagerPermissions {
     }
 
     // Custom constructor (still useful)
-    public ManagerPermissions(boolean[] perm) {
+    public ManagerPermissions(boolean[] perm, String ManagerId) {
         this();
         setPermissionsFromAarray(perm);
+        this.managerId = ManagerId;
     }
 
     // ✅ Getter that Jackson will use
@@ -45,6 +55,20 @@ public class ManagerPermissions {
     public boolean getPermission(String permission) {
         return permissions.getOrDefault(permission, false);
     }
+
+    public void setPermission(String permission, boolean value) {
+        this.permissions.put(permission, value);
+    }
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
+
+
 
     // Extra: allow setting via boolean array if needed
     public void setPermissionsFromAarray(boolean[] perm) {

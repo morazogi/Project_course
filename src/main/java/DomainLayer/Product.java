@@ -11,7 +11,6 @@ public class Product {
     @Column(name = "id", nullable = false, unique = true)
     private String id = UUID.randomUUID().toString();
 
-    @ManyToOne
     @JoinColumn(name = "storeID", referencedColumnName = "id")
     private String storeId;
 
@@ -36,7 +35,7 @@ public class Product {
     // Constructors
     public Product(String id, String storeId, String name, String description, float price , int quantity, double rating, String category) {
         if(quantity > 0) {
-            this.id = id;
+            // id is not needed because we are working with UUID
             this.storeId = storeId;
             this.name = name;
             this.description = description;

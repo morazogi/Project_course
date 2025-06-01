@@ -57,7 +57,7 @@ public class OwnerManagerService {
      * @return Product ID if successful, null otherwise
      */
     @Transactional
-    public String addProduct(String ownerId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String addProduct(String ownerId, String storeId, String productName, String description, float price, int quantity, String category) {
         try {
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_START");
             String result = inventoryService.addProduct(ownerId, storeId, productName, description, (float) price, quantity, category);
@@ -662,7 +662,7 @@ public class OwnerManagerService {
      * @return Product ID if successful, null otherwise
      */
     @Transactional
-    public String managerAddProduct(String managerId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String managerAddProduct(String managerId, String storeId, String productName, String description, float price, int quantity, String category) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_ADD_PRODUCT_START");
             String result = inventoryService.addProduct(managerId, storeId, productName, description, (float) price, quantity, category);
