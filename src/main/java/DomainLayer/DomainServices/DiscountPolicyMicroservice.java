@@ -2,6 +2,7 @@ package DomainLayer.DomainServices;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
+import InfrastructureLayer.DiscountRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -140,6 +141,17 @@ public class DiscountPolicyMicroservice {
                 }
 
                 store.addDiscount(discountId);
+                try {
+                    storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
+                } catch (Exception e) {
+                    return false;
+                }
+
+                try {
+                    discountRepository.saveAndFlush(discount);
+                } catch (Exception e) {
+                    return false;
+                }
 
                 try {
                     storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
@@ -166,6 +178,7 @@ public class DiscountPolicyMicroservice {
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
+
             }
             store.setDiscountPolicy(new ArrayList<>());
             try {

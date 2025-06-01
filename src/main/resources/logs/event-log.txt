@@ -1,152 +1,261 @@
-[2025-06-01 11:28:44] User: testUser | Event: Event | Description: User logged in
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:44] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: TokenService
-[2025-06-01 11:28:45] User: username | Event: Event | Description: Shipping successful
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_MANAGER_PERMISSIONS_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: SEND_OWNERSHIP_PROPOSAL_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: SEND_OWNERSHIP_PROPOSAL_SUCCESS
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_REMOVE_PRODUCT_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_STORE_OWNER_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_PURCHASE_POLICY_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: RELINQUISH_MANAGEMENT_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PURCHASE_POLICY_START
-[2025-06-01 11:28:45] User: founder1 | Event: Event | Description: REOPEN_STORE_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: RESPOND_TO_MANAGER_APPOINTMENT_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: RESPOND_TO_MANAGER_APPOINTMENT_SUCCESS
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_ADD_PRODUCT_START
-[2025-06-01 11:28:45] User: founder1 | Event: Event | Description: CLOSE_STORE_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_STORE_MANAGER_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_STORE_MANAGER_SUCCESS
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: SEND_OWNERSHIP_PROPOSAL_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: GET_CUSTOMER_INQUIRIES_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: GET_CUSTOMER_INQUIRIES_SUCCESS
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: RESPOND_TO_MANAGER_APPOINTMENT_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: APPOINT_STORE_MANAGER_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: RELINQUISH_OWNERSHIP_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: RELINQUISH_OWNERSHIP_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_STORE_MANAGER_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_DETAILS_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_DETAILS_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: GET_CUSTOMER_INQUIRIES_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: SEND_MANAGEMENT_PROPOSAL_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: SEND_MANAGEMENT_PROPOSAL_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: APPOINT_STORE_MANAGER_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: RELINQUISH_OWNERSHIP_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_DETAILS_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: GET_STORE_ROLE_INFO_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: GET_STORE_ROLE_INFO_SUCCESS
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_QUANTITY_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_QUANTITY_SUCCESS
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: SEND_MANAGEMENT_PROPOSAL_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: DEFINE_PURCHASE_POLICY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: DEFINE_PURCHASE_POLICY_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: RESPOND_TO_CUSTOMER_INQUIRY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: RESPOND_TO_CUSTOMER_INQUIRY_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_PRODUCT_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_PRODUCT_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: GET_STORE_ROLE_INFO_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_DETAILS_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_DETAILS_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: APPOINT_STORE_OWNER_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: RESPOND_TO_OWNER_APPOINTMENT_START
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: RESPOND_TO_OWNER_APPOINTMENT_SUCCESS
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_QUANTITY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_MANAGER_PERMISSIONS_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_REMOVE_PRODUCT_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_REMOVE_PRODUCT_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: ADD_PRODUCT_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_STORE_OWNER_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_STORE_OWNER_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: DEFINE_PURCHASE_POLICY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: RESPOND_TO_CUSTOMER_INQUIRY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_PURCHASE_POLICY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_PURCHASE_POLICY_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: REMOVE_PRODUCT_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: RELINQUISH_MANAGEMENT_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: RELINQUISH_MANAGEMENT_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PURCHASE_POLICY_START
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PURCHASE_POLICY_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_DETAILS_START
-[2025-06-01 11:28:45] User: founder1 | Event: Event | Description: REOPEN_STORE_START
-[2025-06-01 11:28:45] User: founder1 | Event: Event | Description: REOPEN_STORE_SUCCESS
-[2025-06-01 11:28:45] User: owner1 | Event: Event | Description: APPOINT_STORE_OWNER_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_ADD_PRODUCT_START
-[2025-06-01 11:28:45] User: manager1 | Event: Event | Description: MANAGER_ADD_PRODUCT_SUCCESS
-[2025-06-01 11:28:45] User: founder1 | Event: Event | Description: CLOSE_STORE_START
-[2025-06-01 11:28:45] User: founder1 | Event: Event | Description: CLOSE_STORE_SUCCESS
-[2025-06-01 11:28:45] User: user1 | Event: Event | Description: RESPOND_TO_OWNER_APPOINTMENT_START
-[2025-06-01 11:28:45] User: removeProduct | Event: Event | Description: Product removed from cart
-[2025-06-01 11:28:45] User: removeProduct | Event: Event | Description: Product not found in cart
-[2025-06-01 11:28:45] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
-[2025-06-01 11:28:45] User: removeProduct | Event: Event | Description: Product removed from cart
-[2025-06-01 11:28:45] User: alice | Event: Event | Description: LOGOUT_SUCCESS
-[2025-06-01 11:28:45] User: alice | Event: Event | Description: LOGIN_FAILED - USER_NOT_EXIST
-[2025-06-01 11:28:45] User: alice | Event: Event | Description: SIGNUP_FAILED - EMPTY
-[2025-06-01 11:28:46] User: alice | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-01 11:28:46] User: null | Event: Event | Description: LOGIN_FAILED - NULL
-[2025-06-01 11:28:46] User: null | Event: Event | Description: SIGNUP_FAILED - NULL
-[2025-06-01 11:28:46] User: alice | Event: Event | Description: LOGOUT_FAILED - TOKEN_NULL
-[2025-06-01 11:28:46] User: Guest | Event: Event | Description: LOGOUT_FAILED - GUEST
-[2025-06-01 11:28:46] User: u | Event: Event | Description: LOGIN_FAILED - EMPTY
-[2025-06-01 11:28:46] User:  | Event: Event | Description: LOGOUT_FAILED - USER_EMPTY
-[2025-06-01 11:28:46] User: alice | Event: Event | Description: LOGOUT_FAILED - TOKEN_EMPTY
-[2025-06-01 11:28:46] User: null | Event: Event | Description: LOGOUT_FAILED - USER_NULL
-[2025-06-01 11:28:46] User:  | Event: Event | Description: SIGNUP_FAILED - EMPTY
-[2025-06-01 11:28:46] User: alice | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-01 11:28:46] User: u | Event: Event | Description: LOGIN_FAILED - NULL
-[2025-06-01 11:28:46] User: alice | Event: Event | Description: SIGNUP_FAILED - NULL
-[2025-06-01 11:28:46] User: alice | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-01 11:28:46] User:  | Event: Event | Description: LOGIN_FAILED - EMPTY
-[2025-06-01 11:28:46] User: SEARCH_BY_CATEGORY | Event: Event | Description: Category=accessories Matches=1
-[2025-06-01 11:28:46] User: SEARCH_BY_NAME | Event: Event | Description: Query=Socks Matches=1
-[2025-06-01 11:40:15] User: a | Event: Event | Description: LOGIN
-[2025-06-01 11:40:15] User: a | Event: Event | Description: TokenService
-[2025-06-01 11:40:15] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-01 11:40:16] User: a | Event: Event | Description: OPEN_STORE
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_OWNER_START
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_MANAGER_START
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named a852.0651992948372
-[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-01 11:40:25] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-01 11:40:25] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: ADD_PRODUCT_SUCCESS
-[2025-06-01 11:40:26] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-01 11:40:26] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named a852.0651992948372
-[2025-06-01 11:40:26] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-01 11:40:26] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-01 11:40:26] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-01 11:40:38] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=a Matches=1
-[2025-06-01 11:40:38] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-01 11:40:38] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named 852.0651992948372852.0651992948372
-[2025-06-01 11:40:38] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-01 11:40:41] User: SEARCH_BY_STORE | Event: Event | Description: Store=852.0651992948372 Matches=1
-[2025-06-01 11:40:43] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-01 11:40:43] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-01 11:40:45] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-01 11:40:45] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named 852.0651992948372852.0651992948372
-[2025-06-01 11:40:45] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-01 11:41:01] User: a | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
-[2025-06-01 11:41:01] User: a | Event: Event | Description: Shipping successful
-[2025-06-01 11:41:01] User: a | Event: Event | Description: Successfully payed for cart
+[2025-06-01 13:13:50] User: testUser | Event: Event | Description: User logged in
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_MANAGER_PERMISSIONS_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: SEND_OWNERSHIP_PROPOSAL_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: SEND_OWNERSHIP_PROPOSAL_SUCCESS
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_REMOVE_PRODUCT_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_STORE_OWNER_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_PURCHASE_POLICY_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: RELINQUISH_MANAGEMENT_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PURCHASE_POLICY_START
+[2025-06-01 13:13:50] User: founder1 | Event: Event | Description: REOPEN_STORE_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: RESPOND_TO_MANAGER_APPOINTMENT_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: RESPOND_TO_MANAGER_APPOINTMENT_SUCCESS
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_ADD_PRODUCT_START
+[2025-06-01 13:13:50] User: founder1 | Event: Event | Description: CLOSE_STORE_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_STORE_MANAGER_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_STORE_MANAGER_SUCCESS
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: SEND_OWNERSHIP_PROPOSAL_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: GET_CUSTOMER_INQUIRIES_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: GET_CUSTOMER_INQUIRIES_SUCCESS
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: RESPOND_TO_MANAGER_APPOINTMENT_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: RELINQUISH_OWNERSHIP_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: RELINQUISH_OWNERSHIP_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_STORE_MANAGER_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_DETAILS_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_DETAILS_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: GET_CUSTOMER_INQUIRIES_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: SEND_MANAGEMENT_PROPOSAL_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: SEND_MANAGEMENT_PROPOSAL_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: RELINQUISH_OWNERSHIP_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_DETAILS_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: GET_STORE_ROLE_INFO_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: GET_STORE_ROLE_INFO_SUCCESS
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_QUANTITY_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_QUANTITY_SUCCESS
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: SEND_MANAGEMENT_PROPOSAL_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: DEFINE_PURCHASE_POLICY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: DEFINE_PURCHASE_POLICY_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: RESPOND_TO_CUSTOMER_INQUIRY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: RESPOND_TO_CUSTOMER_INQUIRY_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_PRODUCT_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_PRODUCT_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: GET_STORE_ROLE_INFO_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_DETAILS_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_DETAILS_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: RESPOND_TO_OWNER_APPOINTMENT_START
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: RESPOND_TO_OWNER_APPOINTMENT_SUCCESS
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_UPDATE_PRODUCT_QUANTITY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_MANAGER_PERMISSIONS_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_REMOVE_PRODUCT_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_REMOVE_PRODUCT_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_STORE_OWNER_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_STORE_OWNER_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: DEFINE_PURCHASE_POLICY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: RESPOND_TO_CUSTOMER_INQUIRY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_PURCHASE_POLICY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_PURCHASE_POLICY_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: REMOVE_PRODUCT_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: RELINQUISH_MANAGEMENT_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: RELINQUISH_MANAGEMENT_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PURCHASE_POLICY_START
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PURCHASE_POLICY_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: UPDATE_PRODUCT_DETAILS_START
+[2025-06-01 13:13:50] User: founder1 | Event: Event | Description: REOPEN_STORE_START
+[2025-06-01 13:13:50] User: founder1 | Event: Event | Description: REOPEN_STORE_SUCCESS
+[2025-06-01 13:13:50] User: owner1 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_ADD_PRODUCT_START
+[2025-06-01 13:13:50] User: manager1 | Event: Event | Description: MANAGER_ADD_PRODUCT_SUCCESS
+[2025-06-01 13:13:50] User: founder1 | Event: Event | Description: CLOSE_STORE_START
+[2025-06-01 13:13:50] User: founder1 | Event: Event | Description: CLOSE_STORE_SUCCESS
+[2025-06-01 13:13:50] User: user1 | Event: Event | Description: RESPOND_TO_OWNER_APPOINTMENT_START
+[2025-06-01 13:13:50] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:50] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:50] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:50] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: TokenService
+[2025-06-01 13:13:51] User: username | Event: Event | Description: Shipping successful
+[2025-06-01 13:19:56] User: a | Event: Event | Description: LOGIN
+[2025-06-01 13:19:56] User: a | Event: Event | Description: TokenService
+[2025-06-01 13:19:56] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-01 13:19:59] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:19:59] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:19:59] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:19:59] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:19:59] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:00] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:00] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River722.4472438552407
+[2025-06-01 13:20:00] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:00] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-01 13:20:00] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-01 13:20:36] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:20:36] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:20:36] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:20:36] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:20:36] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:41] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:41] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:20:41] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:42] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:42] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:42] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:20:42] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:20:54] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-01 13:20:54] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-01 13:20:55] User: a | Event: Event | Description: LOGIN
+[2025-06-01 13:20:55] User: a | Event: Event | Description: TokenService
+[2025-06-01 13:20:55] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River327.71180508082455
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River722.4472438552407
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River327.71180508082455
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River722.4472438552407
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:20:55] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:32] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 13:21:32] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 13:21:32] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 13:21:32] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 13:21:32] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River327.71180508082455
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River722.4472438552407
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River779.8420764124619
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River327.71180508082455
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River722.4472438552407
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River779.8420764124619
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2352.22233110693026
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2981.9317301644622
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2506.6558325407575
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2938.7277728053206
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River2430.558779498866
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: got the key that macthes to the store named River3779.8420764124619
+[2025-06-01 13:21:34] User: 6c484750-2751-480d-a586-33f3944e7a70 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -148,5 +149,37 @@ public class UserConnectivityPresenter {
         }
         System.out.println(storeNames);
         return storeNames;
+    }
+
+    public void applyDiscount(String ownerId,
+                              String storeId,
+                              String discountId,
+                              String Id,
+                              float level,
+                              float logicComposition,
+                              float numericalComposition,
+                              String discountsId,
+                              float percentDiscount,
+                              String discounted,
+                              float conditional,
+                              float limiter,
+                              String conditionalDiscounted){
+
+        List<String> discountsIdList = Arrays.asList(discountsId.split("_"));
+        this.ownerManagerService.defineDiscountPolicy(ownerId,
+                    storeId,
+                    discountId,
+                    Id,
+                    level,
+                    logicComposition,
+                    numericalComposition,
+                    discountsIdList,
+                    percentDiscount,
+                    discounted,
+                    conditional,
+                    limiter,
+                    conditionalDiscounted);
+
+
     }
 }
