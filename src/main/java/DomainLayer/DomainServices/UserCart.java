@@ -15,6 +15,8 @@ import DomainLayer.Order;
 import DomainLayer.Roles.RegisteredUser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Date;
 import java.util.HashMap;
@@ -209,7 +211,7 @@ public class UserCart {
         // create an order
 //        orderRepository.addOrder(new Order(mapper.writeValueAsString(cart), username , totalPrice));
         user.setCartReserved(false);
-//        user.getShoppingCart().clearBags();
+        user.getShoppingCart().getShoppingBags().removeAll(user.getShoppingCart().getShoppingBags());
         userRepository.update(username, mapper.writeValueAsString(user));
     }
 }  
