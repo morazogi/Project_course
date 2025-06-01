@@ -65,3 +65,5 @@
 [2025-06-01 09:19:00] User: 149fcc3f-e403-45af-beb5-ef03d175f5d8 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
 [2025-06-01 09:22:48] User: db176004-1875-471d-895e-f34c4cdefc96 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
 [2025-06-01 09:22:48] User: db176004-1875-471d-895e-f34c4cdefc96 | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:26:02] User: 969be2eb-c504-4a28-8e02-e82f5e38d4cc | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct
+[2025-06-01 09:26:02] User: 969be2eb-c504-4a28-8e02-e82f5e38d4cc | Error: ADD_PRODUCT_FAILED | Details: Not supported yet. - store.addProduct

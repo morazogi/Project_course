@@ -64,8 +64,9 @@ public class Search {
         return mapper.writeValueAsString(matches);
     }
 
-    public String getProductsByStore(String storeId) throws JsonProcessingException {
+    public List<Product> getProductsByStore(String storeId) throws JsonProcessingException {
         Store store = mapper.readValue(storeRepository.getStore(storeId), Store.class);
+        System.out.println(store);
         if (store == null) {
             EventLogger.logEvent("SEARCH_BY_STORE", "Store=" + storeId + " NOT_FOUND");
             throw new IllegalArgumentException("Store not found");
@@ -80,7 +81,7 @@ public class Search {
         }
 
         EventLogger.logEvent("SEARCH_BY_STORE", "Store=" + storeId + " Matches=" + result.size());
-        return mapper.writeValueAsString(result);
+        return result;
     }
 
     public List<String> getStoreByName(String name) {
@@ -107,7 +108,7 @@ public class Search {
             List<String> result = new ArrayList<>();
             for (Product product : products) {
                 if (product.getName().toLowerCase().contains(name.toLowerCase()) &&
-                        (category == null || product.getCategory().equalsIgnoreCase(category))) {
+                        (category == null || category.equals("") || product.getCategory().equalsIgnoreCase(category))) {
                     result.add(product.getId());
                 }
             }

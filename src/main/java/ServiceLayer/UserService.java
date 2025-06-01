@@ -197,5 +197,14 @@ public class UserService {
         }
     }
 
+    public List<Product> getProductsInStore(String storeid) {
+        try {
+            return search.getProductsByStore(storeid);
+        } catch (Exception e) {
+            System.out.println("ERROR finding product by ID:" + e.getMessage());
+        }
+        return null;
+    }
+
 
 }

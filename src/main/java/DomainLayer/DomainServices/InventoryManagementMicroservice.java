@@ -3,6 +3,9 @@ package DomainLayer.DomainServices;
 import DomainLayer.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.UUID;
+
 import static DomainLayer.ManagerPermissions.*;
 import static utils.JsonUtils.mapper;
 
@@ -84,7 +87,7 @@ public class InventoryManagementMicroservice {
      * @param category    Category of the product
      * @return Product ID if successful, null otherwise
      */
-    public String addProduct(String userId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String addProduct(String userId, String storeId, String productName, String description, float price, int quantity, String category) {
         // Check if user has permission
         if (!checkPermission(userId, storeId, ManagerPermissions.PERM_ADD_PRODUCT)) {
             return null; // No permission
@@ -94,9 +97,16 @@ public class InventoryManagementMicroservice {
         if (store == null) {
             return null;
         }
-
-        return store.addProduct(productName, description, price, quantity, category);
-
+        String productId = UUID.randomUUID().toString();
+        Product product = new Product(productId, storeId, productName, description, price, quantity, -1, category);
+        productRepository.save(product);
+        store.addProduct(product.getId(), product.getQuantity());
+        try {
+            storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return store.addProduct(product.getId(), product.getQuantity());
     }
 
     /**

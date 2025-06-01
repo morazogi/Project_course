@@ -188,20 +188,19 @@ public class ProductPresenter {
         return productList;
     }
 
-    public VerticalLayout searchProductInStoreByName(String token, String productName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating, String storeId) {
+    public VerticalLayout searchProductInStoreByName(String token, String storeid, String productName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating, String storeId) {
         VerticalLayout productList = new VerticalLayout();
         try {
-            List<String> items = userService.findProduct(token, productName, "");
+            List<Product> items = userService.getProductsInStore(storeid);
+            System.out.println(items);
             List<Product> products = items.stream().map(item -> {
                         try {
-                            if (mapper.readValue(item, Product.class).getStoreId().equals(storeId)) {
-                                return mapper.readValue(item, Product.class);
-                            }
-                            return null;
+                            return item;
                         } catch (Exception exception) {
                             return null;
                         }
-                    }).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice))
+                    }).filter(item -> productName.equals("") ? true : item.getName().equals(productName))
+                    .filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice))
                     .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice))
                     .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating))
                     .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating))

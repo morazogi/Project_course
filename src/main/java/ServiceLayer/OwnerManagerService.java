@@ -60,7 +60,7 @@ public class OwnerManagerService {
     public String addProduct(String ownerId, String storeId, String productName, String description, double price, int quantity, String category) {
         try {
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_START");
-            String result = inventoryService.addProduct(ownerId, storeId, productName, description, price, quantity, category);
+            String result = inventoryService.addProduct(ownerId, storeId, productName, description, (float) price, quantity, category);
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_SUCCESS");
             return result;
         } catch (Exception e) {
@@ -665,7 +665,7 @@ public class OwnerManagerService {
     public String managerAddProduct(String managerId, String storeId, String productName, String description, double price, int quantity, String category) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_ADD_PRODUCT_START");
-            String result = inventoryService.addProduct(managerId, storeId, productName, description, price, quantity, category);
+            String result = inventoryService.addProduct(managerId, storeId, productName, description, (float) price, quantity, category);
             EventLogger.logEvent(managerId, "MANAGER_ADD_PRODUCT_SUCCESS");
             return result;
         } catch (Exception e) {

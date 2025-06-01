@@ -34,7 +34,7 @@ public class ShoppingCartUI extends VerticalLayout {
 
         add(productPresenter.getShoppingCart(token));
 
-        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecart");}));
+        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecartfinal");}));
 
         setPadding(true);
         setAlignItems(Alignment.CENTER);

@@ -8,14 +8,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class ProductRepository implements IProductRepository {
 
+    private HashMap<String, Product> productHashMap = new HashMap<String, Product>();
     @Override
     public Optional<Product> findById(String id) {
+        for (String productId : productHashMap.keySet()) {
+            if (id.equals(productId)) {
+                return Optional.ofNullable(productHashMap.get(productId));
+            }
+        }
         return Optional.empty();
     }
 
@@ -81,6 +88,11 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public Product getReferenceById(String s) {
+        for (String id : productHashMap.keySet()) {
+            if (id.equals(s)) {
+                return productHashMap.get(s);
+            }
+        }
         return null;
     }
 
@@ -121,6 +133,7 @@ public class ProductRepository implements IProductRepository {
 
     @Override
     public <S extends Product> S save(S entity) {
+        productHashMap.put(entity.getId(), entity);
         return null;
     }
 

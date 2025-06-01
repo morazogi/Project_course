@@ -53,7 +53,7 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
 
         TextField productName = new TextField("product name");
         Button searchProduct = new Button("search product by name", e -> {
-            add(productPresenter.searchProductInStoreByName(token, productName.getValue(), lowestPrice.getValue(), highestPrice.getValue(), lowestProductRating.getValue(), highestProductRating.getValue(), category.getValue(),lowestStoreRating.getValue(), highestStoreRating.getValue(), storeId));
+            add(productPresenter.searchProductInStoreByName(token, storeId, productName.getValue(), lowestPrice.getValue(), highestPrice.getValue(), lowestProductRating.getValue(), highestProductRating.getValue(), category.getValue(),lowestStoreRating.getValue(), highestStoreRating.getValue(), storeId));
         });
 
         TextField categoryName = new TextField("category name");
