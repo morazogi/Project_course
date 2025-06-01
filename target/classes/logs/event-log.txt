@@ -1022,3 +1022,34 @@
 [2025-06-01 11:16:16] User: fd2b1664-84bb-435c-978f-91eedc1017f0 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
 [2025-06-01 11:16:16] User: fd2b1664-84bb-435c-978f-91eedc1017f0 | Event: Event | Description: got the key that macthes to the store named 387.80112760269424387.80112760269424
 [2025-06-01 11:16:16] User: fd2b1664-84bb-435c-978f-91eedc1017f0 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:18:05] User: a | Event: Event | Description: LOGIN
+[2025-06-01 11:18:05] User: a | Event: Event | Description: TokenService
+[2025-06-01 11:18:05] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-01 11:18:07] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 11:18:07] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 11:18:07] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 11:18:07] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 11:18:07] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 11:18:08] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:18:08] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: got the key that macthes to the store named a968.429533072461
+[2025-06-01 11:18:08] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:18:18] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-01 11:18:18] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-01 11:18:19] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:18:19] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: got the key that macthes to the store named a968.429533072461
+[2025-06-01 11:18:19] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:18:19] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-01 11:18:19] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-01 11:18:33] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=a Matches=1
+[2025-06-01 11:18:34] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:18:34] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: got the key that macthes to the store named 968.429533072461968.429533072461
+[2025-06-01 11:18:34] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:18:36] User: SEARCH_BY_STORE | Event: Event | Description: Store=968.429533072461 Matches=1
+[2025-06-01 11:18:38] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-01 11:18:38] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-01 11:18:40] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:18:40] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: got the key that macthes to the store named 968.429533072461968.429533072461
+[2025-06-01 11:18:40] User: 602b63a6-1759-45f5-94c8-c53d7111eeba | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:18:52] User: a | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-01 11:18:52] User: a | Event: Event | Description: Shipping successful
+[2025-06-01 11:18:52] User: a | Event: Event | Description: Successfully payed for cart

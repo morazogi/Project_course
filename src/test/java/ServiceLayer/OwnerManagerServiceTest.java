@@ -97,7 +97,7 @@ class OwnerManagerServiceTest {
         String storeId = "store1";
         String productName = "Test Product";
         String description = "Test Description";
-        double price = 10.0;
+        float price = 10;
         int quantity = 5;
         String category = "Test Category";
         String expectedProductId = "product1";
@@ -120,7 +120,7 @@ class OwnerManagerServiceTest {
         String storeId = "store1";
         String productName = "Test Product";
         String description = "Test Description";
-        double price = 10.0;
+        float price = 10;
         int quantity = 5;
         String category = "Test Category";
 
@@ -988,7 +988,7 @@ class OwnerManagerServiceTest {
         String storeId = "store1";
         String productName = "Test Product";
         String description = "Test Description";
-        double price = 10.0;
+        float price = 10;
         int quantity = 5;
         String category = "Test Category";
         String expectedProductId = "product1";
@@ -1011,7 +1011,7 @@ class OwnerManagerServiceTest {
         String storeId = "store1";
         String productName = "Test Product";
         String description = "Test Description";
-        double price = 10.0;
+        float price = 10;
         int quantity = 5;
         String category = "Test Category";
 
@@ -1034,7 +1034,7 @@ class OwnerManagerServiceTest {
         String productId = "product1";
         String productName = "Updated Product";
         String description = "Updated Description";
-        double price = 15.0;
+        float price = 15;
         String category = "Updated Category";
 
         when(inventoryService.updateProductDetails(managerId, storeId, productId, productName, description, price, category))

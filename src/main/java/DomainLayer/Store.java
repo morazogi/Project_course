@@ -784,9 +784,4 @@ public class Store {
         this.founder = founder;
     }
 
-    public String addProduct(String productID,int quantity) {
-        this.products.put(productID, quantity);
-        return productID;
-    }
-
 }

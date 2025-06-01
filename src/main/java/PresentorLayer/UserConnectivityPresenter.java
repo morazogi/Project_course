@@ -111,7 +111,7 @@ public class UserConnectivityPresenter {
                 return e.getMessage();
             }
             if (store.getName().equals(storeName)) {
-                return ownerManagerService.addProduct(user.getID(), store.getId(), productName, description, price, quantity, category);
+                return ownerManagerService.addProduct(user.getID(), store.getId(), productName, description, price.floatValue(), quantity, category);
             }
         }
         return "Did not find store with that name";

@@ -128,7 +128,7 @@ public class UserHomePageUI extends VerticalLayout {
                 // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
                 // work over the store name -> store ID
 
-                ManagerPermissions perms = new ManagerPermissions(permsArray);
+                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getID());
                 boolean hasAnyPermission = false;
                 HorizontalLayout buttonLayout1 = new HorizontalLayout();
                 HorizontalLayout buttonLayout2 = new HorizontalLayout();
