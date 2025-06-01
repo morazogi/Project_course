@@ -1,4 +1,4 @@
-package DomainLayer.DomainServices;
+package DomainLayer.domainServices;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;

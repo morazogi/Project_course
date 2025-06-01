@@ -4,6 +4,7 @@ import DomainLayer.IToken;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
 import InfrastructureLayer.UserRepository;
+import ServiceLayer.EventLogger;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.notification.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class UserConnectivityPresenter {
@@ -83,5 +85,38 @@ public class UserConnectivityPresenter {
             }
         }
         return "Did not find store with that name";
+    }
+    public void applyDiscount(String ownerId,
+                              String storeId,
+                              String discountId,
+                              String Id,
+                              float level,
+                              float logicComposition,
+                              float numericalComposition,
+                              String discountsId,
+                              float percentDiscount,
+                              String discounted,
+                              float conditional,
+                              float limiter,
+                              String conditionalDiscounted){
+        try{
+            List<String> discountsIdList = Arrays.asList(discountsId.split("_"));
+            this.ownerManagerService.defineDiscountPolicy(ownerId,
+                    storeId,
+                    discountId,
+                    Id,
+                    level,
+                    logicComposition,
+                    numericalComposition,
+                    discountsIdList,
+                    percentDiscount,
+                    discounted,
+                    conditional,
+                    limiter,
+                    conditionalDiscounted);
+        }
+        catch(Exception e){
+            EventLogger.logEvent(ownerId, "couldnt make a discount in the presentor layer");
+        }
     }
 }

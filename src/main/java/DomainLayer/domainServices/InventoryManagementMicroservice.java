@@ -1,4 +1,4 @@
-package DomainLayer.DomainServices;
+package DomainLayer.domainServices;
 
 import DomainLayer.*;
 import com.fasterxml.jackson.core.JsonProcessingException;

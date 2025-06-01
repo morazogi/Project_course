@@ -1,4 +1,4 @@
-package DomainLayer.DomainServices;
+package DomainLayer.domainServices;
 import ServiceLayer.EventLogger;
 import DomainLayer.IDiscountRepository;
 import DomainLayer.IOrderRepository;

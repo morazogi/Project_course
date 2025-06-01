@@ -6,6 +6,7 @@ import ServiceLayer.OwnerManagerService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
 import java.util.Map;
 
 public class PermissionsPresenter {
@@ -28,4 +29,23 @@ public class PermissionsPresenter {
         }
         return this.manager.getManagerPermissions(ownerId, storeId, managerId);
     }
+
+    public void addDiscount(String ownerId, String storeName, float level,
+                            float logicComposition,
+                            float numericalComposition,){
+
+    }
+
+
+    String ownerId, String storeId, String discountId,
+    String Id,
+    float level,
+    float logicComposition,
+    float numericalComposition,
+    List<String> discountsId,
+    float percentDiscount,
+    String discounted,
+    float conditional,
+    float limiter,
+    String conditionalDiscounted
 }

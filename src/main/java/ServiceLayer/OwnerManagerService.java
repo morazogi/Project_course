@@ -2,7 +2,8 @@ package ServiceLayer;
 
 
 import DomainLayer.*;
-import DomainLayer.DomainServices.*;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
+import DomainLayer.domainServices.*;
 import InfrastructureLayer.CustomerInquiryRepository;
 import java.util.List;
 import java.util.UUID;
@@ -196,7 +197,9 @@ public class OwnerManagerService {
         }
     }
     @Transactional
-    public boolean defineDiscountPolicy(String ownerId, String storeId, String discountId,
+    public boolean defineDiscountPolicy(String ownerId,
+                                        String storeId,
+                                        String discountId,
                                         String Id,
                                         float level,
                                         float logicComposition,

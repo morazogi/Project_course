@@ -1,6 +1,7 @@
-package DomainLayer.DomainServices;
+package DomainLayer.domainServices;
 
 import DomainLayer.*;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import DomainLayer.IPayment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.ProductKeyModule;
