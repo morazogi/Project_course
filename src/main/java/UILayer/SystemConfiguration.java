@@ -1,5 +1,6 @@
 package UILayer;
 
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
 import com.vaadin.flow.spring.SpringServlet;
@@ -55,6 +56,7 @@ public class SystemConfiguration {
         return new UserRepository();
     };
 
+
     @Bean
     public RegisteredService RegisteredService() {
         return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository());
@@ -97,9 +99,12 @@ public class SystemConfiguration {
 
 
     @Bean
-    public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService());
-    };
+    public UserService UserService(DiscountPolicyMicroservice discountPolicy) {   // ← add parameter
+                return new UserService(TokenService(), StoreRepository(), UserRepository(),
+                                               ProductRepository(), OrderRepository(),
+                                               ShippingService(), PaymentService(),
+                                               discountPolicy);                                   // ← pass it through
+            };
 
 //    @Bean
 //    public NotificationClientRepository NotificationClientRepository() {

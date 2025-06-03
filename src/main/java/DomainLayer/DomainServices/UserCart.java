@@ -13,7 +13,7 @@ import DomainLayer.ShoppingCart;
 import DomainLayer.Store;
 import DomainLayer.Order;
 import DomainLayer.Roles.RegisteredUser;
-
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
@@ -29,13 +29,20 @@ public class UserCart {
     private IUserRepository userRepository;
     private IProductRepository productRepository;
     private IOrderRepository orderRepository;
+    private final DiscountPolicyMicroservice discountPolicy;
 
-    public UserCart(IToken Tokener , IUserRepository userRepository, IStoreRepository storeRepository ,  IProductRepository productRepository, IOrderRepository orderRepository) {
+    public UserCart(IToken Tokener,
+                    IUserRepository userRepository,
+                    IStoreRepository storeRepository,
+                    IProductRepository productRepository,
+                    IOrderRepository orderRepository,
+                    DiscountPolicyMicroservice discountPolicy) {
         this.orderRepository = orderRepository;
         this.Tokener = Tokener;
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
+        this.discountPolicy = discountPolicy;
     }
 
     public void removeFromCart(String token , String storeId , String productId , Integer quantity) throws JsonProcessingException {
@@ -142,7 +149,7 @@ public class UserCart {
                 }
                 storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
                 productRepository.save(product);
-                totalPrice += product.getPrice() * quantity;
+                totalPrice += (double) discountPolicy.calculatePrice(storeId, bag.getProducts());
             }
         }
 
