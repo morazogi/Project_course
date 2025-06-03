@@ -11,4 +11,5 @@ public interface IStoreRepository {
     void updateStore(String storeId, String storeJson);
     List<String> findAll();
     Map<String, String> getStores();
+    String getStoreByName(String storeName);
 }

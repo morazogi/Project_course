@@ -1,6 +1,7 @@
 package PresentorLayer;
 
 import DomainLayer.*;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import DomainLayer.Roles.RegisteredUser;
 import ServiceLayer.EventLogger;
 import ServiceLayer.UserService;
@@ -64,9 +65,8 @@ public class ProductPresenter {
             }
             for (Map.Entry<String, Integer> product : shoppingBag.getProducts().entrySet()) {
                 productList.add(new Span(userService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" + userService.getProductById(product.getKey()).get().getPrice()));
-                totalPayment = totalPayment + product.getValue()  * userService.getProductById(product.getKey()).get().getPrice();
             }
-            shoppingCartList.add(productList, new Span("total payment :" + totalPayment));
+            shoppingCartList.add(productList, new Span("total payment :" + userService.reserveCart(token)));
         }
 
         return shoppingCartList;

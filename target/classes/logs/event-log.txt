@@ -119,3 +119,130 @@
 [2025-06-01 11:28:46] User:  | Event: Event | Description: LOGIN_FAILED - EMPTY
 [2025-06-01 11:28:46] User: SEARCH_BY_CATEGORY | Event: Event | Description: Category=accessories Matches=1
 [2025-06-01 11:28:46] User: SEARCH_BY_NAME | Event: Event | Description: Query=Socks Matches=1
+[2025-06-01 11:40:15] User: a | Event: Event | Description: LOGIN
+[2025-06-01 11:40:15] User: a | Event: Event | Description: TokenService
+[2025-06-01 11:40:15] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-01 11:40:16] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named a852.0651992948372
+[2025-06-01 11:40:17] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:40:25] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-01 11:40:25] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-01 11:40:26] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:40:26] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named a852.0651992948372
+[2025-06-01 11:40:26] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:40:26] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-01 11:40:26] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-01 11:40:38] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=a Matches=1
+[2025-06-01 11:40:38] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:40:38] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named 852.0651992948372852.0651992948372
+[2025-06-01 11:40:38] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:40:41] User: SEARCH_BY_STORE | Event: Event | Description: Store=852.0651992948372 Matches=1
+[2025-06-01 11:40:43] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-01 11:40:43] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-01 11:40:45] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-01 11:40:45] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: got the key that macthes to the store named 852.0651992948372852.0651992948372
+[2025-06-01 11:40:45] User: a0349662-f8b4-424e-b467-3c0554612b99 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-01 11:41:01] User: a | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-01 11:41:01] User: a | Event: Event | Description: Shipping successful
+[2025-06-01 11:41:01] User: a | Event: Event | Description: Successfully payed for cart
+[2025-06-03 19:53:39] User: a | Event: Event | Description: LOGIN
+[2025-06-03 19:53:39] User: a | Event: Event | Description: TokenService
+[2025-06-03 19:53:39] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-03 19:53:41] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-03 19:53:41] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-03 19:53:41] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-03 19:53:41] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-03 19:53:41] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-03 19:53:42] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:53:42] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: got the key that macthes to the store named a903.3992389232982
+[2025-06-03 19:53:42] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:53:43] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-03 19:53:43] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-03 19:53:45] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:53:45] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: got the key that macthes to the store named a903.3992389232982
+[2025-06-03 19:53:45] User: 46b51e19-f0d6-49fa-83a0-6c524cabac6d | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:55:32] User: a | Event: Event | Description: LOGIN
+[2025-06-03 19:55:32] User: a | Event: Event | Description: TokenService
+[2025-06-03 19:55:32] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-03 19:55:34] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-03 19:55:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-03 19:55:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-03 19:55:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-03 19:55:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-03 19:55:35] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:55:35] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a811.1357582976609
+[2025-06-03 19:55:35] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:55:35] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-03 19:55:35] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-03 19:55:38] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:55:38] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a811.1357582976609
+[2025-06-03 19:55:38] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:55:47] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=a Matches=1
+[2025-06-03 19:55:47] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:55:47] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named 811.1357582976609811.1357582976609
+[2025-06-03 19:55:47] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:57:11] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:57:11] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a811.1357582976609
+[2025-06-03 19:57:11] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:57:15] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-03 19:57:15] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-03 19:57:15] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-03 19:57:15] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-03 19:57:15] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a811.1357582976609
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a202.0676927154913
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named Store202.0676927154913
+[2025-06-03 19:57:17] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a811.1357582976609
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a202.0676927154913
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named Store202.0676927154913
+[2025-06-03 19:58:39] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:58:51] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-03 19:58:51] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a811.1357582976609
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named a202.0676927154913
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named Store202.0676927154913
+[2025-06-03 19:58:52] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:58:57] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:58:57] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named Store202.0676927154913
+[2025-06-03 19:58:57] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:58:57] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: DEFINE_DISCOUNT_POLICY_START
+[2025-06-03 19:58:57] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: DEFINE_DISCOUNT_POLICY_SUCCESS
+[2025-06-03 19:59:34] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-03 19:59:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-03 19:59:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-03 19:59:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-03 19:59:34] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-03 19:59:41] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=Store Matches=2
+[2025-06-03 19:59:42] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:59:42] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named 378.8623559484816378.8623559484816
+[2025-06-03 19:59:42] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:59:49] User: SEARCH_BY_STORE | Event: Event | Description: Store=378.8623559484816 Matches=0
+[2025-06-03 19:59:49] User: SEARCH_BY_STORE | Event: Event | Description: Store=378.8623559484816 Matches=0
+[2025-06-03 19:59:50] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:59:50] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named 378.8623559484816378.8623559484816
+[2025-06-03 19:59:50] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:59:55] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=Store Matches=2
+[2025-06-03 19:59:56] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 19:59:56] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named 202.0676927154913202.0676927154913
+[2025-06-03 19:59:56] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 19:59:59] User: SEARCH_BY_STORE | Event: Event | Description: Store=202.0676927154913 Matches=1
+[2025-06-03 20:00:02] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-03 20:00:02] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-03 20:00:04] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 20:00:04] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named 202.0676927154913202.0676927154913
+[2025-06-03 20:00:04] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS

@@ -64,9 +64,13 @@ public class DiscountPolicyMicroservice {
         return discountRepository.getReferenceById(DiscountId);
     }
 
-    private boolean checkPermission(String userId, String storeId, String permissionType) {
+    private boolean checkPermission(String userId, String storeName, String permissionType) {
         // Get the store
-        Store store = getStoreById(storeId);
+        Store store = null;
+        try {
+            store = mapper.readValue(storeRepository.getStoreByName(storeName), Store.class);
+        } catch (Exception e) {
+        }
         if (store == null) {
             return false;
         }
@@ -111,7 +115,7 @@ public class DiscountPolicyMicroservice {
         return false;
     }
 
-    public boolean addDiscountToDiscountPolicy(String ownerId, String storeId, String discountId,
+    public boolean addDiscountToDiscountPolicy(String ownerId, String storeName, String discountId,
                                         String Id,
                                         float level,
                                         float logicComposition,
@@ -124,25 +128,30 @@ public class DiscountPolicyMicroservice {
                                         String conditionalDiscounted) {
 
 
-        if (checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)) {
-            Store store = getStoreById(storeId);
+        if (checkPermission(ownerId, storeName, ManagerPermissions.PERM_UPDATE_POLICY)) {
+            Store store = null;
+            try {
+                store = mapper.readValue(storeRepository.getStoreByName(storeName), Store.class);
+            } catch (Exception e) {
+            }
+            discountId = UUID.randomUUID().toString();
             if (store != null) {
-
                 // 1. create & save the discount
                 Discount discount = new Discount(
-                        Id, storeId,
+                        discountId, store.getId(),
                         level, logicComposition, numericalComposition,
-                        discountsId, percentDiscount, discounted,
+                        discountRepository.findAllDiscountsOfAStore(store.getId()) != null ? discountRepository.findAllDiscountsOfAStore(store.getId()) : new LinkedList<String>(), percentDiscount, discounted,
                         conditional, limiter, conditionalDiscounted
                 );
-                if (discountRepository.save(discount) == null) {
+                try {
+                    discountRepository.saveDiscount(store.getId(), mapper.writeValueAsString(discount));
+                } catch (Exception e) {
                     return false;
                 }
-
                 store.addDiscount(discountId);
 
                 try {
-                    storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
+                    storeRepository.updateStore(store.getId(), mapper.writeValueAsString(store));
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }

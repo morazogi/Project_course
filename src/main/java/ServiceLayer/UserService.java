@@ -1,9 +1,7 @@
 package ServiceLayer;
 
+import DomainLayer.DomainServices.*;
 import DomainLayer.IToken;
-import DomainLayer.DomainServices.Search;
-import DomainLayer.DomainServices.UserCart;
-import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
@@ -11,6 +9,7 @@ import DomainLayer.IProductRepository;
 import DomainLayer.IOrderRepository;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import DomainLayer.ShoppingBag;
 
 import java.util.LinkedList;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Optional;
 
+import InfrastructureLayer.DiscountRepository;
 import jakarta.transaction.Transactional;
 import utils.ProductKeyModule;
 
@@ -39,25 +39,29 @@ public class UserService {
     private final IStoreRepository storeRepository;
     private final ShippingService shippingService;
     private final PaymentService paymentService;
+    private final DiscountPolicyMicroservice discountPolicy;
     private final UserConnectivity userConnectivity;
     private final UserCart userCart;
     private final Search search;
 
-    public UserService(IToken tokenService, 
+    public UserService(IToken tokenService,
                        IStoreRepository storeRepository,
                        IUserRepository userRepository,
                        IProductRepository productRepository,
                        IOrderRepository orderRepository,
                        ShippingService shippingService,
-                       PaymentService paymentService){
+                       PaymentService paymentService,
+                       DiscountRepository discountRepository){
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.tokenService = tokenService;
         this.shippingService = shippingService;
         this.paymentService = paymentService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository);
-        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository);    
-        this.search = new Search(productRepository, storeRepository);   
+        this.discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
+        this.userCart = new UserCart(tokenService, userRepository, storeRepository,
+                productRepository, orderRepository, discountPolicy);
+        this.search = new Search(productRepository, storeRepository);
     }
 
     @Transactional

@@ -10,10 +10,12 @@ import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.notification.Notification;
+import org.apache.commons.compress.archivers.dump.DumpArchiveEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class UserConnectivityPresenter {
 
@@ -148,5 +150,36 @@ public class UserConnectivityPresenter {
         }
         System.out.println(storeNames);
         return storeNames;
+    }
+
+    public String addDiscount(String token, String storeName, float discountLevel,
+                              float logicComposition,
+                              float numericalComposition,
+                              float percentDiscount,
+                              String discountedItem,
+                              float discountCondition,
+                              float discountLimiter,
+                              float conditional,
+                              String conditionalDiscounted
+                              ) {
+        String username = tokenService.extractUsername(token);
+        String jsonUser = userRepository.getUser(username);
+        RegisteredUser user = null;
+        try {
+            user = mapper.readValue(jsonUser, RegisteredUser.class);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        Map<String, Boolean> permissions = ownerManagerService.getManagerPermissions(user.getID(), storeName, user.getID());
+        if (permissions.get("PERM_UPDATE_POLICY") == null || !permissions.get("PERM_UPDATE_POLICY")) {
+            return "User is not allowed to add discount";
+        }
+        if(conditional != 1 && conditional != 2 && conditional != 3) {
+            conditional = -1;
+        }
+        if(ownerManagerService.defineDiscountPolicy(user.getID(), storeName, "", "", discountLevel, logicComposition, numericalComposition, null, percentDiscount, discountedItem, conditional, discountLimiter, conditionalDiscounted)) {
+            return "Discount successfully added";
+        }
+        return "Did not managed to add discount";
     }
 }
