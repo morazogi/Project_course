@@ -136,15 +136,25 @@ public class DiscountPolicyMicroservice {
             }
             discountId = UUID.randomUUID().toString();
             if (store != null) {
+                LinkedList<String> storeIdLinkedList = new LinkedList<String>();
+                List<Discount> discounts = discountRepository.findAllById(storeIdLinkedList);
+                LinkedList<String> jsonDiscounts = new LinkedList<String>();
+                for (Discount discount : discounts) {
+                    try {
+                        jsonDiscounts.add(mapper.writeValueAsString(discount));
+                    } catch (Exception e)
+                    {
+                    }
+                }
                 // 1. create & save the discount
                 Discount discount = new Discount(
                         discountId, store.getId(),
                         level, logicComposition, numericalComposition,
-                        discountRepository.findAllDiscountsOfAStore(store.getId()) != null ? discountRepository.findAllDiscountsOfAStore(store.getId()) : new LinkedList<String>(), percentDiscount, discounted,
+                        jsonDiscounts.get(0) != null ? jsonDiscounts : new LinkedList<String>(), percentDiscount, discounted,
                         conditional, limiter, conditionalDiscounted
                 );
                 try {
-                    discountRepository.saveDiscount(store.getId(), mapper.writeValueAsString(discount));
+                    discountRepository.saveAndFlush(discount);
                 } catch (Exception e) {
                     return false;
                 }

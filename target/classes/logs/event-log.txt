@@ -246,3 +246,39 @@
 [2025-06-03 20:00:04] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
 [2025-06-03 20:00:04] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: got the key that macthes to the store named 202.0676927154913202.0676927154913
 [2025-06-03 20:00:04] User: a2a9711c-bc9c-4269-a774-ca3bee742538 | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 20:15:24] User: a | Event: Event | Description: LOGIN
+[2025-06-03 20:15:24] User: a | Event: Event | Description: TokenService
+[2025-06-03 20:15:24] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-03 20:15:28] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-03 20:15:28] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-03 20:15:28] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-03 20:15:28] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-03 20:15:28] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-03 20:15:29] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 20:15:29] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: got the key that macthes to the store named Store545.601175347701
+[2025-06-03 20:15:29] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 20:15:47] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-03 20:15:47] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-03 20:15:49] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 20:15:49] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: got the key that macthes to the store named Store545.601175347701
+[2025-06-03 20:15:49] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 20:15:49] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-03 20:15:49] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-03 20:16:59] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 20:16:59] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: got the key that macthes to the store named Store545.601175347701
+[2025-06-03 20:16:59] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 20:16:59] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: DEFINE_DISCOUNT_POLICY_START
+[2025-06-03 20:16:59] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: DEFINE_DISCOUNT_POLICY_SUCCESS
+[2025-06-03 20:17:17] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Milk Category= Matches=0
+[2025-06-03 20:17:24] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=a Matches=0
+[2025-06-03 20:17:28] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=Store Matches=1
+[2025-06-03 20:17:29] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 20:17:29] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: got the key that macthes to the store named 545.601175347701545.601175347701
+[2025-06-03 20:17:29] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 20:17:32] User: SEARCH_BY_STORE | Event: Event | Description: Store=545.601175347701 Matches=1
+[2025-06-03 20:17:35] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-03 20:17:35] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-03 20:17:36] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-03 20:17:36] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: got the key that macthes to the store named 545.601175347701545.601175347701
+[2025-06-03 20:17:36] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-03 20:17:47] User: a | Event: Event | Description: RESERVE_PRODUCT_SUCCESS

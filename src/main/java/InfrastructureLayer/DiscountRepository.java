@@ -24,13 +24,6 @@ public class DiscountRepository implements IDiscountRepository {
 
     }
 
-    public void saveDiscount(String storeId, String discount) {
-        if(discounts.get(storeId) == null) {
-            discounts.put(storeId, new LinkedList<String>());
-        }
-        discounts.get(storeId).add(discount);
-    }
-
     @Override
     public <S extends Discount> S saveAndFlush(S entity) {
         return null;
@@ -171,9 +164,6 @@ public class DiscountRepository implements IDiscountRepository {
         return List.of();
     }
 
-    public List<String> findAllDiscountsOfAStore(String storeId) {
-        return discounts.get(storeId);
-    }
 
     @Override
     public Page<Discount> findAll(Pageable pageable) {

@@ -282,3 +282,10 @@
 [2025-06-03 20:17:36] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: got the key that macthes to the store named 545.601175347701545.601175347701
 [2025-06-03 20:17:36] User: fff72f31-6bf2-44d9-8bbf-1af21df7dc0a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-03 20:17:47] User: a | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-03 20:30:16] User: a | Event: Event | Description: LOGIN
+[2025-06-03 20:30:16] User: a | Event: Event | Description: TokenService
+[2025-06-03 20:30:16] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-03 20:30:17] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-03 20:30:17] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-03 20:30:23] User: a | Event: Event | Description: TokenService
+[2025-06-03 20:30:31] User: a | Event: Event | Description: TokenService
