@@ -65,10 +65,6 @@ public class SystemConfiguration {
         return new CustomerInquiryRepository();
     }
 
-    @Bean
-    public NotificationService NotificationService() {
-        return new NotificationService();
-    };
 
     @Bean
     public OrderService OrderService() {
@@ -95,6 +91,10 @@ public class SystemConfiguration {
         return new TokenService();
     };
 
+    @Bean
+    public NotificationWebSocketHandler notificationWebSocketHandler() {
+        return new NotificationWebSocketHandler();
+    }
 
     @Bean
     public UserService UserService() {
@@ -102,24 +102,15 @@ public class SystemConfiguration {
     };
 
     @Bean
-    public NotificationClientRepository NotificationClientRepository() {
-        return new NotificationClientRepository();
-    };
+    public NotificationService NotificationService(NotificationWebSocketHandler handler,
+                                                   NotificationRepository repo,
+                                                   TokenService tokenService) {
+        return new NotificationService(handler, repo, tokenService);
+    }
 
-    @Bean
-    public WebSocketConfigure WebSocketConfigure() {
-        return new WebSocketConfigure();
-    };
 
-    @Bean
-    public WebSocketClient WebSocketClient() {
-        return new StandardWebSocketClient();
-    };
 
-    @Bean
-    public NotificationWebSocketHandler NotificationWebSocketHandler() {
-        return new NotificationWebSocketHandler();
-    };
+
 
     @Bean
     public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
