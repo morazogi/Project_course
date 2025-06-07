@@ -24,7 +24,7 @@ public class NotificationSUI extends VerticalLayout {
         TextField message  = new TextField("message");
 
         Button connect = new Button("connect", e -> {
-            String token = tokenService.generateToken(username.getValue());
+            String tokenToNotifications = tokenService.generateToken(username.getValue());
             UI.getCurrent().getPage().executeJs("""
                 window._shopWs?.close();
                 window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
@@ -37,7 +37,7 @@ public class NotificationSUI extends VerticalLayout {
                   document.body.appendChild(n);
                   n.opened = true;
                 };
-                """, token);
+                """, tokenToNotifications);
         });
 
         Button send = new Button("send", e ->
