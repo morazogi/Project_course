@@ -1,7 +1,12 @@
 package UILayer;
 
+import DomainLayer.IToken;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
+import PresentorLayer.UserConnectivityPresenter;
+import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -19,10 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class EditStorePageUI extends VerticalLayout {
 
     private final ButtonPresenter buttonPresenter;
+    private final UserConnectivityPresenter userConnectivityPresenter;
 
     @Autowired
-    public EditStorePageUI(RegisteredService registeredService) {
+    public EditStorePageUI(UserService userService, RegisteredService registeredService, OwnerManagerService ownerManagerService, IToken tokenService, UserRepository userRepository) {
         this.buttonPresenter = new ButtonPresenter(registeredService);
+        this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
         // Store Selection and Sign-out Section
         ComboBox<String> storeDropdown = new ComboBox<>("Store");
         storeDropdown.setItems("Store 1", "Store 2", "Store 3"); // Example store names
@@ -69,6 +76,7 @@ public class EditStorePageUI extends VerticalLayout {
         add(addProductForm);
 
         // Set New Discount Section
+        TextField storeName = new TextField("Store name");
         NumberField discountLevel = new NumberField("Discount Level");
         NumberField logicComposition = new NumberField("Logic Composition");
         NumberField numericalComposition = new NumberField("Numerical Composition");
@@ -76,14 +84,20 @@ public class EditStorePageUI extends VerticalLayout {
         TextField discountedItem = new TextField("Discounted Item");
         NumberField discountCondition = new NumberField("Condition");
         NumberField discountLimiter = new NumberField("Limiter");
+        NumberField conditional = new NumberField("1 = Minimum total price\n" +
+                "2 = Minimum quantity of item\n" +
+                "3 = Maximum quantity of item\n");
         TextField conditionalDiscounted = new TextField("Conditional Discounted");
 
         Button addDiscountButton = new Button("Add Discount", e -> {
-            // Add discount logic here (using Discount constructor)
+            add(new Span(userConnectivityPresenter.addDiscount(token, storeName.getValue(), discountLevel.getValue().floatValue(), logicComposition.getValue().floatValue(),
+                    numericalComposition.getValue().floatValue(), percentDiscount.getValue().floatValue(), discountedItem.getValue(), discountCondition.getValue().floatValue(),
+                    discountLimiter.getValue().floatValue(), conditional.getValue().floatValue(),  conditionalDiscounted.getValue())));
         });
 
         VerticalLayout addDiscountForm = new VerticalLayout(
                 new Span("Set New Discount"),
+                storeName,
                 discountLevel,
                 logicComposition,
                 numericalComposition,
@@ -92,6 +106,7 @@ public class EditStorePageUI extends VerticalLayout {
                 discountCondition,
                 discountLimiter,
                 conditionalDiscounted,
+                conditional,
                 addDiscountButton
         );
 

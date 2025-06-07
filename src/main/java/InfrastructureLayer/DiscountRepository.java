@@ -8,12 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class DiscountRepository implements IDiscountRepository {
     public DiscountRepository() {}
+
+    HashMap<String, LinkedList<String>> discounts = new HashMap<String, LinkedList<String>>();
 
     @Override
     public void flush() {
@@ -159,6 +163,7 @@ public class DiscountRepository implements IDiscountRepository {
     public List<Discount> findAll(Sort sort) {
         return List.of();
     }
+
 
     @Override
     public Page<Discount> findAll(Pageable pageable) {

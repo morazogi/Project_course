@@ -98,35 +98,35 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService());
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(), DiscountRepository());
     };
 
-//    @Bean
-//    public NotificationClientRepository NotificationClientRepository() {
-//        return new NotificationClientRepository();
-//    };
-//
-//    @Bean
-//    public WebSocketConfigure WebSocketConfigure() {
-//        return new WebSocketConfigure();
-//    };
-//
-//    @Bean
-//    public WebSocketClient WebSocketClient() {
-//        return new StandardWebSocketClient();
-//    };
-//
-//    @Bean
-//    public NotificationWebSocketHandler NotificationWebSocketHandler() {
-//        return new NotificationWebSocketHandler();
-//    };
-//
-//    @Bean
-//    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
-//        // configure other properties as needed
-//        SpringServlet servlet = new SpringServlet(context, true);
-//        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
-//    }
+    @Bean
+    public NotificationClientRepository NotificationClientRepository() {
+        return new NotificationClientRepository();
+    };
+
+    @Bean
+    public WebSocketConfigure WebSocketConfigure() {
+        return new WebSocketConfigure();
+    };
+
+    @Bean
+    public WebSocketClient WebSocketClient() {
+        return new StandardWebSocketClient();
+    };
+
+    @Bean
+    public NotificationWebSocketHandler NotificationWebSocketHandler() {
+        return new NotificationWebSocketHandler();
+    };
+
+    @Bean
+    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
+        // configure other properties as needed
+        SpringServlet servlet = new SpringServlet(context, true);
+        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
+    }
 
 
 }

@@ -780,6 +780,10 @@ public class Store {
         this.managersToSuperior = managersToSuperior;
     }
 
+    public List<String> getDiscounts() {return discounts;}
+
+    public void setDiscounts(List<String> discounts) {this.discounts = discounts;}
+
     public void setFounder(String founder) {
         this.founder = founder;
     }
