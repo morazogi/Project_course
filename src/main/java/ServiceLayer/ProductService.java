@@ -2,6 +2,7 @@ package ServiceLayer;
 
 import DomainLayer.IProductRepository;
 import DomainLayer.Product;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -9,6 +10,7 @@ import java.util.*;
 public class ProductService {
     private final IProductRepository productRepo;
 
+    @Autowired
     public ProductService(IProductRepository productRepo){
 
         this.productRepo = productRepo;

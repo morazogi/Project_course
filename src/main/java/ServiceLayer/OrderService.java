@@ -22,11 +22,11 @@ public class OrderService{
         int numericId = Integer.parseInt(id);
         numericId++;
         id = String.valueOf(numericId);
-        OrderRepository.addOrder(order.toString(), order.getStoreId(), order.getUserId());
+        OrderRepository.save(order.toString(), order.getStoreId(), order.getUserId());
     }
 
     @Transactional
     public void removeOrder(Order order){
-        OrderRepository.addOrder(order.toString(), order.getStoreId(), order.getUserId());
+        OrderRepository.save(order.toString(), order.getStoreId(), order.getUserId());
     }
 }

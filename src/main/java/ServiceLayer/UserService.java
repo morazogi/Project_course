@@ -9,24 +9,16 @@ import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.IProductRepository;
 import DomainLayer.IOrderRepository;
-import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingCart;
-import DomainLayer.ShoppingBag;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.Collections;
-import java.util.Optional;
 
+import DomainLayer.Roles.RegisteredUser;
+import InfrastructureLayer.*;
 import jakarta.transaction.Transactional;
-import utils.ProductKeyModule;
 
 import DomainLayer.Store;
-import DomainLayer.User;
-import DomainLayer.DomainServices.UserCart;
-import DomainLayer.DomainServices.UserConnectivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
@@ -35,28 +27,31 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final IToken tokenService;
-    private final IProductRepository productRepository;
-    private final IStoreRepository storeRepository;
+    private final ProductRepository productRepository;
+    private final StoreRepository storeRepository;
     private final ShippingService shippingService;
     private final PaymentService paymentService;
     private final UserConnectivity userConnectivity;
     private final UserCart userCart;
     private final Search search;
+    private final GuestRepository guestRepository;
 
     public UserService(IToken tokenService, 
-                       IStoreRepository storeRepository,
-                       IUserRepository userRepository,
-                       IProductRepository productRepository,
-                       IOrderRepository orderRepository,
+                       StoreRepository storeRepository,
+                       UserRepository userRepository,
+                       ProductRepository productRepository,
+                       OrderRepository orderRepository,
                        ShippingService shippingService,
-                       PaymentService paymentService){
+                       PaymentService paymentService,
+                       GuestRepository guestRepository){
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
+        this.guestRepository = guestRepository;
         this.tokenService = tokenService;
         this.shippingService = shippingService;
         this.paymentService = paymentService;
-        this.userConnectivity = new UserConnectivity(tokenService, userRepository);
-        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository);    
+        this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
+        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository, guestRepository);
         this.search = new Search(productRepository, storeRepository);   
     }
 

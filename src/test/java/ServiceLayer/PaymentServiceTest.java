@@ -4,7 +4,6 @@ import DomainLayer.IToken;
 import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
-import DomainLayer.User;
 import InfrastructureLayer.DiscountRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import InfrastructureLayer.ProductRepository;
@@ -13,8 +12,6 @@ import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 

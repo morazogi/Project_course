@@ -18,7 +18,7 @@ class ShoppingCartTest {
 
     @BeforeEach
     void setUp() {
-        cart = new ShoppingCart(userId);
+        cart = new ShoppingCart("username");
     }
 
     @Test

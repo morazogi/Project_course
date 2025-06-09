@@ -1,6 +1,5 @@
 package UILayer;
 
-import DomainLayer.Product;
 import DomainLayer.ShoppingBag;
 import DomainLayer.ShoppingCart;
 import DomainLayer.Store;

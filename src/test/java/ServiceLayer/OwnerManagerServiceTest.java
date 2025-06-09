@@ -3,6 +3,8 @@ package ServiceLayer;
 import DomainLayer.*;
 import DomainLayer.DomainServices.*;
 import java.util.Date;
+
+import InfrastructureLayer.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -20,17 +22,17 @@ class OwnerManagerServiceTest {
 
     // Mocked repositories
     @Mock
-    private IDiscountRepository discountRepository;
+    private DiscountRepository discountRepository;
     @Mock
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
     @Mock
-    private IStoreRepository storeRepository;
+    private StoreRepository storeRepository;
     @Mock
     private ICustomerInquiryRepository inquiryRepository;
     @Mock
-    private IProductRepository productRepository;
+    private ProductRepository productRepository;
     @Mock
-    private IOrderRepository orderRepository;
+    private OrderRepository orderRepository;
 
     // Mocked microservices
     @Mock
