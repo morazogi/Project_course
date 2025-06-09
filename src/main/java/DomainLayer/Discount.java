@@ -67,7 +67,13 @@ public class Discount {
     public NumericalComposition numericalComposition;
 
     // Nested discounts for complex discount combinations
-    public List<String> discountsString = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "discount_strings",
+            joinColumns = @JoinColumn(name = "discount_id")
+    )
+    @Column(name = "value")
+    private List<String> discountsString = new ArrayList<>();
 
     // Discount percentage to apply (e.g., 0.15 = 15% off)
     public float percentDiscount = 0;

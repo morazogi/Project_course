@@ -5,6 +5,7 @@ import DomainLayer.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import java.util.List;
+import java.util.Optional;   // ← add this import
 
 @Component
 public class ProductRepository implements IRepo<Product> {
@@ -33,4 +34,10 @@ public class ProductRepository implements IRepo<Product> {
         return repo.existsById(id);
     }
     public Product getProductByName(String productName) {return repo.findByNameContaining(productName); }
+    public Optional<Product> findById(String productID) {
+        return repo.findById(productID);   // Spring Data already returns Optional
+    }
+    public List<Product> findAll() { return repo.findAll(); }
+
+
 }

@@ -2,6 +2,7 @@ package ServiceLayer;
 
 import DomainLayer.*;
 import DomainLayer.DomainServices.PaymentConnectivity;
+import InfrastructureLayer.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ public class PaymentService {
     private PaymentConnectivity paymentConnectivity;
     private IToken tokenService;
 
-    public PaymentService(IUserRepository userRepository, IProductRepository productRepository, IPayment proxyPayment, IToken tokenService, IDiscountRepository discountRepository, IStoreRepository storeRepository) {
-        this.paymentConnectivity = new PaymentConnectivity(proxyPayment, userRepository, productRepository, storeRepository, discountRepository);
+    public PaymentService(UserRepository userRepository, ProductRepository productRepository, IPayment proxyPayment, IToken tokenService, DiscountRepository discountRepository, StoreRepository storeRepository, GuestRepository guestRepository) {
+        this.paymentConnectivity = new PaymentConnectivity(proxyPayment, userRepository, productRepository, storeRepository, discountRepository, guestRepository);
         this.tokenService = tokenService;
     }
 

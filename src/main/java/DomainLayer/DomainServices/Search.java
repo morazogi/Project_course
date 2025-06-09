@@ -95,4 +95,31 @@ public class Search {
             return Collections.emptyList();
         }
     }
+
+    public List<String> getStoreByName(String name) {
+        try {
+            List<String> result = storeRepository.getAll().stream()
+                    .filter(s -> s.getName().toLowerCase().contains(name.toLowerCase()))
+                    .map(Store::getId)                // collect the store IDs
+                    .toList();
+
+            EventLogger.logEvent(
+                    "SEARCH_STORE_BY_NAME",
+                    "Query=" + name + " Matches=" + result.size());
+            return result;
+        } catch (Exception e) {
+            EventLogger.logEvent("username", "SEARCH_STORE_BY_NAME_FAILED " + e.getMessage());
+            throw new IllegalArgumentException("Failed to search store by name");
+        }
+    }
+    public String getStoreById(String storeId) throws JsonProcessingException {
+        Store store = storeRepository.getById(storeId);
+        if (store == null) {
+            EventLogger.logEvent("SEARCH_STORE_BY_ID", "Store=" + storeId + " NOT_FOUND");
+            throw new IllegalArgumentException("Store not found");
+        }
+        EventLogger.logEvent("SEARCH_STORE_BY_ID", "Store=" + storeId + " FOUND");
+        return mapper.writeValueAsString(store);
+    }
+
 }

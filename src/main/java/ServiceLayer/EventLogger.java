@@ -23,7 +23,7 @@ public class EventLogger {
 
     // Method to write the log message to the file
     @Transactional
-    private static void writeToFile(String logMessage, String logFileName) {
+    public static void writeToFile(String logMessage, String logFileName) {
         try (FileWriter writer = new FileWriter(new File(logFileName), true)) {
             writer.write(logMessage); // Append the log message to the log file
         } catch (IOException e) {

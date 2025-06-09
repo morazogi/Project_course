@@ -28,7 +28,7 @@ public class SearchStoreUI extends VerticalLayout {
         TextField storeName = new TextField("store name");
         Button searchStore = new Button("search store", e -> {
             try {
-                String jsonItems = userService.searchStoreByName(storeName.getValue(), token);
+                String jsonItems = userService.searchStoreByName(storeName.getValue());
                 List<String> items = (List<String>) mapper.readValue(jsonItems, List.class);
                 List<Store> stores = items.stream().map(item -> {
                     try {

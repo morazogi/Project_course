@@ -2,6 +2,8 @@ package ServiceLayer;
 
 import DomainLayer.IToken;
 import DomainLayer.DomainServices.Search;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IStoreRepository;
@@ -35,6 +37,8 @@ public class UserService {
     private final UserCart userCart;
     private final Search search;
     private final GuestRepository guestRepository;
+    private final ObjectMapper mapper = new ObjectMapper();
+
 
     public UserService(IToken tokenService, 
                        StoreRepository storeRepository,
@@ -52,7 +56,8 @@ public class UserService {
         this.paymentService = paymentService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
         this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository, guestRepository);
-        this.search = new Search(productRepository, storeRepository);   
+        this.search = new Search(productRepository, storeRepository);
+
     }
 
     @Transactional
@@ -164,13 +169,16 @@ public class UserService {
     }
 
     @Transactional
-    public String searchStoreByName(String token, String storeName) {
-        try {
-            return search.searchStoreByName(storeName);
-        } catch (Exception e) {
-            EventLogger.logEvent(tokenService.extractUsername(token), "SEARCH_STORE_FAILED");
-            throw new RuntimeException("Failed to search store");
-        }
+    public String searchStoreByName(String partialName) throws JsonProcessingException {
+        List<Store> matches = storeRepository.getAll().stream()
+                .filter(s -> s.getName().toLowerCase().contains(partialName.toLowerCase()))
+                .toList();
+
+        EventLogger.logEvent(
+                "SEARCH_STORE_BY_NAME",
+                "Query=" + partialName + " Matches=" + matches.size());
+
+        return mapper.writeValueAsString(matches);   // <-- JSON string
     }
 
     @Transactional

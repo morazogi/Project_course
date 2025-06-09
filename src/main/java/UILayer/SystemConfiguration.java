@@ -79,9 +79,10 @@ public class SystemConfiguration {
         return new UserRepository();
     };
 
+
     @Bean
     public RegisteredService RegisteredService() {
-        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(),GuestRepository());
+        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository());
     };
 
     @Bean
@@ -106,7 +107,7 @@ public class SystemConfiguration {
 
     @Bean
     public PaymentService PaymentService(DiscountRepository discountRepository) {
-        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository() );
+        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository(), GuestRepository() );
     };
 
     @Bean
@@ -116,7 +117,7 @@ public class SystemConfiguration {
 
     @Bean
     public ShippingService ShippingService() {
-        return new ShippingService(ProxyShipping(), TokenService(), UserRepository());
+        return new ShippingService(ProxyShipping(), TokenService(), UserRepository(), GuestRepository());
     };
 
     @Bean

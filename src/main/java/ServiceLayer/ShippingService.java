@@ -1,6 +1,8 @@
 package ServiceLayer;
 import DomainLayer.*;
 import DomainLayer.DomainServices.ShippingConnectivity;
+import InfrastructureLayer.GuestRepository;
+import InfrastructureLayer.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +12,8 @@ public class ShippingService {
     private final ShippingConnectivity shippingConnectivity;
     private final IToken tokenService;
 
-    public ShippingService(IShipping ProxyShipping, IToken tokenService, IUserRepository userRepository) {
-        this.shippingConnectivity = new ShippingConnectivity(ProxyShipping, userRepository);
+    public ShippingService(IShipping ProxyShipping, IToken tokenService, UserRepository userRepository, GuestRepository guestRepository) {
+        this.shippingConnectivity = new ShippingConnectivity(ProxyShipping, userRepository, guestRepository);
         this.tokenService = tokenService;
     }
 

@@ -19,19 +19,21 @@ public class RegisteredService {
     private final History history;
     private final OpenStore opener;
     private final toNotify notifyService;
+    private final GuestRepository guestRepository;
 
     public RegisteredService(IToken tokenService,
                              StoreRepository storeRepository,
                              UserRepository userRepository,
                              ProductRepository productRepository,
                              OrderRepository orderRepository,
-                             NotificationRepository notificationRepository) {
+                             NotificationRepository notificationRepository, GuestRepository guestRepository) {
         this.tokenService = tokenService;
-        this.userConnectivity = new UserConnectivity(tokenService, userRepository);
+        this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
         this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);
         this.history = new History(tokenService, orderRepository , userRepository);
         this.opener = new OpenStore(tokenService, storeRepository, userRepository);
         this.notifyService = new toNotify(notificationRepository, tokenService);
+        this.guestRepository = guestRepository;
     }
 
 

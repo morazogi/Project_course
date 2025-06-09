@@ -3,6 +3,7 @@ package DomainLayer.DomainServices;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import InfrastructureLayer.GuestRepository;
 import InfrastructureLayer.UserRepository;
 import ServiceLayer.EventLogger;
 
@@ -16,9 +17,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class UserConnectivity {
     private IToken Tokener;
     private UserRepository userRepository;
+    private GuestRepository guestRepository;
+
     private ObjectMapper mapper = new ObjectMapper();
 
-    public UserConnectivity(IToken Tokener, UserRepository userRepository) {
+    public UserConnectivity(IToken Tokener, UserRepository userRepository, GuestRepository guestRepository) {
         this.userRepository = userRepository;
         this.Tokener = Tokener;
     }

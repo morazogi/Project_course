@@ -23,7 +23,7 @@ public class ErrorLogger {
 
     // Method to write the log message to the file
     @Transactional
-    private static void writeToFile(String logMessage, String logFile) {
+    public static void writeToFile(String logMessage, String logFile) {
         try (FileWriter writer = new FileWriter(new File(logFile), true)) {
             writer.write(logMessage); // Append the log message to the log file
         } catch (IOException e) {
