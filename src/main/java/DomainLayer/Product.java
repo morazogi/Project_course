@@ -8,11 +8,12 @@ import java.util.UUID;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "storeID", referencedColumnName = "id")
+    // todo should there be a one to many annotation here?
+    @Column(name = "store_id", nullable = false)
     private String storeId;
 
     @Column(name = "name", nullable = false)

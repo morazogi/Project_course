@@ -3,7 +3,8 @@ package ServiceLayer;
 
 import DomainLayer.*;
 import DomainLayer.DomainServices.*;
-import InfrastructureLayer.CustomerInquiryRepository;
+import InfrastructureLayer.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class OwnerManagerService {
     private final QueryMicroservice notificationService;
     private final PurchaseHistoryMicroservice purchaseHistoryService;
 
-    public OwnerManagerService(IUserRepository userRepository, IStoreRepository storeRepository, IProductRepository productRepository, IOrderRepository orderRepository, IDiscountRepository discountRepository) {
+    public OwnerManagerService(UserRepository userRepository, StoreRepository storeRepository, ProductRepository productRepository, OrderRepository orderRepository, DiscountRepository discountRepository) {
         // Initialize repositories
         ICustomerInquiryRepository inquiryRepository = new CustomerInquiryRepository();
 
@@ -209,9 +210,7 @@ public class OwnerManagerService {
                                         String conditionalDiscounted) {
         try {
             EventLogger.logEvent(ownerId, "DEFINE_DISCOUNT_POLICY_START");
-            String id = UUID.randomUUID().toString();
             boolean result = discountPolicyService.addDiscountToDiscountPolicy(ownerId,storeId,discountId,
-                                                                                id,
                                                                                 level,
                                                                                 logicComposition,
                                                                                 numericalComposition,

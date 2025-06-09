@@ -2,20 +2,18 @@ package DomainLayer;
 
 import ServiceLayer.EventLogger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
-import org.testng.annotations.Ignore;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "stores")
 public class Store {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     @Column(name = "name", nullable = false)
     private String name;

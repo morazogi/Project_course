@@ -1,8 +1,5 @@
 package DomainLayer;
 
-import DomainLayer.Product;
-import DomainLayer.IProductRepository;
-import DomainLayer.IStoreRepository;
 import DomainLayer.Store;
 import DomainLayer.DomainServices.Search;
 

@@ -1,10 +1,6 @@
 package UILayer;
 
-import DomainLayer.Product;
-import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.User;
 import ServiceLayer.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;

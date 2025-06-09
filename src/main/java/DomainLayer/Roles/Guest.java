@@ -2,40 +2,51 @@ package DomainLayer.Roles;
 
 import java.util.UUID;
 
-import DomainLayer.Product;
 import DomainLayer.ShoppingBag;
 import DomainLayer.ShoppingCart;
 import DomainLayer.Store;
-import io.micrometer.observation.Observation.Event;
 import ServiceLayer.EventLogger;
 
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "guests")
 public class Guest {
 
     @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
-
     @Column(name = "username", nullable = false, unique = true)
-    private String username = "Guest" + counter++;
+    protected String username;
 
     @Column(name = "cart_reserved")
-    private Boolean cartReserved = false;
+    protected Boolean cartReserved;
 
     @Transient
-    protected ShoppingCart shoppingCart = new ShoppingCart(id);
-
-    @Transient
-    protected static int counter = 0;
+    protected ShoppingCart shoppingCart;
 
     public Guest() {
+        this.username = "Guest" + UUID.randomUUID().toString();
+        this.cartReserved = false;
+        this.shoppingCart = new ShoppingCart(username);
     }
 
+    public Guest(String username) {
+        this.username = username;
+        this.cartReserved = false;
+        this.shoppingCart = new ShoppingCart(username);
+    }
+    //================getters===================
+    public String getUsername() { return username; }
+    public ShoppingCart getShoppingCart() { return shoppingCart; }
+    //================setters===================
+    public void setUsername(String userName) { this.username = userName; }
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
+    //------------------------------------------
     public void addProduct(String storeId, String productId, Integer quantity) {
+        if(quantity <= 0 ) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
         boolean found = false;
         for (ShoppingBag shoppingBag : shoppingCart.getShoppingBags()) {
             if (shoppingBag.getStoreId().equals(storeId)) {
@@ -72,18 +83,9 @@ public class Guest {
         throw new IllegalArgumentException("Product not found in cart");
     }
 
-    public String getID() {
-        return this.id;
-    }
-
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
-    }
-
     public void setCartReserved(Boolean cartReserved) {
         this.cartReserved = cartReserved;
     }
-
 
     public Boolean getCartReserved() {
         return cartReserved;

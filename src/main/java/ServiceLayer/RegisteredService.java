@@ -1,16 +1,12 @@
 package ServiceLayer;
 
-import DomainLayer.IStoreRepository;
-import DomainLayer.INotificationRepository;
-import DomainLayer.IOrderRepository;
-import DomainLayer.IProductRepository;
+import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IToken;
-import DomainLayer.IUserRepository;
-import DomainLayer.User;
 import DomainLayer.DomainServices.*;
-
+import InfrastructureLayer.*;
 import java.util.List;
 
+import InfrastructureLayer.NotificationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +21,11 @@ public class RegisteredService {
     private final toNotify notifyService;
 
     public RegisteredService(IToken tokenService,
-                             IStoreRepository storeRepository,
-                             IUserRepository userRepository,
-                             IProductRepository productRepository,
-                             IOrderRepository orderRepository,
-                             INotificationRepository notificationRepository) {
+                             StoreRepository storeRepository,
+                             UserRepository userRepository,
+                             ProductRepository productRepository,
+                             OrderRepository orderRepository,
+                             NotificationRepository notificationRepository) {
         this.tokenService = tokenService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository);
         this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);

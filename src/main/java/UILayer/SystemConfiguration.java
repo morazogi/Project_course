@@ -1,6 +1,6 @@
 package UILayer;
 
-import DomainLayer.IStoreRepository;
+import DomainLayer.*;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,35 @@ public class SystemConfiguration {
     public ProductRepository ProductRepository() {
         return new ProductRepository();
     };
+    @Bean
+    public GuestRepository GuestRepository(){
+        return new GuestRepository();
+    }
 
+    @Bean
+    public INotificationRepository INotificationRepository() {
+        return INotificationRepository();
+    };
+    @Bean
+    public IProductRepository IProductRepository() {
+        return IProductRepository();
+    }
+    @Bean
+    public IStoreRepository IStoreRepository() {
+        return IStoreRepository();
+    }
+    @Bean
+    public IDiscountRepository IDiscountRepository() {
+        return IDiscountRepository();
+    }
+    @Bean
+    public IOrderRepository IOrderRepository() {
+        return IOrderRepository();
+    }
+    @Bean
+    public IUserRepository IUserRepository() {
+        return IUserRepository();
+    }
     @Bean
     public NotificationRepository NotificationRepository() {
         return new NotificationRepository();
@@ -53,7 +81,7 @@ public class SystemConfiguration {
 
     @Bean
     public RegisteredService RegisteredService() {
-        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository());
+        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(),GuestRepository());
     };
 
     @Bean
@@ -99,7 +127,7 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(DiscountRepository()));
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(DiscountRepository()), GuestRepository());
     };
 
     @Bean

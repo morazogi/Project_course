@@ -17,7 +17,6 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Route("/searchproduct")

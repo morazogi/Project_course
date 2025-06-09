@@ -144,6 +144,14 @@
             <version>8.3.0</version>
         </dependency>
 
+        <!-- postgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.1</version>
+        </dependency>
+
+
         <!-- In-memory H2 for local runs -->
         <dependency>
             <groupId>com.h2database</groupId>

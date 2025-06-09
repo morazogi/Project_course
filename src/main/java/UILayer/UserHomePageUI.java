@@ -4,7 +4,6 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.ManagerPermissions;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

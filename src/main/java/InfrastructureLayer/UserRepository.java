@@ -1,52 +1,40 @@
 package InfrastructureLayer;
 import DomainLayer.IUserRepository;
-import DomainLayer.Store;
-import DomainLayer.User;
 import DomainLayer.Roles.RegisteredUser;
-import io.micrometer.observation.Observation.Event;
-import ServiceLayer.EventLogger;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.List;
 
+@Component
+public class UserRepository implements IRepo<RegisteredUser> {
 
-@Repository
-public class UserRepository implements IUserRepository {
-    //entry in the hashmap is of the form <username , (pass;json)>
-    HashMap<String , String> rep = new HashMap<String ,String>();
-    HashMap<String , String> pass = new HashMap<String ,String>();
-    public final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    IUserRepository repo;
 
-
-    public String getUserPass(String username){
-        return pass.get(username);
+    public RegisteredUser save(RegisteredUser RegisteredUser) {
+        return repo.save(RegisteredUser);
+    }
+    public RegisteredUser update(RegisteredUser RegisteredUser) {
+        return repo.saveAndFlush(RegisteredUser);
+    }
+    public RegisteredUser getById(String id) {
+        return repo.getReferenceById(id);
+    }
+    public List<RegisteredUser> getAll() {
+        return repo.findAll();
+    }
+    public void deleteById(String userID) {
+        repo.deleteById(userID);
+    }
+    public void delete(RegisteredUser RegisteredUser){
+        repo.delete(RegisteredUser);
+    }
+    public boolean existsById(String id){
+        return repo.existsById(id);
+    }
+    public RegisteredUser getByName(String name) {
+        return repo.findByNameContaining(name);
     }
 
-    public boolean addUser(String username, String hashedPassword , String json) {
-        if(rep.containsKey(username)){
-            throw new IllegalArgumentException("User already exists");
-        }
-        rep.put(username , json);
-        pass.put(username, hashedPassword);
-        return true;
-    }
-
-    public boolean isUserExist(String username) {
-        return rep.containsKey(username);
-    }
-
-    public boolean update(String name, String s) {
-
-        if(!rep.containsKey(s)){
-            return false;
-        }
-        rep.replace(name , s);
-        return true;
-    }
-
-    public String getUser(String username) {
-        return rep.get(username);
-    }
 }

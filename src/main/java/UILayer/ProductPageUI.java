@@ -1,7 +1,6 @@
 package UILayer;
 
 import DomainLayer.Product;
-import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
 import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
@@ -19,7 +18,6 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParameters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 @Route("/product/:productid/:storeid")
