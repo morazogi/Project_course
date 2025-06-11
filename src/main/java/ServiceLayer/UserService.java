@@ -1,5 +1,6 @@
 package ServiceLayer;
 
+import DomainLayer.DomainServices.*;
 import DomainLayer.IToken;
 import DomainLayer.DomainServices.Search;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,16 +12,28 @@ import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.IProductRepository;
 import DomainLayer.IOrderRepository;
+import DomainLayer.Roles.RegisteredUser;
+import DomainLayer.ShoppingCart;
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
+import DomainLayer.ShoppingBag;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.Collections;
+import java.util.Optional;
 
 import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.*;
+import InfrastructureLayer.DiscountRepository;
 import jakarta.transaction.Transactional;
+import utils.ProductKeyModule;
 
 import DomainLayer.Store;
+import DomainLayer.User;
+import DomainLayer.DomainServices.UserCart;
+import DomainLayer.DomainServices.UserConnectivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
@@ -33,6 +46,7 @@ public class UserService {
     private final StoreRepository storeRepository;
     private final ShippingService shippingService;
     private final PaymentService paymentService;
+    private final DiscountPolicyMicroservice discountPolicy;
     private final UserConnectivity userConnectivity;
     private final UserCart userCart;
     private final Search search;
@@ -57,6 +71,7 @@ public class UserService {
         this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
         this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository, guestRepository);
         this.search = new Search(productRepository, storeRepository);
+        this.discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
 
     }
 
@@ -169,7 +184,15 @@ public class UserService {
     }
 
     @Transactional
-    public String searchStoreByName(String partialName) throws JsonProcessingException {
+    public List<String> searchStoreByName(String token, String storeName) {
+        try {
+            return search.searchStoreByName(storeName);
+        } catch (Exception e) {
+            EventLogger.logEvent(tokenService.extractUsername(token), "SEARCH_STORE_FAILED");
+            throw new RuntimeException("Failed to search store");
+        }
+    }
+    /*    public String searchStoreByName(String partialName) throws JsonProcessingException {
         List<Store> matches = storeRepository.getAll().stream()
                 .filter(s -> s.getName().toLowerCase().contains(partialName.toLowerCase()))
                 .toList();
@@ -180,6 +203,7 @@ public class UserService {
 
         return mapper.writeValueAsString(matches);   // <-- JSON string
     }
+*/
 
     @Transactional
     public String getStoreById(String token, String storeId) {
@@ -190,5 +214,24 @@ public class UserService {
             throw new RuntimeException("Failed to search store");
         }
     }
+
+    public Optional<Product> getProductById(String id) {
+        try {
+            return productRepository.findById(id);
+        } catch (Exception e) {
+            System.out.println("ERROR finding product by ID:" + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    public List<Product> getProductsInStore(String storeid) {
+        try {
+            return search.getProductsByStore(storeid);
+        } catch (Exception e) {
+            System.out.println("ERROR finding product by ID:" + e.getMessage());
+        }
+        return null;
+    }
+
 
 }

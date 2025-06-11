@@ -33,7 +33,8 @@ public class Discount {
         UNDEFINED,      // not yet set
         NONE,           // no condition
         MIN_PRICE,      // minimum total price
-        MIN_QUANTITY    // minimum quantity of items
+        MIN_QUANTITY,   // minimum quantity of items
+        MAX_QUANTITY    // maximum quantity of items
     }
 
 
@@ -87,7 +88,8 @@ public class Discount {
     // Condition type to activate discount:
     // -1 = No condition,
     // 1 = Minimum total price,
-    // 2 = Minimum quantity of items
+    // 2 = Minimum quantity of item
+    // 3 = Maximum quantity of item
     @Enumerated(EnumType.STRING)
     public ConditionalType conditional;
 
@@ -124,14 +126,14 @@ public class Discount {
             this.level = Level.CATEGORY;
         } else if (level == 3) {
             this.level = Level.STORE;
-         } else {
-                        this.level = Level.UNDEFINED;
-                    }
+        } else {
+            this.level = Level.UNDEFINED;
+        }
 
-                    if (logicComposition == 1) {
-                        this.logicComposition = LogicComposition.XOR;
-                    } else if (logicComposition == 2) {
-                       this.logicComposition = LogicComposition.AND;
+        if (logicComposition == 1) {
+            this.logicComposition = LogicComposition.XOR;
+        } else if (logicComposition == 2) {
+            this.logicComposition = LogicComposition.AND;
         } else if (logicComposition == 3) {
             this.logicComposition = LogicComposition.OR;
         } else {
@@ -156,6 +158,8 @@ public class Discount {
             this.conditional = ConditionalType.MIN_PRICE;
         } else if (conditional == 2) {
             this.conditional = ConditionalType.MIN_QUANTITY;
+        } else if (conditional == 3) {
+            this.conditional = ConditionalType.MAX_QUANTITY;
         } else {
             this.conditional = ConditionalType.UNDEFINED;
         }
@@ -450,6 +454,18 @@ public class Discount {
 
                 if (product.getName().equals(this.conditionalDiscounted)) {
                     return quantityToBuy >= limiter;
+                }
+            }
+            return false;
+        }
+        else if (this.conditional == ConditionalType.MAX_QUANTITY) {
+
+            for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+                Product product = entry.getKey();
+                int quantityToBuy = entry.getValue();
+
+                if (product.getName().equals(this.conditionalDiscounted)) {
+                    return quantityToBuy <= limiter;
                 }
             }
             return false;

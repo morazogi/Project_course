@@ -42,11 +42,11 @@ public class HomePageUI extends VerticalLayout {
         // Buttons
         HorizontalLayout buttons = new HorizontalLayout();
         Button loginButton = new Button("🔐 Login", e -> UI.getCurrent().navigate("/login"));
-        Button registerButton = new Button("📝 Register", e -> UI.getCurrent().navigate("/register"));
+        Button registerButton = new Button("📝 Register", e -> UI.getCurrent().navigate("/signup"));
         buttons.add(loginButton, registerButton);
 
         // Roles section
-        Span rolesTitle = new Span("👥 Who can use MarketX?");
+        //Span rolesTitle = new Span("👥 Who can use MarketX?");
         VerticalLayout roles = new VerticalLayout(
                 new Span("• 👤 User – Browse and buy products"),
                 new Span("• 🧑💼 Store Manager – Manage store catalog, discounts & sales"),
@@ -58,9 +58,10 @@ public class HomePageUI extends VerticalLayout {
         roles.setAlignItems(Alignment.START);
 
         // Footer
-        Span footer = new Span("© 2025 MarketX Project");
+        //Span footer = new Span("© 2025 MarketX Project");
 
         // Add everything to layout
-        add(title, subtitle, features, buttons, rolesTitle, roles, footer);
+        //add(title, subtitle, features, buttons, rolesTitle, roles, footer);
+        add(title, subtitle, features, buttons, roles);
     }
 }

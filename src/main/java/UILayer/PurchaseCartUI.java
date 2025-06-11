@@ -121,7 +121,7 @@ public class PurchaseCartUI extends VerticalLayout {
         // Buttons for Confirm/Cancel
         HorizontalLayout buttonLayout = new HorizontalLayout(confirmPurchase, cancelPurchase);
         add(productGrid, totalField, buttonLayout);
-
+        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecartfinal");}));
         setPadding(true);
         setAlignItems(Alignment.CENTER);
         this.storeRepository = storeRepository;

@@ -5,6 +5,9 @@ import DomainLayer.*;
 import DomainLayer.DomainServices.*;
 import InfrastructureLayer.*;
 
+import DomainLayer.DomainServices.InventoryManagementMicroservice;
+import DomainLayer.DomainServices.PurchasePolicyMicroservice;
+import InfrastructureLayer.CustomerInquiryRepository;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +40,7 @@ public class OwnerManagerService {
         this.inventoryService = new InventoryManagementMicroservice(storeRepository, productRepository);
         this.purchasePolicyService = new PurchasePolicyMicroservice();
         this.discountPolicyService = new DiscountPolicyMicroservice(storeRepository,userRepository, productRepository, discountRepository);
-        this.storeManagementService = new StoreManagementMicroservice(storeRepository, userRepository);
+        this.storeManagementService = new StoreManagementMicroservice(storeRepository, userRepository, tokenService);
         this.notificationService = new QueryMicroservice(inquiryRepository);
         this.purchaseHistoryService = new PurchaseHistoryMicroservice();
     }
@@ -56,10 +59,10 @@ public class OwnerManagerService {
      * @return Product ID if successful, null otherwise
      */
     @Transactional
-    public String addProduct(String ownerId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String addProduct(String ownerId, String storeId, String productName, String description, float price, int quantity, String category) {
         try {
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_START");
-            String result = inventoryService.addProduct(ownerId, storeId, productName, description, price, quantity, category);
+            String result = inventoryService.addProduct(ownerId, storeId, productName, description, (float) price, quantity, category);
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_SUCCESS");
             return result;
         } catch (Exception e) {
@@ -378,11 +381,25 @@ public class OwnerManagerService {
     public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
         try {
             EventLogger.logEvent(appointerId, "APPOINT_STORE_MANAGER_START");
+
             boolean result = storeManagementService.appointStoreManager(appointerId, storeId, userId, permissions);
             EventLogger.logEvent(appointerId, "APPOINT_STORE_MANAGER_SUCCESS");
             return result;
         } catch (Exception e) {
             ErrorLogger.logError(appointerId, "APPOINT_STORE_MANAGER_FAILED", e.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean setFounder(String founderId, String storeId) {
+        try {
+            EventLogger.logEvent(founderId, "STORE_FOUNDER");
+            boolean result = storeManagementService.appointStoreFounder(founderId, storeId);
+            EventLogger.logEvent(founderId, "STORE_FOUNDER_SUCCESS");
+            return result;
+        } catch (Exception e) {
+            ErrorLogger.logError(founderId, "STORE_FOUNDER_FAILED", e.getMessage());
             return false;
         }
     }
@@ -557,7 +574,7 @@ public class OwnerManagerService {
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
         try {
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_START");
-            Map<String, Boolean> result = storeManagementService.getManagerPermissions(ownerId, storeId, managerId);
+            Map<String, Boolean> result = storeManagementService.getManagerPermissions(storeId, managerId);
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_SUCCESS");
             return result;
         } catch (Exception e) {
@@ -645,10 +662,10 @@ public class OwnerManagerService {
      * @return Product ID if successful, null otherwise
      */
     @Transactional
-    public String managerAddProduct(String managerId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String managerAddProduct(String managerId, String storeId, String productName, String description, float price, int quantity, String category) {
         try {
             EventLogger.logEvent(managerId, "MANAGER_ADD_PRODUCT_START");
-            String result = inventoryService.addProduct(managerId, storeId, productName, description, price, quantity, category);
+            String result = inventoryService.addProduct(managerId, storeId, productName, description, (float) price, quantity, category);
             EventLogger.logEvent(managerId, "MANAGER_ADD_PRODUCT_SUCCESS");
             return result;
         } catch (Exception e) {

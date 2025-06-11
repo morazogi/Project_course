@@ -2,17 +2,10 @@ package UILayer;
 
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.ProductRepository;
-import DomainLayer.Roles.RegisteredUser;
-
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.UserRepository;
-
-import ServiceLayer.ErrorLogger;
-import ServiceLayer.ProductService;
+import PresentorLayer.ButtonPresenter;
+import PresentorLayer.ProductPresenter;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,51 +22,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/shoppingcart")
 public class ShoppingCartUI extends VerticalLayout {
 
-    private final RegisteredService registeredService;
-    private final ProductService productService;
-    private final UserService userService;
-    private final IToken tokenService;
-    private final UserRepository userRepository;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ProductPresenter productPresenter;
+    private final ButtonPresenter buttonPresenter;
 
     @Autowired
-    public ShoppingCartUI(RegisteredService configuredRegisteredService, ProductService configuredProductService, UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
-        this.registeredService = configuredRegisteredService;
-        this.productService = configuredProductService;
-        this.userService = configuredUserService;
-        Button signOut = new Button("Sign out", e -> {
-            try {
-                String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                UI.getCurrent().getSession().setAttribute("token", registeredService.logoutRegistered(token));
-                UI.getCurrent().navigate("");
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
-        }
-        );
+    public ShoppingCartUI(RegisteredService configuredRegisteredService, UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
+        buttonPresenter = new ButtonPresenter(configuredRegisteredService);
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        add(new HorizontalLayout(buttonPresenter.signOutButton(token), new H1("Shopping cart"), buttonPresenter.homePageButton()));
 
-        Button homePage = new Button("Home page", e -> {
-            UI.getCurrent().navigate("");
-        });
+        add(productPresenter.getShoppingCart(token));
 
-        add(new HorizontalLayout(signOut, new H1("Shopping cart"), homePage));
-
-        this.tokenService = configuredTokenService;
-        this.userRepository = configuredUserRepository;
-        String token = (String) UI.getCurrent().getSession().getAttribute("user");
-        String username = tokenService.extractUsername(token);
-        RegisteredUser user = null;
-        try {
-            user = userRepository.getById(username);
-        } catch (Exception e) {
-            ErrorLogger.logError(username,e.toString(),"user "+username+" not found in class purchaseCartUI");
-        }
-
-        ShoppingCart shoppingCart = user.getShoppingCart();
-
-        add(new ProductListUI(shoppingCart, productService, userService));
-
-        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecart");}));
+        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecartfinal");}));
 
         setPadding(true);
         setAlignItems(Alignment.CENTER);

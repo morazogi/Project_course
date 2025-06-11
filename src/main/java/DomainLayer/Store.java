@@ -528,8 +528,9 @@ public class Store {
         return (owners.contains(userId) || managers.get(userId).getPermission(permission));
     }
 
-    public String addProduct(String productName, String description, double price, int quantity, String category) {
-        throw new UnsupportedOperationException("Not supported yet. - store.addProduct");
+    public String addProduct(String productID,int quantity) {
+        this.products.put(productID, quantity);
+        return productID;
     }
 
     public boolean updateProductDetails(String productId, String productName, String description, double price, String category) {
@@ -687,13 +688,13 @@ public class Store {
     }
 
     public void addManager(String appointerId, String userId, boolean[] permissions) {
-        ManagerPermissions mp = new ManagerPermissions(permissions);
+        ManagerPermissions mp = new ManagerPermissions(permissions,userId);
         managers.put(userId, mp);
         managersToSuperior.put(userId, appointerId);
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {
-        managers.get(managerId).setPermissions(permissions);
+        managers.get(managerId).setPermissionsFromAarray(permissions);
     }
 
     public void terminateManagment(String managerId) {
@@ -744,4 +745,45 @@ public class Store {
         //todo: implement
         return false;
     }
+
+    public Map<String, ManagerPermissions> getManagers() {
+        return managers;
+    }
+
+    public void setManagers(Map<String, ManagerPermissions> managers) {
+        this.managers = managers;
+    }
+
+    public List<String> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(List<String> owners) {
+        this.owners = owners;
+    }
+
+    public Map<String, String> getOwnersToSuperior() {
+        return ownersToSuperior;
+    }
+
+    public void setOwnersToSuperior(Map<String, String> ownersToSuperior) {
+        this.ownersToSuperior = ownersToSuperior;
+    }
+
+    public Map<String, String> getManagersToSuperior() {
+        return managersToSuperior;
+    }
+
+    public void setManagersToSuperior(Map<String, String> managersToSuperior) {
+        this.managersToSuperior = managersToSuperior;
+    }
+
+    public List<String> getDiscounts() {return discounts;}
+
+    public void setDiscounts(List<String> discounts) {this.discounts = discounts;}
+
+    public void setFounder(String founder) {
+        this.founder = founder;
+    }
+
 }

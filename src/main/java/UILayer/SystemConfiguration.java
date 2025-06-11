@@ -1,10 +1,14 @@
 package UILayer;
 
-import DomainLayer.*;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
+import com.vaadin.flow.spring.SpringServlet;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
+import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
@@ -25,35 +29,7 @@ public class SystemConfiguration {
     public ProductRepository ProductRepository() {
         return new ProductRepository();
     };
-    @Bean
-    public GuestRepository GuestRepository(){
-        return new GuestRepository();
-    }
 
-    @Bean
-    public INotificationRepository INotificationRepository() {
-        return INotificationRepository();
-    };
-    @Bean
-    public IProductRepository IProductRepository() {
-        return IProductRepository();
-    }
-    @Bean
-    public IStoreRepository IStoreRepository() {
-        return IStoreRepository();
-    }
-    @Bean
-    public IDiscountRepository IDiscountRepository() {
-        return IDiscountRepository();
-    }
-    @Bean
-    public IOrderRepository IOrderRepository() {
-        return IOrderRepository();
-    }
-    @Bean
-    public IUserRepository IUserRepository() {
-        return IUserRepository();
-    }
     @Bean
     public NotificationRepository NotificationRepository() {
         return new NotificationRepository();
@@ -79,10 +55,9 @@ public class SystemConfiguration {
         return new UserRepository();
     };
 
-
     @Bean
     public RegisteredService RegisteredService() {
-        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository());
+        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository());
     };
 
     @Bean
@@ -102,22 +77,17 @@ public class SystemConfiguration {
 
     @Bean
     public OwnerManagerService OwnerManagerService() {
-        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository(), DiscountRepository());
+        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository(), DiscountRepository(), TokenService());
     };
 
     @Bean
-    public PaymentService PaymentService(DiscountRepository discountRepository) {
-        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository(), GuestRepository() );
-    };
-
-    @Bean
-    public ProductService ProductService() {
-        return new ProductService(ProductRepository());
+    public PaymentService PaymentService() {
+        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository() );
     };
 
     @Bean
     public ShippingService ShippingService() {
-        return new ShippingService(ProxyShipping(), TokenService(), UserRepository(), GuestRepository());
+        return new ShippingService(ProxyShipping(), TokenService(), UserRepository());
     };
 
     @Bean
@@ -128,7 +98,7 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(DiscountRepository()), GuestRepository());
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(), DiscountRepository());
     };
 
     @Bean
@@ -150,5 +120,13 @@ public class SystemConfiguration {
     public NotificationWebSocketHandler NotificationWebSocketHandler() {
         return new NotificationWebSocketHandler();
     };
+
+    @Bean
+    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
+        // configure other properties as needed
+        SpringServlet servlet = new SpringServlet(context, true);
+        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
+    }
+
 
 }

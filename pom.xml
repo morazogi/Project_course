@@ -80,6 +80,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Byte Buddy (compile/runtime so both Hibernate & Mockito see it) -->
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.14.15</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy-agent</artifactId>
+            <version>1.14.15</version>
+        </dependency>
+
         <!-- BCrypt -->
         <dependency>
             <groupId>org.mindrot</groupId>

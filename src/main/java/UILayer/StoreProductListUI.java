@@ -34,7 +34,7 @@ public class StoreProductListUI extends HorizontalLayout {
             add(new Button(product.getName() + "\n" + product.getPrice(), e -> {
                 UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
 
-     }
+        }
 
     }
 

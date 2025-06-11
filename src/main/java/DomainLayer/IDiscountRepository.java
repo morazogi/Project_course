@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.*;
 
 import java.util.List;
 
+import java.util.List;
+
 @Repository
 public interface IDiscountRepository extends JpaRepository<Discount, String> {
 }
