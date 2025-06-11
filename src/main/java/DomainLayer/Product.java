@@ -35,7 +35,7 @@ public class Product {
     private String category;
 
     // Constructors
-    public Product(String id, String storeId, String name, String description, float price , int quantity, double rating, String category) {
+    public Product(String storeId, String name, String description, float price , int quantity, double rating, String category) {
         if(quantity > 0) {
             // id is not needed because we are working with UUID
             this.storeId = storeId;

@@ -4,6 +4,7 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.Store;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.RegisteredService;
@@ -28,7 +29,7 @@ public class SearchProductUI extends VerticalLayout {
     private final ProductPresenter productPresenter;
 
     @Autowired
-    public SearchProductUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public SearchProductUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         TextField lowestPrice = new TextField("lowest price");

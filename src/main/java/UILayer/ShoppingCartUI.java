@@ -1,18 +1,14 @@
 package UILayer;
 
 import DomainLayer.IToken;
-import DomainLayer.IUserRepository;
-import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingCart;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -26,7 +22,7 @@ public class ShoppingCartUI extends VerticalLayout {
     private final ButtonPresenter buttonPresenter;
 
     @Autowired
-    public ShoppingCartUI(RegisteredService configuredRegisteredService, UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public ShoppingCartUI(RegisteredService configuredRegisteredService, UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
         buttonPresenter = new ButtonPresenter(configuredRegisteredService);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");

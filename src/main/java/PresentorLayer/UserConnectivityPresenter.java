@@ -51,15 +51,14 @@ public class UserConnectivityPresenter {
         String storeId = registeredService.openStore(token, storeName);
         System.out.println(storeId);
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println("dfsa");
         }
-        System.out.println(ownerManagerService.appointStoreOwner(user.getID(), storeId, user.getID()));
+        System.out.println(ownerManagerService.appointStoreOwner(user.getUsername(), storeId, user.getUsername()));
         boolean[] arr = new boolean[7];
         arr[0] = true;
         arr[1] = true;
@@ -68,17 +67,16 @@ public class UserConnectivityPresenter {
         arr[4] = true;
         arr[5] = true;
         arr[6] = true;
-        System.out.println(ownerManagerService.appointStoreManager(user.getID(), storeId, user.getID(), arr));
+        System.out.println(ownerManagerService.appointStoreManager(user.getUsername(), storeId, user.getUsername(), arr));
         username = tokenService.extractUsername(token);
-        jsonUser = userRepository.getUser(username);
         user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
 
-        System.out.println(jsonUser);
+        System.out.println(mapper.writeValueAsString(user));
     }
 
     public String addNewProductToStore(String token, String storeName, String productName, String description, String stringPrice, String stringQuantity, String category) {
@@ -95,10 +93,9 @@ public class UserConnectivityPresenter {
             return "Invalid quantity";
         }
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
             Notification.show(e.getMessage());
         }
@@ -113,7 +110,7 @@ public class UserConnectivityPresenter {
                 return e.getMessage();
             }
             if (store.getName().equals(storeName)) {
-                return ownerManagerService.addProduct(user.getID(), store.getId(), productName, description, price.floatValue(), quantity, category);
+                return ownerManagerService.addProduct(user.getUsername(), store.getId(), productName, description, price.floatValue(), quantity, category);
             }
         }
         return "Did not find store with that name";
@@ -129,10 +126,9 @@ public class UserConnectivityPresenter {
 
     public LinkedList<String> getUserStoresName(String token) throws Exception {
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
             Notification.show(e.getMessage());
         }
@@ -163,21 +159,20 @@ public class UserConnectivityPresenter {
                               String conditionalDiscounted
                               ) {
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
             return e.getMessage();
         }
-        Map<String, Boolean> permissions = ownerManagerService.getManagerPermissions(user.getID(), storeName, user.getID());
+        Map<String, Boolean> permissions = ownerManagerService.getManagerPermissions(user.getUsername(), storeName, user.getUsername());
         if (permissions.get("PERM_UPDATE_POLICY") == null || !permissions.get("PERM_UPDATE_POLICY")) {
             return "User is not allowed to add discount";
         }
         if(conditional != 1 && conditional != 2 && conditional != 3) {
             conditional = -1;
         }
-        if(ownerManagerService.defineDiscountPolicy(user.getID(), storeName, "", "", discountLevel, logicComposition, numericalComposition, null, percentDiscount, discountedItem, conditional, discountLimiter, conditionalDiscounted)) {
+        if(ownerManagerService.defineDiscountPolicy(user.getUsername(), storeName, "", "", discountLevel, logicComposition, numericalComposition, null, percentDiscount, discountedItem, conditional, discountLimiter, conditionalDiscounted)) {
             return "Discount successfully added";
         }
         return "Did not managed to add discount";

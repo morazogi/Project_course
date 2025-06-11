@@ -3,6 +3,7 @@ package UILayer;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +29,7 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
 
     private final ProductPresenter productPresenter;
     @Autowired
-    public SearchProductInStoreUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public SearchProductInStoreUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
     }
 

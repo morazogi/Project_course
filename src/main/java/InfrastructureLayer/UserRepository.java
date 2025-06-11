@@ -34,7 +34,7 @@ public class UserRepository implements IRepo<RegisteredUser> {
         return repo.existsById(id);
     }
     public RegisteredUser getByName(String name) {
-        return repo.findByNameContaining(name);
+        return repo.findByUsernameContaining(name);
     }
 
 }

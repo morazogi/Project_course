@@ -12,5 +12,4 @@ public class ProxyShipping implements IShipping {
     public void processShipping(String userId, String state, String city, String street, Map<String, Integer> products, String homeNumber) throws Exception {
         //based on shipping service
     }
-
 }

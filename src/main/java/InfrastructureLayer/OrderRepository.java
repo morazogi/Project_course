@@ -31,7 +31,7 @@ public class OrderRepository implements IRepo<Order> {
         return repo.existsById(orderID);
     }
     public List<Order> findByStoreID(String StoreID) {
-        return repo.findByStoreID(StoreID);
+        return repo.findByStoreId(StoreID);
     }
 
 

@@ -16,15 +16,15 @@ public class RegisteredUser extends Guest {
     @Column(name = "answer")
     private Map<String, String> answers = new HashMap<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "owned_stores", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "store_id")
-    private LinkedList<String> ownedStores = new LinkedList<>();
+    private List<String> ownedStores = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "managed_stores", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "store_id")
-    private LinkedList<String> managedStores = new LinkedList<>();
+    private List<String> managedStores = new ArrayList<>();
 
     @Column(name = "hashed_password",nullable = false)
     private String hashedPassword;
@@ -45,10 +45,10 @@ public class RegisteredUser extends Guest {
     public String getHashedPassword() {
         return hashedPassword;
     }
-    public LinkedList<String> getOwnedStores() {
+    public List<String> getOwnedStores() {
         return ownedStores;
     }
-    public LinkedList<String> getManagedStores() {
+    public List<String> getManagedStores() {
         return managedStores;
     }
     public void addOwnedStore(String storeId) {
@@ -69,10 +69,10 @@ public class RegisteredUser extends Guest {
         this.answers = answers;
     }
 
-    public void setOwnedStores(LinkedList<String> ownedStores) {
+    public void setOwnedStores(List<String> ownedStores) {
         this.ownedStores = ownedStores;
     }
-    public void setManagedStores(LinkedList<String> managedStores) {
+    public void setManagedStores(List<String> managedStores) {
         this.managedStores = managedStores;
     }
 

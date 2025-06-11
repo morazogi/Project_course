@@ -11,7 +11,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Microservice handling system administrator operations
@@ -109,8 +111,8 @@ public class AdminOperationsMicroservice {
         try {
             // Get all stores where user has roles
             RegisteredUser user = userRepository.getById(userId);
-            LinkedList<String> userManagedStores = user.getManagedStores();
-            LinkedList<String> userOwnedStores = user.getOwnedStores();
+            List<String> userManagedStores = user.getManagedStores();
+            List<String> userOwnedStores = user.getOwnedStores();
             // Revoke all roles in all stores
             for (String StoreID : userManagedStores) {
                 getStoreById(StoreID).terminateManagment(userId);

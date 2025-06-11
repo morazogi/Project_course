@@ -8,7 +8,6 @@ import java.util.Map;
 @Entity
 public class Discount {
 
-
     enum Level {
         UNDEFINED,
         PRODUCT,
@@ -73,7 +72,7 @@ public class Discount {
             name = "discount_strings",
             joinColumns = @JoinColumn(name = "discount_id")
     )
-    @Column(name = "value")
+    @Column(name = "discount_value")
     private List<String> discountsString = new ArrayList<>();
 
     // Discount percentage to apply (e.g., 0.15 = 15% off)

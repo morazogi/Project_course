@@ -1,23 +1,22 @@
 package DomainLayer;
-import java.util.*;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "shopping_carts")
+@Table(name = "shopping_cart")
 public class ShoppingCart {
 
     @Id
-    @JoinColumn(name = "username_in_shopping_cart", nullable = false)
-    private String usernameInShoppingCart;
+    @JoinColumn(name = "username", nullable = false)
+    private String username;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_id")
     private List<ShoppingBag> shoppingBags = new ArrayList<ShoppingBag>();
 
     public ShoppingCart(String username) {
-        this.usernameInShoppingCart = username;
+        this.username = username;
     }
     public ShoppingCart() {}
     public void addProduct(String storeId, String productId , Integer quantity) {
@@ -55,7 +54,7 @@ public class ShoppingCart {
     }
     public List<ShoppingBag> getShoppingBags() {return shoppingBags;}
     public String getUserId() {
-        return usernameInShoppingCart;
+        return username;
     }
     public void sold (){
         for (ShoppingBag shoppingBag : shoppingBags) {
@@ -65,7 +64,7 @@ public class ShoppingCart {
     @Override
     public String toString() {
         return "ShoppingCart{" +
-                "usernameInShoppingCart='" + usernameInShoppingCart.toString() + '\'' +
+                "usernameInShoppingCart='" + username.toString() + '\'' +
                 ", shoppingBags=" + shoppingBags.stream().map(ShoppingBag::toString)  +
                 '}';
     }

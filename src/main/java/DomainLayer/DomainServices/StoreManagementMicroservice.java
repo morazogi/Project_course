@@ -314,4 +314,8 @@ public class StoreManagementMicroservice {
         return false;
 
     }
+
+    public boolean appointStoreFounder(String founderId, String storeId) {
+        throw new RuntimeException("store founder can't be appointed - error thrown in storeManagementMicroservice");
+    }
 }

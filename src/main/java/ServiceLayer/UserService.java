@@ -1,39 +1,21 @@
 package ServiceLayer;
-
-import DomainLayer.DomainServices.*;
 import DomainLayer.IToken;
 import DomainLayer.DomainServices.Search;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.UserConnectivity;
-import DomainLayer.IStoreRepository;
-import DomainLayer.IUserRepository;
 import DomainLayer.Product;
-import DomainLayer.IProductRepository;
-import DomainLayer.IOrderRepository;
-import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingCart;
 import DomainLayer.DomainServices.DiscountPolicyMicroservice;
-import DomainLayer.ShoppingBag;
-
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Optional;
-
-import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.*;
 import InfrastructureLayer.DiscountRepository;
 import jakarta.transaction.Transactional;
-import utils.ProductKeyModule;
 
 import DomainLayer.Store;
-import DomainLayer.User;
-import DomainLayer.DomainServices.UserCart;
-import DomainLayer.DomainServices.UserConnectivity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
@@ -61,7 +43,8 @@ public class UserService {
                        OrderRepository orderRepository,
                        ShippingService shippingService,
                        PaymentService paymentService,
-                       GuestRepository guestRepository){
+                       GuestRepository guestRepository,
+                       DiscountRepository discountRepository){
         this.productRepository = productRepository;
         this.storeRepository = storeRepository;
         this.guestRepository = guestRepository;
@@ -184,7 +167,7 @@ public class UserService {
     }
 
     @Transactional
-    public List<String> searchStoreByName(String token, String storeName) {
+    public List<Store> searchStoreByName(String token, String storeName) {
         try {
             return search.searchStoreByName(storeName);
         } catch (Exception e) {
@@ -232,6 +215,4 @@ public class UserService {
         }
         return null;
     }
-
-
 }

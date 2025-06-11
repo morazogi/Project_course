@@ -2,6 +2,7 @@ package UILayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
+import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.PermissionsPresenter;
@@ -35,7 +36,7 @@ public class UserHomePageUI extends VerticalLayout {
     private final PermissionsPresenter pp;
 
     @Autowired
-    public UserHomePageUI(UserService userService, OwnerManagerService ownerManager, IToken tokenService, UserRepository userRepository, RegisteredService registeredService, IStoreRepository storeRepository) {
+    public UserHomePageUI(UserService userService, OwnerManagerService ownerManager, IToken tokenService, UserRepository userRepository, RegisteredService registeredService, StoreRepository storeRepository) {
         // Get current user from session
         this.tokenService = tokenService;
         this.userRepository = userRepository;
@@ -45,10 +46,9 @@ public class UserHomePageUI extends VerticalLayout {
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String username = tokenService.extractUsername(token);
 
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
             Notification.show(e.getMessage());
         }
@@ -112,7 +112,7 @@ public class UserHomePageUI extends VerticalLayout {
         }
         for (String storeName : stores) {
             add(new Span(storeName));
-            map1 = this.pp.getPremissions(user.getID(), storeName, user.getID());
+            map1 = this.pp.getPremissions(user.getUsername(), storeName, user.getUsername());
             ; //user.getManagerPermissions();
 
             if (map1 != null) {
@@ -128,7 +128,7 @@ public class UserHomePageUI extends VerticalLayout {
                 // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
                 // work over the store name -> store ID
 
-                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getID());
+                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername());
                 boolean hasAnyPermission = false;
                 HorizontalLayout buttonLayout1 = new HorizontalLayout();
                 HorizontalLayout buttonLayout2 = new HorizontalLayout();

@@ -1,1 +1,1 @@
-[2025-06-01 11:28:46] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
+[2025-06-12 00:41:22] User: Guest | Error: APPOINT_STORE_OWNER_FAILED | Details: Unable to find DomainLayer.Roles.RegisteredUser with id Guest

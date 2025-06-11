@@ -20,7 +20,8 @@ public class Guest {
     @Column(name = "cart_reserved")
     protected Boolean cartReserved;
 
-    @Transient
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "shopping_cart_id")
     protected ShoppingCart shoppingCart;
 
     public Guest() {

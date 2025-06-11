@@ -1,5 +1,6 @@
 package UILayer;
 
+import DomainLayer.*;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
 import com.vaadin.flow.spring.SpringServlet;
@@ -7,14 +8,11 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
-import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 @Configuration
 public class SystemConfiguration {
-
     @Bean
     public DiscountRepository DiscountRepository() {
         return new DiscountRepository();
@@ -57,8 +55,13 @@ public class SystemConfiguration {
 
     @Bean
     public RegisteredService RegisteredService() {
-        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository());
+        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository());
     };
+
+    @Bean
+    public GuestRepository GuestRepository() {
+        return new GuestRepository();
+    }
 
     @Bean
     public CustomerInquiryRepository CustomerInquiryRepository() {
@@ -77,17 +80,17 @@ public class SystemConfiguration {
 
     @Bean
     public OwnerManagerService OwnerManagerService() {
-        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository(), DiscountRepository(), TokenService());
+        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository(), DiscountRepository());
     };
 
     @Bean
     public PaymentService PaymentService() {
-        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository() );
+        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository(), GuestRepository() );
     };
 
     @Bean
     public ShippingService ShippingService() {
-        return new ShippingService(ProxyShipping(), TokenService(), UserRepository());
+        return new ShippingService(ProxyShipping(), TokenService(), UserRepository(), GuestRepository());
     };
 
     @Bean
@@ -98,7 +101,7 @@ public class SystemConfiguration {
 
     @Bean
     public UserService UserService() {
-        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(), DiscountRepository());
+        return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(),GuestRepository(), DiscountRepository());
     };
 
     @Bean
@@ -120,13 +123,6 @@ public class SystemConfiguration {
     public NotificationWebSocketHandler NotificationWebSocketHandler() {
         return new NotificationWebSocketHandler();
     };
-
-    @Bean
-    public ServletRegistrationBean<SpringServlet> vaadinServlet(ApplicationContext context) {
-        // configure other properties as needed
-        SpringServlet servlet = new SpringServlet(context, true);
-        return new ServletRegistrationBean<>(servlet, "/vaadin/*");
-    }
 
 
 }

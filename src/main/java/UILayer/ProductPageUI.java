@@ -4,6 +4,7 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.Store;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.RegisteredService;
@@ -31,7 +32,7 @@ public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public ProductPageUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository, RegisteredService configuredRegisteredService) {
+    public ProductPageUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, RegisteredService configuredRegisteredService) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
         buttonPresenter = new ButtonPresenter(configuredRegisteredService);
     }

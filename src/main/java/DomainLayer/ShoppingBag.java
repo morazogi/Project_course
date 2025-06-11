@@ -1,18 +1,11 @@
 package DomainLayer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import ServiceLayer.EventLogger;
-import io.micrometer.observation.Observation.Event;
 import jakarta.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
-@Table(name = "shopping_bags")
+@Table(name = "shopping_bag")
 public class ShoppingBag {
 
     @Id
@@ -23,11 +16,13 @@ public class ShoppingBag {
     private String storeId;
 
     @ElementCollection
-    @CollectionTable(name = "shopping_bag_products", joinColumns = @JoinColumn(name = "bag_id"))
+    @CollectionTable(name = "products", joinColumns = @JoinColumn(name = "store_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
     private Map<String, Integer> products = new HashMap<>();
-    public ShoppingBag( String storeId) {
+
+
+    public ShoppingBag(String storeId) {
         this.storeId = storeId;
         this.products = new HashMap<String, Integer>();
     }

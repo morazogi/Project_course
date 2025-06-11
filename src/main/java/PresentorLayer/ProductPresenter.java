@@ -3,6 +3,7 @@ package PresentorLayer;
 import DomainLayer.*;
 import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import DomainLayer.Roles.RegisteredUser;
+import InfrastructureLayer.UserRepository;
 import ServiceLayer.EventLogger;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,11 +29,11 @@ public class ProductPresenter {
     private final UserService userService;
     private final ObjectMapper mapper = new ObjectMapper();
     private IToken tokenService;
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
 
     @Autowired
-    public ProductPresenter(UserService userService, IToken tokenService, IUserRepository userRepository) {
+    public ProductPresenter(UserService userService, IToken tokenService, UserRepository userRepository) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.userRepository = userRepository;
@@ -41,14 +42,12 @@ public class ProductPresenter {
     public VerticalLayout getShoppingCart(String token) {
         VerticalLayout shoppingCartList = new VerticalLayout();
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
 
         }
-
         ShoppingCart shoppingCart = user.getShoppingCart();
         shoppingCartList.add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
         double totalPayment = 0;
@@ -278,10 +277,10 @@ public class ProductPresenter {
     public VerticalLayout searchStore(String storeName, String token) {
         VerticalLayout storeList = new VerticalLayout();
         try {
-            List<String> items = userService.searchStoreByName(token, storeName);
+            List<Store> items = userService.searchStoreByName(token, storeName);
             List<Store> stores = items.stream().map(item -> {
                 try {
-                    return mapper.readValue(item, Store.class);
+                    return item;
                 } catch (Exception exception) {
                     return null;
                 }

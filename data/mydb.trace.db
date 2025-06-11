@@ -1,0 +1,138 @@
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONSTANTS" not found; SQL statement:
+SELECT * FROM CONSTANTS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ENUM_VALUES" not found; SQL statement:
+SELECT * FROM ENUM_VALUES [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INDEXES" not found; SQL statement:
+SELECT * FROM INDEXES [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INDEX_COLUMNS" not found; SQL statement:
+SELECT * FROM INDEX_COLUMNS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INFORMATION_SCHEMA_CATALOG_NAME" not found; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA_CATALOG_NAME [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "IN_DOUBT" not found; SQL statement:
+SELECT * FROM IN_DOUBT [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "LOCKS" not found; SQL statement:
+SELECT * FROM LOCKS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUERY_STATISTICS" not found; SQL statement:
+SELECT * FROM QUERY_STATISTICS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RIGHTS" not found; SQL statement:
+SELECT * FROM RIGHTS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ROLES" not found; SQL statement:
+SELECT * FROM ROLES [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSIONS" not found; SQL statement:
+SELECT * FROM SESSIONS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSION_STATE" not found; SQL statement:
+SELECT * FROM SESSION_STATE [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SETTINGS" not found; SQL statement:
+SELECT * FROM SETTINGS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SYNONYMS" not found; SQL statement:
+SELECT * FROM SYNONYMS [42102-214]
+2025-06-12 00:31:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM USERS [42102-214]
+2025-06-12 00:33:08 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM GUESTS STORES [*]PRODUCTS"; SQL statement:
+SELECT * FROM GUESTS STORES PRODUCTS [42000-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONSTANTS" not found; SQL statement:
+SELECT * FROM CONSTANTS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ENUM_VALUES" not found; SQL statement:
+SELECT * FROM ENUM_VALUES [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INDEXES" not found; SQL statement:
+SELECT * FROM INDEXES [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INDEX_COLUMNS" not found; SQL statement:
+SELECT * FROM INDEX_COLUMNS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INFORMATION_SCHEMA_CATALOG_NAME" not found; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA_CATALOG_NAME [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "IN_DOUBT" not found; SQL statement:
+SELECT * FROM IN_DOUBT [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "LOCKS" not found; SQL statement:
+SELECT * FROM LOCKS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUERY_STATISTICS" not found; SQL statement:
+SELECT * FROM QUERY_STATISTICS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RIGHTS" not found; SQL statement:
+SELECT * FROM RIGHTS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ROLES" not found; SQL statement:
+SELECT * FROM ROLES [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSIONS" not found; SQL statement:
+SELECT * FROM SESSIONS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSION_STATE" not found; SQL statement:
+SELECT * FROM SESSION_STATE [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SETTINGS" not found; SQL statement:
+SELECT * FROM SETTINGS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SYNONYMS" not found; SQL statement:
+SELECT * FROM SYNONYMS [42102-214]
+2025-06-12 00:35:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM USERS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CONSTANTS" not found; SQL statement:
+SELECT * FROM CONSTANTS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ENUM_VALUES" not found; SQL statement:
+SELECT * FROM ENUM_VALUES [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INDEXES" not found; SQL statement:
+SELECT * FROM INDEXES [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INDEX_COLUMNS" not found; SQL statement:
+SELECT * FROM INDEX_COLUMNS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "INFORMATION_SCHEMA_CATALOG_NAME" not found; SQL statement:
+SELECT * FROM INFORMATION_SCHEMA_CATALOG_NAME [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "IN_DOUBT" not found; SQL statement:
+SELECT * FROM IN_DOUBT [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "LOCKS" not found; SQL statement:
+SELECT * FROM LOCKS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUERY_STATISTICS" not found; SQL statement:
+SELECT * FROM QUERY_STATISTICS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RIGHTS" not found; SQL statement:
+SELECT * FROM RIGHTS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ROLES" not found; SQL statement:
+SELECT * FROM ROLES [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSIONS" not found; SQL statement:
+SELECT * FROM SESSIONS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SESSION_STATE" not found; SQL statement:
+SELECT * FROM SESSION_STATE [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SETTINGS" not found; SQL statement:
+SELECT * FROM SETTINGS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SYNONYMS" not found; SQL statement:
+SELECT * FROM SYNONYMS [42102-214]
+2025-06-12 00:36:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USERS" not found; SQL statement:
+SELECT * FROM USERS [42102-214]

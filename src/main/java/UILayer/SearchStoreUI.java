@@ -3,6 +3,7 @@ package UILayer;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Store;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +25,7 @@ public class SearchStoreUI extends VerticalLayout {
     private final ProductPresenter productPresenter;
 
     @Autowired
-    public SearchStoreUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public SearchStoreUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 

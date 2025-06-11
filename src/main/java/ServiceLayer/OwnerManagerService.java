@@ -40,7 +40,7 @@ public class OwnerManagerService {
         this.inventoryService = new InventoryManagementMicroservice(storeRepository, productRepository);
         this.purchasePolicyService = new PurchasePolicyMicroservice();
         this.discountPolicyService = new DiscountPolicyMicroservice(storeRepository,userRepository, productRepository, discountRepository);
-        this.storeManagementService = new StoreManagementMicroservice(storeRepository, userRepository, tokenService);
+        this.storeManagementService = new StoreManagementMicroservice(storeRepository, userRepository);
         this.notificationService = new QueryMicroservice(inquiryRepository);
         this.purchaseHistoryService = new PurchaseHistoryMicroservice();
     }
@@ -574,7 +574,7 @@ public class OwnerManagerService {
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
         try {
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_START");
-            Map<String, Boolean> result = storeManagementService.getManagerPermissions(storeId, managerId);
+            Map<String, Boolean> result = storeManagementService.getManagerPermissions(ownerId, storeId, managerId);
             EventLogger.logEvent(ownerId, "GET_MANAGER_PERMISSIONS_SUCCESS");
             return result;
         } catch (Exception e) {

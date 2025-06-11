@@ -4,6 +4,7 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.ManagerPermissions;
 import DomainLayer.Store;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.PermissionsPresenter;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.OwnerManagerService;
@@ -31,7 +32,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
     private final PermissionsPresenter permissionsPresenter;
 
     @Autowired
-    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository, OwnerManagerService ownerManagerService) {
+    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, OwnerManagerService ownerManagerService) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
         permissionsPresenter = new PermissionsPresenter(ownerManagerService, configuredTokenService, configuredUserRepository);
         setPadding(true);

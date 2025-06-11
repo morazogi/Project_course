@@ -104,12 +104,7 @@ public class Store {
     /**
      * Maps store owners to their subordinates using a wrapper embeddable
      */
-    @ElementCollection
-    @CollectionTable(
-            name = "owner_subordinates",
-            joinColumns = @JoinColumn(name = "store_id")
-    )
-    @MapKeyColumn(name = "owner_id")
+    @Transient
     private Map<String, SubordinatesList> ownerToSubordinates = new HashMap<>();
 
     // Helper methods for easier access

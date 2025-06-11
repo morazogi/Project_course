@@ -3,7 +3,7 @@ package UILayer;
 import DomainLayer.IToken;
 import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.User;
+
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import PresentorLayer.UserConnectivityPresenter;

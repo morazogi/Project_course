@@ -1,10 +1,7 @@
 package DomainLayer.DomainServices;
 
 import DomainLayer.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.UUID;
 
 import static DomainLayer.ManagerPermissions.*;
 import InfrastructureLayer.ProductRepository;
@@ -95,16 +92,15 @@ public class InventoryManagementMicroservice {
         if (store == null) {
             return null;
         }
-        String productId = UUID.randomUUID().toString();
-        Product product = new Product(productId, storeId, productName, description, price, quantity, -1, category);
+        Product product = new Product(storeId, productName, description, price, quantity, -1, category);
         productRepository.save(product);
         store.addProduct(product.getId(), product.getQuantity());
         try {
-            storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
+            storeRepository.update(store);
         } catch (Exception e) {
             return e.getMessage();
         }
-        return store.addProduct(product.getId(), product.getQuantity());
+        return product.getId();
     }
 
     /**

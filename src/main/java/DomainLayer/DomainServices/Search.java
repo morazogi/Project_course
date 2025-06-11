@@ -59,7 +59,7 @@ public class Search {
         return mapper.writeValueAsString(matches);
     }
 
-    public String getProductsByStore(String storeId) throws JsonProcessingException {
+    public List<Product> getProductsByStore(String storeId) throws JsonProcessingException {
         Store store = storeRepository.getById(storeId);
         if (store == null) {
             EventLogger.logEvent("SEARCH_BY_STORE", "Store=" + storeId + " NOT_FOUND");
@@ -75,7 +75,7 @@ public class Search {
         }
 
         EventLogger.logEvent("SEARCH_BY_STORE", "Store=" + storeId + " Matches=" + result.size());
-        return mapper.writeValueAsString(result);
+        return result;
     }
 
     public List<String> findProduct(String name, String category) {
