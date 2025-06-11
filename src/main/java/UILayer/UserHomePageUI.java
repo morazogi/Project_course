@@ -4,6 +4,7 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.ManagerPermissions;
 import DomainLayer.Roles.RegisteredUser;
+import ServiceLayer.ErrorLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -27,10 +28,9 @@ public class UserHomePageUI extends VerticalLayout {
         this.userRepository = userRepository;
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getReferenceById(username);
         } catch (Exception e) {
             Notification.show(e.getMessage());
         }

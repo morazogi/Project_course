@@ -2,8 +2,16 @@ package UILayer;
 
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.ProductRepository;
+import DomainLayer.Roles.RegisteredUser;
+
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+
+import ServiceLayer.ErrorLogger;
 import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
@@ -25,11 +33,11 @@ public class ShoppingCartUI extends VerticalLayout {
     private final ProductService productService;
     private final UserService userService;
     private final IToken tokenService;
-    private final IUserRepository userRepository;
+    private final UserRepository userRepository;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public ShoppingCartUI(RegisteredService configuredRegisteredService, ProductService configuredProductService, UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
+    public ShoppingCartUI(RegisteredService configuredRegisteredService, ProductService configuredProductService, UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
         this.registeredService = configuredRegisteredService;
         this.productService = configuredProductService;
         this.userService = configuredUserService;
@@ -54,12 +62,11 @@ public class ShoppingCartUI extends VerticalLayout {
         this.userRepository = configuredUserRepository;
         String token = (String) UI.getCurrent().getSession().getAttribute("user");
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
-
+            ErrorLogger.logError(username,e.toString(),"user "+username+" not found in class purchaseCartUI");
         }
 
         ShoppingCart shoppingCart = user.getShoppingCart();
