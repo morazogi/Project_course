@@ -70,9 +70,9 @@ public class Store {
     @Column(name = "owner_id")
     private List<String> owners = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @MapKeyColumn(name = "manager_id")
-    @JoinColumn(name = "store_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) // <--- Add fetch = FetchType.EAGER
+    @MapKey(name = "id.managerId")
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Map<String, ManagerPermissions> managers = new HashMap<>();
 
     @ElementCollection
@@ -104,32 +104,69 @@ public class Store {
     /**
      * Maps store owners to their subordinates using a wrapper embeddable
      */
-    @Transient
-    private Map<String, SubordinatesList> ownerToSubordinates = new HashMap<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) // <--- Add fetch = FetchType.EAGER
+    @MapKey(name = "id.ownerId")
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    private Map<String, OwnerSubordinateEntry> ownerToSubordinates = new HashMap<>();
+
+
 
     // Helper methods for easier access
+
+    /**
+     * Retrieves the list of subordinates for a given owner within this store.
+     *
+     * @param ownerId The ID of the owner.
+     * @return A list of subordinate IDs, or an empty list if the owner or their subordinates are not found.
+     */
     public List<String> getSubordinatesForOwner(String ownerId) {
-        SubordinatesList list = ownerToSubordinates.get(ownerId);
-        return list != null ? list.getSubordinates() : new ArrayList<>();
-    }
-
-    public void setSubordinatesForOwner(String ownerId, List<String> subordinates) {
-        ownerToSubordinates.put(ownerId, new SubordinatesList(subordinates));
-    }
-
-    public void addSubordinateToOwner(String ownerId, String subordinateId) {
-        ownerToSubordinates.computeIfAbsent(ownerId, k -> new SubordinatesList())
-                .getSubordinates()
-                .add(subordinateId);
+        // Get the OwnerSubordinateEntry object for the given ownerId from the map.
+        OwnerSubordinateEntry entry = ownerToSubordinates.get(ownerId);
+        // If the entry exists, return its list of subordinates; otherwise, return an empty list.
+        return entry != null ? entry.getSubordinates() : new ArrayList<>();
     }
 
     /**
+     * Sets the entire list of subordinates for a specific owner in this store.
+     * This will create or update the OwnerSubordinateEntry for that owner.
+     *
+     * @param ownerId The ID of the owner.
+     * @param subordinates The new list of subordinate IDs to set.
+     */
+    public void setSubordinatesForOwner(String ownerId, List<String> subordinates) {
+        // Create a new OwnerSubordinateEntry with the current store's ID, the ownerId, and the provided subordinates list.
+        // Assuming 'this.id' is the String ID of the current Store instance.
+        OwnerSubordinateEntry newEntry = new OwnerSubordinateEntry(this.id, ownerId, subordinates);
+        // Put (or replace) the entry in the map.
+        ownerToSubordinates.put(ownerId, newEntry);
+    }
+
+    /**
+     * Adds a single subordinate ID to an owner's list of subordinates in this store.
+     * If the owner doesn't have an existing subordinate entry, a new one will be created.
+     *
+     * @param ownerId The ID of the owner.
+     * @param subordinateId The ID of the subordinate to add.
+     */
+    public void addSubordinateToOwner(String ownerId, String subordinateId) {
+        // Use computeIfAbsent to get the existing OwnerSubordinateEntry or create a new one if it doesn't exist.
+        // The lambda provides the logic for creating a new entry: it needs the store's ID, the ownerId, and an initial empty list.
+        ownerToSubordinates.computeIfAbsent(ownerId, k -> new OwnerSubordinateEntry(this.id, k, new ArrayList<>()))
+                // Once we have the OwnerSubordinateEntry, add the new subordinate to its internal list.
+                .addSubordinate(subordinateId);
+    }
+    /**
      * Wrapper entity to handle the list of subordinates
      */
-    @Embeddable
-    class SubordinatesList {
-        @ElementCollection
-        @CollectionTable(name = "subordinate_entries")
+    public class SubordinatesList { // Make public if nested, or separate file
+        @ElementCollection // This creates a join table for the list of strings
+        @CollectionTable(
+                name = "subordinate_ids",
+                joinColumns = {
+                        @JoinColumn(name = "store_id"), // Part of the compound PK from the outer map
+                        @JoinColumn(name = "owner_id")  // Part of the compound PK from the outer map
+                }
+        )
         @OrderColumn(name = "subordinate_index")
         @Column(name = "subordinate_id")
         private List<String> subordinates = new ArrayList<>();
@@ -537,10 +574,22 @@ public class Store {
     }
 
     public void addOwner(String appointerId, String userId) {
+        // 1. Add the new owner to the 'owners' list (this part remains the same).
         owners.add(userId);
+
+        // 2. Map the new owner to their direct superior (this part also remains the same).
         ownersToSuperior.put(userId, appointerId);
-        ownerToSubordinates.put(userId, new SubordinatesList());
-        ownerToSubordinates.get(appointerId).addSubordinate(userId);
+
+        // 3. Initialize the OwnerSubordinateEntry for the new owner.
+        //    Every owner can potentially have subordinates, so we create an entry for them.
+        //    'this.id' refers to the ID of the current Store instance.
+        OwnerSubordinateEntry newOwnerEntry = new OwnerSubordinateEntry(this.id, userId, new ArrayList<>());
+        ownerToSubordinates.put(userId, newOwnerEntry);
+
+        // 4. Add the new owner (userId) as a subordinate to their appointer (appointerId).
+        //    We use computeIfAbsent to ensure the appointer's entry exists before adding a subordinate.
+        ownerToSubordinates.computeIfAbsent(appointerId, k -> new OwnerSubordinateEntry(this.id, k, new ArrayList<>()))
+                .addSubordinate(userId);
     }
 
     public boolean userIsOwner(String userId) {
@@ -683,9 +732,10 @@ public class Store {
     }
 
     public void addManager(String appointerId, String userId, boolean[] permissions) {
-        ManagerPermissions mp = new ManagerPermissions(permissions,userId);
-        managers.put(userId, mp);
-        managersToSuperior.put(userId, appointerId);
+        // Pass the current store's ID (this.id) when creating ManagerPermissions
+        ManagerPermissions mp = new ManagerPermissions(permissions, userId, this.id);
+        managers.put(userId, mp); // This will now correctly persist a composite key (managerId, storeId)
+        ownersToSuperior.put(userId, appointerId);
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {

@@ -1,1 +1,17 @@
 [2025-06-12 00:41:22] User: Guest | Error: APPOINT_STORE_OWNER_FAILED | Details: Unable to find DomainLayer.Roles.RegisteredUser with id Guest
+[2025-06-16 17:37:59] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store does not exist
+[2025-06-16 17:38:08] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store does not exist
+[2025-06-16 18:30:45] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:45] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:50] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:50] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:50] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:50] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:51] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:51] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:51] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:51] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:55] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:30:55] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-16 18:33:52] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
+[2025-06-16 18:33:52] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement

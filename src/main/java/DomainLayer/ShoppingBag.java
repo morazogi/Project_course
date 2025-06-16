@@ -10,13 +10,17 @@ public class ShoppingBag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")    // NEW
     private String id;
 
     @Column(name = "store_id", nullable = false)
     private String storeId;
 
     @ElementCollection
-    @CollectionTable(name = "products", joinColumns = @JoinColumn(name = "store_id"))
+    @CollectionTable(                                   // NEW
+            name        = "shopping_bag_products",      // NEW  dedicated table
+            joinColumns = @JoinColumn(name = "shopping_bag_id")  // NEW  FK → bag PK
+    )
     @MapKeyColumn(name = "product_id")
     @Column(name = "quantity")
     private Map<String, Integer> products = new HashMap<>();

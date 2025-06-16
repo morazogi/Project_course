@@ -193,8 +193,10 @@ public class UserService {
         try {
             return search.getStoreById(storeId);
         } catch (Exception e) {
-            EventLogger.logEvent(tokenService.extractUsername(token), "SEARCH_STORE_FAILED");
-            throw new RuntimeException("Failed to search store");
+            String username = "unknown";
+            try { username = tokenService.extractUsername(token); } catch (Exception ignored) {}
+            EventLogger.logEvent(username, "SEARCH_STORE_FAILED: " + e.getClass().getName() + " - " + e.getMessage());
+            throw new RuntimeException("Failed to search store. Cause: " + e.getMessage(), e); // <-- Wrap it
         }
     }
 

@@ -1,10 +1,11 @@
 package InfrastructureLayer;
-import DomainLayer.IUserRepository;
+import DomainLayer.IUserRepository; // Assuming this is your Spring Data JPA repository interface
 import DomainLayer.Roles.RegisteredUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional; // Import Optional
 
 @Component
 public class UserRepository implements IRepo<RegisteredUser> {
@@ -18,9 +19,12 @@ public class UserRepository implements IRepo<RegisteredUser> {
     public RegisteredUser update(RegisteredUser RegisteredUser) {
         return repo.saveAndFlush(RegisteredUser);
     }
+
     public RegisteredUser getById(String id) {
-        return repo.getReferenceById(id);
+        Optional<RegisteredUser> userOptional = repo.findById(id);
+        return userOptional.orElseThrow(() -> new RuntimeException("RegisteredUser with ID " + id + " not found."));
     }
+
     public List<RegisteredUser> getAll() {
         return repo.findAll();
     }
@@ -36,5 +40,4 @@ public class UserRepository implements IRepo<RegisteredUser> {
     public RegisteredUser getByName(String name) {
         return repo.findByUsernameContaining(name);
     }
-
 }

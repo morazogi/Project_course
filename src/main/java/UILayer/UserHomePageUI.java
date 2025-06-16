@@ -104,15 +104,15 @@ public class UserHomePageUI extends VerticalLayout {
 
         // Permissions and actions
         //if(storeDropdown.getValue() != null)
-        LinkedList<String> stores = new LinkedList<String>();
+        LinkedList<Store> stores = new LinkedList<Store>();
         try {
             stores = userConnectivityPresenter.getUserStoresName(token);
         } catch (Exception e) {
             add(new Span(e.getMessage() + "\npremissions:"));
         }
-        for (String storeName : stores) {
-            add(new Span(storeName));
-            map1 = this.pp.getPremissions(user.getUsername(), storeName, user.getUsername());
+        for (Store storeName : stores) {
+            add(new Span(storeName.getName()));
+            map1 = this.pp.getPremissions(user.getUsername(), storeName.getName(), user.getUsername());
             ; //user.getManagerPermissions();
 
             if (map1 != null) {
@@ -128,7 +128,7 @@ public class UserHomePageUI extends VerticalLayout {
                 // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
                 // work over the store name -> store ID
 
-                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername());
+                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
                 boolean hasAnyPermission = false;
                 HorizontalLayout buttonLayout1 = new HorizontalLayout();
                 HorizontalLayout buttonLayout2 = new HorizontalLayout();

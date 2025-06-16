@@ -124,5 +124,10 @@ public class SystemConfiguration {
         return new NotificationWebSocketHandler();
     };
 
+//    @Bean
+//    public Module hibernateModule() {
+//        // Use Hibernate6Module for Hibernate 6.x. For older versions, it might be Hibernate5Module.
+//        return new Hibernate6Module();
+//    }
 
 }

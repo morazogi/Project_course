@@ -6,6 +6,7 @@ import DomainLayer.Store;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 
 public class OpenStore {
     private IToken Tokener;

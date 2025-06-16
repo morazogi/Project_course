@@ -10,6 +10,7 @@ import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.notification.Notification;
+import jakarta.transaction.Transactional;
 import org.apache.commons.compress.archivers.dump.DumpArchiveEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -76,7 +77,7 @@ public class UserConnectivityPresenter {
             throw new Exception(e.getMessage());
         }
 
-        System.out.println(mapper.writeValueAsString(user));
+        //System.out.println(mapper.writeValueAsString(user));
     }
 
     public String addNewProductToStore(String token, String storeName, String productName, String description, String stringPrice, String stringQuantity, String category) {
@@ -124,22 +125,42 @@ public class UserConnectivityPresenter {
         return userService.login(username, password);
     }
 
-    public LinkedList<String> getUserStoresName(String token) throws Exception {
-        String username = tokenService.extractUsername(token);
+    public LinkedList<Store> getUserStoresName(String token) throws Exception {
+        String username = "";
+        try {
+            username = tokenService.extractUsername(token);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage() + "1");
+        }
         RegisteredUser user = null;
         try {
             user = userRepository.getById(username);
         } catch (Exception e) {
             Notification.show(e.getMessage());
         }
-        LinkedList<String> storeNames = new LinkedList<String>();
+        LinkedList<Store> storeNames = new LinkedList<Store>();
         List<String> managedStores = user.getManagedStores();
+
+        // ADD THIS DEBUGGING LINE
+        System.out.println("DEBUG: User '" + username + "' has managedStores: " + managedStores);
+
         for (String managedStore : managedStores) {
-            String jsonStore = userService.getStoreById(token, managedStore);
+            // ADD THIS DEBUGGING LINE
+            System.out.println("DEBUG: Attempting to retrieve details for storeId: " + managedStore);
+            String jsonStore = null;
+            try {
+                jsonStore = userService.getStoreById(token, managedStore);
+            } catch (Exception e) {
+                System.err.println("ERROR retrieving store " + managedStore + ": " + e.getMessage()); // Log specific error
+                // You might choose to skip this store and continue the loop,
+                // or re-throw after logging if you want to stop on the first error.
+                // For now, let's re-throw to keep current behavior for the user.
+                throw e;
+            }
             Store store = null;
             try {
                 store = mapper.readValue(jsonStore, Store.class);
-                storeNames.add(store.getName());
+                storeNames.add(store);
             } catch (Exception e) {
                 throw new Exception(e.getMessage());
             }
@@ -177,4 +198,5 @@ public class UserConnectivityPresenter {
         }
         return "Did not managed to add discount";
     }
+
 }

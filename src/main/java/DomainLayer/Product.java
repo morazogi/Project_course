@@ -9,7 +9,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "product_id", nullable = false, updatable = false)
     private String id;
 
     // todo should there be a one to many annotation here?
