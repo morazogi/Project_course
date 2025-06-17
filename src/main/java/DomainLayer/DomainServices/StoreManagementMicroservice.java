@@ -311,11 +311,11 @@ public class StoreManagementMicroservice {
      */
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
         Store store = getStoreById(storeId);
-        if (store.checkIfSuperior(ownerId,managerId)&&store.userIsManager(managerId)){
+        // Allow if owner == manager
+        if ((store.checkIfSuperior(ownerId, managerId) || ownerId.equals(managerId)) && store.userIsManager(managerId)) {
             return store.getPremissions(managerId);
         }
-        Map<String, Boolean> fakeAnswer = new HashMap<>();
-        return fakeAnswer;
+        return new HashMap<>();
     }
     public boolean relinquishManagement(String managerID, String storeId) {
         Store store = getStoreById(storeId);

@@ -19,7 +19,7 @@ public class StoreRepository implements IRepo<Store>{
         return repo.saveAndFlush(store);
     }
     public Store getById(String id) {
-        return repo.getReferenceById(id);
+        return repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Store not found"));
     }
     public List<Store> getAll() {
         return repo.findAll();

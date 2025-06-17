@@ -1,18 +1,20 @@
-package DomainLayer; // Adjust package as per your structure
+package DomainLayer;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import DomainLayer.ManagerPermissionsPK; // Import your new PK class
-import java.util.Map;
+
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-
-
-
 
 @Entity
 @Table(name = "manager_permissions")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ManagerPermissions {
-    // ... (public static final String PERM_... constants)
+
     public static final String PERM_MANAGE_INVENTORY = "PERM_MANAGE_INVENTORY";
     public static final String PERM_MANAGE_STAFF = "PERM_MANAGE_STAFF";
     public static final String PERM_VIEW_STORE = "PERM_VIEW_STORE";
@@ -25,61 +27,57 @@ public class ManagerPermissions {
     private ManagerPermissionsPK id;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "manager_permission_entries",
-            // The join columns here refer to the columns in 'manager_permission_entries'
-            // that form the foreign key back to 'manager_permissions'.
-            // The 'referencedColumnName' implicitly points to the columns in the
-            // owning entity's primary key (derived from ManagerPermissionsPK).
+    @CollectionTable(
+            name = "manager_permission_entries",
             joinColumns = {
-                    @JoinColumn(name = "manager_id", referencedColumnName = "manager_id"),
-                    @JoinColumn(name = "store_id", referencedColumnName = "store_id")
-            })
+                    @JoinColumn(name = "store_id", referencedColumnName = "store_id"),
+                    @JoinColumn(name = "manager_id", referencedColumnName = "manager_id")
+            }
+    )
     @MapKeyColumn(name = "permission_name")
     @Column(name = "permission_value")
-    private Map<String, Boolean> permissions;
+    private Map<String, Boolean> permissions = new HashMap<>();
 
-    // Default constructor needed by JPA and potentially Jackson
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", insertable = false, updatable = false)
+    private Store store;
+
     public ManagerPermissions() {
-        this.permissions = new HashMap<>();
-        this.permissions.put(PERM_MANAGE_INVENTORY, false);
-        this.permissions.put(PERM_MANAGE_STAFF, false);
-        this.permissions.put(PERM_VIEW_STORE, false);
-        this.permissions.put(PERM_UPDATE_POLICY, false);
-        this.permissions.put(PERM_ADD_PRODUCT, false);
-        this.permissions.put(PERM_REMOVE_PRODUCT, false);
-        this.permissions.put(PERM_UPDATE_PRODUCT, false);
+        initializeDefaultPermissions();
     }
 
-    // Custom constructor: NOW ACCEPTS storeId
-    public ManagerPermissions(boolean[] perm, String managerId, String storeId) {
-        this(); // Call default constructor to initialize permissions map
-        this.id = new ManagerPermissionsPK(managerId, storeId); // Initialize the composite ID
-        setPermissionsFromAarray(perm);
+    public ManagerPermissions(boolean[] permArray, String managerId, String storeId) {
+        this.id = new ManagerPermissionsPK(managerId, storeId);
+        initializeDefaultPermissions();
+        setPermissionsFromAarray(permArray);
     }
 
-    // --- Getters and Setters ---
+    private void initializeDefaultPermissions() {
+        permissions.put(PERM_MANAGE_INVENTORY, false);
+        permissions.put(PERM_MANAGE_STAFF, false);
+        permissions.put(PERM_VIEW_STORE, false);
+        permissions.put(PERM_UPDATE_POLICY, false);
+        permissions.put(PERM_ADD_PRODUCT, false);
+        permissions.put(PERM_REMOVE_PRODUCT, false);
+        permissions.put(PERM_UPDATE_PRODUCT, false);
+    }
 
-    // Getter for the composite ID
     public ManagerPermissionsPK getId() {
         return id;
     }
 
-    // Setter for the composite ID (often not used externally, but JPA needs it)
     public void setId(ManagerPermissionsPK id) {
         this.id = id;
     }
 
-    // Convenience getter for managerId (access through the composite ID)
     public String getManagerId() {
-        return this.id != null ? this.id.getManagerId() : null;
+        return id != null ? id.getManagerId() : null;
     }
 
-    // Convenience getter for storeId (access through the composite ID)
     public String getStoreId() {
-        return this.id != null ? this.id.getStoreId() : null;
+        return id != null ? id.getStoreId() : null;
     }
 
-    // (Other getters/setters for permissions map remain the same)
     public Map<String, Boolean> getPermissions() {
         return permissions;
     }
@@ -96,12 +94,9 @@ public class ManagerPermissions {
         this.permissions.put(permission, value);
     }
 
-    // Extra: allow setting via boolean array if needed
     public void setPermissionsFromAarray(boolean[] perm) {
-        // Ensure perm array is long enough to avoid IndexOutOfBoundsException
         if (perm == null || perm.length < 7) {
-            // Log a warning or throw an IllegalArgumentException
-            System.err.println("Warning: Permissions array is too short or null.");
+            System.err.println("Permissions array is null or too short.");
             return;
         }
         this.permissions.put(PERM_MANAGE_INVENTORY, perm[0]);
@@ -113,17 +108,16 @@ public class ManagerPermissions {
         this.permissions.put(PERM_UPDATE_PRODUCT, perm[6]);
     }
 
-    // Implement equals and hashCode for the entity, using the ID
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof ManagerPermissions)) return false;
         ManagerPermissions that = (ManagerPermissions) o;
-        return Objects.equals(id, that.id); // Only compare IDs for entity equality
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id); // Hash based on ID
+        return Objects.hash(id);
     }
 }

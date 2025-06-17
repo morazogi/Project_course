@@ -15,3 +15,13 @@
 [2025-06-16 18:30:55] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
 [2025-06-16 18:33:52] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: could not prepare statement
 [2025-06-16 18:33:52] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: could not prepare statement
+[2025-06-17 15:20:37] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:20:37] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:22:37] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:22:37] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:22:43] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:22:43] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:22:43] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:28:47] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:28:47] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
+[2025-06-17 15:28:47] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found

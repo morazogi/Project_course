@@ -383,6 +383,8 @@ public class OwnerManagerService {
             EventLogger.logEvent(appointerId, "APPOINT_STORE_MANAGER_START");
 
             boolean result = storeManagementService.appointStoreManager(appointerId, storeId, userId, permissions);
+            Map<String, Boolean> perms = getManagerPermissions(userId, storeId, userId);
+            System.out.println("After appointment, perms = " + perms);
             EventLogger.logEvent(appointerId, "APPOINT_STORE_MANAGER_SUCCESS");
             return result;
         } catch (Exception e) {

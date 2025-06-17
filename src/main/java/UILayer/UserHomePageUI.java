@@ -112,18 +112,18 @@ public class UserHomePageUI extends VerticalLayout {
         }
         for (Store storeName : stores) {
             add(new Span(storeName.getName()));
-            map1 = this.pp.getPremissions(user.getUsername(), storeName.getName(), user.getUsername());
+            map1 = this.pp.getPremissions(user.getUsername(), storeName.getId(), user.getUsername());
             ; //user.getManagerPermissions();
 
             if (map1 != null) {
                 boolean[] permsArray = {
-                        map1.get("PERM_MANAGE_INVENTORY"),
-                        map1.get("PERM_MANAGE_STAFF"),
-                        map1.get("PERM_VIEW_STORE"),
-                        map1.get("PERM_UPDATE_POLICY"),
-                        map1.get("PERM_ADD_PRODUCT"),
-                        map1.get("PERM_REMOVE_PRODUCT"),
-                        map1.get("PERM_UPDATE_PRODUCT")};
+                        Boolean.TRUE.equals(map1.get("PERM_MANAGE_INVENTORY")),
+                                Boolean.TRUE.equals(map1.get("PERM_MANAGE_STAFF")),
+                                        Boolean.TRUE.equals(map1.get("PERM_VIEW_STORE")),
+                                                Boolean.TRUE.equals(map1.get("PERM_UPDATE_POLICY")),
+                                                        Boolean.TRUE.equals(map1.get("PERM_ADD_PRODUCT")),
+                                                                Boolean.TRUE.equals(map1.get("PERM_REMOVE_PRODUCT")),
+                                                                        Boolean.TRUE.equals(map1.get("PERM_UPDATE_PRODUCT"))};
 
                 // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
                 // work over the store name -> store ID

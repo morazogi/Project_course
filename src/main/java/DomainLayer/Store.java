@@ -1,11 +1,14 @@
 package DomainLayer;
 
 import ServiceLayer.EventLogger;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.*;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "stores")
 public class Store {
@@ -70,9 +73,8 @@ public class Store {
     @Column(name = "owner_id")
     private List<String> owners = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) // <--- Add fetch = FetchType.EAGER
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @MapKey(name = "id.managerId")
-    @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Map<String, ManagerPermissions> managers = new HashMap<>();
 
     @ElementCollection
@@ -735,7 +737,7 @@ public class Store {
         // Pass the current store's ID (this.id) when creating ManagerPermissions
         ManagerPermissions mp = new ManagerPermissions(permissions, userId, this.id);
         managers.put(userId, mp); // This will now correctly persist a composite key (managerId, storeId)
-        ownersToSuperior.put(userId, appointerId);
+        managersToSuperior.put(userId, appointerId);
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {

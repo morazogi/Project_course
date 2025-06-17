@@ -8,6 +8,7 @@ import InfrastructureLayer.StoreRepository;
 import ServiceLayer.EventLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.Hibernate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,6 +115,7 @@ public class Search {
     }
     public String getStoreById(String storeId) throws JsonProcessingException {
         Store store = storeRepository.getById(storeId);
+        Hibernate.initialize(store);
         if (store == null) {
             EventLogger.logEvent("SEARCH_STORE_BY_ID", "Store=" + storeId + " NOT_FOUND");
             throw new IllegalArgumentException("Store not found");
