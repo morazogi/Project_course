@@ -1,7 +1,9 @@
 package PresentorLayer;
 
 import DomainLayer.IToken;
+import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
+import DomainLayer.ShoppingBag;
 import DomainLayer.Store;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
@@ -197,6 +199,15 @@ public class UserConnectivityPresenter {
             return "Discount successfully added";
         }
         return "Did not managed to add discount";
+    }
+
+
+    public double calculateCartPrice(String token) {
+        return userService.calculateCartPrice(token);
+    }
+
+    public Map<String,Integer> getCartProducts(String token) {
+        return userService.getCartProducts(token);
     }
 
 }

@@ -310,6 +310,7 @@ public class UserCart {
                     throw new IllegalArgumentException("Product not found");
                 }
                 store.sellProduct(productId, quantity);
+                storeRepository.update(store);
                 Order order = new Order(user.getShoppingCart().toString(), storeId, username, new Date());
                 orderRepository.save(order);
             }

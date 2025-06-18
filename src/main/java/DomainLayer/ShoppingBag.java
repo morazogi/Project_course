@@ -36,6 +36,8 @@ public class ShoppingBag {
     }
     public String getStoreId() {return storeId;}
     public Map<String, Integer> getProducts() { return products; }
+
+
     public void addProduct(String productId , Integer quantity) {
         if (products.containsKey(productId)) {
             products.put(productId, Integer.valueOf(products.get(productId) + quantity));
