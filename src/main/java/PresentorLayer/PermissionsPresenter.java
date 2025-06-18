@@ -7,6 +7,7 @@ import ServiceLayer.OwnerManagerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.notification.Notification;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PermissionsPresenter {
@@ -39,7 +40,9 @@ public class PermissionsPresenter {
         try {
             user = userRepository.getById(username);
         } catch (Exception e) {
-            Notification.show(e.getMessage());
+        }
+        if (user == null) {
+            return new HashMap<String, Boolean>();
         }
         return this.manager.getManagerPermissions(user.getUsername(), storeId, user.getUsername());
     }

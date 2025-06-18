@@ -43,7 +43,7 @@ public class ProductPresenter {
 
     public VerticalLayout getShoppingCart(String token) {
         VerticalLayout shoppingCartList = new VerticalLayout();
-        List<ShoppingBag> shoppingBags = userGetShoppingBag(token);
+        List<ShoppingBag> shoppingBags = userService.getShoppingCart(token);
         shoppingCartList.add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
         double totalPayment = 0;
         for (ShoppingBag shoppingBag: shoppingBags) {
@@ -60,7 +60,7 @@ public class ProductPresenter {
             for (Map.Entry<String, Integer> product : shoppingBag.getProducts().entrySet()) {
                 productList.add(new Span(userService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" + userService.getProductById(product.getKey()).get().getPrice()));
             }
-            shoppingCartList.add(productList, new Span("total payment :" + userService.reserveCart(token)));
+            shoppingCartList.add(productList, new Span("total payment :" + userService.calculateCartPrice(token)));
         }
 
         return shoppingCartList;
@@ -103,10 +103,13 @@ public class ProductPresenter {
     public VerticalLayout searchProductByName(String token, String productName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating) {
         VerticalLayout productList = new VerticalLayout();
         try {
-            List<String> items = userService.findProduct(token, productName, "");
+            List<Product> items = userService.getAllProducts(token);
             List<Product> products = items.stream().map(item -> {
                         try {
-                            return mapper.readValue(item, Product.class);
+                            if (item.getName().equals(productName)) {
+                                return item;
+                            }
+                            return null;
                         } catch (Exception exception) {
                             return null;
                         }
@@ -144,10 +147,13 @@ public class ProductPresenter {
     public VerticalLayout searchProductByCategory(String token, String categoryName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating) {
         VerticalLayout productList = new VerticalLayout();
         try {
-            List<String> items = userService.findProduct(token, "", categoryName);
+            List<Product> items = userService.getAllProducts(token);
             List<Product> products = items.stream().map(item -> {
                         try {
-                            return mapper.readValue(item, Product.class);
+                            if (item.getCategory().equals(categoryName)) {
+                                return item;
+                            }
+                            return null;
                         } catch (Exception exception) {
                             return null;
                         }

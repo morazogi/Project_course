@@ -64,7 +64,7 @@ public class PurchaseCartUI2 extends VerticalLayout {
 
                 // 2. show total price
                 double price = userConnectivityPresenter.calculateCartPrice(token);
-                priceSpan.setText("total price: " + price);
+                priceSpan.setText("total price after discounts: " + price);
 
             } catch (Exception ex) {
                 error.setText(ex.getMessage());

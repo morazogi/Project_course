@@ -257,4 +257,25 @@ public class UserService {
         }
         return result;
     }
+
+    @Transactional
+    public List<ShoppingBag> getShoppingCart(String token) {
+        if (token == null) throw new IllegalArgumentException("Token cannot be null");
+        String username = tokenService.extractUsername(token);
+        Guest user;
+        boolean registered = !username.contains("Guest");
+        if (registered) user = userRepository.getById(username);
+        else             user = guestRepository.getById(username);
+
+        List<ShoppingBag> shoppingBags = new ArrayList<ShoppingBag>();
+        for (ShoppingBag bag : user.getShoppingCart().getShoppingBags()) {
+            ShoppingBag shoppingBag = new ShoppingBag(bag.getStoreId());
+            for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
+                shoppingBag.addProduct(e.getKey(), productRepository.getById(e.getKey()).getQuantity());
+            }
+            shoppingBags.add(shoppingBag);
+        }
+        return shoppingBags;
+    }
+
 }
