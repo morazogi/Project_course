@@ -2,7 +2,9 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.AuctionManagerPresenter;
+import PresentorLayer.ButtonPresenter;
 import PresentorLayer.Offer;
+import ServiceLayer.RegisteredService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -20,10 +22,12 @@ public class AuctionManagerUI extends VerticalLayout {
     private final AuctionManagerPresenter presenter;
     private final Span statusMessage = new Span();
     private final VerticalLayout offerDisplayLayout = new VerticalLayout();
+    private final ButtonPresenter buttonPresenter;
 
     @Autowired
-    public AuctionManagerUI(IToken tokenService) {
+    public AuctionManagerUI(IToken tokenService, RegisteredService registeredService) {
         this.presenter = new AuctionManagerPresenter();
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 

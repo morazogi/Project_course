@@ -5,9 +5,11 @@ import DomainLayer.IUserRepository;
 import DomainLayer.ManagerPermissions;
 import DomainLayer.Store;
 import InfrastructureLayer.UserRepository;
+import PresentorLayer.ButtonPresenter;
 import PresentorLayer.PermissionsPresenter;
 import PresentorLayer.ProductPresenter;
 import ServiceLayer.OwnerManagerService;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -30,11 +32,13 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
 
     private final ProductPresenter productPresenter;
     private final PermissionsPresenter permissionsPresenter;
+    private final ButtonPresenter buttonPresenter;
 
     @Autowired
-    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, OwnerManagerService ownerManagerService) {
+    public StorePageUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, OwnerManagerService ownerManagerService, RegisteredService registeredService) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
         permissionsPresenter = new PermissionsPresenter(ownerManagerService, configuredTokenService, configuredUserRepository);
+        buttonPresenter = new ButtonPresenter(registeredService, configuredTokenService);
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }
@@ -48,7 +52,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
             add(new Span("No fitting store"));
         }
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        add(productPresenter.getStorePage(token, (String) UI.getCurrent().getSession().getAttribute("storeId")));
+        add(buttonPresenter.homePageButton(token), productPresenter.getStorePage(token, (String) UI.getCurrent().getSession().getAttribute("storeId")));
 
         Map<String, Boolean> perms = permissionsPresenter.getPremissions(token, (String) UI.getCurrent().getSession().getAttribute("storeId"));
         HorizontalLayout buttonLayout1 = new HorizontalLayout();

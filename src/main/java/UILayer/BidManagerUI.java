@@ -2,6 +2,8 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.BidManagerPresenter;
+import PresentorLayer.ButtonPresenter;
+import ServiceLayer.RegisteredService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -21,10 +23,12 @@ public class BidManagerUI extends VerticalLayout {
 
     private final BidManagerPresenter bidManagerPresenter;
     private final List<Span> offerLines = new ArrayList<>();
+    private final ButtonPresenter buttonPresenter;
 
     @Autowired
-    public BidManagerUI(IToken tokenService) { //BidService bidService,
+    public BidManagerUI(IToken tokenService, RegisteredService registeredService) { //BidService bidService,
         this.bidManagerPresenter = new BidManagerPresenter(); //bidService,
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 

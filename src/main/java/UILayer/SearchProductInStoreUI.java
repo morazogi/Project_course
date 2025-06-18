@@ -4,7 +4,9 @@ import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import InfrastructureLayer.UserRepository;
+import PresentorLayer.ButtonPresenter;
 import PresentorLayer.ProductPresenter;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
@@ -28,9 +30,13 @@ import java.util.Objects;
 public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnterObserver {
 
     private final ProductPresenter productPresenter;
+    private final ButtonPresenter buttonPresenter;
+
     @Autowired
-    public SearchProductInStoreUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
+    public SearchProductInStoreUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, RegisteredService registeredService) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
+        this.buttonPresenter = new ButtonPresenter(registeredService, configuredTokenService);
+
     }
 
     @Override
@@ -63,7 +69,7 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
         });
 
 
-        add(new H1("search products"), new HorizontalLayout(lowestPrice, highestPrice, lowestProductRating, highestProductRating, category), new HorizontalLayout(productName, searchProduct), new HorizontalLayout(categoryName, searchProductByCategory));
+        add(new HorizontalLayout(new H1("search products"), buttonPresenter.homePageButton(token)), new HorizontalLayout(lowestPrice, highestPrice, lowestProductRating, highestProductRating, category), new HorizontalLayout(productName, searchProduct), new HorizontalLayout(categoryName, searchProductByCategory));
 
     }
 

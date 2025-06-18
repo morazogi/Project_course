@@ -1,6 +1,8 @@
 package PresentorLayer;
 
+import DomainLayer.IToken;
 import ServiceLayer.RegisteredService;
+import ServiceLayer.TokenService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
@@ -8,8 +10,10 @@ import com.vaadin.flow.component.notification.Notification;
 public class ButtonPresenter {
 
     private final RegisteredService registeredService;
-    public ButtonPresenter(RegisteredService registeredService) {
+    private final IToken tokenService;
+    public ButtonPresenter(RegisteredService registeredService, IToken tokenService) {
         this.registeredService = registeredService;
+        this.tokenService = tokenService;
     }
 
     public Button signOutButton(String token) {
@@ -32,9 +36,13 @@ public class ButtonPresenter {
         return login;
     }
 
-    public Button homePageButton() {
+    public Button homePageButton(String token) {
         Button homePage = new Button("Home page", e -> {
-            UI.getCurrent().navigate("/home");
+            if (tokenService.extractUsername(token).equals("Guest")) {
+                UI.getCurrent().navigate("/home");
+            } else {
+                UI.getCurrent().navigate("/userhomepage");
+            }
         });
         return homePage;
     }

@@ -28,7 +28,7 @@ public class EditStorePageUI extends VerticalLayout {
 
     @Autowired
     public EditStorePageUI(UserService userService, RegisteredService registeredService, OwnerManagerService ownerManagerService, IToken tokenService, UserRepository userRepository) {
-        this.buttonPresenter = new ButtonPresenter(registeredService);
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
         this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
         // Store Selection and Sign-out Section
         ComboBox<String> storeDropdown = new ComboBox<>("Store");
