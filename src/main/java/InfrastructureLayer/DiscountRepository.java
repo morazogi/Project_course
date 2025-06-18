@@ -19,7 +19,7 @@ public class DiscountRepository implements IRepo<Discount> {
         return repo.saveAndFlush(discount);
     }
     public Discount getById(String id) {
-        return repo.getReferenceById(id);
+        return repo.findById(id).orElse(null);
     }
     public List<Discount> getAll() {
         return repo.findAll();

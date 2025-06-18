@@ -8,6 +8,7 @@ import DomainLayer.Store;
 import ServiceLayer.EventLogger;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 
 @Entity
 @Table(name = "guests")

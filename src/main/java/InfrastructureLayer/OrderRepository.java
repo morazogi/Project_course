@@ -16,7 +16,7 @@ public class OrderRepository implements IRepo<Order> {
         return repo.saveAndFlush(order);
     }
     public Order getById(String orderID) {
-        return repo.getReferenceById(orderID);
+        return repo.findById(orderID).orElse(null);
     }
     public List<Order> getAll() {
         return repo.findAll();

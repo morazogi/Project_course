@@ -47,6 +47,7 @@ public class Store {
     @CollectionTable(name = "store_products", joinColumns = @JoinColumn(name = "store_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "products_quantity")
+    @org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.FALSE)
     private Map<String, Integer> products = new HashMap<>();
 
     //does reserved products should be in the database? todo

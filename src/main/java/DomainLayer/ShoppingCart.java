@@ -1,5 +1,7 @@
 package DomainLayer;
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class ShoppingCart {
     @JoinColumn(name = "username", nullable = false)
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")
     private List<ShoppingBag> shoppingBags = new ArrayList<ShoppingBag>();
 

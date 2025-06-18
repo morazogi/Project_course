@@ -19,7 +19,7 @@ public class ProductRepository implements IRepo<Product> {
         return repo.save(product);
     }
     public Product getById(String productID) {
-        return repo.getReferenceById(productID);
+        return repo.findById(productID).orElse(null);
     }
     public List<Product> getAll() {
         return repo.findAll();

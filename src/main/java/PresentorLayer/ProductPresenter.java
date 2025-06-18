@@ -18,6 +18,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.StoreRepository;
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -41,17 +43,10 @@ public class ProductPresenter {
 
     public VerticalLayout getShoppingCart(String token) {
         VerticalLayout shoppingCartList = new VerticalLayout();
-        String username = tokenService.extractUsername(token);
-        RegisteredUser user = null;
-        try {
-            user = userRepository.getById(username);
-        } catch (Exception e) {
-
-        }
-        ShoppingCart shoppingCart = user.getShoppingCart();
+        List<ShoppingBag> shoppingBags = userGetShoppingBag(token);
         shoppingCartList.add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
         double totalPayment = 0;
-        for (ShoppingBag shoppingBag: shoppingCart.getShoppingBags()) {
+        for (ShoppingBag shoppingBag: shoppingBags) {
             VerticalLayout productList = new VerticalLayout();
             try {
                 String storeId = shoppingBag.getStoreId();
@@ -332,6 +327,24 @@ public class ProductPresenter {
             return new VerticalLayout(new Span("store does not exist"));
         }
         return storePage;
+    }
+
+    @Transactional
+    public List<ShoppingBag> userGetShoppingBag(String token) {
+        String username = tokenService.extractUsername(token);
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+
+        }
+        ShoppingCart shoppingCart = user.getShoppingCart();
+        List<ShoppingBag> shoppingBag = shoppingCart.getShoppingBags();
+        shoppingBag.size();
+        for(ShoppingBag shoppingBagd : shoppingBag) {
+            shoppingBagd.getProducts().size();
+        }
+        return shoppingBag;
     }
 
     //public boolean addProduct(String name, String description,double price, int quantity, double rating, String category, String storeName){
