@@ -2,14 +2,17 @@ package ServiceLayer;
 
 import DomainLayer.IProductRepository;
 import DomainLayer.Product;
+import InfrastructureLayer.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
 public class ProductService {
-    private final IProductRepository productRepo;
+    private final ProductRepository productRepo;
 
-    public ProductService(IProductRepository productRepo){
+    @Autowired
+    public ProductService(ProductRepository productRepo){
 
         this.productRepo = productRepo;
     }

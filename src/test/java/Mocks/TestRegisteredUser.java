@@ -22,11 +22,10 @@ public class TestRegisteredUser extends RegisteredUser {
     private String testId;
 
     public TestRegisteredUser(String id) {
-        super("TestUser");
+        super("TestUser","password");
         this.testId = id;
     }
 
-    @Override
     public String getID() {
         return testId;
     }

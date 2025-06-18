@@ -95,6 +95,6 @@ class GuestTest {
     @Test
     void testGetID_UniquePerInstance() {
         Guest other = new Guest();
-        assertNotEquals(guest.getID(), other.getID(), "Each Guest should have a unique ID");
+        assertNotEquals(guest.getUsername(), other.getUsername(), "Each Guest should have a unique ID"); // changed from id to user name just now 11.06
     }
 }

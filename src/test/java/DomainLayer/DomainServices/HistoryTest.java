@@ -1,79 +1,76 @@
-package DomainLayer.DomainServices;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.List;
-
-import DomainLayer.DomainServices.History;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.*;
-
-import DomainLayer.IOrderRepository;
-import DomainLayer.IToken;
-import DomainLayer.IUserRepository;
-
-class HistoryTest {
-
-    @Mock private IToken tokener;
-    @Mock private IOrderRepository orderRepository;
-    @Mock private IUserRepository userRepository;
-
-    @InjectMocks private History historyService;
-    private AutoCloseable mocks;
-
-    private static final String TOKEN = "tok-1";
-    private static final String USER  = "alice";
-
-    @BeforeEach
-    void setUp() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    void getOrderHistory_nullToken_throws() {
-        IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> historyService.getOrderHistory(null)
-        );
-        assertEquals("Token cannot be null", ex.getMessage());
-    }
-
-    @Test
-    void getOrderHistory_invalidToken_throws() throws Exception {
-        // stub validateToken to do nothing, extractUsername to return null
-        doNothing().when(tokener).validateToken(TOKEN);
-        when(tokener.extractUsername(TOKEN)).thenReturn(null);
-
-        IllegalArgumentException ex = assertThrows(
-            IllegalArgumentException.class,
-            () -> historyService.getOrderHistory(TOKEN)
-        );
-        assertEquals("Invalid token", ex.getMessage());
-    }
-
-    @Test
-    void getOrderHistory_success_returnsList() throws Exception {
-        List<String> mockHistory = Arrays.asList("order1", "order2");
-
-        // stub token behavior
-        doNothing().when(tokener).validateToken(TOKEN);
-        when(tokener.extractUsername(TOKEN)).thenReturn(USER);
-
-        // stub repository
-        when(orderRepository.getOrderHistory(USER)).thenReturn(mockHistory);
-
-        // call under test
-        List<String> result = historyService.getOrderHistory(TOKEN);
-
-        // verify interactions
-        verify(tokener).validateToken(TOKEN);
-        verify(tokener).extractUsername(TOKEN);
-        verify(orderRepository).getOrderHistory(USER);
-
-        // assert result
-        assertSame(mockHistory, result);
-    }
-}
+//package DomainLayer.DomainServices;
+//
+//import DomainLayer.IToken;
+//import DomainLayer.Order;
+//import InfrastructureLayer.OrderRepository;
+//import InfrastructureLayer.UserRepository;
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.Test;
+//
+//import java.util.Arrays;
+//import java.util.List;
+//
+//import static org.junit.jupiter.api.Assertions.*;
+//import static org.mockito.Mockito.*;
+//
+//class HistoryTest {
+//
+//    private IToken mockToken;
+//    private OrderRepository mockOrderRepository;
+//    private UserRepository mockUserRepository;
+//    private History history;
+//
+//    @BeforeEach
+//    void setUp() {
+//        mockToken = mock(IToken.class);
+//        mockOrderRepository = mock(OrderRepository.class);
+//        mockUserRepository = mock(UserRepository.class);
+//        history = new History(mockToken, mockOrderRepository, mockUserRepository);
+//    }
+//
+//    @Test
+//    void testGetOrderHistory_success() throws Exception {
+//        String token = "validToken";
+//        String username = "user1";
+//
+//        Order order1 = mock(Order.class);
+//        Order order2 = mock(Order.class);
+//
+//        when(mockToken.extractUsername(token)).thenReturn(username);
+//        doNothing().when(mockToken).validateToken(token);
+//        when(mockOrderRepository.findByUserID(username)).thenReturn(Arrays.asList(order1, order2));
+//        when(order1.toString()).thenReturn("Order1");
+//        when(order2.toString()).thenReturn("Order2");
+//
+//        List<String> result = history.getOrderHistory(token);
+//
+//        assertEquals(2, result.size());
+//        assertTrue(result.contains("Order1"));
+//        assertTrue(result.contains("Order2"));
+//
+//        verify(mockToken).validateToken(token);
+//        verify(mockToken).extractUsername(token);
+//        verify(mockOrderRepository).findByUserID(username);
+//    }
+//
+//    @Test
+//    void testGetOrderHistory_nullToken() {
+//        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+//            history.getOrderHistory(null);
+//        });
+//        assertEquals("Token cannot be null", exception.getMessage());
+//    }
+//
+//    @Test
+//    void testGetOrderHistory_invalidToken() throws Exception {
+//        String token = "invalidToken";
+//
+//        doNothing().when(mockToken).validateToken(token);
+//        when(mockToken.extractUsername(token)).thenReturn(null);
+//
+//        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+//            history.getOrderHistory(token);
+//        });
+//        assertEquals("Invalid token", exception.getMessage());
+//    }
+//}

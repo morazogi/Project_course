@@ -55,7 +55,7 @@ public class TokenService implements IToken {
     }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+       return extractClaim(token, Claims::getSubject);
     }
 
     public Date extractExpiration(String token) {
@@ -63,6 +63,7 @@ public class TokenService implements IToken {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }

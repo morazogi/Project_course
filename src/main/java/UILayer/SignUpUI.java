@@ -1,6 +1,12 @@
 package UILayer;
 
+import DomainLayer.IToken;
 import DomainLayer.Roles.RegisteredUser;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import PresentorLayer.UserConnectivityPresenter;
+import ServiceLayer.OwnerManagerService;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -16,18 +22,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/signup")
 public class SignUpUI extends VerticalLayout {
 
-    private final UserService userService;
+    private final UserConnectivityPresenter userConnectivityPresenter;
 
     @Autowired
-    public SignUpUI(UserService configuredUserService) {
-        this.userService = configuredUserService;
+    public SignUpUI(UserService userService, RegisteredService registeredService, OwnerManagerService ownerManagerService, IToken tokenService, UserRepository userRepository, StoreRepository storeRepository) {
+        this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
 
         TextField username = new TextField("username");
         PasswordField password = new PasswordField("password");
         Span error = new Span("");
         Button login = new Button("sign up", e -> {
             try {
-                userService.signUp(username.getValue(), password.getValue());
+                userConnectivityPresenter.signUp(username.getValue(), password.getValue());
                 UI.getCurrent().navigate("");
             } catch (Exception exception) {
                 error.setText(exception.getMessage());

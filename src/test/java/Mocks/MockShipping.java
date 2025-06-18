@@ -1,9 +1,7 @@
 package Mocks;
 
 import DomainLayer.IShipping;
-import DomainLayer.Product;
 import DomainLayer.Store;
-import DomainLayer.User;
 
 import java.util.Map;
 

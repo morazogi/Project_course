@@ -25,6 +25,8 @@ public class NotificationSUI extends VerticalLayout {
         add(notification);
 
         add(new Button("send notification", e -> {String token = tokenService.generateToken(username.getValue());
+            notificationClientRepository.connectToServer(token);
+            notificationClientRepository.sendNotification(notification.getValue());
         }));
     }
 }

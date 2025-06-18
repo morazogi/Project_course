@@ -32,7 +32,8 @@ public class Discount {
         UNDEFINED,      // not yet set
         NONE,           // no condition
         MIN_PRICE,      // minimum total price
-        MIN_QUANTITY    // minimum quantity of items
+        MIN_QUANTITY,   // minimum quantity of items
+        MAX_QUANTITY    // maximum quantity of items
     }
 
 
@@ -41,6 +42,7 @@ public class Discount {
 
     // Unique identifier for the discount instance
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     public String Id;
 
     @Column(name = "store_id", nullable = false)
@@ -65,7 +67,13 @@ public class Discount {
     public NumericalComposition numericalComposition;
 
     // Nested discounts for complex discount combinations
-    public List<String> discountsString = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "discount_strings",
+            joinColumns = @JoinColumn(name = "discount_id")
+    )
+    @Column(name = "discount_value")
+    private List<String> discountsString = new ArrayList<>();
 
     // Discount percentage to apply (e.g., 0.15 = 15% off)
     public float percentDiscount = 0;
@@ -79,7 +87,8 @@ public class Discount {
     // Condition type to activate discount:
     // -1 = No condition,
     // 1 = Minimum total price,
-    // 2 = Minimum quantity of items
+    // 2 = Minimum quantity of item
+    // 3 = Maximum quantity of item
     @Enumerated(EnumType.STRING)
     public ConditionalType conditional;
 
@@ -98,7 +107,6 @@ public class Discount {
     }
 
     public Discount(
-            String Id,
             String storeId,
             float level,
             float logicComposition,
@@ -110,7 +118,6 @@ public class Discount {
             float limiter,
             String conditionalDiscounted
     ) {
-        this.Id = Id;
         this.storeId = storeId;
         if (level == 1) {
             this.level = Level.PRODUCT;
@@ -118,14 +125,14 @@ public class Discount {
             this.level = Level.CATEGORY;
         } else if (level == 3) {
             this.level = Level.STORE;
-         } else {
-                        this.level = Level.UNDEFINED;
-                    }
+        } else {
+            this.level = Level.UNDEFINED;
+        }
 
-                    if (logicComposition == 1) {
-                        this.logicComposition = LogicComposition.XOR;
-                    } else if (logicComposition == 2) {
-                       this.logicComposition = LogicComposition.AND;
+        if (logicComposition == 1) {
+            this.logicComposition = LogicComposition.XOR;
+        } else if (logicComposition == 2) {
+            this.logicComposition = LogicComposition.AND;
         } else if (logicComposition == 3) {
             this.logicComposition = LogicComposition.OR;
         } else {
@@ -150,6 +157,8 @@ public class Discount {
             this.conditional = ConditionalType.MIN_PRICE;
         } else if (conditional == 2) {
             this.conditional = ConditionalType.MIN_QUANTITY;
+        } else if (conditional == 3) {
+            this.conditional = ConditionalType.MAX_QUANTITY;
         } else {
             this.conditional = ConditionalType.UNDEFINED;
         }
@@ -158,7 +167,13 @@ public class Discount {
         this.conditionalDiscounted = conditionalDiscounted != null ? conditionalDiscounted : "";
     }
 
+    public String getStoreId() {
+        return storeId;
+    }
 
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
 
     public boolean isAlreadyUsed() { return alreadyUsed; }
     public String getId() { return Id; }
@@ -184,13 +199,10 @@ public class Discount {
     public synchronized void setLimiter(float limiter) { this.limiter = limiter; }
     public synchronized void setConditionalDiscounted(String conditionalDiscounted) { this.conditionalDiscounted = conditionalDiscounted; }
 
-
-
     public Map<Product, Float> applyDiscount(Float originalPrice, Map<Product , Integer> productsQuantity, Map<Product, Float> productDiscounts, List<Discount> discounts){
-        if(alreadyUsed)
+        if(alreadyUsed) {
             return productDiscounts;
-
-
+        }
 
         if(logicComposition == LogicComposition.UNDEFINED){
             if (checkConditinal(originalPrice, productsQuantity)) {
@@ -199,7 +211,6 @@ public class Discount {
                 return productDiscounts;
             }
         }
-
 
         else if(logicComposition == LogicComposition.XOR){   //xor
             float predict = 0;         //even false, odd true
@@ -218,8 +229,6 @@ public class Discount {
             }
         }
 
-
-
         else if(logicComposition == LogicComposition.AND){  //and
             boolean predict = true;
             if(!this.checkConditinal(originalPrice, productsQuantity)){
@@ -234,9 +243,6 @@ public class Discount {
                 return this.applyNewMultiplier(originalPrice, productsQuantity, productDiscounts, discounts);
             }
         }
-
-
-
 
         else if(logicComposition == LogicComposition.OR){   //or
             boolean predict = false;
@@ -255,16 +261,6 @@ public class Discount {
         }
         return productDiscounts;
     }
-
-
-
-
-
-
-
-
-
-
 
 
     public Map<Product, Float> applyNewMultiplier(Float originalPrice, Map<Product , Integer> productsQuantity, Map<Product, Float> productDiscounts, List<Discount> discounts) {
@@ -298,7 +294,6 @@ public class Discount {
                 return productDiscounts;
             }
 
-
             else if(numericalComposition == NumericalComposition.MULTIPLICATION){     //2 = Multiplication
                 for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
                     Product product = entry.getKey();
@@ -326,19 +321,6 @@ public class Discount {
                 return productDiscounts;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
         else if (level == Level.CATEGORY){  //category
             if(numericalComposition == NumericalComposition.MAXIMUM){        //1 = Maximum
                 // Find maximum discount percentage among nested discounts
@@ -369,19 +351,6 @@ public class Discount {
 
                 return productDiscounts;
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
             else if(numericalComposition == NumericalComposition.MULTIPLICATION){     //2 = Multiplication
                 for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
                     Product product = entry.getKey();
@@ -395,15 +364,6 @@ public class Discount {
                 }
                 return productDiscounts;
             }
-
-
-
-
-
-
-
-
-
             else if(numericalComposition == NumericalComposition.UNDEFINED){
 
                 for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
@@ -419,22 +379,6 @@ public class Discount {
                 return productDiscounts;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         else if (level == Level.STORE){  //store
             if(numericalComposition == NumericalComposition.MAXIMUM){        //1 = Maximum
                 // Find maximum discount percentage among nested discounts
@@ -465,18 +409,6 @@ public class Discount {
 
                 return productDiscounts;
             }
-
-
-
-
-
-
-
-
-
-
-
-
             else if(numericalComposition == NumericalComposition.MULTIPLICATION){     //2 = Multiplication
                 for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
                     Product product = entry.getKey();
@@ -489,18 +421,6 @@ public class Discount {
                 }
                 return productDiscounts;
             }
-
-
-
-
-
-
-
-
-
-
-
-
             else if(numericalComposition == NumericalComposition.UNDEFINED){
 
                 for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
@@ -517,12 +437,7 @@ public class Discount {
 
         }
         return productDiscounts;
-
     }
-
-
-
-
         boolean checkConditinal(float originalPrice, Map<Product , Integer> products){
         if(this.conditional == ConditionalType.UNDEFINED){
             return true;
@@ -538,6 +453,18 @@ public class Discount {
 
                 if (product.getName().equals(this.conditionalDiscounted)) {
                     return quantityToBuy >= limiter;
+                }
+            }
+            return false;
+        }
+        else if (this.conditional == ConditionalType.MAX_QUANTITY) {
+
+            for (Map.Entry<Product, Integer> entry : products.entrySet()) {
+                Product product = entry.getKey();
+                int quantityToBuy = entry.getValue();
+
+                if (product.getName().equals(this.conditionalDiscounted)) {
+                    return quantityToBuy <= limiter;
                 }
             }
             return false;
