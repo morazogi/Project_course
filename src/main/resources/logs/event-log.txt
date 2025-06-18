@@ -289,3 +289,4 @@
 [2025-06-03 20:30:17] User: a | Event: Event | Description: SIGNUP_FAILED
 [2025-06-03 20:30:23] User: a | Event: Event | Description: TokenService
 [2025-06-03 20:30:31] User: a | Event: Event | Description: TokenService
+[2025-06-07 19:47:17] User: Guest | Event: Event | Description: TokenService
