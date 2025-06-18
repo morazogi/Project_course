@@ -1248,3 +1248,20 @@
 [2025-06-18 05:07:36] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-18 05:07:37] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
 [2025-06-18 05:07:37] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-18 20:16:39] User: dani | Event: Event | Description: LOGIN
+[2025-06-18 20:16:39] User: dani | Event: Event | Description: TokenService
+[2025-06-18 20:16:39] User: dani | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: OPEN_STORE
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-18 20:16:52] User: dani | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: OPEN_STORE
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-18 20:16:55] User: dani | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS

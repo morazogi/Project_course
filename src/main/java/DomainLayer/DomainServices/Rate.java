@@ -11,7 +11,6 @@ import DomainLayer.Store;
 
 public class Rate {
     private IToken Tokener;
-    private ObjectMapper mapper = new ObjectMapper();
     private StoreRepository storeRepository;
     private UserRepository userRepository;
     private ProductRepository productRepository;

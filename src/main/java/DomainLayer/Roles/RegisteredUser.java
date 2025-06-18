@@ -3,26 +3,24 @@ package DomainLayer.Roles;
 import jakarta.persistence.*;
 import java.util.*;
 
-import DomainLayer.ShoppingCart;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Entity
+@PrimaryKeyJoinColumn(name = "username")
 @Table(name = "registered_users")
 public class RegisteredUser extends Guest {
 
     @ElementCollection
-    @CollectionTable(name = "user_answers", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_answers", joinColumns = @JoinColumn(name = "username"))
     @MapKeyColumn(name = "question")
     @Column(name = "answer")
     private Map<String, String> answers = new HashMap<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "owned_stores", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "owned_stores", joinColumns = @JoinColumn(name = "username"))
     @Column(name = "store_id")
     private List<String> ownedStores = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "managed_stores", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "managed_stores", joinColumns = @JoinColumn(name = "username"))
     @Column(name = "store_id")
     private List<String> managedStores = new ArrayList<>();
 
