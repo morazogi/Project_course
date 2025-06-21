@@ -1,78 +1,89 @@
 package PresentorLayer;
 
+import ServiceLayer.AuctionService;
+import ServiceLayer.UserService;
+import DomainLayer.Auction;
+import DomainLayer.Product;
+import DomainLayer.Store;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Holds auction data in-memory and exposes a Vaadin Component for the UI.
- * Replace / extend with real service-layer calls when ready.
- */
 public class AuctionPresenter {
 
-    private final List<Auction> auctions = new ArrayList<>();
-    private String name;
+    private final String username;
+    private final String token;
+    private final AuctionService auctionService;
+    private final UserService userService;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public AuctionPresenter(String userName) {
-        this.name = userName;
-        // Demo data – delete when wired to backend
-        auctions.add(new Auction("A01", "Gaming Laptop",   1000, "name1"));
-        auctions.add(new Auction("A02", "Wireless Headset",  90, "name2"));
+    public AuctionPresenter(String username,
+                            String token,
+                            AuctionService auctionService,
+                            UserService userService) {
+        this.username = username;
+        this.token = token;
+        this.auctionService = auctionService;
+        this.userService = userService;
     }
 
-    /*──────────────────── Public API for UI ────────────────────*/
-
-    /** returns a Vaadin component that lists every auction neatly */
     public Component getAuctionsComponent() {
         Div container = new Div();
-        if (auctions.isEmpty()) {
+        List<Auction> list = auctionService.list();
+        if (list.isEmpty()) {
             container.add(new Span("No auctions available"));
-        } else {
-            for (Auction a : auctions) {
-                container.add(new Span(
-                        a.itemId + " – " + a.itemName +
-                                " | Current Offer: $" + a.currentPrice +
-                                " (by " + a.lastOfferedBy + ")"
-                ));
-                container.add(new Div());   // simple spacer
+            return container;
+        }
+
+        for (Auction a : list) {
+            String storeName = "?";
+            String productName = "?";
+            try {
+                Store s = mapper.readValue(
+                        userService.getStoreById(token, a.getStoreId()), Store.class);
+                storeName = s.getName();
+                Product p = userService.getProductById(a.getProductId()).orElse(null);
+                if (p != null) productName = p.getName();
+            } catch (Exception ignored) {}
+
+            container.add(new Span(
+                    storeName + " – " + productName +
+                            " | $" + a.getCurrentPrice() +
+                            " (" + a.getLastParty() + ")" +
+                            (a.isWaitingConsent() ? " [awaiting consent]" : "")
+            ));
+
+            if (a.isAwaitingPayment() && username.equals(a.getWinner())) {
+                Span pay = new Span("  → Pay now");
+                pay.getStyle().set("color", "blue").set("cursor", "pointer");
+                String id = a.getId();
+                pay.addClickListener(ev ->
+                        UI.getCurrent().navigate("/auctionpay/" + id));
+                container.add(pay);
             }
+            container.add(new Div());
         }
         return container;
     }
 
-    /**
-     * Customer attempts to place (or counter) an offer.
-     * Returns a human-readable message for the UI.
-     */
-    public String placeOffer(String itemId, double price) {
-        for (Auction a : auctions) {
-            if (a.itemId.equals(itemId)) {
-
-                // in a simple ping-pong model we allow ANY price;
-                // business rules (must be higher / lower, etc.) go here
-                this.auctions.add(new Auction(itemId, a.itemName, price, this.name));
-                // here we need to sync it with the auction manager list we will do it throw the service layer since it will hold them both
-                return "Offer submitted!";
-            }
+    public String placeOffer(String storeName, String productName, double price) {
+        for (Auction a : auctionService.list()) {
+            try {
+                Store s = mapper.readValue(
+                        userService.getStoreById(token, a.getStoreId()), Store.class);
+                Product p = userService.getProductById(a.getProductId()).orElse(null);
+                if (s.getName().equalsIgnoreCase(storeName)
+                        && p != null
+                        && p.getName().equalsIgnoreCase(productName)
+                        && !a.isWaitingConsent()) {
+                    auctionService.offer(a.getId(), username, price);
+                    return "Offer submitted!";
+                }
+            } catch (Exception ignored) {}
         }
-        return "Auction with given Item ID not found.";
-    }
-
-
-    private static class Auction {
-        final String itemId;
-        final String itemName;
-        double currentPrice;
-        String lastOfferedBy;
-
-        Auction(String id, String name, double startPrice, String provider) {
-            this.itemId      = id;
-            this.itemName    = name;
-            this.currentPrice = startPrice;
-            this.lastOfferedBy = provider;
-        }
+        return "Matching auction not found or awaiting consent.";
     }
 }

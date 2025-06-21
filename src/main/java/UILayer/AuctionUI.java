@@ -2,6 +2,8 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.AuctionPresenter;
+import ServiceLayer.AuctionService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -11,66 +13,52 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Customer-side screen:
- * – lists all open auctions
- * – lets the user enter an Item-ID and a price to make / counter an offer
- */
 @Route("/auction")
 public class AuctionUI extends VerticalLayout {
 
     private final AuctionPresenter presenter;
     private final Div auctionsDisplay = new Div();
     private final Span message = new Span();
-    private final IToken tokenService;
 
+    @Autowired
+    public AuctionUI(IToken tokenService,
+                     AuctionService auctionService,
+                     UserService userService) {
 
-    public AuctionUI(IToken tokenService) {
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        String username = token != null ? tokenService.extractUsername(token) : "guest";
 
+        this.presenter = new AuctionPresenter(username, token, auctionService, userService);
 
-        this.tokenService = tokenService;
-        String token = "";
-        if (tokenService != null) {
-            token = (String) UI.getCurrent().getSession().getAttribute("token");
-        }
-        String username = "";
-        if(token != null) {
-           username = tokenService.extractUsername(token);
-        }
-
-        this.presenter = new AuctionPresenter(username);
-
-        // ── heading + current auctions ──────────────────────────────
         add(new H1("Open Auctions"));
         add(auctionsDisplay);
         updateAuctionsDisplay();
 
-        // ── offer input fields ─────────────────────────────────────
-        TextField itemIdField   = new TextField("Item ID");
-        TextField offerPriceField = new TextField("Your Offer");
+        TextField storeField   = new TextField("Store Name");
+        TextField productField = new TextField("Product Name");
+        TextField offerField   = new TextField("Your Offer");
 
-        Button makeOfferButton = new Button("Send Offer", e -> {
+        Button send = new Button("Send Offer", e -> {
             try {
-                String itemId = itemIdField.getValue().trim();
-                double price  = Double.parseDouble(offerPriceField.getValue().trim());
-
-                String result = presenter.placeOffer(itemId, price);
-                message.setText(result);
+                double price = Double.parseDouble(offerField.getValue().trim());
+                String r = presenter.placeOffer(storeField.getValue().trim(),
+                        productField.getValue().trim(),
+                        price);
+                message.setText(r);
                 updateAuctionsDisplay();
-
             } catch (NumberFormatException ex) {
-                message.setText("Please enter a valid number for the offer.");
+                message.setText("Enter a valid number for the offer.");
             }
         });
 
-        add(itemIdField, offerPriceField, makeOfferButton, message);
+        add(storeField, productField, offerField, send, message);
 
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }
 
-    /** refreshes the list of auctions on screen */
     private void updateAuctionsDisplay() {
         auctionsDisplay.removeAll();
         auctionsDisplay.add(presenter.getAuctionsComponent());

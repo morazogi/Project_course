@@ -2,6 +2,8 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.BidManagerPresenter;
+import ServiceLayer.BidService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -13,57 +15,43 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Route("/bidmanager")
 public class BidManagerUI extends VerticalLayout {
 
-    private final BidManagerPresenter bidManagerPresenter;
-    private final List<Span> offerLines = new ArrayList<>();
+    private final BidManagerPresenter presenter;
+    private final Span error = new Span();
 
     @Autowired
-    public BidManagerUI(IToken tokenService) { //BidService bidService,
-        this.bidManagerPresenter = new BidManagerPresenter(); //bidService,
+    public BidManagerUI(IToken tokenService,
+                        BidService bidService,
+                        UserService userService) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        String manager = token!=null ? tokenService.extractUsername(token):"unknown";
 
-        // UI Fields
-        TextField productId = new TextField("Product ID");
-        TextField productName = new TextField("Product Name");
-        TextField startingPrice = new TextField("Starting Price");
-        TextField minBidIncrease = new TextField("Minimum Increase");
-        TextField bidDuration = new TextField("Duration (minutes)");
+        presenter = new BidManagerPresenter(manager, bidService, userService);
 
-        Span error = new Span("");
+        TextField store  = new TextField("Store Name");
+        TextField prod   = new TextField("Product Name");
+        TextField start  = new TextField("Starting Price");
+        TextField inc    = new TextField("Minimum Increase");
+        TextField dur    = new TextField("Duration (minutes)");
 
-        Button startBid = new Button("Start Bid", e -> {
+        Button startBtn  = new Button("Start Bid", e -> {
             try {
-                bidManagerPresenter.startBid(
-                        token,
-                        productId.getValue(),
-                        productName.getValue(),
-                        startingPrice.getValue(),
-                        minBidIncrease.getValue(),
-                        bidDuration.getValue()
-                );
-                Notification.show("Bid started successfully!");
+                presenter.startBid(token,
+                        store.getValue(), prod.getValue(),
+                        start.getValue(), inc.getValue(), dur.getValue());
+                Notification.show("Bid created.");
                 error.setText("");
-            } catch (Exception ex) {
-                error.setText(ex.getMessage());
-            }
+            } catch(Exception ex){ error.setText(ex.getMessage()); }
         });
 
-        add(
-                new H1("Start a Bid"),
-                new HorizontalLayout(productId, productName),
-                new HorizontalLayout(startingPrice, minBidIncrease, bidDuration),
-                startBid,
-                error,
-                bidManagerPresenter.getOffers() // placeholder for future real offers
-        );
+        add(new H1("Create Bid"),
+                new HorizontalLayout(store, prod),
+                new HorizontalLayout(start, inc, dur),
+                startBtn, error);
 
-        setPadding(true);
-        setAlignItems(Alignment.CENTER);
+        setPadding(true); setAlignItems(Alignment.CENTER);
     }
 }

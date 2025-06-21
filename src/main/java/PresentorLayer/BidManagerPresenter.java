@@ -1,44 +1,49 @@
 package PresentorLayer;
 
-import DomainLayer.IToken;
-import com.vaadin.flow.component.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.html.Span;
+import ServiceLayer.BidService;
+import ServiceLayer.UserService;
+import DomainLayer.Product;
+import DomainLayer.Store;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class BidManagerPresenter {
 
-    //private final BidService bidService;
-    private final List<Offer> offerLogs = new ArrayList<>();
+    private final BidService bidService;
+    private final UserService userService;
+    private final String manager;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public BidManagerPresenter() { //BidService bidService,
-        //this.bidService = bidService;
-
+    public BidManagerPresenter(String manager,
+                               BidService bidService,
+                               UserService userService) {
+        this.manager     = manager;
+        this.bidService  = bidService;
+        this.userService = userService;
     }
 
-    public void startBid(String token, String productId, String productName, String startPrice, String minIncrease, String duration) {
-        // Optional: validate and convert string values to numbers
-        double price = Double.parseDouble(startPrice);
-        double increase = Double.parseDouble(minIncrease);
-        int durationMinutes = Integer.parseInt(duration);
+    public void startBid(String token,
+                         String storeName,
+                         String productName,
+                         String startPrice,
+                         String minIncrease,
+                         String duration) throws Exception {
 
-        // TODO create from service layer going down
-        // openBid(token, productId, productName, price, increase, durationMinutes);
-        // in this class we also need to send the bid to the Bid ui
-    }
+        double price  = Double.parseDouble(startPrice);
+        double inc    = Double.parseDouble(minIncrease);
+        int minutes   = Integer.parseInt(duration);
 
-    public void addOffer(String buyerName, String productName, double amount) {
-        offerLogs.add(new Offer(buyerName, productName, amount));
-    }
+        /* find store ID */
+        String storeId = userService.searchStoreByName(token, storeName)
+                .stream().findFirst()
+                .orElseThrow(() -> new RuntimeException("store not found"))
+                .getId();
 
-    public Component getOffers() {
-        VerticalLayout layout = new VerticalLayout();
-        for (Offer offer : offerLogs) {
-            layout.add(new Span(offer.toString()));
-        }
-        return layout;
+        /* product in that store */
+        String productId=null;
+        for (Product p : userService.getProductsInStore(storeId))
+            if (p.getName().equalsIgnoreCase(productName)) { productId=p.getId(); break; }
+        if (productId==null) throw new RuntimeException("product not in store");
+
+        bidService.start(storeId, productId, price, inc, minutes);
     }
 }

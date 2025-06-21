@@ -1,56 +1,85 @@
 package PresentorLayer;
 
+import ServiceLayer.BidService;
+import ServiceLayer.UserService;
+import DomainLayer.BidSale;
+import DomainLayer.Product;
+import DomainLayer.Store;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BidUserPresenter {
 
-    private final List<Bid> bids = new ArrayList<>();
+    private final String username;
+    private final String token;
+    private final BidService bidService;
+    private final UserService userService;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public BidUserPresenter() {
-        // Example bids
-        //bids.add(new Bid("P01", "Product A", 100));
-        //bids.add(new Bid("P02", "Product B", 150));
+    public BidUserPresenter(String username,
+                            String token,
+                            BidService bidService,
+                            UserService userService) {
+        this.username   = username;
+        this.token      = token;
+        this.bidService = bidService;
+        this.userService= userService;
     }
 
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    // Return a Component listing bids + current price
     public Component getBidsComponent() {
-        Div container = new Div();
-        if (bids.isEmpty()) {
-            container.add(new Span("No bids available"));
-        } else {
-            for (Bid bid : bids) {
-                container.add(new Span(
-                        bid.getProductId() + ": " + bid.getProductName() + " - Current Price: $" + bid.getCurrentPrice()
-                ));
-                container.add(new Div()); // spacing
+        Div box = new Div();
+        List<BidSale> list = bidService.open();
+        if (list.isEmpty()) { box.add(new Span("No bids available")); return box; }
+
+        for (BidSale b : list) {
+            String storeName="?"; String productName="?";
+            try {
+                Store s = mapper.readValue(
+                        userService.getStoreById(token, b.getStoreId()), Store.class);
+                Product p = userService.getProductById(b.getProductId()).orElse(null);
+                storeName = s.getName();  productName = p!=null? p.getName():"?";
+            } catch(Exception ignored){}
+
+            Span line = new Span(
+                    storeName + " – " + productName +
+                            " | $" + b.getCurrentPrice() +
+                            (b.getCurrentBidder()!=null ? " ("+ b.getCurrentBidder()+")":"") +
+                            (b.isAwaitingPayment() ? " [awaiting payment]":"")
+            );
+            box.add(line);
+
+            if (b.isAwaitingPayment() && username.equals(b.getWinner())) {
+                Span pay = new Span("  → Pay now");
+                pay.getStyle().set("color","blue").set("cursor","pointer");
+                String id=b.getId();
+                pay.addClickListener(e -> UI.getCurrent().navigate("/bidpay/"+id));
+                box.add(pay);
             }
+            box.add(new Div());
         }
-        return container;
+        return box;
     }
 
-    // Try to place a bid on a product; returns message if success or fail
-    public String placeBid(String productId, double bidAmount) {
-        for (Bid bid : bids) {
-            if (bid.getProductId().equals(productId)) {
-                if (bidAmount > bid.getCurrentPrice()) {
-                    bid.setCurrentPrice(bidAmount);
-                    // didnt rly know where to do it, but the class that handles it needs to call for the add bid function in the bidManagerPresentor
-                    // so the bid will be shown in the ui layer and the database etc...
-                    return "Bid placed successfully!";
-                } else {
-                    return "Bid amount must be higher than current price.";
+    public String placeBid(String storeName,String productName,double amount) {
+        for (BidSale b : bidService.open()) {
+            try {
+                Store s = mapper.readValue(
+                        userService.getStoreById(token, b.getStoreId()), Store.class);
+                Product p = userService.getProductById(b.getProductId()).orElse(null);
+
+                if (s.getName().equalsIgnoreCase(storeName)
+                        && p!=null && p.getName().equalsIgnoreCase(productName)
+                        && !b.isAwaitingPayment()) {
+                    bidService.place(b.getId(), username, amount);
+                    return "Bid placed!";
                 }
-            }
+            } catch(Exception ignored){}
         }
-        return "Bid with product ID not found.";
+        return "Matching bid not found / finished.";
     }
 }

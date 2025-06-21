@@ -3,6 +3,8 @@ package UILayer;
 import DomainLayer.IToken;
 import PresentorLayer.AuctionManagerPresenter;
 import PresentorLayer.Offer;
+import ServiceLayer.AuctionService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -22,22 +24,25 @@ public class AuctionManagerUI extends VerticalLayout {
     private final VerticalLayout offerDisplayLayout = new VerticalLayout();
 
     @Autowired
-    public AuctionManagerUI(IToken tokenService) {
-        this.presenter = new AuctionManagerPresenter();
+    public AuctionManagerUI(IToken tokenService,
+                            AuctionService auctionService,
+                            UserService userService) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        String manager = token != null ? tokenService.extractUsername(token) : "unknown";
 
-        // === Auction Creation ===
-        TextField itemIdField = new TextField("Item ID");
-        TextField itemNameField = new TextField("Item Name");
+        this.presenter = new AuctionManagerPresenter(manager, auctionService, userService);
+
+        TextField storeNameField = new TextField("Store Name");
+        TextField productNameField = new TextField("Product Name");
         TextField itemPriceField = new TextField("Starting Price");
         TextField itemDescriptionField = new TextField("Description");
 
         Button createAuctionButton = new Button("Create Auction", e -> {
             try {
                 presenter.createAuction(token,
-                        itemIdField.getValue().trim(),
-                        itemNameField.getValue().trim(),
+                        storeNameField.getValue().trim(),
+                        productNameField.getValue().trim(),
                         itemPriceField.getValue().trim(),
                         itemDescriptionField.getValue().trim());
 
@@ -48,32 +53,31 @@ public class AuctionManagerUI extends VerticalLayout {
             }
         });
 
-        // === Offer Handling ===
         TextField counterPriceField = new TextField("Counter Price");
 
         Button refreshOffersButton = new Button("Refresh Offers", e -> renderOffers());
 
         Button acceptButton = new Button("Accept", e -> {
             statusMessage.setText(presenter.respondToOffer(token, "accept", null));
-            // to add a nice message and update down to the data base
+            renderOffers();
         });
 
         Button declineButton = new Button("Decline", e -> {
             statusMessage.setText(presenter.respondToOffer(token, "decline", null));
-            // to add a nice message and update down to the data base
+            renderOffers();
         });
 
         Button counterButton = new Button("Counter", e -> {
             statusMessage.setText(presenter.respondToOffer(token, "counter", counterPriceField.getValue()));
+            renderOffers();
         });
 
         add(
                 new H1("Create New Auction"),
-                new HorizontalLayout(itemIdField, itemNameField),
+                new HorizontalLayout(storeNameField, productNameField),
                 new HorizontalLayout(itemPriceField, itemDescriptionField),
                 createAuctionButton,
                 statusMessage,
-
                 new H1("Customer Offers"),
                 refreshOffersButton,
                 offerDisplayLayout,

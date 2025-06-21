@@ -1,40 +1,71 @@
 package PresentorLayer;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.Span;
-
-import java.util.ArrayList;
+import ServiceLayer.AuctionService;
+import ServiceLayer.UserService;
+import DomainLayer.Product;
+import DomainLayer.Store;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 
 public class AuctionManagerPresenter {
 
-    private final List<Offer> offers = new ArrayList<>();
+    private final AuctionService auctionService;
+    private final UserService userService;
+    private final String managerId;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public void createAuction(String token, String id, String name, String price, String description) {
-        // TODO: Connect to service layer and backend
-        System.out.println("Creating auction: " + id + ", " + name + ", $" + price + ", " + description);
-        // For now, simulate adding a new auction
+    public AuctionManagerPresenter(String managerId,
+                                   AuctionService auctionService,
+                                   UserService userService) {
+        this.managerId = managerId;
+        this.auctionService = auctionService;
+        this.userService = userService;
     }
 
+    public void createAuction(String token,
+                              String storeName,
+                              String productName,
+                              String price,
+                              String description) throws Exception {
+        double startPrice = Double.parseDouble(price);
 
-    public void addOffer(String buyer, String itemName, double offerAmount) {
-        offers.add(new Offer(buyer, itemName, offerAmount));
+        List<Store> stores = userService.searchStoreByName(token, storeName);
+        if (stores.isEmpty()) throw new RuntimeException("store not found");
+        String storeId = stores.get(0).getId();
+
+        String productId = null;
+        for (Product p : userService.getProductsInStore(storeId)) {
+            if (p.getName().equalsIgnoreCase(productName)) {
+                productId = p.getId();
+                break;
+            }
+        }
+        if (productId == null) throw new RuntimeException("product not found in that store");
+
+        auctionService.create(storeId, productId, managerId, startPrice);
     }
 
     public List<Offer> getOffers() {
-        return offers;
+        return auctionService.list().stream()
+                .filter(a -> a.isWaitingConsent())
+                .map(a -> new Offer(a.getLastParty(), a.getProductId(), a.getCurrentPrice()))
+                .toList();
     }
 
     public String respondToOffer(String token, String action, String counterPrice) {
-        switch (action) {
-            case "accept":
-                return "Offer accepted.";
-            case "decline":
-                return "Offer declined.";
-            case "counter":
-                return "Countered with: $" + counterPrice;
-            default:
-                return "Unknown action.";
-        }
+        return auctionService.list().stream()
+                .filter(a -> a.isWaitingConsent())
+                .findFirst()
+                .map(a -> switch (action) {
+                    case "accept"  -> { auctionService.accept(a.getId(), managerId);
+                        yield "Accepted – waiting for buyer’s payment."; }
+                    case "decline" -> { auctionService.decline(a.getId(), managerId);
+                        yield "Offer declined / auction closed."; }
+                    case "counter" -> { auctionService.offer(a.getId(), managerId,
+                            Double.parseDouble(counterPrice));
+                        yield "Countered with $" + counterPrice; }
+                    default        -> "Unknown action.";
+                })
+                .orElse("No pending offers.");
     }
 }

@@ -124,6 +124,30 @@ public class SystemConfiguration {
         return new NotificationWebSocketHandler();
     };
 
+
+    @Bean
+    public AuctionService AuctionService(PaymentService paymentService,
+                                         ShippingService shippingService,
+                                         IToken tokenService,
+                                         StoreRepository storeRepository,
+                                         ProductRepository productRepository,
+                                         OrderRepository orderRepository) {   // if you record orders
+        return new AuctionService(paymentService, shippingService, tokenService,
+                storeRepository, productRepository, orderRepository);
+    }
+
+    @Bean
+    public BidService BidService(PaymentService paymentService,
+                                 ShippingService shippingService,
+                                 IToken tokenService,
+                                 StoreRepository storeRepository,
+                                 ProductRepository productRepository,
+                                 OrderRepository orderRepository) {
+        return new BidService(paymentService, shippingService, tokenService,
+                storeRepository, productRepository, orderRepository);
+    }
+
+
 //    @Bean
 //    public Module hibernateModule() {
 //        // Use Hibernate6Module for Hibernate 6.x. For older versions, it might be Hibernate5Module.
