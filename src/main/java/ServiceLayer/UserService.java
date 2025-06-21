@@ -1,14 +1,10 @@
 package ServiceLayer;
 
-import DomainLayer.IToken;
+import DomainLayer.*;
 import DomainLayer.DomainServices.Search;
 import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.DomainServices.DiscountPolicyMicroservice;
-import DomainLayer.Product;
-import DomainLayer.Store;
-import DomainLayer.ShoppingBag;
-import DomainLayer.ShoppingCart;
 import DomainLayer.Roles.Guest;
 import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.*;
@@ -138,13 +134,17 @@ public class UserService {
     @Transactional
     public List<String> findProduct(String token, String name, String category) {
         try {
-            tokenService.validateToken(token);
-            return search.findProduct(name, category);
-        } catch (Exception e) {
-            System.out.println("ERROR finding product by Name:" + e.getMessage());
-            return Collections.emptyList();
+            tokenService.validateToken(token);                      // may throw
+
+        } catch (Exception ex) {                                    // ⇐ catch token failure
+            throw new PermissionException(
+                    "No permission: you must be logged-in to search products.");
         }
+
+        /* normal path */
+        return search.findProduct(name == null ? "" : name, category);
     }
+
 
     @Transactional
     public List<Product> getAllProducts(String token) {

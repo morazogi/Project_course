@@ -81,21 +81,26 @@ public class Search {
 
     public List<String> findProduct(String name, String category) {
         try {
-            List<Product> products = productRepository.getAll();
             List<String> result = new ArrayList<>();
-            for (Product product : products) {
-                if (product.getName().toLowerCase().contains(name.toLowerCase()) &&
-                        (category == null || product.getCategory().equalsIgnoreCase(category))) {
-                    result.add(product.getId());
-                }
+            for (Product p : productRepository.getAll()) {
+                boolean nameMatch = p.getName().toLowerCase()
+                        .contains(name.toLowerCase());
+                boolean catMatch  = category == null || category.isBlank()
+                        || p.getCategory().equalsIgnoreCase(category);
+                if (nameMatch && catMatch) result.add(p.getId());
             }
-            EventLogger.logEvent("SEARCH_BY_PRODUCT", "Name=" + name + " Category=" + category + " Matches=" + result.size());
+            EventLogger.logEvent("SEARCH_BY_PRODUCT",
+                    "Name=" + name + " Category=" + category +
+                            " Matches=" + result.size());
             return result;
+
         } catch (Exception e) {
             System.out.println("ERROR finding product by Name:" + e.getMessage());
             return Collections.emptyList();
         }
     }
+
+
 
     public List<String> getStoreByName(String name) {
         try {
