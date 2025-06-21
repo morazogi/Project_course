@@ -113,21 +113,30 @@ public class UserService {
 
     @Transactional
     public void purchaseCart(String token,
-                             String paymentMethod,
+                             String name,
                              String cardNumber,
                              String expirationDate,
                              String cvv,
                              String state,
                              String city,
-                             String street,
-                             String homeNumber) {
+                             String address,
+                             String id,
+                             String zip) {
+        String paymentTransactionId = null;
+        String shippingTransactionId = null;
         try {
             Double price = reserveCart(token);
-            shippingService.processShipping(token, state, city, street, homeNumber);
-            paymentService.processPayment(token, paymentMethod, cardNumber, expirationDate, cvv);
+            shippingTransactionId = shippingService.processShipping(token, state, city, address, name, zip);
+            paymentTransactionId = paymentService.processPayment(token, name, cardNumber, expirationDate, cvv, id);
             userCart.purchaseCart(token, price);
         } catch (Exception e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "PURCHASE_CART_FAILED " + e.getMessage());
+            if (shippingTransactionId != null) {
+                shippingService.cancelShipping(token, shippingTransactionId);
+            }
+            if (paymentTransactionId != null) {
+                paymentService.cancelPayment(token, paymentTransactionId);
+            }
             throw new RuntimeException("Failed to purchase cart");
         }
     }

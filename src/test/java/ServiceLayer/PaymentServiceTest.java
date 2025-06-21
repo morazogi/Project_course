@@ -107,4 +107,10 @@
 //        assertFalse(response);
 //    }
 //
+//    @Test
+//    public void testCancelPayment_Successful() {
+//        boolean response = paymentService.cancelPayment(token);
+//        assertTrue(response);
+//    }
+//
 //}

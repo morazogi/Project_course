@@ -26,7 +26,7 @@ public class ShippingConnectivity {
         this.mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public void processShipping(String username, String state, String city, String street, String homeNumber) throws Exception {
+    public String processShipping(String username, String state, String city, String address, String name, String zip) throws Exception {
         boolean isRegisterdUser = (!username.contains("Guest"));
         Guest user;
         if(isRegisterdUser) {
@@ -48,8 +48,35 @@ public class ShippingConnectivity {
             }
         }
         List<ShoppingBag> shoppingBags = user.getShoppingCart().getShoppingBags();
-        for (ShoppingBag shoppingBag : shoppingBags) {
-            proxyShipping.processShipping(user.getUsername(), state, city, street, shoppingBag.getProducts(), homeNumber);
+        return proxyShipping.processShipping(state, city, address, shoppingBags.get(0).getProducts(), name, zip);
+    }
+
+    public String cancelShipping(String username, String id) {
+        try {
+            boolean isRegisterdUser = (!username.contains("Guest"));
+            Guest user;
+            if(isRegisterdUser) {
+                try {
+                    user = (RegisteredUser) userRepository.getById(username);
+                }
+                catch (Exception e) {
+                    EventLogger.logEvent(username, "CANCEL_SHIPPIN - USER_NOT_FOUND:"+e.toString());
+                    throw new IllegalArgumentException("User not found");
+                }
+            }
+            else {
+                try {
+                    user = guestRepository.getById(username);
+                }
+                catch (Exception e) {
+                    EventLogger.logEvent(username, "CANCEL_SHIPPING - USER_NOT_FOUND:"+e.toString());
+                    throw new IllegalArgumentException("User not found");
+                }
+            }
+            return proxyShipping.cancelShipping(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
+
 }

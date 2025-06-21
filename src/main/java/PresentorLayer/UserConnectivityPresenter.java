@@ -39,15 +39,16 @@ public class UserConnectivityPresenter {
     }
 
     public void purchaseCart(String token ,
-                             String paymentMethod ,
+                             String name ,
                              String cardNumber,
                              String expirationDate,
                              String cvv,
                              String state,
                              String city,
-                             String street,
-                             String homeNumber) throws Exception {
-        userService.purchaseCart(token, paymentMethod, cardNumber, expirationDate, cvv, state, city, street, homeNumber);
+                             String address,
+                             String zip,
+                             String id) throws Exception {
+        userService.purchaseCart(token, name, cardNumber, expirationDate, cvv, state, city, address, id, zip);
     }
 
     public void addStore(String token, String storeName) throws Exception {

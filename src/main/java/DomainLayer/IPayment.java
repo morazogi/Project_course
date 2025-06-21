@@ -1,5 +1,6 @@
 package DomainLayer;
 
 public interface IPayment{
-    void processPayment(Double payment, String creditCardNumber, String expirationDate, String backNumber, String storeId, String paymentService) throws Exception;
+    public String processPayment(Double payment, String creditCardNumber, String expirationDate, String backNumber, String Id , String name) throws Exception;
+    public String cancelPayment(String Id) throws Exception;
 }

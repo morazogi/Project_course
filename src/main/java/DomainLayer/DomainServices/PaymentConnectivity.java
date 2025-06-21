@@ -34,7 +34,7 @@ public class PaymentConnectivity {
         this.mapper.registerModule(new ProductKeyModule());
         this.mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
-    public void processPayment(String username, String creditCardNumber, String expirationDate, String backNumber, String paymentService) throws Exception {
+    public String processPayment(String username, String creditCardNumber, String expirationDate, String backNumber, String Id, String name) throws Exception {
         try {
             boolean isRegisterdUser = (!username.contains("Guest"));
             Guest user;
@@ -43,7 +43,7 @@ public class PaymentConnectivity {
                     user = (RegisteredUser) userRepository.getById(username);
                 }
                 catch (Exception e) {
-                    EventLogger.logEvent(username, "PROCESS_SHIPPING - USER_NOT_FOUND:"+e.toString());
+                    EventLogger.logEvent(username, "PROCESS_PAYMENT - USER_NOT_FOUND:"+e.toString());
                     throw new IllegalArgumentException("User not found");
                 }
             }
@@ -52,7 +52,7 @@ public class PaymentConnectivity {
                     user = guestRepository.getById(username);
                 }
                 catch (Exception e) {
-                    EventLogger.logEvent(username, "PROCESS_SHIPPING - USER_NOT_FOUND:"+e.toString());
+                    EventLogger.logEvent(username, "PROCESS_PAYMENT - USER_NOT_FOUND:"+e.toString());
                     throw new IllegalArgumentException("User not found");
                 }
             }
@@ -72,10 +72,39 @@ public class PaymentConnectivity {
                     productsString.put(storeId, entry.getValue()); // Preserve value
                 }
                 payment = discountPolicy.calculatePrice(firstProduct.getStoreId(), productsString);
-                proxyPayment.processPayment(payment, creditCardNumber, expirationDate, backNumber, shoppingBag.getStoreId(), paymentService);
+                return proxyPayment.processPayment(payment, creditCardNumber, expirationDate, backNumber, Id, name);
             }
         } catch (Exception e) {
-            throw new Exception("Exception for payment: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+        return "";
+    }
+
+    public String cancelPayment(String username, String id) {
+        try {
+            boolean isRegisterdUser = (!username.contains("Guest"));
+            Guest user;
+            if(isRegisterdUser) {
+                try {
+                    user = (RegisteredUser) userRepository.getById(username);
+                }
+                catch (Exception e) {
+                    EventLogger.logEvent(username, "CANCEL_PAYMENT - USER_NOT_FOUND:"+e.toString());
+                    throw new IllegalArgumentException("User not found");
+                }
+            }
+            else {
+                try {
+                    user = guestRepository.getById(username);
+                }
+                catch (Exception e) {
+                    EventLogger.logEvent(username, "CANCEL_PAYMENT - USER_NOT_FOUND:"+e.toString());
+                    throw new IllegalArgumentException("User not found");
+                }
+            }
+                return proxyPayment.cancelPayment(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
