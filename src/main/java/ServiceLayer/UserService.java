@@ -95,9 +95,12 @@ public class UserService {
             userCart.addToCart(token, storeId, productId, quantity);
             EventLogger.logEvent(tokenService.extractUsername(token), "ADD_TO_CART");
             return "Product added to cart";
+        } catch (IllegalArgumentException e) {            // <<― propagate readable stock-error
+            EventLogger.logEvent(tokenService.extractUsername(token), "ADD_TO_CART_FAILED " + e.getMessage());
+            return e.getMessage();
         } catch (Exception e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "ADD_TO_CART_FAILED " + e.getMessage());
-            throw new RuntimeException("Failed to add product to cart");
+            return "Failed to add product to cart";
         }
     }
 

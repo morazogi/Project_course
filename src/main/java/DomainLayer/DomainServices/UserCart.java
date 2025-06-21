@@ -118,54 +118,41 @@ public class UserCart {
         }
     }
 
-    public void addToCart(String token ,String storeId , String productId , Integer quantity) throws JsonProcessingException {
-        if (token == null) {
-            EventLogger.logEvent(Tokener.extractUsername(token), "ADD_TO_CART_FAILED - NULL");
-            throw new IllegalArgumentException("Token cannot be null");
-        }
-        if (storeId == null) {
-            EventLogger.logEvent(Tokener.extractUsername(token), "ADD_TO_CART_FAILED - NULL");
-            throw new IllegalArgumentException("StoreId cannot be null");
-        }
-        if (productId == null) {
-            EventLogger.logEvent(Tokener.extractUsername(token), "ADD_TO_CART_FAILED - NULL");
-            throw new IllegalArgumentException("ProductId cannot be null");
-        }
-        if (quantity == null) {
-            EventLogger.logEvent(Tokener.extractUsername(token), "ADD_TO_CART_FAILED - NULL");
-            throw new IllegalArgumentException("Quantity cannot be null");
-        }
-        if (quantity <= 0) {
-            EventLogger.logEvent(Tokener.extractUsername(token), "ADD_TO_CART_FAILED - INVALID_QUANTITY");
-            throw new IllegalArgumentException("Quantity must be greater than 0");
-        }
-        String username = Tokener.extractUsername(token);
-        if (!username.contains("Guest")){
-            try {
-                RegisteredUser user = userRepository.getById(username);
-                Tokener.validateToken(token);
-                user.addProduct(storeId, productId, quantity);
-                userRepository.update(user);
-                EventLogger.logEvent(user.getUsername(), "ADD_TO_CART_SUCCESS");
-            }
-            catch (EntityNotFoundException e) {
-                EventLogger.logEvent(username, "ADD_FROM_CART_FAILED - USER_NOT_FOUND:"+e.toString());
-                throw new IllegalArgumentException("User not found");
-            }
+    public void addToCart(String token, String storeId, String productId, Integer quantity) throws JsonProcessingException {
+        validateAddParams(token, storeId, productId, quantity);          // existing validation
 
+        String username = Tokener.extractUsername(token);
+        Tokener.validateToken(token);
+
+        Product product = productRepository.getById(productId);
+        if (product == null) throw new IllegalArgumentException("Product not found");
+
+        int available = product.getQuantity();
+
+        if (username.contains("Guest")) {
+            Guest guest = guestRepository.getById(username);
+            int already = quantityInCart(guest.getShoppingCart(), storeId, productId);
+            if (available < already + quantity)
+                throw new IllegalArgumentException("Only " + (available - already) + " left in stock");
+            guest.addProduct(storeId, productId, quantity);
+            guestRepository.update(guest);
         } else {
-            try {
-                RegisteredUser user = userRepository.getById(username);
-                Tokener.validateToken(token);
-                user.addProduct(storeId, productId , quantity);
-                userRepository.update(user);
-                EventLogger.logEvent(user.getUsername(), "ADD_TO_CART_SUCCESS");
-            }
-            catch (Exception e) {
-                EventLogger.logEvent(username, "ADD_FROM_CART_FAILED - USER_NOT_FOUND:"+e.toString());
-                throw new IllegalArgumentException("User not found");
-            }
+            RegisteredUser user = userRepository.getById(username);
+            int already = quantityInCart(user.getShoppingCart(), storeId, productId);
+            if (available < already + quantity)
+                throw new IllegalArgumentException("Only " + (available - already) + " left in stock");
+            user.addProduct(storeId, productId, quantity);
+            userRepository.update(user);
         }
+
+        EventLogger.logEvent(username, "ADD_TO_CART_SUCCESS");
+    }
+
+    private int quantityInCart(ShoppingCart cart, String storeId, String productId) {
+        for (ShoppingBag bag : cart.getShoppingBags())
+            if (bag.getStoreId().equals(storeId))
+                return bag.getProducts().getOrDefault(productId, 0);
+        return 0;
     }
 
     public Double reserveCart(String token) throws JsonProcessingException {
@@ -321,5 +308,17 @@ public class UserCart {
 //        user.getShoppingCart().clearBags();
         if(isRegisteredUser) userRepository.update((RegisteredUser) user);
         else guestRepository.update(user);
+    }
+
+
+    private void validateAddParams(String token,
+                                   String storeId,
+                                   String productId,
+                                   Integer quantity) {
+        if (token == null)          throw new IllegalArgumentException("Token cannot be null");
+        if (storeId == null)        throw new IllegalArgumentException("StoreId cannot be null");
+        if (productId == null)      throw new IllegalArgumentException("ProductId cannot be null");
+        if (quantity == null || quantity <= 0)
+            throw new IllegalArgumentException("Quantity must be greater than 0");
     }
 }  

@@ -33,7 +33,6 @@ public class ProductPresenter {
     private IToken tokenService;
     private UserRepository userRepository;
 
-
     @Autowired
     public ProductPresenter(UserService userService, IToken tokenService, UserRepository userRepository) {
         this.userService = userService;
@@ -43,10 +42,10 @@ public class ProductPresenter {
 
     public VerticalLayout getShoppingCart(String token) {
         VerticalLayout shoppingCartList = new VerticalLayout();
-        List<ShoppingBag> shoppingBags = userService.getShoppingCart(token);
+        List<ShoppingBag> shoppingBags = userGetShoppingBag(token);
         shoppingCartList.add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
         double totalPayment = 0;
-        for (ShoppingBag shoppingBag: shoppingBags) {
+        for (ShoppingBag shoppingBag : shoppingBags) {
             VerticalLayout productList = new VerticalLayout();
             try {
                 String storeId = shoppingBag.getStoreId();
@@ -60,7 +59,7 @@ public class ProductPresenter {
             for (Map.Entry<String, Integer> product : shoppingBag.getProducts().entrySet()) {
                 productList.add(new Span(userService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" + userService.getProductById(product.getKey()).get().getPrice()));
             }
-            shoppingCartList.add(productList, new Span("total payment :" + userService.calculateCartPrice(token)));
+            shoppingCartList.add(productList, new Span("total payment :" + userService.reserveCart(token)));
         }
 
         return shoppingCartList;
@@ -80,7 +79,7 @@ public class ProductPresenter {
                 Notification.show("store with id: " + storeId + "does not exist");
             }
 
-            HorizontalLayout upwardsPage = new HorizontalLayout(new H1(product.getName()),new H1(storeName));
+            HorizontalLayout upwardsPage = new HorizontalLayout(new H1(product.getName()), new H1(storeName));
             upwardsPage.setAlignItems(FlexComponent.Alignment.CENTER);
 
             Button addToCart = new Button("add to cart", e -> {
@@ -103,13 +102,10 @@ public class ProductPresenter {
     public VerticalLayout searchProductByName(String token, String productName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating) {
         VerticalLayout productList = new VerticalLayout();
         try {
-            List<Product> items = userService.getAllProducts(token);
+            List<String> items = userService.findProduct(token, productName, "");
             List<Product> products = items.stream().map(item -> {
                         try {
-                            if (item.getName().equals(productName)) {
-                                return item;
-                            }
-                            return null;
+                            return mapper.readValue(item, Product.class);
                         } catch (Exception exception) {
                             return null;
                         }
@@ -136,7 +132,9 @@ public class ProductPresenter {
                     })
                     .toList();
             for (Product product : products) {
-                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
+                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {
+                    UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
+                }));
             }
         } catch (Exception exception) {
             return new VerticalLayout(new Span(exception.getMessage()));
@@ -147,13 +145,10 @@ public class ProductPresenter {
     public VerticalLayout searchProductByCategory(String token, String categoryName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating) {
         VerticalLayout productList = new VerticalLayout();
         try {
-            List<Product> items = userService.getAllProducts(token);
+            List<String> items = userService.findProduct(token, "", categoryName);
             List<Product> products = items.stream().map(item -> {
                         try {
-                            if (item.getCategory().equals(categoryName)) {
-                                return item;
-                            }
-                            return null;
+                            return mapper.readValue(item, Product.class);
                         } catch (Exception exception) {
                             return null;
                         }
@@ -180,7 +175,9 @@ public class ProductPresenter {
                     })
                     .toList();
             for (Product product : products) {
-                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
+                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {
+                    UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
+                }));
             }
         } catch (Exception exception) {
             return new VerticalLayout(new Span(exception.getMessage()));
@@ -223,7 +220,9 @@ public class ProductPresenter {
                     })
                     .toList();
             for (Product product : products) {
-                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
+                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {
+                    UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
+                }));
             }
         } catch (Exception exception) {
             return new VerticalLayout(new Span(exception.getMessage()));
@@ -267,7 +266,9 @@ public class ProductPresenter {
                     })
                     .toList();
             for (Product product : products) {
-                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
+                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {
+                    UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
+                }));
             }
         } catch (Exception exception) {
             return new VerticalLayout(new Span(exception.getMessage()));
@@ -287,7 +288,9 @@ public class ProductPresenter {
                 }
             }).toList();
             for (Store store : stores) {
-                storeList.add(new Button(store.getName() , choose -> {UI.getCurrent().navigate("/store/" + store.getId());}));
+                storeList.add(new Button(store.getName(), choose -> {
+                    UI.getCurrent().navigate("/store/" + store.getId());
+                }));
             }
         } catch (Exception exception) {
             return new VerticalLayout(new Span(exception.getMessage()));
@@ -298,27 +301,20 @@ public class ProductPresenter {
     public VerticalLayout getAllProductsInStore(String token, String storeId) {
         VerticalLayout productList = new VerticalLayout();
         List<Product> items = userService.getAllProducts(token);
-        List<Product> products = items.stream().map(item -> {
-            try {
-                if (item.getStoreId().equals(storeId)) {
-                    return item;
-                }
-                return null;
-            } catch (Exception exception) {
-                return null;
-            }
-        }).filter(Objects::isNull).toList();
+        List<Product> products = items.stream()
+                .filter(item -> storeId.equals(item.getStoreId()))
+                .toList();
         for (Product product : products) {
             productList.add(new Button(product.getName() + "\n" + product.getPrice(), e -> {
-                UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
-
+                UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
+            }));
         }
         return productList;
     }
 
     public VerticalLayout getStorePage(String token, String storeId) {
         VerticalLayout storePage = new VerticalLayout();
-        if(!userService.getStoreById(token, storeId).isEmpty()) {
+        if (!userService.getStoreById(token, storeId).isEmpty()) {
             try {
                 Store store = mapper.readValue(userService.getStoreById(token, storeId), Store.class);
                 storePage.add(new Span("is the store open now: " + store.isOpen()));
@@ -347,7 +343,7 @@ public class ProductPresenter {
         ShoppingCart shoppingCart = user.getShoppingCart();
         List<ShoppingBag> shoppingBag = shoppingCart.getShoppingBags();
         shoppingBag.size();
-        for(ShoppingBag shoppingBagd : shoppingBag) {
+        for (ShoppingBag shoppingBagd : shoppingBag) {
             shoppingBagd.getProducts().size();
         }
         return shoppingBag;
