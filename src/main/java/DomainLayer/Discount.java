@@ -62,9 +62,11 @@ public class Discount {
 
     // How discount percentages are combined numerically:
     // 1 = Maximum (use highest discount),
+
     // 2 = Multiplication (stack discounts multiplicatively)
     @Enumerated(EnumType.STRING)
     public NumericalComposition numericalComposition;
+
 
     // Nested discounts for complex discount combinations
     @ElementCollection

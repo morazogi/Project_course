@@ -3,11 +3,11 @@
 //import static org.junit.jupiter.api.Assertions.*;
 //import static org.mockito.Mockito.*;
 //
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import DomainLayer.IStoreRepository;
-//import DomainLayer.IToken;
-//import DomainLayer.IUserRepository;
+//import DomainLayer.Roles.RegisteredUser;
 //import DomainLayer.Store;
+//import InfrastructureLayer.StoreRepository;
+//import InfrastructureLayer.UserRepository;
+//import DomainLayer.IToken;
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //import org.mockito.*;
@@ -15,12 +15,11 @@
 //class OpenStoreTest {
 //
 //    @Mock private IToken tokener;
-//    @Mock private IStoreRepository storeRepository;
-//    @Mock private IUserRepository userRepository;
+//    @Mock private StoreRepository storeRepository;
+//    @Mock private UserRepository userRepository;
 //
 //    @InjectMocks private OpenStore openStoreService;
 //    private AutoCloseable mocks;
-//    private ObjectMapper mapper = new ObjectMapper();
 //
 //    private static final String TOKEN    = "token-xyz";
 //    private static final String USERNAME = "alice";
@@ -28,7 +27,7 @@
 //    @BeforeEach
 //    void setUp() {
 //        mocks = MockitoAnnotations.openMocks(this);
-//        // default: token is valid and extractUsername returns USERNAME
+//
 //        doNothing().when(tokener).validateToken(TOKEN);
 //        when(tokener.extractUsername(TOKEN)).thenReturn(USERNAME);
 //    }
@@ -36,8 +35,8 @@
 //    @Test
 //    void openStore_nullToken_throws() {
 //        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> openStoreService.openStore(null , "storeName")
+//                IllegalArgumentException.class,
+//                () -> openStoreService.openStore(null , "storeName")
 //        );
 //        assertEquals("Invalid input", ex.getMessage());
 //    }
@@ -47,35 +46,48 @@
 //        when(userRepository.getById(USERNAME)).thenReturn(null);
 //
 //        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> openStoreService.openStore(TOKEN , "storeName")
+//                IllegalArgumentException.class,
+//                () -> openStoreService.openStore(TOKEN , "storeName")
 //        );
 //        assertEquals("User does not exist", ex.getMessage());
 //    }
 //
 //    @Test
-//    void openStore_success_returnsNewStoreId_andAddsStore() throws Exception {
-//        // stub: user exists
-//        when(userRepository.getById(USERNAME)).thenReturn("{\"dummy\":\"json\"}");
+//    void openStore_success_returnsNewStoreId_andSavesStore() throws Exception {
+//        RegisteredUser dummyUser = mock(RegisteredUser.class);
+//        when(userRepository.getById(USERNAME)).thenReturn(dummyUser);
+//
+//        Store mockStore = new Store(USERNAME, "storeName");
+//        when(storeRepository.save(any(Store.class))).thenReturn(mockStore);
 //
 //        // call
 //        String newStoreId = openStoreService.openStore(TOKEN , "storeName");
 //
 //        // verify token validation and extraction
-//        +6
 //        verify(tokener).validateToken(TOKEN);
 //        verify(tokener).extractUsername(TOKEN);
 //
-//        // capture addStore args
-//        ArgumentCaptor<String> idCap   = ArgumentCaptor.forClass(String.class);
-//        ArgumentCaptor<String> jsonCap = ArgumentCaptor.forClass(String.class);
-//        verify(storeRepository).addStore(idCap.capture(), jsonCap.capture());
+//        // capture save args
+//        ArgumentCaptor<Store> storeCaptor = ArgumentCaptor.forClass(Store.class);
+//        verify(storeRepository).save(storeCaptor.capture());
 //
-//        // the returned ID matches the one passed to addStore
-//        assertEquals(idCap.getValue(), newStoreId);
+//        // verify the store was created with correct parameters
+//        Store savedStore = storeCaptor.getValue();
+//        assertEquals(USERNAME, savedStore.getFounder());
+//        assertEquals("storeName", savedStore.getName());
 //
-//        // JSON should parse back to a Store with matching owner
-//        Store created = mapper.readValue(jsonCap.getValue(), Store.class);
-//        assertEquals(newStoreId, created.getId());
+//        // verify the returned ID matches the saved store's ID
+//        assertEquals(mockStore.getId(), newStoreId);
+//    }
+//
+//    @Test
+//    void openStore_invalidStoreName_throws() {
+//        when(userRepository.getById(USERNAME)).thenReturn(mock(RegisteredUser.class));
+//
+//        IllegalArgumentException ex = assertThrows(
+//                IllegalArgumentException.class,
+//                () -> openStoreService.openStore(TOKEN , "")
+//        );
+//        assertEquals("Invalid store name", ex.getMessage());
 //    }
 //}

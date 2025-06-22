@@ -12,8 +12,6 @@ public class InventoryManagementMicroservice {
     private StoreRepository storeRepository;
     private ProductRepository productRepository;
     private ObjectMapper mapper = new ObjectMapper();
-    // Standard permission strings
-
 
     public InventoryManagementMicroservice(StoreRepository storeRepository, ProductRepository productRepository) {
         this.storeRepository = storeRepository;
