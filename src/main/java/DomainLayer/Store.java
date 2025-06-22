@@ -775,7 +775,12 @@ public class Store {
     }
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {
-        managers.get(managerId).setPermissionsFromAarray(permissions);
+        ManagerPermissions mp = managers.get(managerId);
+        if (mp != null) {
+            mp.setPermissionsFromAarray(permissions);
+        } else {
+            EventLogger.logEvent("ChangeManagerPermissions", "Manager not found: " + managerId);
+        }
     }
 
     public void terminateManagment(String managerId) {

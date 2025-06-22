@@ -166,17 +166,22 @@ public class StoreManagementMicroservice {
                 return false;
             }
 
-
             Store store = getStoreById(storeId); // Make sure getStoreById uses your StoreRepository
             synchronized (store) {
+                // Check if user exists before proceeding
+                RegisteredUser managerUser;
+                try {
+                    managerUser = getUserById(userId); // Get the user object
+                } catch (IllegalArgumentException e) {
+                    // User does not exist
+                    return false;
+                }
                 //if (store.userIsOwner(userId) || store.userIsManager(userId)) {
                 //    return false;
                 //}
                 store.addManager(appointerId, userId, permissions);
                 // Changes to 'store' will be automatically flushed by the @Transactional context
 
-                // --- IMPORTANT CHANGE HERE ---
-                RegisteredUser managerUser = getUserById(userId); // Get the user object
                 if (managerUser == null) {
                     // Handle case where user is not found (e.g., log error, throw exception, return false)
                     System.err.println("Error: User with ID " + userId + " not found for manager appointment.");

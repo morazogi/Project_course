@@ -1324,3 +1324,5 @@
 [2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart
 [2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
 [2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:45:50] User: ChangeManagerPermissions | Event: Event | Description: Manager not found: manager-3
+[2025-06-23 01:47:16] User: ChangeManagerPermissions | Event: Event | Description: Manager not found: manager-3
