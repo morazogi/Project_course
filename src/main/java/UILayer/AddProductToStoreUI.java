@@ -3,6 +3,7 @@ package UILayer;
 import DomainLayer.IToken;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
+import PresentorLayer.ButtonPresenter;
 import PresentorLayer.UserConnectivityPresenter;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
@@ -21,10 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AddProductToStoreUI extends VerticalLayout {
 
     private final UserConnectivityPresenter userConnectivityPresenter;
+    private final ButtonPresenter buttonPresenter;
+
 
     @Autowired
     public AddProductToStoreUI(UserService userService, RegisteredService registeredService, OwnerManagerService ownerManagerService, IToken tokenService, UserRepository userRepository, StoreRepository storeRepository) {
         this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         TextField storeName = new TextField("store name");
         TextField productName = new TextField("product name");
@@ -37,7 +41,7 @@ public class AddProductToStoreUI extends VerticalLayout {
             result.setText(userConnectivityPresenter.addNewProductToStore(token, storeName.getValue(), productName.getValue(), description.getValue(), price.getValue(), quantity.getValue(), category.getValue()));
         });
 
-        add(new H1("add product"), new HorizontalLayout(storeName, productName, description, price, quantity, category), addNewProductToStore, result);
+        add(new HorizontalLayout(new H1("add product"), buttonPresenter.homePageButton(token)), new HorizontalLayout(storeName, productName, description, price, quantity, category), addNewProductToStore, result);
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }

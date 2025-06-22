@@ -5,10 +5,14 @@ import PresentorLayer.BidUserPresenter;
 import ServiceLayer.BidService;
 import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
+import PresentorLayer.ButtonPresenter;
+import ServiceLayer.RegisteredService;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
@@ -25,11 +29,20 @@ public class Bid extends VerticalLayout {
     public Bid(IToken tokenService,
                BidService bidService,
                UserService userService) {
+    private final Div bidsDisplay = new Div();
+    private final Span message = new Span();
+    private final ButtonPresenter buttonPresenter;
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String user  = token!=null ? tokenService.extractUsername(token):"guest";
+    public Bid(IToken tokenService, RegisteredService registeredService) {
+        presenter = new BidUserPresenter();
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
 
         presenter = new BidUserPresenter(user, token, bidService, userService);
+        add(new HorizontalLayout(new H1("Available Bids"), buttonPresenter.homePageButton(token)));
+        updateBidsDisplay();
 
         add(new H1("Active Bids"), disp);  refresh();
 

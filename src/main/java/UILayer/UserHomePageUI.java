@@ -40,7 +40,7 @@ public class UserHomePageUI extends VerticalLayout {
         // Get current user from session
         this.tokenService = tokenService;
         this.userRepository = userRepository;
-        this.buttonPresenter = new ButtonPresenter(registeredService);
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
         this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManager, tokenService, userRepository);
         this.pp = new PermissionsPresenter(ownerManager, tokenService, userRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
@@ -74,12 +74,10 @@ public class UserHomePageUI extends VerticalLayout {
 
         // Header bar
         H1 title = new H1("🛍️ Store Manager Dashboard");
-        Button homeBtn = buttonPresenter.homePageButton();
         Button signOutBtn = buttonPresenter.signOutButton(token);
 
         HorizontalLayout header = new HorizontalLayout(
                 new H4("👤 Hello, " + user.getUsername()),
-                homeBtn,
                 signOutBtn
         );
         header.setWidthFull();
@@ -91,7 +89,10 @@ public class UserHomePageUI extends VerticalLayout {
 
         add(header, new Hr(), title, storeDropdown);
         add(new HorizontalLayout(new Button("add store", e -> {UI.getCurrent().navigate("/addstore");}), new Button("add new product to store", e -> {UI.getCurrent().navigate("/addnewproduct");})));
-
+        Button searchStoreButton = new Button("Search store", e -> UI.getCurrent().navigate("/searchstore"));
+        Button searchProductButton = new Button("Search product", e -> UI.getCurrent().navigate("/searchproduct"));
+        Button editStoreButton = new Button("Edit store", e -> UI.getCurrent().navigate("/edit-store"));
+        add(new HorizontalLayout(searchStoreButton, searchProductButton, editStoreButton, new Button("Shopping cart", e -> UI.getCurrent().navigate("/shoppingcart"))));
         // in case storeDropdown.getValue() == null
         Map<String, Boolean> map1 = new HashMap<>();
         map1.put("PERM_MANAGE_INVENTORY", false);

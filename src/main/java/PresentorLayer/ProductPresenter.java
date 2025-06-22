@@ -322,6 +322,16 @@ public class ProductPresenter {
         List<Product> products = items.stream()
                 .filter(item -> storeId.equals(item.getStoreId()))
                 .toList();
+        List<Product> products = items.stream().map(item -> {
+            try {
+                if (item.getStoreId().equals(storeId)) {
+                    return item;
+                }
+                return null;
+            } catch (Exception exception) {
+                return null;
+            }
+        }).filter(Objects::nonNull).toList();
         for (Product product : products) {
             productList.add(new Button(product.getName() + "\n" + product.getPrice(), e -> {
                 UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());

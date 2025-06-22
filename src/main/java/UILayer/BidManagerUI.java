@@ -4,6 +4,8 @@ import DomainLayer.IToken;
 import PresentorLayer.BidManagerPresenter;
 import ServiceLayer.BidService;
 import ServiceLayer.UserService;
+import PresentorLayer.ButtonPresenter;
+import ServiceLayer.RegisteredService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -18,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/bidmanager")
 public class BidManagerUI extends VerticalLayout {
 
+    private final BidManagerPresenter bidManagerPresenter;
+    private final List<Span> offerLines = new ArrayList<>();
+    private final ButtonPresenter buttonPresenter;
     private final BidManagerPresenter presenter;
     private final Span error = new Span();
 
@@ -25,6 +30,9 @@ public class BidManagerUI extends VerticalLayout {
     public BidManagerUI(IToken tokenService,
                         BidService bidService,
                         UserService userService) {
+    public BidManagerUI(IToken tokenService, RegisteredService registeredService) { //BidService bidService,
+        this.bidManagerPresenter = new BidManagerPresenter(); //bidService,
+        this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String manager = token!=null ? tokenService.extractUsername(token):"unknown";

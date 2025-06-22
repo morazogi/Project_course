@@ -25,14 +25,14 @@ public class ShoppingCartUI extends VerticalLayout {
     @Autowired
     public ShoppingCartUI(RegisteredService configuredRegisteredService, UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
-        buttonPresenter = new ButtonPresenter(configuredRegisteredService);
+        buttonPresenter = new ButtonPresenter(configuredRegisteredService, configuredTokenService);
 
     }
 
     @PostConstruct
     public void init() {
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        add(new HorizontalLayout(buttonPresenter.signOutButton(token), new H1("Shopping cart"), buttonPresenter.homePageButton()));
+        add(new HorizontalLayout(buttonPresenter.signOutButton(token), new H1("Shopping cart"), buttonPresenter.homePageButton(token)));
 
         add(productPresenter.getShoppingCart(token));
 
