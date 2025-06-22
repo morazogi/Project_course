@@ -2088,3 +2088,38 @@
 [2025-06-22 08:40:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
 [2025-06-22 08:41:09] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
 [2025-06-22 08:41:10] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 11:42:56] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:42:56] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:43:01] User: b | Event: Event | Description: LOGIN
+[2025-06-22 11:43:01] User: b | Event: Event | Description: TokenService
+[2025-06-22 11:43:01] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 11:43:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:43:01] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 11:43:01] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 11:43:02] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:43:02] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:43:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:45:36] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 11:45:38] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 11:52:44] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:52:44] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:52:48] User: b | Event: Event | Description: LOGIN
+[2025-06-22 11:52:48] User: b | Event: Event | Description: TokenService
+[2025-06-22 11:52:48] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 11:52:48] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:52:48] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 11:52:48] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 11:52:51] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:53:31] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 11:53:31] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 11:57:21] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:57:21] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:57:28] User: b | Event: Event | Description: LOGIN
+[2025-06-22 11:57:28] User: b | Event: Event | Description: TokenService
+[2025-06-22 11:57:28] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 11:57:28] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:57:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 11:57:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 11:57:30] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:58:07] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 11:58:08] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
