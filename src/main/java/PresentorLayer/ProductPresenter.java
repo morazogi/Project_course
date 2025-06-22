@@ -307,7 +307,7 @@ public class ProductPresenter {
             } catch (Exception exception) {
                 return null;
             }
-        }).filter(Objects::isNull).toList();
+        }).filter(Objects::nonNull).toList();
         for (Product product : products) {
             productList.add(new Button(product.getName() + "\n" + product.getPrice(), e -> {
                 UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));

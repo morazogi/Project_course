@@ -31,9 +31,9 @@ public class ProxyShipping implements IShipping {
                             "\"city\" : " + "\"" + city + "\"," +
                             "\"address\" : " + "\"" + address + "\"," +
                             "\"country\" : " + "\"" + state + "\"," +
-                            "\"zip\" : " + "\"" + zip + "\"," + "}";
+                            "\"zip\" : " + "\"" + zip + "\"" + "}";
 
-                request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").header("Authorization", "Bearer YOUR_API_KEY").POST(HttpRequest.BodyPublishers.ofString(json)).build();
+                request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(json)).build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -47,6 +47,7 @@ public class ProxyShipping implements IShipping {
                 throw new Exception("could not connect to shipping system");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

@@ -92,7 +92,7 @@ public class UserHomePageUI extends VerticalLayout {
         Button searchStoreButton = new Button("Search store", e -> UI.getCurrent().navigate("/searchstore"));
         Button searchProductButton = new Button("Search product", e -> UI.getCurrent().navigate("/searchproduct"));
         Button editStoreButton = new Button("Edit store", e -> UI.getCurrent().navigate("/edit-store"));
-        add(new HorizontalLayout(searchStoreButton, searchProductButton, editStoreButton));
+        add(new HorizontalLayout(searchStoreButton, searchProductButton, editStoreButton, new Button("Shopping cart", e -> UI.getCurrent().navigate("/shoppingcart"))));
         // in case storeDropdown.getValue() == null
         Map<String, Boolean> map1 = new HashMap<>();
         map1.put("PERM_MANAGE_INVENTORY", false);

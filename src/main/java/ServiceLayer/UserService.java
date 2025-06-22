@@ -137,7 +137,7 @@ public class UserService {
             if (paymentTransactionId != null) {
                 paymentService.cancelPayment(token, paymentTransactionId);
             }
-            throw new RuntimeException("Failed to purchase cart");
+            throw new RuntimeException("Failed to purchase cart " + e.getMessage());
         }
     }
 
@@ -280,7 +280,7 @@ public class UserService {
         for (ShoppingBag bag : user.getShoppingCart().getShoppingBags()) {
             ShoppingBag shoppingBag = new ShoppingBag(bag.getStoreId());
             for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
-                shoppingBag.addProduct(e.getKey(), productRepository.getById(e.getKey()).getQuantity());
+                shoppingBag.addProduct(e.getKey(), e.getValue());
             }
             shoppingBags.add(shoppingBag);
         }

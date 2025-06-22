@@ -26,7 +26,7 @@ public class MockShipping implements IShipping {
         } catch (Exception e) {
             throw new Exception("Invalid home number");
         }
-        return "Shipping successful"
+        return "Shipping successful";
     }
 
     public String cancelShipping(String id) {

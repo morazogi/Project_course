@@ -92,7 +92,7 @@ public class ProxyPayment implements IPayment {
             String json = "{\"action_type\" : \"cancel_pay\"," +
                           "\"transaction_id\" : " + "\"" + Id + "\"}";
 
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").header("Authorization", "Bearer YOUR_API_KEY").POST(HttpRequest.BodyPublishers.ofString(json)).build();
+            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(json)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
