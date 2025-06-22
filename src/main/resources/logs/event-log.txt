@@ -1265,3 +1265,62 @@
 [2025-06-18 20:16:55] User: dani | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
 [2025-06-18 20:16:55] User: dani | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-18 20:16:55] User: dani | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-22 19:00:03] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-22 19:00:03] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-22 19:00:03] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-22 19:00:03] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-22 19:19:17] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-22 19:19:17] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-22 19:19:17] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-22 19:19:17] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-22 19:19:22] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-22 19:19:22] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-22 19:19:22] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-22 19:19:22] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-22 20:22:23] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 20:24:08] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 20:36:57] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 20:54:41] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 20:58:35] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 21:21:56] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 21:37:42] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 21:59:37] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 22:56:57] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 23:16:27] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-22 23:51:03] User: ReserveProduct | Event: Event | Description: Product not found
+[2025-06-23 00:34:23] User: ReserveProduct | Event: Event | Description: Not enough quantity available
+[2025-06-23 00:34:23] User: ReserveProduct | Event: Event | Description: Product not found
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:01:25] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:03:13] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:03:13] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:03:13] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:03:13] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:03:13] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:03:13] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:03:14] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:03:14] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:03:14] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:03:14] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:03:14] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:03:14] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product not found in cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-23 01:05:23] User: removeProduct | Event: Event | Description: Product removed from cart

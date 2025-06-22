@@ -102,7 +102,7 @@ public class Store {
 //    @MapKeyColumn(name = "owner_id")
 //    @OrderColumn(name = "subordinate_index") // Preserves list order
 //    @Column(name = "subordinate_id")
-//    private Map<String, List<String>> ownerToSubordinates = new HashMap<>();
+    // private Map<String, List<String>> ownerToSubordinates = new HashMap<>();
 
     /**
      * Maps store owners to their subordinates using a wrapper embeddable
@@ -202,6 +202,14 @@ public class Store {
         this.name = name;
         founder = founderID;
         openNow = true;
+        // Ensure founder is always an owner and has a subordinates entry
+        if (!owners.contains(founderID)) {
+            owners.add(founderID);
+        }
+        if (!ownerToSubordinates.containsKey(founderID)) {
+            ownerToSubordinates.put(founderID, new OwnerSubordinateEntry(this.id, founderID, new ArrayList<>()));
+        }
+        // Do not add a self-reference in ownersToSuperior for the founder
     }
     public Store() {
     }
@@ -356,6 +364,10 @@ public class Store {
         return true;
     }
     public boolean removeProduct(String productId) {
+        // Prevent removal if product is reserved
+        if (reservedProducts.containsKey(productId)) {
+            throw new IllegalArgumentException("Cannot remove product that is reserved");
+        }
         if (!products.containsKey(productId)) {
             return false;
         }
@@ -533,10 +545,13 @@ public class Store {
         }
         if (currentQuantity == quantity) {
             reservedProducts.remove(productId);
-            products.put(productId, Integer.valueOf(quantity));
+            // Restore the product's quantity to the original value before reservation
+            int prev = products.getOrDefault(productId, 0);
+            products.put(productId, prev + quantity);
         } else {
             reservedProducts.put(productId, Integer.valueOf(currentQuantity - quantity));
-            products.put(productId, Integer.valueOf(products.get(productId) + quantity));
+            int prev = products.getOrDefault(productId, 0);
+            products.put(productId, prev + quantity);
         }
         return true;
     }
@@ -577,7 +592,10 @@ public class Store {
     }
 
     public void addOwner(String appointerId, String userId) {
-        // 1. Add the new owner to the 'owners' list (this part remains the same).
+        // Prevent duplicate owners
+        if (owners.contains(userId)) {
+            return;
+        }
         owners.add(userId);
 
         // 2. Map the new owner to their direct superior (this part also remains the same).
@@ -654,52 +672,52 @@ public class Store {
     }
 
     /**
-     * Retrieves a list of all subordinates associated with the specified owner.
+     * Retrieves a set of all subordinates (owners and managers) associated with the specified owner.
      * This includes direct subordinates as well as their subordinates recursively
      * within the management hierarchy.
      *
      * @param ownerId the unique identifier of the owner whose subordinates are to be retrieved
-     * @return a LinkedList containing the unique identifiers of all subordinates
+     * @return a Set containing the unique identifiers of all subordinates
      */
-    public LinkedList<String> getAllSubordinates(String ownerId) {
-        LinkedList<String> subordinates = new LinkedList<>();
-
-        // Check if the owner exists and has subordinates
-        List<String> directSubordinates = ownerToSubordinates.get(ownerId).getSubordinates();
+    public Set<String> getAllSubordinates(String ownerId) {
+        Set<String> subordinates = new HashSet<>();
+        OwnerSubordinateEntry entry = ownerToSubordinates.get(ownerId);
+        if (entry == null) {
+            return subordinates;
+        }
+        List<String> directSubordinates = entry.getSubordinates();
         if (directSubordinates == null) {
             return subordinates;
         }
-
-        // Add direct subordinates
-        subordinates.addAll(directSubordinates);
-
-        // Recursively add subordinates of subordinates
         for (String subordinate : directSubordinates) {
+            subordinates.add(subordinate);
             subordinates.addAll(getAllSubordinates(subordinate));
+            // If the subordinate is a manager, add them as well
+            if (userIsManager(subordinate)) {
+                subordinates.add(subordinate);
+            }
         }
-
+        // Also add managers directly appointed by this owner
+        for (Map.Entry<String, String> entryMgr : managersToSuperior.entrySet()) {
+            if (ownerId.equals(entryMgr.getValue())) {
+                subordinates.add(entryMgr.getKey());
+            }
+        }
         return subordinates;
     }
-
-
-
     public boolean removeDiscount(String id) {
         if (id == null) {
             return false;
         }
         return discounts.remove(id);
     }
-
-
-
     public boolean addDiscount(String discountId) {
-        if (discountId == null) {
+
+        if (discountId == null || discounts.contains(discountId)) {
             return false;
         }
         return discounts.add(discountId);
     }
-
-
     /**
      * Terminates the ownership of the specified owner by removing their associated
      * roles and subordinates within a store management hierarchy. This includes
@@ -709,11 +727,21 @@ public class Store {
      * @param ownerId the unique identifier of the owner whose ownership should be terminated
      */
     public void terminateOwnership(String ownerId) {
-        // First, get all subordinates that will need to be removed
-        LinkedList<String> subordinatesToRemove = getAllSubordinates(ownerId);
+        // Prevent removal of the founder
+        if (isFounder(ownerId)) {
+            // Do nothing: founder cannot be removed
+            return;
+        }
+        // Get all subordinates recursively (owners and managers)
+        Set<String> subordinatesToRemove = getAllSubordinates(ownerId);
 
-        // Remove all subordinates first
+        // Remove all subordinates and clean up their superior's subordinate lists
         for (String subordinateId : subordinatesToRemove) {
+            // Remove subordinate from their superior's subordinate list
+            String superiorId = ownersToSuperior.get(subordinateId);
+            if (superiorId != null && ownerToSubordinates.containsKey(superiorId)) {
+                ownerToSubordinates.get(superiorId).removeSubordinate(subordinateId);
+            }
             owners.remove(subordinateId);
             ownerToSubordinates.remove(subordinateId);
             ownersToSuperior.remove(subordinateId);
@@ -722,6 +750,11 @@ public class Store {
                 managers.remove(subordinateId);
                 managersToSuperior.remove(subordinateId);
             }
+        }
+        // Remove the owner from their superior's subordinate list
+        String ownerSuperiorId = ownersToSuperior.get(ownerId);
+        if (ownerSuperiorId != null && ownerToSubordinates.containsKey(ownerSuperiorId)) {
+            ownerToSubordinates.get(ownerSuperiorId).removeSubordinate(ownerId);
         }
         // Finally remove the owner himself
         owners.remove(ownerId);
@@ -833,5 +866,4 @@ public class Store {
     public void setFounder(String founder) {
         this.founder = founder;
     }
-
 }

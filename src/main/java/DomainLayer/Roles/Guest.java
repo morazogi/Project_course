@@ -47,6 +47,12 @@ public class Guest {
     }
     //------------------------------------------
     public void addProduct(String storeId, String productId, Integer quantity) {
+        if (storeId == null) {
+            throw new NullPointerException("storeId cannot be null");
+        }
+        if (productId == null) {
+            throw new NullPointerException("productId cannot be null");
+        }
         if(quantity <= 0 ) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
@@ -66,6 +72,12 @@ public class Guest {
     }
 
     public void removeProduct(String storeId, String productId , Integer quantity) {
+        if (storeId == null) {
+            throw new NullPointerException("storeId cannot be null");
+        }
+        if (productId == null) {
+            throw new NullPointerException("productId cannot be null");
+        }
         for (ShoppingBag shoppingBag : shoppingCart.getShoppingBags()) {
             if (shoppingBag.getStoreId().equals(storeId)) {
                 boolean found = shoppingBag.removeProduct(productId , quantity);

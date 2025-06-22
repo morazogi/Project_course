@@ -2,6 +2,7 @@ package DomainLayer.DomainServices;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import DomainLayer.Store;
 import DomainLayer.Roles.RegisteredUser;
@@ -128,7 +129,7 @@ public class StoreManagementMicroservice {
         Store store = getStoreById(storeId);
         if(store.checkIfSuperior(removerId,ownerId)){
             synchronized (store) {
-                LinkedList<String> firedUsers = store.getAllSubordinates(ownerId);
+                List<String> firedUsers = store.getAllSubordinates(ownerId).stream().toList();
                 store.terminateOwnership(ownerId);
                 for(String s:firedUsers){
                     getUserById(s).removeStore(storeId);
@@ -149,7 +150,7 @@ public class StoreManagementMicroservice {
         Store store = getStoreById(storeId);
         if(!store.isFounder(ownerId)&&store.userIsOwner(ownerId)){
             synchronized (store) {
-                LinkedList<String> firedUsers = store.getAllSubordinates(ownerId);
+                List<String> firedUsers = store.getAllSubordinates(ownerId).stream().toList();
                 store.terminateOwnership(ownerId);
                 for(String s:firedUsers){
                     getUserById(s).removeStore(storeId);

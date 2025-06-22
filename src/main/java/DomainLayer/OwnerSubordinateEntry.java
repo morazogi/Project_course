@@ -34,7 +34,7 @@ public class OwnerSubordinateEntry implements Serializable {
     // Default constructor for JPA
     public OwnerSubordinateEntry() {}
 
-    // Constructor for creating new entries
+    // Ensure this constructor is PUBLIC and matches the signature used in Store.java
     public OwnerSubordinateEntry(String storeId, String ownerId, List<String> subordinates) {
         this.id = new OwnerSubordinateEntryPK(storeId, ownerId);
         this.subordinates = subordinates != null ? new ArrayList<>(subordinates) : new ArrayList<>();

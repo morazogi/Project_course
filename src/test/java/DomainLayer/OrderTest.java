@@ -155,4 +155,29 @@ public class OrderTest {
         assertEquals(order1.getUserId(), order2.getUserId());
         assertEquals(order1.getDate(), order2.getDate());
     }
+
+    @Test
+    @DisplayName("Constructor should allow null and empty values for info, storeId, userId")
+    void testConstructorWithNullAndEmptyValues() {
+        // Should not throw
+        assertDoesNotThrow(() -> new Order(null, null, null, null));
+        assertDoesNotThrow(() -> new Order("", "", "", null));
+    }
+
+    @Test
+    @DisplayName("Order ID should be null until persisted")
+    void testIdIsNullUntilPersisted() {
+        Order o = new Order("info", "store", "user", new Date());
+        assertNull(o.getId());
+    }
+
+    @Test
+    @DisplayName("Order equals/hashCode contract (if implemented in future)")
+    void testEqualsAndHashCodeContract() {
+        // This test is a placeholder for when equals/hashCode are implemented.
+        // For now, just check reference equality.
+        Order o1 = new Order("info", "store", "user", new Date());
+        Order o2 = new Order("info", "store", "user", new Date(o1.getDate().getTime()));
+        assertNotEquals(o1, o2); // Should be false unless equals is overridden
+    }
 }

@@ -46,6 +46,9 @@ public class ShoppingBag {
         }
     }
     public boolean removeProduct(String productId , Integer quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
         boolean found = false;
         for (String product : products.keySet()) {
             if (productId.equals(product)) {
