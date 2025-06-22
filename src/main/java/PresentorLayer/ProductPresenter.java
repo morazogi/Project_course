@@ -40,9 +40,8 @@ public class ProductPresenter {
 
     public VerticalLayout getShoppingCart(String token) {
         VerticalLayout shoppingCartList = new VerticalLayout();
-        List<ShoppingBag> shoppingBags = userGetShoppingBag(token);
+        List<ShoppingBag> shoppingBags = userService.getShoppingCart(token);
         shoppingCartList.add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
-        double totalPayment = 0;
         for (ShoppingBag shoppingBag : shoppingBags) {
             VerticalLayout productList = new VerticalLayout();
             try {
@@ -57,7 +56,7 @@ public class ProductPresenter {
             for (Map.Entry<String, Integer> product : shoppingBag.getProducts().entrySet()) {
                 productList.add(new Span(userService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" + userService.getProductById(product.getKey()).get().getPrice()));
             }
-            shoppingCartList.add(productList, new Span("total payment :" + userService.reserveCart(token)));
+            shoppingCartList.add(productList, new Span("total payment :" + userService.calculateCartPrice(token)));
         }
 
         return shoppingCartList;
@@ -354,24 +353,6 @@ public class ProductPresenter {
             return new VerticalLayout(new Span("store does not exist"));
         }
         return storePage;
-    }
-
-    @Transactional
-    public List<ShoppingBag> userGetShoppingBag(String token) {
-        String username = tokenService.extractUsername(token);
-        RegisteredUser user = null;
-        try {
-            user = userRepository.getById(username);
-        } catch (Exception e) {
-
-        }
-        ShoppingCart shoppingCart = user.getShoppingCart();
-        List<ShoppingBag> shoppingBag = shoppingCart.getShoppingBags();
-        shoppingBag.size();
-        for (ShoppingBag shoppingBagd : shoppingBag) {
-            shoppingBagd.getProducts().size();
-        }
-        return shoppingBag;
     }
 
     //public boolean addProduct(String name, String description,double price, int quantity, double rating, String category, String storeName){

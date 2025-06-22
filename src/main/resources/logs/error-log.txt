@@ -32,3 +32,6 @@
 [2025-06-22 11:45:38] User: b | Error: Error in shipping | Details: For input string: "No POST data received"
 [2025-06-22 11:53:31] User: b | Error: Error in shipping | Details: For input string: "No POST data received"
 [2025-06-22 11:58:08] User: b | Error: Failed to pay  | Details: For input string: "No POST data received"
+[2025-06-22 16:32:54] User: b | Error: Error in shipping | Details: could not connect to shipping system
+[2025-06-22 16:37:41] User: b | Error: Error in shipping | Details: could not connect to shipping system
+[2025-06-22 16:39:14] User: b | Error: Error in shipping | Details: could not connect to shipping system

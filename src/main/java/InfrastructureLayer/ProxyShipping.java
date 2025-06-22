@@ -17,23 +17,24 @@ public class ProxyShipping implements IShipping {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
-            String json = "{\"action_type\" : \"handshake\"}";
+            String json = "action_type=handshake";
 
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(json)).build();
+            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(json)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
+            System.out.println(response);
+            if (response.body().equals("OK")) {
                 client = HttpClient.newHttpClient();
 
-                    json = "{\"action_type\" : \"supply\"," +
-                            "\"name\" : " + "\"" + name + "\"," +
-                            "\"city\" : " + "\"" + city + "\"," +
-                            "\"address\" : " + "\"" + address + "\"," +
-                            "\"country\" : " + "\"" + state + "\"," +
-                            "\"zip\" : " + "\"" + zip + "\"" + "}";
+                    json = "action_type=supply" +
+                            "&name=" + name +
+                            "&city=" + city +
+                            "&address=" + address +
+                            "&country=" + state +
+                            "&zip=" + zip;
 
-                request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(json)).build();
+                request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(json)).build();
 
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
@@ -55,10 +56,10 @@ public class ProxyShipping implements IShipping {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
-            String json = "{\"action_type\" : \"cancel_supply\"," +
-                    "\"transaction_id\" : " + "\"" + Id + "\"}";
+            String json = "action_type=cancel_supply" +
+                    "&transaction_id=" + Id;
 
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/json").header("Authorization", "Bearer YOUR_API_KEY").POST(HttpRequest.BodyPublishers.ofString(json)).build();
+            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://damp-lynna-wsep-1984852e.koyeb.app")).header("Content-Type", "application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(json)).build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
