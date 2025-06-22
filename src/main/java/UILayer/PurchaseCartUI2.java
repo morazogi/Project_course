@@ -37,7 +37,7 @@ public class PurchaseCartUI2 extends VerticalLayout {
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 
         /* --------- payment / shipping fields --------- */
-        TextField name  = new TextField("name");
+        TextField name           = new TextField("name");
         TextField cardNumber     = new TextField("card number");
         TextField expirationDate = new TextField("expiration date");
         TextField cvv            = new TextField("cvv");

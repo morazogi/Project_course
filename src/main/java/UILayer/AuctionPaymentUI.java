@@ -1,7 +1,9 @@
 package UILayer;
 
 import DomainLayer.IToken;
+import PresentorLayer.AuctionPresenter;
 import ServiceLayer.AuctionService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -17,14 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/auctionpay/:id")
 public class AuctionPaymentUI extends VerticalLayout implements BeforeEnterObserver {
 
-    private final AuctionService auctionService;
-    private final IToken tokenService;
     private String auctionId;
+    private AuctionPresenter auctionPresenter;
 
     @Autowired
-    public AuctionPaymentUI(AuctionService auctionService, IToken tokenService) {
-        this.auctionService = auctionService;
-        this.tokenService = tokenService;
+    public AuctionPaymentUI(AuctionService auctionService, IToken tokenService, UserService userService) {
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        this.auctionPresenter = new AuctionPresenter(token != null ? tokenService.extractUsername(token) : "guest", token, auctionService, userService);
     }
 
     @Override
@@ -39,29 +40,31 @@ public class AuctionPaymentUI extends VerticalLayout implements BeforeEnterObser
 
         add(new H1("Pay for auction"));
 
-        TextField payMeth = new TextField("payment method");
-        TextField card = new TextField("card number");
-        TextField exp = new TextField("expiration");
-        TextField cvv = new TextField("cvv");
-        TextField state = new TextField("state");
-        TextField city = new TextField("city");
-        TextField street = new TextField("street");
-        TextField home = new TextField("home");
+        TextField name           = new TextField("name");
+        TextField cardNumber     = new TextField("card number");
+        TextField expirationDate = new TextField("expiration date");
+        TextField cvv            = new TextField("cvv");
+        TextField state          = new TextField("state");
+        TextField city           = new TextField("city");
+        TextField address        = new TextField("address");
+        TextField id             = new TextField("id");
+        TextField zip            = new TextField("zip");
 
         Span msg = new Span();
 
         Button pay = new Button("Submit payment", ev -> {
             try {
-                auctionService.pay(auctionId, token,
-                        payMeth.getValue(), card.getValue(), exp.getValue(), cvv.getValue(),
-                        state.getValue(), city.getValue(), street.getValue(), home.getValue());
+                auctionPresenter.pay(auctionId, token, name.getValue(), cardNumber.getValue(),
+                        expirationDate.getValue(), cvv.getValue(),
+                        state.getValue(), city.getValue(),
+                        address.getValue(), id.getValue(), zip.getValue());
                 msg.setText("Payment successful – thank you!");
             } catch (Exception ex) {
                 msg.setText(ex.getMessage());
             }
         });
 
-        add(payMeth, card, exp, cvv, state, city, street, home, pay, msg);
+        add(name, cardNumber, expirationDate, cvv, state, city, address, id, zip, pay, msg);
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }

@@ -17,10 +17,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Route("/bidmanager")
 public class BidManagerUI extends VerticalLayout {
 
-    private final BidManagerPresenter bidManagerPresenter;
     private final List<Span> offerLines = new ArrayList<>();
     private final ButtonPresenter buttonPresenter;
     private final BidManagerPresenter presenter;
@@ -29,15 +31,13 @@ public class BidManagerUI extends VerticalLayout {
     @Autowired
     public BidManagerUI(IToken tokenService,
                         BidService bidService,
-                        UserService userService) {
-    public BidManagerUI(IToken tokenService, RegisteredService registeredService) { //BidService bidService,
-        this.bidManagerPresenter = new BidManagerPresenter(); //bidService,
+                        UserService userService,
+                        RegisteredService registeredService) {
         this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String manager = token!=null ? tokenService.extractUsername(token):"unknown";
 
-        presenter = new BidManagerPresenter(manager, bidService, userService);
+        presenter = new BidManagerPresenter(token!=null ? tokenService.extractUsername(token):"unknown", bidService, userService);
 
         TextField store  = new TextField("Store Name");
         TextField prod   = new TextField("Product Name");
@@ -55,7 +55,7 @@ public class BidManagerUI extends VerticalLayout {
             } catch(Exception ex){ error.setText(ex.getMessage()); }
         });
 
-        add(new H1("Create Bid"),
+        add(new HorizontalLayout(new H1("Create Bid"), buttonPresenter.homePageButton(token)),
                 new HorizontalLayout(store, prod),
                 new HorizontalLayout(start, inc, dur),
                 startBtn, error);

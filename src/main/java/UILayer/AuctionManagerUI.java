@@ -29,9 +29,8 @@ public class AuctionManagerUI extends VerticalLayout {
     @Autowired
     public AuctionManagerUI(IToken tokenService,
                             AuctionService auctionService,
-                            UserService userService) {
-    public AuctionManagerUI(IToken tokenService, RegisteredService registeredService) {
-        this.presenter = new AuctionManagerPresenter();
+                            UserService userService,
+                            RegisteredService registeredService) {
         this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");

@@ -82,4 +82,8 @@ public class BidUserPresenter {
         }
         return "Matching bid not found / finished.";
     }
+
+    public void pay(String bidId, String token, String name, String cardNumber, String expirationDate, String cvv, String state, String city, String address, String id, String zip) {
+        bidService.pay(bidId, token, name, cardNumber, expirationDate, cvv, state, city, address, id, zip);
+    }
 }

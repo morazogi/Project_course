@@ -3,7 +3,9 @@ package UILayer;
 import DomainLayer.IToken;
 import PresentorLayer.AuctionPresenter;
 import PresentorLayer.ButtonPresenter;
+import ServiceLayer.AuctionService;
 import ServiceLayer.RegisteredService;
+import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
@@ -20,14 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuctionUI extends VerticalLayout {
 
     private final AuctionPresenter presenter;
+    private final ButtonPresenter buttonPresenter;
     private final Div auctionsDisplay = new Div();
     private final Span message = new Span();
 
     @Autowired
     public AuctionUI(IToken tokenService,
                      AuctionService auctionService,
-                     UserService userService) {
-    public AuctionUI(IToken tokenService, RegisteredService registeredService) {
+                     UserService userService,
+                     RegisteredService registeredService) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         String username = token != null ? tokenService.extractUsername(token) : "guest";
@@ -36,7 +39,6 @@ public class AuctionUI extends VerticalLayout {
         this.presenter = new AuctionPresenter(username, token, auctionService, userService);
 
         add(new H1("Open Auctions"));
-        this.presenter = new AuctionPresenter(username);
 
         // ── heading + current auctions ──────────────────────────────
         add(new HorizontalLayout(new H1("Open Auctions"), buttonPresenter.homePageButton(token)));

@@ -319,9 +319,6 @@ public class ProductPresenter {
     public VerticalLayout getAllProductsInStore(String token, String storeId) {
         VerticalLayout productList = new VerticalLayout();
         List<Product> items = userService.getAllProducts(token);
-        List<Product> products = items.stream()
-                .filter(item -> storeId.equals(item.getStoreId()))
-                .toList();
         List<Product> products = items.stream().map(item -> {
             try {
                 if (item.getStoreId().equals(storeId)) {

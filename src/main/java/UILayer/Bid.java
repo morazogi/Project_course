@@ -24,25 +24,19 @@ public class Bid extends VerticalLayout {
     private final BidUserPresenter presenter;
     private final Div disp = new Div();
     private final Span msg = new Span();
+    private final ButtonPresenter buttonPresenter;
 
     @Autowired
     public Bid(IToken tokenService,
                BidService bidService,
-               UserService userService) {
-    private final Div bidsDisplay = new Div();
-    private final Span message = new Span();
-    private final ButtonPresenter buttonPresenter;
+               UserService userService,
+               RegisteredService registeredService) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String user  = token!=null ? tokenService.extractUsername(token):"guest";
-    public Bid(IToken tokenService, RegisteredService registeredService) {
-        presenter = new BidUserPresenter();
         this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
-        String token = (String) UI.getCurrent().getSession().getAttribute("token");
 
-        presenter = new BidUserPresenter(user, token, bidService, userService);
+        presenter = new BidUserPresenter(token!=null ? tokenService.extractUsername(token):"guest", token, bidService, userService);
         add(new HorizontalLayout(new H1("Available Bids"), buttonPresenter.homePageButton(token)));
-        updateBidsDisplay();
 
         add(new H1("Active Bids"), disp);  refresh();
 
