@@ -163,14 +163,29 @@ public class DiscountPolicyMicroservice {
 
 
 
-    public float calculatePrice(String storeId, Map<String,Integer> productsStringQuantity){
-        Store store = getStoreById(storeId);
+    public float calculatePrice(String storeId,
+                                Map<String, Integer> productsStringQuantity) {
 
-        List<Discount> Alldiscounts = store.getDiscountPolicy().stream()
+        /* ---------- fetch store and the discounts it references ---------- */
+        Store store = getStoreById(storeId);
+        if (store == null) {
+            throw new IllegalArgumentException("Store not found");
+        }
+
+        List<Discount> allDiscounts = store.getDiscountPolicy().stream()
                 .map(this::getDiscountById)
                 .filter(Objects::nonNull)
                 .toList();
 
+    /* -----------------------------------------------------------------
+       Start every *new* basket evaluation with a clean slate:
+       clear “alreadyUsed” on every discount (including nested ones)
+       ----------------------------------------------------------------- */
+        for (Discount d : allDiscounts) {
+            resetUsedRecursively(d);
+        }
+
+        /* ---------- turn id→qty map into Product→qty map ---------- */
         Map<Product, Integer> productsQuantity = new HashMap<>();
         for (Map.Entry<String, Integer> e : productsStringQuantity.entrySet()) {
             Product p = getProductById(e.getKey());
@@ -179,56 +194,53 @@ public class DiscountPolicyMicroservice {
             }
         }
 
-
-
-
-
-
+        /* ---------- base price and initial multipliers (1.0 = no discount) ---------- */
         float originalPrice = 0f;
-
+        Map<Product, Float> productMultipliers = new HashMap<>();
         for (Map.Entry<Product, Integer> e : productsQuantity.entrySet()) {
             originalPrice += e.getKey().getPrice() * e.getValue();
+            productMultipliers.put(e.getKey(), 1f);
         }
 
-
-        Map<Product, Float> productDiscounts = new HashMap<>();
-        for (Product p : productsQuantity.keySet()) {
-            productDiscounts.put(p, 1f);
-        }
-
-
-        for (Discount discount : Alldiscounts) {
-            List<Discount> nestedDiscounts = new ArrayList<>();
-            for (String id : discount.getDiscounts()) {
-                Discount d = getDiscountById(id);
-                if (d != null) {
-                    nestedDiscounts.add(d);
-                }
+        /* ---------- apply every *top-level* discount in the store’s policy ---------- */
+        for (Discount top : allDiscounts) {
+            List<Discount> nested = new ArrayList<>();
+            for (String id : top.getDiscounts()) {
+                Discount child = getDiscountById(id);
+                if (child != null) nested.add(child);
             }
-            productDiscounts =  discount.applyDiscount(originalPrice, productsQuantity, productDiscounts, nestedDiscounts);
+            productMultipliers = top.applyDiscount(originalPrice,
+                    productsQuantity,
+                    productMultipliers,
+                    nested);
         }
 
-
-
-
-
-
-
-
+        /* ---------- final total ---------- */
         float total = 0f;
-        for (Map.Entry<Product, Float> e : productDiscounts.entrySet()) {
-            Product p = e.getKey();
-            float discount = e.getValue();
-            int qty = productsQuantity.getOrDefault(p, 0);
-            total += p.getPrice() * discount * qty;
+        for (Map.Entry<Product, Float> e : productMultipliers.entrySet()) {
+            Product p  = e.getKey();
+            float mul  = e.getValue();
+            int   qty  = productsQuantity.getOrDefault(p, 0);
+            total += p.getPrice() * mul * qty;
         }
 
         return total;
     }
 
+    /* ---------------------------------------------------------------
+       Utility: recursively clears the “alreadyUsed” flag so that a
+       discount can participate again in a fresh calculation.
+       --------------------------------------------------------------- */
 
 
 
+    private void resetUsedRecursively(Discount disc) {
+        if (disc == null) return;
+        disc.setAlreadyUsed(false);
+        for (String id : disc.getDiscounts()) {
+            resetUsedRecursively(getDiscountById(id));
+        }
+    }
 
 
 
