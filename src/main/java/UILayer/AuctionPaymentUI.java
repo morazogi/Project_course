@@ -7,6 +7,7 @@ import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,52 +21,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuctionPaymentUI extends VerticalLayout implements BeforeEnterObserver {
 
     private String auctionId;
-    private AuctionPresenter auctionPresenter;
+    private final AuctionPresenter pres;
 
+    /*──────────────────────────────────────────────────────────────────────*/
     @Autowired
-    public AuctionPaymentUI(AuctionService auctionService, IToken tokenService, UserService userService) {
+    public AuctionPaymentUI(AuctionService aucSvc, IToken tokenSvc, UserService userSvc) {
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        this.auctionPresenter = new AuctionPresenter(token != null ? tokenService.extractUsername(token) : "guest", token, auctionService, userService);
+        pres = new AuctionPresenter(
+                token!=null ? tokenSvc.extractUsername(token):"guest",
+                token, aucSvc, userSvc);
     }
 
-    @Override
-    public void beforeEnter(BeforeEnterEvent e) {
-        RouteParameters params = e.getRouteParameters();
-        auctionId = params.get("id").orElse("");
+    @Override public void beforeEnter(BeforeEnterEvent e){
+        RouteParameters p = e.getRouteParameters();
+        auctionId = p.get("id").orElse("");
         build();
     }
 
-    private void build() {
+    private void build(){
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 
-        add(new H1("Pay for auction"));
+        TextField name   = new TextField("Card Holder");
+        TextField card   = new TextField("Card Number");        card.setPlaceholder("xxxx xxxx xxxx xxxx");
+        TextField exp    = new TextField("Expiry (MM/YY)");
+        TextField cvv    = new TextField("CVV");
 
-        TextField name           = new TextField("name");
-        TextField cardNumber     = new TextField("card number");
-        TextField expirationDate = new TextField("expiration date");
-        TextField cvv            = new TextField("cvv");
-        TextField state          = new TextField("state");
-        TextField city           = new TextField("city");
-        TextField address        = new TextField("address");
-        TextField id             = new TextField("id");
-        TextField zip            = new TextField("zip");
+        TextField state  = new TextField("State");
+        TextField city   = new TextField("City");
+        TextField addr   = new TextField("Street / No.");
+        TextField zip    = new TextField("ZIP");
+        TextField idNum  = new TextField("Buyer ID");
 
-        Span msg = new Span();
-
-        Button pay = new Button("Submit payment", ev -> {
+        Span info = new Span();
+        Button pay = new Button("Pay now", e -> {
             try {
-                auctionPresenter.pay(auctionId, token, name.getValue(), cardNumber.getValue(),
-                        expirationDate.getValue(), cvv.getValue(),
-                        state.getValue(), city.getValue(),
-                        address.getValue(), id.getValue(), zip.getValue());
-                msg.setText("Payment successful – thank you!");
-            } catch (Exception ex) {
-                msg.setText(ex.getMessage());
-            }
+                pres.pay(auctionId, token,
+                        name.getValue(), card.getValue(), exp.getValue(), cvv.getValue(),
+                        state.getValue(), city.getValue(), addr.getValue(), idNum.getValue(), zip.getValue());
+                info.setText("Payment successful ✔");
+            } catch(Exception ex){ info.setText(ex.getMessage()); }
         });
 
-        add(name, cardNumber, expirationDate, cvv, state, city, address, id, zip, pay, msg);
-        setPadding(true);
-        setAlignItems(Alignment.CENTER);
+        add(new H1("Auction Payment"), new Hr(),
+                name, card, exp, cvv,
+                state, city, addr, zip, idNum,
+                pay, info);
+
+        setPadding(true); setAlignItems(Alignment.CENTER);
     }
 }

@@ -740,4 +740,24 @@ public class OwnerManagerService {
             return false;
         }
     }
+
+
+    @Transactional
+    public boolean hasInventoryPermission(String userId, String storeId) {
+
+        /* ① founder / owner → always yes */
+        if (storeManagementService.isFounderOrOwner(userId, storeId))
+            return true;
+
+        /* ② manager → check permission map */
+        Map<String, Boolean> perms =
+                storeManagementService.getManagerPermissions(userId, storeId, userId);
+
+        if (perms == null) return false;
+        Boolean allowed = perms.get(ManagerPermissions.PERM_MANAGE_INVENTORY);
+        return allowed != null && allowed;
+    }
+    public boolean isFounderOrOwner(String userId, String storeId) {
+        return storeManagementService.isFounderOrOwner(userId, storeId);
+    }
 }
