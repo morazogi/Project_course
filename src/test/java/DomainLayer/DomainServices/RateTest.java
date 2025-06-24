@@ -1,180 +1,120 @@
-//package DomainLayer.DomainServices;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.Mockito.*;
-//
-//import DomainLayer.Roles.RegisteredUser;
-//import InfrastructureLayer.ProductRepository;
-//import InfrastructureLayer.StoreRepository;
-//import InfrastructureLayer.UserRepository;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import DomainLayer.IProductRepository;
-//import DomainLayer.IStoreRepository;
-//import DomainLayer.IToken;
-//import DomainLayer.IUserRepository;
-//import DomainLayer.Product;
-//import DomainLayer.Store;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.*;
-//
-//class RateTest {
-//
-//    @Mock private IToken tokener;
-//    @Mock private StoreRepository storeRepository;
-//    @Mock private UserRepository userRepository;
-//    @Mock private ProductRepository productRepository;
-//
-//    @InjectMocks private Rate rateService;
-//    private AutoCloseable mocks;
-//    private ObjectMapper mapper = new ObjectMapper();
-//
-//    private static final String TOKEN = "token";
-//    private static final String USER = "alice";
-//    private static final String STORE_ID = "store1";
-//    private static final String PRODUCT_ID = "prod1";
-//
-//    @BeforeEach
-//    void setUp() {
-//        mocks = MockitoAnnotations.openMocks(this);
-//        when(tokener.extractUsername(TOKEN)).thenReturn(USER);
-//        doNothing().when(tokener).validateToken(TOKEN);
-//    }
-//
-//    // --- rateStore() tests ---
-//
-//    @Test
-//    void rateStore_nullToken_throws() {
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(null, STORE_ID, 3));
-//    }
-//
-//    @Test
-//    void rateStore_nullStoreId_throws() {
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(TOKEN, null, 3));
-//    }
-//
-//    @Test
-//    void rateStore_invalidRate_throws() {
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(TOKEN, STORE_ID, 0));
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(TOKEN, STORE_ID, 6));
-//    }
-//
-//    @Test
-//    void rateStore_storeNotExist_throws() throws Exception {
-//        // stub repository to return null JSON
-//        when(storeRepository.getById(STORE_ID)).thenReturn(null);
-//
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(TOKEN, STORE_ID, 4));
-//    }
-//
-//    @Test
-//    void rateStore_userNotExist_throws() throws Exception {
-//        // prepare a valid store JSON
-//        Store store = new Store(STORE_ID , "");
-//        when(storeRepository.getById(STORE_ID)).thenReturn(store);
-//
-//        // user repo returns null
-//        when(userRepository.getById(USER)).thenReturn(null);
-//
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(TOKEN, STORE_ID, 4));
-//    }
-//
-//    @Test
-//    void rateStore_rateTrue_updatesAndReturnsTrue() throws Exception {
-//        // prepare a valid store JSON
-//        Store store = mock(Store.class);
-//        when(storeRepository.getById(STORE_ID)).thenReturn(store);
-//
-//        when(userRepository.getById(USER)).thenReturn(new RegisteredUser());
-//        when(store.rate(5)).thenReturn(true);
-//
-//        boolean result = rateService.rateStore(TOKEN, STORE_ID, 5);
-//
-//        verify(tokener).validateToken(TOKEN);
-//        verify(storeRepository).update(eq(STORE_ID), anyString());
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    void rateStore_rateFalse_returnsFalse() throws Exception {
-//        // prepare a valid store JSON
-//        Store store = mock(Store.class);
-//        String storeJson = mapper.writeValueAsString(store);
-//        when(storeRepository.getStore(STORE_ID)).thenReturn(storeJson);
-//        when(userRepository.getUser(USER)).thenReturn("someUserJson");
-//
-//        //rate with -4 should throw an exception
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateStore(TOKEN, STORE_ID, -4));
-//
-//    }
-//
-//    // --- rateProduct() tests ---
-//
-//    @Test
-//    void rateProduct_nullArgs_throws() {
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateProduct(null, PRODUCT_ID, 4.0));
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateProduct(TOKEN, null, 4.0));
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateProduct(TOKEN, PRODUCT_ID, 0.5));
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateProduct(TOKEN, PRODUCT_ID, 6.0));
-//    }
-//
-//    @Test
-//    void rateProduct_productNotExist_throws() {
-//        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(null);
-//
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateProduct(TOKEN, PRODUCT_ID, 4.0));
-//    }
-//
-//    @Test
-//    void rateProduct_userNotExist_throws() {
-//        // prepare a valid product
-//        Product product = mock(Product.class);
-//        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(product);
-//        // user repo returns null
-//        when(userRepository.getUser(USER)).thenReturn(null);
-//
-//        assertThrows(IllegalArgumentException.class,
-//            () -> rateService.rateProduct(TOKEN, PRODUCT_ID, 4.0));
-//    }
-//
-//    @Test
-//    void rateProduct_addRatingTrue_savesAndReturnsTrue() {
-//        // prepare a valid product
-//        Product product = mock(Product.class);
-//        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(product);
-//        when(userRepository.getUser(USER)).thenReturn("someUserJson");
-//        when(product.addRating(USER, 5.0)).thenReturn(true);
-//
-//        boolean result = rateService.rateProduct(TOKEN, PRODUCT_ID, 5.0);
-//
-//        verify(tokener).validateToken(TOKEN);
-//        verify(productRepository).save(product);
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    void rateProduct_addRatingFalse_returnsFalse() {
-//        // prepare a valid product
-//        Product product = mock(Product.class);
-//        when(productRepository.getReferenceById(PRODUCT_ID)).thenReturn(product);
-//        when(userRepository.getUser(USER)).thenReturn("someUserJson");
-//        when(product.addRating(USER, 3.5)).thenReturn(false);
-//
-//        boolean result = rateService.rateProduct(TOKEN, PRODUCT_ID, 3.5);
-//
-//        verify(productRepository, never()).save(product);
-//        assertFalse(result);
-//    }
-//}
+package DomainLayer.DomainServices;
+
+import DomainLayer.IToken;
+import DomainLayer.Product;
+import DomainLayer.Roles.RegisteredUser;
+import DomainLayer.Store;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+/**
+ * Unit tests for {@link Rate}.
+ */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class RateTest {
+
+    /* -------- mocked collaborators -------- */
+    @Mock IToken            tokener;
+    @Mock StoreRepository   storeRepo;
+    @Mock UserRepository    userRepo;
+    @Mock ProductRepository productRepo;
+
+    private Rate service;            // system under test
+    private final RegisteredUser dummyUser = Mockito.mock(RegisteredUser.class);
+
+    @BeforeEach
+    void init() {
+        service = new Rate(tokener, storeRepo, userRepo, productRepo);
+    }
+
+    /* =============================================================
+                           rateStore
+       ============================================================= */
+    @Test
+    void rateStore_happyPath_updatesRepoAndReturnsTrue() throws Exception {
+        String token   = "tok";
+        String user    = "alice";
+        String storeId = "s1";
+
+        when(tokener.extractUsername(token)).thenReturn(user);
+        doNothing().when(tokener).validateToken(token);
+
+        Store store = mock(Store.class);
+        when(storeRepo.getById(storeId)).thenReturn(store);
+        when(userRepo.getById(user)).thenReturn(dummyUser);
+        when(store.rate(4)).thenReturn(true);
+
+        assertTrue(service.rateStore(token, storeId, 4));
+        verify(storeRepo).update(store);
+    }
+
+    @Test
+    void rateStore_invalidRateValue_throws() {
+        assertThrows(IllegalArgumentException.class,
+                () -> service.rateStore("t", "s", 6));   // >5
+    }
+
+    @Test
+    void rateStore_nonExistingStore_throws() {
+        when(tokener.extractUsername("tok")).thenReturn("user");
+        doNothing().when(tokener).validateToken("tok");
+        when(storeRepo.getById("noStore")).thenReturn(null);
+
+        when(userRepo.getById("user")).thenReturn(dummyUser);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> service.rateStore("tok", "noStore", 3));
+    }
+
+    /* =============================================================
+                           rateProduct
+       ============================================================= */
+    @Test
+    void rateProduct_happyPath_savesAndReturnsTrue() {
+        String token = "tok";
+        String user  = "bob";
+        String pid   = "p1";
+
+        when(tokener.extractUsername(token)).thenReturn(user);
+        doNothing().when(tokener).validateToken(token);
+
+        Product prod = mock(Product.class);
+        when(productRepo.getById(pid)).thenReturn(prod);
+        when(userRepo.getById(user)).thenReturn(dummyUser);
+        when(prod.addRating(user, 5)).thenReturn(true);
+
+        assertTrue(service.rateProduct(token, pid, 5));
+        verify(productRepo).save(prod);
+    }
+
+    @Test
+    void rateProduct_duplicateRating_returnsFalseAndNoSave() {
+        String token = "tok";
+        String user  = "bob";
+        String pid   = "p1";
+
+        when(tokener.extractUsername(token)).thenReturn(user);
+        doNothing().when(tokener).validateToken(token);
+
+        Product prod = mock(Product.class);
+        when(productRepo.getById(pid)).thenReturn(prod);
+        when(userRepo.getById(user)).thenReturn(dummyUser);
+        when(prod.addRating(user, 4)).thenReturn(false);        // already rated
+
+        assertFalse(service.rateProduct(token, pid, 4));
+        verify(productRepo, never()).save(any());
+    }
+}

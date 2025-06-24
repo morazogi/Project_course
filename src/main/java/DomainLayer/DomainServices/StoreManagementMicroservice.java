@@ -333,4 +333,16 @@ public class StoreManagementMicroservice {
     public boolean appointStoreFounder(String founderId, String storeId) {
         throw new RuntimeException("store founder can't be appointed - error thrown in storeManagementMicroservice");
     }
+
+    /**
+     * Return <code>true</code> if the user is the store’s founder **or**
+     * already appears in the owner list.
+     *
+     * @param userId  the user to check
+     * @param storeId the store in question
+     */
+    public boolean isFounderOrOwner(String userId, String storeId) {
+        Store store = getStoreById(storeId);      // throws if store not found
+        return store.isFounder(userId) || store.userIsOwner(userId);
+    }
 }

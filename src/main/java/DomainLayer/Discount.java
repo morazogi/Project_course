@@ -263,179 +263,71 @@ public class Discount {
     }
 
 
-    public Map<Product, Float> applyNewMultiplier(Float originalPrice, Map<Product , Integer> productsQuantity, Map<Product, Float> productDiscounts, List<Discount> discounts) {
-        if (level == Level.PRODUCT){       //product
-            if(numericalComposition == NumericalComposition.MAXIMUM){        //1 = Maximum
-                float maxDiscount = this.percentDiscount;
-                for (Discount d : discounts) {
-                    if (d.percentDiscount > maxDiscount) {
-                        maxDiscount = d.percentDiscount;
-                    }
-                }
+    public Map<Product, Float> applyNewMultiplier(
+            Float originalPrice,
+            Map<Product,Integer> productsQuantity,
+            Map<Product, Float> productDiscounts,
+            List<Discount> nested)
+    {
+        /* ---------------- collect every relevant percentage ---------------- */
+        List<Discount> all = new ArrayList<>();
+        all.add(this);
+        all.addAll(nested);
 
-                // Apply the maximum discount found
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
+        /* helper that says whether a given product is inside this discount’s scope */
+        java.util.function.Predicate<Product> inScope = p -> switch (level) {
+            case PRODUCT   -> discounted.isBlank() || p.getName().equals(discounted);
+            case CATEGORY  -> discounted.isBlank() || p.getCategory().equals(discounted);
+            case STORE, UNDEFINED -> true;
+        };
 
-                    if (product.getName().equals(this.discounted) || "".equals(this.discounted)) {
+        /* ------------------------------------------------------------------ *
+         *  Calculate the effective multiplier to apply
+         * ------------------------------------------------------------------ */
+        float newMultiplier;           // will be multiplied into / assigned to map entries
 
-                        float discountedValue = value - maxDiscount;
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
+        switch (numericalComposition) {
 
-                // Mark all discounts as used except the one with max percentage
-                this.alreadyUsed = true;
-                for (Discount d : discounts) {
-                    d.alreadyUsed = true; // Prevent all nested discounts from reapplying
-                }
-
-                return productDiscounts;
+            /* ---------- 1. Take the single maximum percentage ---------- */
+            case MAXIMUM -> {
+                float maxPct = all.stream()
+                        .map(d -> d.percentDiscount)
+                        .max(Float::compare)
+                        .orElse(0f);
+                newMultiplier = Math.max(0f, 1f - maxPct);
             }
 
-            else if(numericalComposition == NumericalComposition.MULTIPLICATION){     //2 = Multiplication
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
-
-                    if (product.getName().equals(this.discounted ) || "".equals(this.discounted ) ) {
-                        float discountedValue =  value * (1 - percentDiscount);
-                        productDiscounts.put(product, discountedValue);
-                    }
+            /* ---------- 2. Multiply every (1 - p) ---------- */
+            case MULTIPLICATION -> {
+                newMultiplier = 1f;
+                for (Discount d : all) {
+                    newMultiplier *= (1f - d.percentDiscount);
                 }
-                return productDiscounts;
             }
 
-            else if(numericalComposition == NumericalComposition.UNDEFINED){
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
-
-                    if (product.getName().equals(this.discounted ) || "".equals(this.discounted ) ) {
-                        System.out.println("Discounted " + product.getName());
-                        float discountedValue =  value - percentDiscount;
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-                return productDiscounts;
+            /* ---------- 3. Add all percentages, then subtract ---------- */
+            default -> {   // UNDEFINED
+                float totalPct = 0f;
+                for (Discount d : all) totalPct += d.percentDiscount;
+                totalPct = Math.min(totalPct, 1f);          // clamp
+                newMultiplier = 1f - totalPct;
             }
         }
-        else if (level == Level.CATEGORY){  //category
-            if(numericalComposition == NumericalComposition.MAXIMUM){        //1 = Maximum
-                // Find maximum discount percentage among nested discounts
-                float maxDiscount = this.percentDiscount;
-                for (Discount d : discounts) {
-                    if (d.percentDiscount > maxDiscount) {
-                        maxDiscount = d.percentDiscount;
-                    }
-                }
 
-                // Apply the maximum discount found
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
+        /* ---------------- apply to every eligible product ---------------- */
+        for (Map.Entry<Product, Float> e : productDiscounts.entrySet()) {
+            Product p   = e.getKey();
+            float  curr = e.getValue();
 
-                    if (product.getCategory().equals(this.discounted) || "".equals(this.discounted)) {
-
-                        float discountedValue = value - maxDiscount;
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-
-                // Mark all discounts as used except the one with max percentage
-                this.alreadyUsed = true;
-                for (Discount d : discounts) {
-                    d.alreadyUsed = true; // Prevent all nested discounts from reapplying
-                }
-
-                return productDiscounts;
-            }
-            else if(numericalComposition == NumericalComposition.MULTIPLICATION){     //2 = Multiplication
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
-
-                    if (product.getCategory().equals(this.discounted) || "".equals(this.discounted)) {
-
-                        float discountedValue =  value * (1 - percentDiscount);
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-                return productDiscounts;
-            }
-            else if(numericalComposition == NumericalComposition.UNDEFINED){
-
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
-
-                    if (product.getCategory().equals(this.discounted) || "".equals(this.discounted)) {
-
-                        float discountedValue =  value - percentDiscount;
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-                return productDiscounts;
+            if (inScope.test(p)) {
+                productDiscounts.put(p, curr * newMultiplier);
             }
         }
-        else if (level == Level.STORE){  //store
-            if(numericalComposition == NumericalComposition.MAXIMUM){        //1 = Maximum
-                // Find maximum discount percentage among nested discounts
-                float maxDiscount = this.percentDiscount;
-                for (Discount d : discounts) {
-                    if (d.percentDiscount > maxDiscount) {
-                        maxDiscount = d.percentDiscount;
-                    }
-                }
 
-                // Apply the maximum discount found
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
+        /* ---------------- mark all these discounts as used ---------------- */
+        this.alreadyUsed = true;
+        for (Discount d : nested) d.alreadyUsed = true;
 
-                    if (product.getName().equals(this.discounted) || "".equals(this.discounted)) {
-
-                        float discountedValue = value - maxDiscount;
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-
-                // Mark all discounts as used except the one with max percentage
-                this.alreadyUsed = true;
-                for (Discount d : discounts) {
-                    d.alreadyUsed = true; // Prevent all nested discounts from reapplying
-                }
-
-                return productDiscounts;
-            }
-            else if(numericalComposition == NumericalComposition.MULTIPLICATION){     //2 = Multiplication
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
-
-                    if (true) {
-                        float discountedValue =  value * (1 - percentDiscount);
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-                return productDiscounts;
-            }
-            else if(numericalComposition == NumericalComposition.UNDEFINED){
-
-                for (Map.Entry<Product, Float> entry : productDiscounts.entrySet()) {
-                    Product product = entry.getKey();
-                    float value = entry.getValue();
-
-                    if (true) {
-                        float discountedValue =  value - percentDiscount;
-                        productDiscounts.put(product, discountedValue);
-                    }
-                }
-                return productDiscounts;
-            }
-
-        }
         return productDiscounts;
     }
         boolean checkConditinal(float originalPrice, Map<Product , Integer> products){

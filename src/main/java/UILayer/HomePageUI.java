@@ -43,6 +43,8 @@ public class HomePageUI extends VerticalLayout {
         HorizontalLayout buttons = new HorizontalLayout();
         Button loginButton = new Button("🔐 Login", e -> UI.getCurrent().navigate("/login"));
         Button registerButton = new Button("📝 Register", e -> UI.getCurrent().navigate("/signup"));
+        Button searchStoreButton = new Button("Search store", e -> UI.getCurrent().navigate("/searchstore"));
+        Button searchProductButton = new Button("Search product", e -> UI.getCurrent().navigate("/searchproduct"));
         buttons.add(loginButton, registerButton);
 
         // Roles section
@@ -62,6 +64,6 @@ public class HomePageUI extends VerticalLayout {
 
         // Add everything to layout
         //add(title, subtitle, features, buttons, rolesTitle, roles, footer);
-        add(title, subtitle, features, buttons, roles);
+        add(title, subtitle, features, buttons, new HorizontalLayout(searchStoreButton, searchProductButton), roles);
     }
 }

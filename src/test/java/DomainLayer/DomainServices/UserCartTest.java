@@ -1,209 +1,116 @@
-//package DomainLayer.DomainServices;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//import static org.mockito.ArgumentMatchers.eq;
-//import static org.mockito.Mockito.*;
-//
-//import InfrastructureLayer.OrderRepository;
-//import InfrastructureLayer.ProductRepository;
-//import InfrastructureLayer.StoreRepository;
-//import InfrastructureLayer.UserRepository;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//
-//import DomainLayer.*;
-//import DomainLayer.Roles.RegisteredUser;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.mockito.*;
-//
-//class UserCartTest {
-//
-//    @Mock private IToken tokener;
-//    @Mock private UserRepository userRepository;
-//    @Mock private StoreRepository storeRepository;
-//    @Mock private ProductRepository productRepository;
-//    @Mock private OrderRepository orderRepository;
-//    @Mock private IPayment paymentSystem;
-//    @Mock private IShipping shippingSystem;
-//
-//    @InjectMocks private UserCart userCart;
-//    private ObjectMapper mapper = new ObjectMapper();
-//
-//    private static final String TOKEN = "token123";
-//    private static final String USER = "alice";
-//    private RegisteredUser baseUser;
-//
-//    private AutoCloseable mocks;
-//
-//    @BeforeEach
-//    void setUp() throws JsonProcessingException {
-//        // Initialize Mockito annotations
-//        mocks = MockitoAnnotations.openMocks(this);
-//
-//        // Base user with empty cart
-//        baseUser = new RegisteredUser("username", "userPass");
-//        baseUser.setUsername(USER);
-//        String userJson = mapper.writeValueAsString(baseUser);
-//
-//        when(tokener.extractUsername(TOKEN)).thenReturn(USER);
-//        doNothing().when(tokener).validateToken(TOKEN);
-//        when(userRepository.getById(USER)).thenReturn(baseUser);
-//    }
-//
-//    // --- addToCart tests ---
-//
-//    @Test
-//    void addToCart_nullToken_throwsIAE() {
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.addToCart(null, "store1", "prod1", 1)
-//        );
-//        assertEquals("Token cannot be null", ex.getMessage());
-//    }
-//
-//    @Test
-//    void addToCart_invalidQuantity_throwsIAE() {
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.addToCart(TOKEN, "store1", "prod1", 0)
-//        );
-//        assertEquals("Quantity must be greater than 0", ex.getMessage());
-//    }
-//
-//    /*@Test
-//    void addToCart_success_updatesUserRepository() throws Exception {
-//        userCart.addToCart(TOKEN, "store1", "prod1", 2);
-//
-//        verify(tokener).validateToken(TOKEN);
-//        ArgumentCaptor<String> jsonCaptor = ArgumentCaptor.forClass(String.class);
-//        verify(userRepository).update(eq(USER), jsonCaptor.capture());
-//
-//        RegisteredUser updated = mapper.readValue(jsonCaptor.getValue(), RegisteredUser.class);
-//        assertEquals(1, updated.getShoppingCart().getShoppingBags().size());
-//        ShoppingBag bag = updated.getShoppingCart().getShoppingBags().get(0);
-//        assertEquals("store1", bag.getStoreId());
-//        assertEquals(2, bag.getProducts().get("prod1"));
-//    }*/
-//
-//    // --- removeFromCart tests ---
-//
-//    @Test
-//    void removeFromCart_nullStore_throwsIAE() {
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.removeFromCart(TOKEN, null, "prod1", 1)
-//        );
-//        assertEquals("StoreId cannot be null", ex.getMessage());
-//    }
-//
-//    /*@Test
-//    void removeFromCart_success_decrementsQuantity() throws Exception {
-//        // prepare a cart with quantity 5
-//        baseUser.addProduct("store1", "prod1", 5);
-//        when(userRepository.getById(USER))
-//            .thenReturn(baseUser);
-//
-//        userCart.removeFromCart(TOKEN, "store1", "prod1", 3);
-//
-//        verify(tokener).validateToken(TOKEN);
-//        ArgumentCaptor<String> jsonCaptor = ArgumentCaptor.forClass(String.class);
-//        verify(userRepository).update(eq(USER), jsonCaptor.capture());
-//
-//        RegisteredUser updated = mapper.readValue(jsonCaptor.getValue(), RegisteredUser.class);
-//        ShoppingBag bag = updated.getShoppingCart().getShoppingBags().get(0);
-//        assertEquals(2, bag.getProducts().get("prod1"));
-//    }*/
-//
-//    // --- reserveCart tests ---
-//
-//    @Test
-//    void reserveCart_nullToken_throwsIAE() {
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.reserveCart(null)
-//        );
-//        assertEquals("Token cannot be null", ex.getMessage());
-//    }
-//
-//    @Test
-//    void reserveCart_storeNotFound_throwsIAE() throws Exception {
-//        baseUser.addProduct("storeX", "p1", 1);
-//        when(userRepository.getById(USER))
-//            .thenReturn(baseUser);
-//        when(storeRepository.getById("storeX")).thenReturn(null);
-//
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.reserveCart(TOKEN)
-//        );
-//        assertEquals("Store not found", ex.getMessage());
-//    }
-//
-//    // --- purchaseCart tests ---
-//
-//    @Test
-//    void purchaseCart_notReserved_throwsIAE() {
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.purchaseCart(TOKEN, 10.0)
-//        );
-//        assertEquals("Cart is not reserved", ex.getMessage());
-//    }
-//
-////    @Test
-////    void purchaseCart_happyPath_processesAll() throws Exception {
-////        // user with reserved cart and one item
-////        baseUser.addProduct("store1", "p1", 2);
-////        baseUser.setCartReserved(true);
-////        when(userRepository.getUser(USER))
-////            .thenReturn(mapper.writeValueAsString(baseUser));
-////
-////        Store store = new Store("store1"  , "");
-////
-////        // stub product
-////        Product product = new Product("p1", "name", "desc", "cat", 5, 10, 2.5, "store1");
-////        when(productRepository.getProduct("p1")).thenReturn(product);
-////
-////        store.addNewProduct("p1", 5);
-////        store.reserveProduct("p1", 2);
-////        when(storeRepository.getStore("store1")).thenReturn(mapper.writeValueAsString(store));
-////
-////        // execute
-////        userCart.purchaseCart(TOKEN, userCart.reserveCart(TOKEN));
-////
-//////        verify(orderRepository).addOrder(any(Order.class));
-////
-////        // final state persisted
-////        ArgumentCaptor<String> jsonCaptor = ArgumentCaptor.forClass(String.class);
-////        verify(userRepository, atLeastOnce()).update(eq(USER), jsonCaptor.capture());
-////        RegisteredUser post = mapper.readValue(jsonCaptor.getValue(), RegisteredUser.class);
-////        assertFalse(post.getCartReserved());
-////        assertTrue(post.getShoppingCart().getShoppingBags().isEmpty());
-////    }
-//
-//    @Test
-//    void purchaseCart_notInInventory_throwsIAE() throws Exception {
-//        baseUser.addProduct("store1", "p1", 2);
-//        baseUser.setCartReserved(true);
-//        Store store = new Store("store1" , "");
-//        store.addNewProduct("p1", 1);
-//        when(storeRepository.getById("store1")).thenReturn(store);
-//        when(userRepository.getById(USER))
-//            .thenReturn(baseUser);
-//        when(productRepository.getById("p1")).thenReturn(new Product("p1", "name", "desc", "cat", 5, 10, 2.5, "store1"));
-//
-//        // stub product
-//        Product product = new Product("p1", "name", "desc", "cat", 5, 10, 2.5, "store1");
-//        when(productRepository.getById("p1")).thenReturn(product);
-//
-//        when(storeRepository.getById("store1")).thenReturn(store);
-//
-//        IllegalArgumentException ex = assertThrows(
-//            IllegalArgumentException.class,
-//            () -> userCart.purchaseCart(TOKEN, userCart.reserveCart(TOKEN))
-//        );
-//        assertEquals("Failed to reserve product: " + "p1" , ex.getMessage());
-//    }
-//}
+package DomainLayer.DomainServices;
+
+import DomainLayer.IToken;
+import DomainLayer.Product;
+import DomainLayer.Roles.Guest;
+import DomainLayer.Roles.RegisteredUser;
+import DomainLayer.ShoppingCart;
+import InfrastructureLayer.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+/**
+ * Unit tests for {@link UserCart}.  All collaborators are mocked; we use a real
+ * {@link ShoppingCart} where needed to compute in-cart quantities.
+ */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class UserCartTest {
+
+    /* ---------- mocked collaborators ---------- */
+    @Mock IToken            tokener;
+    @Mock UserRepository    userRepo;
+    @Mock GuestRepository   guestRepo;
+    @Mock StoreRepository   storeRepo;
+    @Mock ProductRepository productRepo;
+    @Mock OrderRepository   orderRepo;
+
+    private UserCart cartSvc;
+
+    /* shared fixtures */
+    private final String storeId = "s1";
+    private final String prodId  = "p1";
+
+    @BeforeEach
+    void setUp() {
+        cartSvc = new UserCart(tokener, userRepo, storeRepo,
+                productRepo, orderRepo, guestRepo);
+    }
+
+    /* ===============================================================
+                           addToCart – registered
+       =============================================================== */
+    @Test
+    void addToCart_registeredUser_success_updatesRepo() throws Exception {
+        String token = "tok";
+        when(tokener.extractUsername(token)).thenReturn("alice");
+        doNothing().when(tokener).validateToken(token);
+
+        /* product with ample stock */
+        Product apple = new Product(storeId, "Apple", "", 1.0f, 10, 0d, "Food");
+        apple.setId(prodId);
+        when(productRepo.getById(prodId)).thenReturn(apple);
+
+        /* user with empty ShoppingCart */
+        RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
+        when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
+        when(userRepo.getById("alice")).thenReturn(alice);
+
+        cartSvc.addToCart(token, storeId, prodId, 3);
+
+        verify(alice).addProduct(storeId, prodId, 3);
+        verify(userRepo).update(alice);
+    }
+
+    @Test
+    void addToCart_insufficientStock_throws() {
+        when(tokener.extractUsername("tok")).thenReturn("alice");
+        doNothing().when(tokener).validateToken("tok");
+
+        Product scarce = new Product(storeId, "Rare", "", 5f, 1, 0d, "Misc");
+        scarce.setId(prodId);
+        when(productRepo.getById(prodId)).thenReturn(scarce);
+
+        RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
+        when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
+        when(userRepo.getById("alice")).thenReturn(alice);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.addToCart("tok", storeId, prodId, 2));
+        verify(userRepo, never()).update(any());
+    }
+
+    /* ===============================================================
+                           removeFromCart – guest
+       =============================================================== */
+    @Test
+    void removeFromCart_guest_success_callsUpdate() throws Exception {
+        when(tokener.extractUsername("tok")).thenReturn("Guest-1");
+        doNothing().when(tokener).validateToken("tok");
+
+        Guest guest = mock(Guest.class);
+        when(guest.getUsername()).thenReturn("Guest-1");
+        when(guestRepo.getById("Guest-1")).thenReturn(guest);
+
+        cartSvc.removeFromCart("tok", storeId, prodId, 1);
+
+        verify(guest).removeProduct(storeId, prodId, 1);
+        verify(guestRepo).update(guest);
+    }
+
+    @Test
+    void removeFromCart_zeroQuantity_throws() {
+        when(tokener.extractUsername("tok")).thenReturn("alice");
+
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.removeFromCart("tok", storeId, prodId, 0));
+    }
+}

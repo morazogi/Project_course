@@ -2,15 +2,19 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.AuctionPresenter;
+import PresentorLayer.ButtonPresenter;
 import ServiceLayer.AuctionService;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,48 +23,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuctionUI extends VerticalLayout {
 
     private final AuctionPresenter presenter;
-    private final Div auctionsDisplay = new Div();
-    private final Span message = new Span();
+    private final ButtonPresenter  btns;
+    private final Div board = new Div();
+    private final Span msg  = new Span();
+
+    /*──────────────────────────────────────────────────────────────────────*/
 
     @Autowired
-    public AuctionUI(IToken tokenService,
-                     AuctionService auctionService,
-                     UserService userService) {
+    public AuctionUI(IToken tokenSvc,
+                     AuctionService auctionSvc,
+                     UserService userSvc,
+                     RegisteredService regSvc) {
 
-        String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String username = token != null ? tokenService.extractUsername(token) : "guest";
+        String token   = (String) UI.getCurrent().getSession().getAttribute("token");
+        String user    = token != null ? tokenSvc.extractUsername(token) : "guest";
 
-        this.presenter = new AuctionPresenter(username, token, auctionService, userService);
+        this.presenter = new AuctionPresenter(user, token, auctionSvc, userSvc);
+        this.btns      = new ButtonPresenter(regSvc, tokenSvc);
 
-        add(new H1("Open Auctions"));
-        add(auctionsDisplay);
-        updateAuctionsDisplay();
+        /* –– live board –– */
+        add(new HorizontalLayout(new H1("Live Auctions"), btns.homePageButton(token)),
+                board, new Hr());
 
-        TextField storeField   = new TextField("Store Name");
-        TextField productField = new TextField("Product Name");
-        TextField offerField   = new TextField("Your Offer");
+        /* –– offer form –– */
+        TextField   store  = new TextField("Store Name");
+        TextField   prod   = new TextField("Product Name");
+        NumberField offer  = new NumberField("Your Offer ($)");
+        offer.setPlaceholder("e.g. 39.99");
 
         Button send = new Button("Send Offer", e -> {
-            try {
-                double price = Double.parseDouble(offerField.getValue().trim());
-                String r = presenter.placeOffer(storeField.getValue().trim(),
-                        productField.getValue().trim(),
-                        price);
-                message.setText(r);
-                updateAuctionsDisplay();
-            } catch (NumberFormatException ex) {
-                message.setText("Enter a valid number for the offer.");
-            }
+            if (offer.getValue() == null){ msg.setText("Enter a price"); return; }
+            msg.setText(presenter.placeOffer(store.getValue(), prod.getValue(),
+                    offer.getValue()));
+            updateBoard();
         });
 
-        add(storeField, productField, offerField, send, message);
+        add(new H1("Make / Counter an Offer"),
+                new HorizontalLayout(store, prod, offer, send),
+                msg);
+        updateBoard();
 
-        setPadding(true);
-        setAlignItems(Alignment.CENTER);
+        setPadding(true); setAlignItems(Alignment.CENTER);
     }
 
-    private void updateAuctionsDisplay() {
-        auctionsDisplay.removeAll();
-        auctionsDisplay.add(presenter.getAuctionsComponent());
+    /*──────────────────────────────────────────────────────────────────────*/
+    private void updateBoard(){
+        board.removeAll();
+        board.add(presenter.getAuctionsComponent());
     }
 }

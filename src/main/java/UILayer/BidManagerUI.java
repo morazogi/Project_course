@@ -2,7 +2,10 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.BidManagerPresenter;
+import PresentorLayer.ButtonPresenter;
 import ServiceLayer.BidService;
+import ServiceLayer.OwnerManagerService;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -11,6 +14,8 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,39 +24,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BidManagerUI extends VerticalLayout {
 
     private final BidManagerPresenter presenter;
-    private final Span error = new Span();
+    private final Span status = new Span();
+    private final ButtonPresenter btns;
 
     @Autowired
-    public BidManagerUI(IToken tokenService,
-                        BidService bidService,
-                        UserService userService) {
+    public BidManagerUI(IToken tokenSvc,
+                        BidService bidSvc,
+                        UserService userSvc,
+                        OwnerManagerService ownerMgr,
+                        RegisteredService regSvc) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String manager = token!=null ? tokenService.extractUsername(token):"unknown";
+        presenter = new BidManagerPresenter(token!=null ? tokenSvc.extractUsername(token):"manager",
+                bidSvc, userSvc, ownerMgr);
+        btns      = new ButtonPresenter(regSvc, tokenSvc);
 
-        presenter = new BidManagerPresenter(manager, bidService, userService);
+        /* form */
+        TextField  store = new TextField("Store Name");
+        TextField  prod  = new TextField("Product Name");
+        NumberField start= new NumberField("Start Price ($)");
+        NumberField step = new NumberField("Min Increase ($)");
+        IntegerField mins= new IntegerField("Duration (minutes)");
+        mins.setMin(1);
 
-        TextField store  = new TextField("Store Name");
-        TextField prod   = new TextField("Product Name");
-        TextField start  = new TextField("Starting Price");
-        TextField inc    = new TextField("Minimum Increase");
-        TextField dur    = new TextField("Duration (minutes)");
-
-        Button startBtn  = new Button("Start Bid", e -> {
+        Button create = new Button("Launch Bid", e -> {
             try {
                 presenter.startBid(token,
                         store.getValue(), prod.getValue(),
-                        start.getValue(), inc.getValue(), dur.getValue());
-                Notification.show("Bid created.");
-                error.setText("");
-            } catch(Exception ex){ error.setText(ex.getMessage()); }
+                        toStr(start), toStr(step), mins.getValue()==null?"":mins.getValue().toString());
+                Notification.show("Bid launched 🚀");
+                clear(store, prod, start, step, mins); status.setText("");
+            } catch(Exception ex){ status.setText(ex.getMessage()); }
         });
 
-        add(new H1("Create Bid"),
+        add(new HorizontalLayout(new H1("Bid Manager"), btns.homePageButton(token)),
                 new HorizontalLayout(store, prod),
-                new HorizontalLayout(start, inc, dur),
-                startBtn, error);
+                new HorizontalLayout(start, step, mins),
+                create, status);
 
         setPadding(true); setAlignItems(Alignment.CENTER);
+    }
+
+    private static String toStr(NumberField f){ return f.getValue()==null? "": f.getValue().toString(); }
+    private void clear(TextField a,TextField b,NumberField c,NumberField d,IntegerField e){
+        a.clear(); b.clear(); c.clear(); d.clear(); e.clear();
     }
 }

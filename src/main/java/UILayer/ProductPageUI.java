@@ -34,7 +34,7 @@ public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver
     @Autowired
     public ProductPageUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, RegisteredService configuredRegisteredService) {
         productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
-        buttonPresenter = new ButtonPresenter(configuredRegisteredService);
+        buttonPresenter = new ButtonPresenter(configuredRegisteredService, configuredTokenService);
     }
 
 
@@ -46,7 +46,7 @@ public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver
             if (parameters.get("storeid").isPresent()) {
                 String storeId = parameters.get("storeid").get();
                 String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                add(new HorizontalLayout(buttonPresenter.signOutButton(token), buttonPresenter.homePageButton()));
+                add(new HorizontalLayout(buttonPresenter.signOutButton(token), buttonPresenter.homePageButton(token)));
                 add(productPresenter.getProductPage(productId, storeId));
                 setPadding(true);
                 setAlignItems(Alignment.CENTER);

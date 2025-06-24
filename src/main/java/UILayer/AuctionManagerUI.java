@@ -2,8 +2,10 @@ package UILayer;
 
 import DomainLayer.IToken;
 import PresentorLayer.AuctionManagerPresenter;
+import PresentorLayer.ButtonPresenter;
 import PresentorLayer.Offer;
 import ServiceLayer.AuctionService;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -20,32 +22,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuctionManagerUI extends VerticalLayout {
 
     private final AuctionManagerPresenter presenter;
-    private final Span statusMessage = new Span();
-    private final VerticalLayout offerDisplayLayout = new VerticalLayout();
+    private final ButtonPresenter         buttonPresenter;
+
+    /* UI state */
+    private final Span            statusMessage     = new Span();
+    private final VerticalLayout  offerDisplayArea  = new VerticalLayout();
+
+    /* ------------------------------------------------------------ */
 
     @Autowired
-    public AuctionManagerUI(IToken tokenService,
-                            AuctionService auctionService,
-                            UserService userService) {
+    public AuctionManagerUI(IToken tokenSvc,
+                            AuctionService auctionSvc,
+                            UserService userSvc,
+                            RegisteredService regSvc) {
 
-        String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String manager = token != null ? tokenService.extractUsername(token) : "unknown";
+        String token    = (String) UI.getCurrent().getSession().getAttribute("token");
+        String manager  = token != null ? tokenSvc.extractUsername(token)
+                : "unknown";
 
-        this.presenter = new AuctionManagerPresenter(manager, auctionService, userService);
+        this.presenter       = new AuctionManagerPresenter(manager, token, auctionSvc, userSvc);
+        this.buttonPresenter = new ButtonPresenter(regSvc, tokenSvc);
 
-        TextField storeNameField = new TextField("Store Name");
-        TextField productNameField = new TextField("Product Name");
-        TextField itemPriceField = new TextField("Starting Price");
-        TextField itemDescriptionField = new TextField("Description");
+        /* ── Create-auction form ───────────────────────────────── */
+        TextField storeField   = new TextField("Store name");
+        TextField productField = new TextField("Product name");
+        TextField priceField   = new TextField("Starting price");
+        TextField descField    = new TextField("Description");
 
-        Button createAuctionButton = new Button("Create Auction", e -> {
+        Button createBtn = new Button("Create auction", e -> {
             try {
                 presenter.createAuction(token,
-                        storeNameField.getValue().trim(),
-                        productNameField.getValue().trim(),
-                        itemPriceField.getValue().trim(),
-                        itemDescriptionField.getValue().trim());
-
+                        storeField.getValue(), productField.getValue(),
+                        priceField.getValue(), descField.getValue());
                 Notification.show("Auction created.");
                 statusMessage.setText("");
             } catch (Exception ex) {
@@ -53,36 +61,42 @@ public class AuctionManagerUI extends VerticalLayout {
             }
         });
 
-        TextField counterPriceField = new TextField("Counter Price");
+        /* ── Customer-offer controls ───────────────────────────── */
+        TextField counterField = new TextField("Counter-offer ($)");
+        Button refreshBtn = new Button("Refresh", ev -> renderOffers());
 
-        Button refreshOffersButton = new Button("Refresh Offers", e -> renderOffers());
-
-        Button acceptButton = new Button("Accept", e -> {
-            statusMessage.setText(presenter.respondToOffer(token, "accept", null));
+        Button acceptBtn  = new Button("Accept",  ev -> {
+            statusMessage.setText(presenter.respondToOffer(token, "accept",  null));
             renderOffers();
         });
-
-        Button declineButton = new Button("Decline", e -> {
+        Button declineBtn = new Button("Decline", ev -> {
             statusMessage.setText(presenter.respondToOffer(token, "decline", null));
             renderOffers();
         });
-
-        Button counterButton = new Button("Counter", e -> {
-            statusMessage.setText(presenter.respondToOffer(token, "counter", counterPriceField.getValue()));
+        Button counterBtn = new Button("Counter", ev -> {
+            statusMessage.setText(presenter.respondToOffer(token, "counter",
+                    counterField.getValue()));
             renderOffers();
         });
 
+        /* ── Layout ────────────────────────────────────────────── */
         add(
-                new H1("Create New Auction"),
-                new HorizontalLayout(storeNameField, productNameField),
-                new HorizontalLayout(itemPriceField, itemDescriptionField),
-                createAuctionButton,
-                statusMessage,
-                new H1("Customer Offers"),
-                refreshOffersButton,
-                offerDisplayLayout,
-                counterPriceField,
-                new HorizontalLayout(acceptButton, declineButton, counterButton)
+                new HorizontalLayout(
+                        new H1("Auction Manager"),
+                        buttonPresenter.homePageButton(token)),
+
+                /* create auction section */
+                new H1("Create new auction"),
+                new HorizontalLayout(storeField, productField),
+                new HorizontalLayout(priceField, descField),
+                createBtn, statusMessage,
+
+                /* offers section */
+                new H1("Customer offers"),
+                refreshBtn,
+                offerDisplayArea,
+                counterField,
+                new HorizontalLayout(acceptBtn, declineBtn, counterBtn)
         );
 
         renderOffers();
@@ -90,14 +104,16 @@ public class AuctionManagerUI extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
     }
 
+    /* ------------------------------------------------------------------ */
+    /** Rebuild the offers list with readable “store / product” strings. */
     private void renderOffers() {
-        offerDisplayLayout.removeAll();
-        if (presenter.getOffers().isEmpty()) {
-            offerDisplayLayout.add(new Span("No offers yet."));
-        } else {
-            for (Offer offer : presenter.getOffers()) {
-                offerDisplayLayout.add(new Span(offer.toString()));
-            }
+        offerDisplayArea.removeAll();
+        var offers = presenter.getOffers();
+        if (offers.isEmpty()) {
+            offerDisplayArea.add(new Span("No offers yet."));
+            return;
         }
+        for (Offer o : offers)
+            offerDisplayArea.add(new Span(o.toString()));
     }
 }

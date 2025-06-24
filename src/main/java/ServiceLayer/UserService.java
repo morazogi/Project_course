@@ -1,14 +1,10 @@
 package ServiceLayer;
 
-import DomainLayer.IToken;
+import DomainLayer.*;
 import DomainLayer.DomainServices.Search;
 import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.DomainServices.DiscountPolicyMicroservice;
-import DomainLayer.Product;
-import DomainLayer.Store;
-import DomainLayer.ShoppingBag;
-import DomainLayer.ShoppingCart;
 import DomainLayer.Roles.Guest;
 import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.*;
@@ -116,35 +112,48 @@ public class UserService {
 
     @Transactional
     public void purchaseCart(String token,
-                             String paymentMethod,
+                             String name,
                              String cardNumber,
                              String expirationDate,
                              String cvv,
                              String state,
                              String city,
-                             String street,
-                             String homeNumber) {
+                             String address,
+                             String id,
+                             String zip) {
+        String paymentTransactionId = null;
+        String shippingTransactionId = null;
         try {
             Double price = reserveCart(token);
-            shippingService.processShipping(token, state, city, street, homeNumber);
-            paymentService.processPayment(token, paymentMethod, cardNumber, expirationDate, cvv);
+            shippingTransactionId = shippingService.processShipping(token, state, city, address, name, zip);
+            paymentTransactionId = paymentService.processPayment(token, name, cardNumber, expirationDate, cvv, id);
             userCart.purchaseCart(token, price);
         } catch (Exception e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "PURCHASE_CART_FAILED " + e.getMessage());
-            throw new RuntimeException("Failed to purchase cart");
+            if (shippingTransactionId != null) {
+                shippingService.cancelShipping(token, shippingTransactionId);
+            }
+            if (paymentTransactionId != null) {
+                paymentService.cancelPayment(token, paymentTransactionId);
+            }
+            throw new RuntimeException("Failed to purchase cart " + e.getMessage());
         }
     }
 
     @Transactional
     public List<String> findProduct(String token, String name, String category) {
         try {
-            tokenService.validateToken(token);
-            return search.findProduct(name, category);
-        } catch (Exception e) {
-            System.out.println("ERROR finding product by Name:" + e.getMessage());
-            return Collections.emptyList();
+            tokenService.validateToken(token);                      // may throw
+
+        } catch (Exception ex) {                                    // ⇐ catch token failure
+            throw new PermissionException(
+                    "No permission: you must be logged-in to search products.");
         }
+
+        /* normal path */
+        return search.findProduct(name == null ? "" : name, category);
     }
+
 
     @Transactional
     public List<Product> getAllProducts(String token) {
@@ -274,7 +283,7 @@ public class UserService {
         for (ShoppingBag bag : user.getShoppingCart().getShoppingBags()) {
             ShoppingBag shoppingBag = new ShoppingBag(bag.getStoreId());
             for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
-                shoppingBag.addProduct(e.getKey(), productRepository.getById(e.getKey()).getQuantity());
+                shoppingBag.addProduct(e.getKey(), e.getValue());
             }
             shoppingBags.add(shoppingBag);
         }

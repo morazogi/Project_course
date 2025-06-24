@@ -37,15 +37,15 @@ public class PurchaseCartUI2 extends VerticalLayout {
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
 
         /* --------- payment / shipping fields --------- */
-        TextField paymentMethod  = new TextField("payment method");
+        TextField name           = new TextField("name");
         TextField cardNumber     = new TextField("card number");
         TextField expirationDate = new TextField("expiration date");
         TextField cvv            = new TextField("cvv");
         TextField state          = new TextField("state");
         TextField city           = new TextField("city");
-        TextField street         = new TextField("street");
-        TextField homeNumber     = new TextField("home number");
-
+        TextField address        = new TextField("address");
+        TextField id             = new TextField("id");
+        TextField zip            = new TextField("zip");
         /* --------- UI elements we update --------- */
         Span priceSpan   = new Span("");
         Span error       = new Span("");
@@ -59,8 +59,8 @@ public class PurchaseCartUI2 extends VerticalLayout {
                 productList.removeAll();
                 Map<String,Integer> items =
                         userConnectivityPresenter.getCartProducts(token);
-                items.forEach((name, qty) ->
-                        productList.add(new Span(name + " × " + qty)));
+                items.forEach((productName, qty) ->
+                        productList.add(new Span(productName + " × " + qty)));
 
                 // 2. show total price
                 double price = userConnectivityPresenter.calculateCartPrice(token);
@@ -75,10 +75,11 @@ public class PurchaseCartUI2 extends VerticalLayout {
             try {
                 userConnectivityPresenter.purchaseCart(
                         token,
-                        paymentMethod.getValue(), cardNumber.getValue(),
+                        name.getValue(), cardNumber.getValue(),
                         expirationDate.getValue(), cvv.getValue(),
                         state.getValue(), city.getValue(),
-                        street.getValue(), homeNumber.getValue());
+                        address.getValue(), id.getValue(),
+                        zip.getValue());
             } catch (Exception ex) {
                 error.setText(ex.getMessage());
             }
@@ -90,8 +91,8 @@ public class PurchaseCartUI2 extends VerticalLayout {
                 calcPrice,
                 productList,
                 priceSpan,
-                new HorizontalLayout(paymentMethod, cardNumber, expirationDate, cvv),
-                new HorizontalLayout(state, city, street, homeNumber),
+                new HorizontalLayout(name, cardNumber, expirationDate, cvv, id),
+                new HorizontalLayout(state, city, address, zip),
                 purchaseCart,
                 error
         );

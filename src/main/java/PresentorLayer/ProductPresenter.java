@@ -22,9 +22,7 @@ import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ProductPresenter {
 
@@ -42,9 +40,8 @@ public class ProductPresenter {
 
     public VerticalLayout getShoppingCart(String token) {
         VerticalLayout shoppingCartList = new VerticalLayout();
-        List<ShoppingBag> shoppingBags = userGetShoppingBag(token);
+        List<ShoppingBag> shoppingBags = userService.getShoppingCart(token);
         shoppingCartList.add(new VerticalLayout(new Span("store"), new Span("product\namount\nprice")));
-        double totalPayment = 0;
         for (ShoppingBag shoppingBag : shoppingBags) {
             VerticalLayout productList = new VerticalLayout();
             try {
@@ -59,7 +56,7 @@ public class ProductPresenter {
             for (Map.Entry<String, Integer> product : shoppingBag.getProducts().entrySet()) {
                 productList.add(new Span(userService.getProductById(product.getKey()).get().getName() + "\n" + product.getValue() + "\n" + userService.getProductById(product.getKey()).get().getPrice()));
             }
-            shoppingCartList.add(productList, new Span("total payment :" + userService.reserveCart(token)));
+            shoppingCartList.add(productList, new Span("total payment :" + userService.calculateCartPrice(token)));
         }
 
         return shoppingCartList;
@@ -99,48 +96,68 @@ public class ProductPresenter {
         return productPage;
     }
 
-    public VerticalLayout searchProductByName(String token, String productName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating) {
-        VerticalLayout productList = new VerticalLayout();
+    public VerticalLayout searchProductByName(String token,
+                                              String productName,
+                                              String lowestPrice,
+                                              String highestPrice,
+                                              String lowestProductRating,
+                                              String highestProductRating,
+                                              String category,
+                                              String lowestStoreRating,
+                                              String highestStoreRating) {
+
+        VerticalLayout list = new VerticalLayout();
+        String nameFilter = productName == null ? "" : productName.trim().toLowerCase();
+
         try {
-            List<String> items = userService.findProduct(token, productName, "");
-            List<Product> products = items.stream().map(item -> {
-                        try {
-                            return mapper.readValue(item, Product.class);
-                        } catch (Exception exception) {
-                            return null;
-                        }
-                    }).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice))
-                    .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice))
-                    .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating))
-                    .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating))
-                    .filter(item -> category.equals("") ? true : item.getCategory().equals(category))
-                    .filter(item -> {
-                        try {
-                            return lowestStoreRating.equals("") ? true : mapper.readValue(userService.getStoreById(item.getStoreId(), token), Store.class).getRating() >= Integer.valueOf(lowestStoreRating);
-                        } catch (JsonProcessingException ex) {
-                            Notification.show(ex.getMessage());
-                            return false;
-                        }
-                    })
-                    .filter(item -> {
-                        try {
-                            return highestStoreRating.equals("") ? true : mapper.readValue(userService.getStoreById(item.getStoreId(), token), Store.class).getRating() <= Integer.valueOf(highestStoreRating);
-                        } catch (JsonProcessingException ex) {
-                            Notification.show(ex.getMessage());
-                            return false;
-                        }
-                    })
+            /* 1. ids from backend */
+            List<String> ids = userService.findProduct(token, nameFilter, "");
+
+            /* 2. load products */
+            List<Product> products = ids.stream()
+                    .map(id -> userService.getProductById(id).orElse(null))
+                    .filter(Objects::nonNull)
+                    .filter(p -> lowestPrice.isEmpty()          || p.getPrice()  >= Double.parseDouble(lowestPrice))
+                    .filter(p -> highestPrice.isEmpty()         || p.getPrice()  <= Double.parseDouble(highestPrice))
+                    .filter(p -> lowestProductRating.isEmpty()  || p.getRating() >= Integer.parseInt(lowestProductRating))
+                    .filter(p -> highestProductRating.isEmpty() || p.getRating() <= Integer.parseInt(highestProductRating))
+                    .filter(p -> category.isEmpty()             || p.getCategory().equalsIgnoreCase(category))
                     .toList();
-            for (Product product : products) {
-                productList.add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {
-                    UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
-                }));
+
+            /* 3. store names cache */
+            Map<String,String> storeNames = new HashMap<>();
+            for (Product p : products) {
+                storeNames.computeIfAbsent(p.getStoreId(), sid -> {
+                    try {
+                        Store s = mapper.readValue(userService.getStoreById(token, sid), Store.class);
+                        return s.getName();
+                    } catch (Exception e) { return "unknown store"; }
+                });
             }
-        } catch (Exception exception) {
-            return new VerticalLayout(new Span(exception.getMessage()));
+
+            /* 4. build UI */
+            if (products.isEmpty()) {
+                list.add(new Span("No matching products found."));
+                return list;
+            }
+            for (Product p : products) {
+                String label = storeNames.get(p.getStoreId()) +
+                        " – " + p.getName() +
+                        " | $" + p.getPrice();
+                list.add(new Button(label,
+                        e -> UI.getCurrent()
+                                .navigate("/product/" + p.getId() + "/" + p.getStoreId())));
+            }
+
+        } catch (PermissionException pe) {                       // not logged-in
+            list.add(new Span(pe.getMessage()));
+
+        } catch (Exception ex) {                                 // anything else
+            list.add(new Span(ex.getMessage()));
         }
-        return productList;
+        return list;
     }
+
 
     public VerticalLayout searchProductByCategory(String token, String categoryName, String lowestPrice, String highestPrice, String lowestProductRating, String highestProductRating, String category, String lowestStoreRating, String highestStoreRating) {
         VerticalLayout productList = new VerticalLayout();
@@ -301,9 +318,16 @@ public class ProductPresenter {
     public VerticalLayout getAllProductsInStore(String token, String storeId) {
         VerticalLayout productList = new VerticalLayout();
         List<Product> items = userService.getAllProducts(token);
-        List<Product> products = items.stream()
-                .filter(item -> storeId.equals(item.getStoreId()))
-                .toList();
+        List<Product> products = items.stream().map(item -> {
+            try {
+                if (item.getStoreId().equals(storeId)) {
+                    return item;
+                }
+                return null;
+            } catch (Exception exception) {
+                return null;
+            }
+        }).filter(Objects::nonNull).toList();
         for (Product product : products) {
             productList.add(new Button(product.getName() + "\n" + product.getPrice(), e -> {
                 UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());
@@ -329,24 +353,6 @@ public class ProductPresenter {
             return new VerticalLayout(new Span("store does not exist"));
         }
         return storePage;
-    }
-
-    @Transactional
-    public List<ShoppingBag> userGetShoppingBag(String token) {
-        String username = tokenService.extractUsername(token);
-        RegisteredUser user = null;
-        try {
-            user = userRepository.getById(username);
-        } catch (Exception e) {
-
-        }
-        ShoppingCart shoppingCart = user.getShoppingCart();
-        List<ShoppingBag> shoppingBag = shoppingCart.getShoppingBags();
-        shoppingBag.size();
-        for (ShoppingBag shoppingBagd : shoppingBag) {
-            shoppingBagd.getProducts().size();
-        }
-        return shoppingBag;
     }
 
     //public boolean addProduct(String name, String description,double price, int quantity, double rating, String category, String storeName){

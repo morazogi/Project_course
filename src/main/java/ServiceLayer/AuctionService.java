@@ -79,14 +79,15 @@ public class AuctionService {
 
     public void pay(String auctionId,
                     String token,
-                    String paymentMethod,
+                    String name,
                     String cardNumber,
                     String expDate,
                     String cvv,
                     String state,
                     String city,
-                    String street,
-                    String homeNumber) {
+                    String address,
+                    String id,
+                    String zip) {
 
         Auction a = auctions.get(auctionId);
         if (a == null)                    throw new RuntimeException("auction not found");
@@ -97,11 +98,11 @@ public class AuctionService {
 
         /* 1. charge card */
         paymentService.processPayment(
-                token, paymentMethod, cardNumber, expDate, cvv);
+                token, name, cardNumber, expDate, cvv, id);
 
         /* 2. arrange shipping */
         shippingService.processShipping(
-                token, state, city, street, homeNumber);
+                token, state, city, address, name, zip);
 
         /* 3. update stock and store ledger */
         Store store = storeRepository.getById(a.getStoreId());

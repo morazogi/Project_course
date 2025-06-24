@@ -74,8 +74,8 @@ public class BidService {
     /*──────────────────── payment ─────────────────────*/
     public void pay(String bidId,
                     String token,
-                    String payMethod,String card,String exp,String cvv,
-                    String state,String city,String street,String home) {
+                    String name, String card,String exp,String cvv,
+                    String state,String city,String address,String id,String zip) {
 
         BidSale b = bids.get(bidId);
         if (b == null) throw new RuntimeException("bid not found");
@@ -85,10 +85,10 @@ public class BidService {
         if (!buyer.equals(b.getWinner())) throw new RuntimeException("not your bid");
 
         /* 1. charge */
-        paymentService.processPayment(token, payMethod, card, exp, cvv);
+        paymentService.processPayment(token, name, card, exp, cvv, id);
 
         /* 2. ship */
-        shippingService.processShipping(token, state, city, street, home);
+        shippingService.processShipping(token, state, city, address, name, zip);
 
         /* 3. update stock & store */
         Store   store   = storeRepo.getById(b.getStoreId());

@@ -86,4 +86,8 @@ public class AuctionPresenter {
         }
         return "Matching auction not found or awaiting consent.";
     }
+
+    public void pay(String auctionId, String token, String name, String cardNumber, String expirationDate, String cvv, String state, String city, String address, String id, String zip) {
+        auctionService.pay(auctionId, token, name, cardNumber, expirationDate, cvv, state, city, address, id, zip);
+    }
 }

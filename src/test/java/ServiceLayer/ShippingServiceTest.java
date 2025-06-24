@@ -74,7 +74,10 @@
 //        assertFalse(response);
 //    }
 //
-//
-//
+//    @Test
+//    public void testCancelShipping_Successful() {
+//        boolean response = paymentService.cancelShipping(token);
+//        assertTrue(response);
+//    }
 //
 // }

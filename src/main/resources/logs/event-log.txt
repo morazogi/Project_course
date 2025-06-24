@@ -1863,470 +1863,523 @@
 [2025-06-18 19:54:54] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
 [2025-06-18 19:54:54] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
 [2025-06-18 19:55:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:39:39] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 15:39:39] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 15:39:40] User: a | Event: Event | Description: LOGIN
-[2025-06-21 15:39:40] User: a | Event: Event | Description: TokenService
-[2025-06-21 15:39:40] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 15:39:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:39:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:39:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:39:44] User: a | Event: Event | Description: OPEN_STORE
-[2025-06-21 15:39:44] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
-[2025-06-21 15:39:44] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
-[2025-06-21 15:39:44] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
-[2025-06-21 15:39:44] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:39:44] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:39:44] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
-[2025-06-21 15:39:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:39:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:39:45] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:39:45] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:39:45] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:39:45] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:39:46] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 15:39:46] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 15:39:47] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:39:47] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:39:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:39:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:39:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:39:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:39:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:39:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:39:58] User: a | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-21 15:39:58] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
-[2025-06-21 15:40:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:40:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:40:00] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:40:00] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:40:00] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:40:00] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:40:00] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 15:40:00] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 15:40:07] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 15:40:08] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:40:08] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:40:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:40:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:40:09] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:40:09] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:09] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:09] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:09] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:10] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:11] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:11] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:11] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:11] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:12] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:40:12] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:40:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:40:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:40:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:40:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:40:32] User: a | Event: Event | Description: RESERVE_CART_FAILED
-[2025-06-21 15:40:32] User: a | Event: Event | Description: PURCHASE_CART_FAILED Failed to purchase cart
-[2025-06-21 15:41:38] User: a | Event: Event | Description: RESERVE_CART_FAILED
-[2025-06-21 15:41:38] User: a | Event: Event | Description: PURCHASE_CART_FAILED Failed to purchase cart
-[2025-06-21 15:41:47] User: a | Event: Event | Description: RESERVE_CART_FAILED
-[2025-06-21 15:41:47] User: a | Event: Event | Description: PURCHASE_CART_FAILED Failed to purchase cart
-[2025-06-21 15:41:53] User: a | Event: Event | Description: RESERVE_CART_FAILED
-[2025-06-21 15:41:53] User: a | Event: Event | Description: PURCHASE_CART_FAILED Failed to purchase cart
-[2025-06-21 15:54:18] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 15:54:18] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 15:54:19] User: a | Event: Event | Description: LOGIN
-[2025-06-21 15:54:20] User: a | Event: Event | Description: TokenService
-[2025-06-21 15:54:20] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 15:54:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:54:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:54:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:54:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:54:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:54:30] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:54:30] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:30] User: a | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-21 15:54:30] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
-[2025-06-21 15:54:31] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 15:54:31] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:31] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:54:31] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:54:31] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:54:31] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:54:32] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 15:54:32] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 15:54:36] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=a Matches=0
-[2025-06-21 15:54:39] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 15:54:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:54:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 15:54:41] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:42] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:54:42] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:54:43] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:54:43] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:54:43] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
-[2025-06-21 15:54:43] User: a | Event: Event | Description: ADD_TO_CART
-[2025-06-21 15:54:43] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:44] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:44] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:44] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:46] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:49] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:49] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:51] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:51] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:51] User: a | Event: Event | Description: ADD_TO_CART_FAILED Only 0 left in stock
-[2025-06-21 15:54:54] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:54] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 15:54:54] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 15:54:54] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:25:53] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:25:53] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:25:54] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:25:54] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:25:54] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:25:54] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:25:54] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:25:54] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:25:54] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:25:54] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:25:54] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:25:58] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:25:58] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:26:24] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:26:24] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:26:25] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:26:25] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:26:25] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:26:25] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:26:25] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:26:25] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:26:25] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:26:25] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:26:25] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:26:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:26:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:26:59] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:26:59] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:26:59] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:26:59] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:26:59] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:26:59] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:32:20] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:32:20] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:32:21] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:32:21] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:32:21] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:32:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:32:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:32:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:32:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:32:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:32:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:32:46] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:32:46] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:32:46] User: a | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-21 16:32:46] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
-[2025-06-21 16:32:47] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:32:47] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:32:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:32:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:32:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:32:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:32:47] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:32:47] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:33:09] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:09] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:24] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:24] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:25] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:25] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:26] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:26] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:27] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:27] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:27] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:27] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:27] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:27] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:27] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:27] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:30] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:30] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:30] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:30] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:30] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:30] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:32] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:32] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:32] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:32] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:33] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:33] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:33:40] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:33:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:33:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:33:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:33:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:34:06] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:06] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati Category= Matches=0
-[2025-06-21 16:34:18] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:18] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati 5.0 Category= Matches=0
-[2025-06-21 16:34:19] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:19] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati 5.0 Category= Matches=0
-[2025-06-21 16:34:19] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:19] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati 5.0 Category= Matches=0
-[2025-06-21 16:34:21] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:21] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati5.0 Category= Matches=0
-[2025-06-21 16:34:21] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:21] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati5.0 Category= Matches=0
-[2025-06-21 16:34:21] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:21] User: SEARCH_BY_PRODUCT | Event: Event | Description: Name=Nati5.0 Category= Matches=0
-[2025-06-21 16:34:50] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:34:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:34:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:34:56] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:34:56] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:37:48] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:37:48] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:37:49] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:37:50] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:37:50] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:37:50] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:37:50] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:37:50] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:37:50] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:37:50] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:37:50] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:37:52] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:37:52] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:38:03] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:38:03] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=3
-[2025-06-21 16:38:12] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:38:12] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=3
-[2025-06-21 16:38:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:38:32] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=3
-[2025-06-21 16:40:23] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:40:23] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=3
-[2025-06-21 16:42:14] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:42:14] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:42:16] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:16] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:16] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:17] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:17] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:17] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:17] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:17] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:17] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:19] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:19] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:19] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:20] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:20] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:20] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:21] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:21] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:21] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:23] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:23] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:23] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:25] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:25] User: b | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
-[2025-06-21 16:42:25] User: b | Event: Event | Description: LOGIN_FAILED
-[2025-06-21 16:42:47] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:42:47] User: b | Event: Event | Description: TokenService
-[2025-06-21 16:42:47] User: b | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:42:49] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:42:49] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:44:11] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:44:11] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:44:12] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:44:12] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:44:12] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:44:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:44:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:44:12] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:44:12] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:44:12] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:44:12] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:44:15] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:44:15] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:44:27] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:44:27] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=3
-[2025-06-21 16:47:39] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:47:39] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:47:44] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:47:44] User: b | Event: Event | Description: TokenService
-[2025-06-21 16:47:44] User: b | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:47:52] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:47:52] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:47:53] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:47:53] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:47:53] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:47:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:47:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:47:53] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:47:53] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:47:53] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:47:53] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:48:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:48:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:48:13] User: a | Event: Event | Description: ADD_PRODUCT_START
-[2025-06-21 16:48:13] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
-[2025-06-21 16:48:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:48:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:48:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:48:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:48:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:48:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:48:15] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:48:15] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:48:29] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:48:29] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=4
-[2025-06-21 16:48:33] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:48:33] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:50:42] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:50:42] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:50:44] User: a | Event: Event | Description: LOGIN
-[2025-06-21 16:50:44] User: a | Event: Event | Description: TokenService
-[2025-06-21 16:50:44] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:50:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 16:50:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:50:44] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:50:44] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:50:44] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 16:50:44] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 16:50:47] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:50:47] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:50:49] User: b | Event: Event | Description: LOGIN
-[2025-06-21 16:50:49] User: b | Event: Event | Description: TokenService
-[2025-06-21 16:50:49] User: b | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 16:50:50] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:50:50] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:50:52] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 16:50:52] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 16:51:03] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 16:51:03] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=4
-[2025-06-21 16:51:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:51:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:52:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:52:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:52:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 16:52:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:02:18] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:02:18] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:02:20] User: b | Event: Event | Description: LOGIN
-[2025-06-21 17:02:20] User: b | Event: Event | Description: TokenService
-[2025-06-21 17:02:20] User: b | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 17:02:21] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:02:21] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:02:24] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:02:24] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:02:25] User: a | Event: Event | Description: LOGIN
-[2025-06-21 17:02:26] User: a | Event: Event | Description: TokenService
-[2025-06-21 17:02:26] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 17:02:26] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 17:02:26] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:02:26] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 17:02:26] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 17:02:26] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 17:02:26] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 17:02:37] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:02:37] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:02:48] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 17:02:48] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=4
-[2025-06-21 17:02:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:03:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:03:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:03:17] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:03:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:15:06] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:15:06] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:15:09] User: b | Event: Event | Description: LOGIN
-[2025-06-21 17:15:09] User: b | Event: Event | Description: TokenService
-[2025-06-21 17:15:09] User: b | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 17:15:11] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:15:11] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:15:14] User: a | Event: Event | Description: LOGIN
-[2025-06-21 17:15:14] User: a | Event: Event | Description: TokenService
-[2025-06-21 17:15:14] User: a | Event: Event | Description: LOGIN_SUCCESS
-[2025-06-21 17:15:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
-[2025-06-21 17:15:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:15:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 17:15:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 17:15:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
-[2025-06-21 17:15:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
-[2025-06-21 17:15:16] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:15:16] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:15:19] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
-[2025-06-21 17:15:19] User: a | Event: Event | Description: SIGNUP_FAILED
-[2025-06-21 17:16:18] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 17:16:18] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=4
-[2025-06-21 17:16:23] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 17:16:23] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=4
-[2025-06-21 17:16:29] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:16:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:16:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:16:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:39] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=River Matches=1
-[2025-06-21 17:17:39] User: SEARCH_BY_STORE | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 Matches=4
-[2025-06-21 17:17:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:55] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:55] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:17:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:18:30] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
-[2025-06-21 17:19:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=36fb70d0-d419-447c-aba4-08b58a438d01 FOUND
+[2025-06-21 11:54:23] User: Guest | Event: Event | Description: TokenService
+[2025-06-21 11:54:27] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-21 11:54:27] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-21 11:54:29] User: a | Event: Event | Description: LOGIN
+[2025-06-21 11:54:29] User: a | Event: Event | Description: TokenService
+[2025-06-21 11:54:29] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-21 11:54:29] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:29] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 11:54:29] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 11:54:38] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-21 11:54:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:38] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 11:54:38] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 11:54:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 11:54:40] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 11:54:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:45] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 11:54:45] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 11:54:46] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:54:46] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 11:54:46] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 11:54:47] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-21 11:54:47] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-21 11:54:47] User: Guest | Event: Event | Description: TokenService
+[2025-06-21 11:54:51] User: Guest | Event: Event | Description: TokenService
+[2025-06-21 11:55:06] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-21 11:55:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:55:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 11:55:07] User: Guest | Event: Event | Description: TokenService
+[2025-06-21 23:05:07] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-21 23:05:07] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-21 23:05:09] User: a | Event: Event | Description: LOGIN
+[2025-06-21 23:05:09] User: a | Event: Event | Description: TokenService
+[2025-06-21 23:05:09] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-21 23:05:09] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:05:09] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 23:05:09] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 23:05:11] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-21 23:05:11] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-21 23:05:24] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-21 23:05:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:05:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:05:24] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 23:05:24] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 23:05:30] User: SEARCH_BY_STORE | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 Matches=1
+[2025-06-21 23:05:35] User: SEARCH_BY_STORE | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 Matches=1
+[2025-06-21 23:05:35] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:05:37] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-21 23:05:37] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-21 23:05:39] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:05:39] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:05:39] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-21 23:05:39] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-21 23:05:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-21 23:06:10] User: a | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-21 23:06:10] User: a | Event: Event | Description: Shipping successful
+[2025-06-21 23:06:11] User: a | Event: Event | Description: Successfully payed for cart
+[2025-06-22 08:03:17] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:03:17] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:03:20] User: a | Event: Event | Description: LOGIN
+[2025-06-22 08:03:20] User: a | Event: Event | Description: TokenService
+[2025-06-22 08:03:20] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 08:03:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-22 08:03:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:03:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:03:21] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:03:21] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:03:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-22 08:03:48] User: ReserveProduct | Event: Event | Description: Product not found
+[2025-06-22 08:03:48] User: a | Event: Event | Description: PURCHASE_CART_FAILED - RESERVE_FAILED
+[2025-06-22 08:03:48] User: a | Event: Event | Description: RESERVE_CART_FAILED
+[2025-06-22 08:03:48] User: a | Event: Event | Description: PURCHASE_CART_FAILED Failed to purchase cart
+[2025-06-22 08:04:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=0674c787-5a0c-48c4-86b7-764835113e01 FOUND
+[2025-06-22 08:04:50] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:04:50] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:04:59] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:04:59] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:05:01] User: b | Event: Event | Description: LOGIN
+[2025-06-22 08:05:01] User: b | Event: Event | Description: TokenService
+[2025-06-22 08:05:01] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 08:05:09] User: b | Event: Event | Description: OPEN_STORE
+[2025-06-22 08:05:10] User: b | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-22 08:05:10] User: b | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-22 08:05:10] User: b | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-22 08:05:10] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:05:10] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:05:10] User: b | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-22 08:05:11] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:11] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:05:11] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:05:27] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:27] User: b | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-22 08:05:27] User: b | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-22 08:05:28] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:05:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:05:31] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:05:31] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:05:33] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:05:33] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:05:33] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:33] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:05:33] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:05:39] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=dfsa Matches=1
+[2025-06-22 08:05:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:40] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:05:40] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:05:51] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:05:51] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:05:51] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:06:06] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=dfsa Matches=1
+[2025-06-22 08:06:07] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:07] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:07] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:06:07] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:06:17] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:17] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:06:17] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:06:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:21] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:06:21] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:06:36] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:36] User: b | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-22 08:06:36] User: b | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-22 08:06:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:38] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:06:38] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:06:52] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:52] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:06:52] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:06:53] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:06:53] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:06:55] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:06:55] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:06:55] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:09:18] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=dfsa Matches=1
+[2025-06-22 08:09:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:09:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:09:19] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:09:19] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:13:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:13:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:01] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:14:01] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:14:05] User: b | Event: Event | Description: LOGIN
+[2025-06-22 08:14:06] User: b | Event: Event | Description: TokenService
+[2025-06-22 08:14:06] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 08:14:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:06] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:14:06] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:14:12] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=dfsa Matches=1
+[2025-06-22 08:14:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:12] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:14:12] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:14:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:17] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-22 08:14:17] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-22 08:14:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:23] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:23] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:14:23] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:14:28] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:14:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:14:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:14:38] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:14:38] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:14:49] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:15:30] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 08:15:32] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "NoPOST data received"
+[2025-06-22 08:15:50] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:27:40] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:27:40] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:27:44] User: b | Event: Event | Description: LOGIN
+[2025-06-22 08:27:44] User: b | Event: Event | Description: TokenService
+[2025-06-22 08:27:44] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 08:27:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:27:45] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:27:45] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:27:51] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:27:51] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:27:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:28:14] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 08:28:16] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 08:32:50] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:32:50] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:32:55] User: b | Event: Event | Description: LOGIN
+[2025-06-22 08:32:55] User: b | Event: Event | Description: TokenService
+[2025-06-22 08:32:55] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 08:32:55] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:32:55] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:32:55] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:33:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:33:03] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:33:03] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:33:06] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:33:06] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:33:06] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:33:09] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:33:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:33:12] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:33:12] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:33:17] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:33:17] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:33:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:33:19] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:33:19] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:33:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:33:55] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 08:33:55] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 08:40:39] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 08:40:39] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 08:40:44] User: b | Event: Event | Description: LOGIN
+[2025-06-22 08:40:44] User: b | Event: Event | Description: TokenService
+[2025-06-22 08:40:44] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 08:40:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:40:44] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 08:40:44] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 08:40:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 08:41:09] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 08:41:10] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 11:42:56] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:42:56] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:43:01] User: b | Event: Event | Description: LOGIN
+[2025-06-22 11:43:01] User: b | Event: Event | Description: TokenService
+[2025-06-22 11:43:01] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 11:43:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:43:01] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 11:43:01] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 11:43:02] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:43:02] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:43:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:45:36] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 11:45:38] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 11:52:44] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:52:44] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:52:48] User: b | Event: Event | Description: LOGIN
+[2025-06-22 11:52:48] User: b | Event: Event | Description: TokenService
+[2025-06-22 11:52:48] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 11:52:48] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:52:48] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 11:52:48] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 11:52:51] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:53:31] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 11:53:31] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 11:57:21] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 11:57:21] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 11:57:28] User: b | Event: Event | Description: LOGIN
+[2025-06-22 11:57:28] User: b | Event: Event | Description: TokenService
+[2025-06-22 11:57:28] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 11:57:28] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:57:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 11:57:28] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 11:57:30] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 11:58:07] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 11:58:08] User: b | Event: Event | Description: PURCHASE_CART_FAILED For input string: "No POST data received"
+[2025-06-22 16:27:46] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:27:46] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:27:49] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:27:49] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:27:49] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:27:49] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:27:49] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:27:49] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:27:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:27:57] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:27:57] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:32:23] User: Guest | Event: Event | Description: TokenService
+[2025-06-22 16:32:26] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:32:26] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:32:29] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:32:29] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:32:29] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:32:29] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:32:29] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:32:29] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:32:30] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:32:53] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:32:54] User: b | Event: Event | Description: PURCHASE_CART_FAILED could not connect to shipping system
+[2025-06-22 16:37:08] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:37:08] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:37:15] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:37:15] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:37:15] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:37:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:37:15] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:37:15] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:37:16] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:37:40] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:37:41] User: b | Event: Event | Description: PURCHASE_CART_FAILED could not connect to shipping system
+[2025-06-22 16:38:49] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:38:49] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:38:52] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:38:52] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:38:52] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:38:52] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:38:52] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:38:52] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:38:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:39:14] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:39:14] User: b | Event: Event | Description: PURCHASE_CART_FAILED could not connect to shipping system
+[2025-06-22 16:41:39] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:41:39] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:41:41] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:41:41] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:41:41] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:41:42] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:41:42] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:41:42] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:41:43] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:42:11] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:42:12] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:42:12] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:42:25] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:44:05] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:44:06] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:44:06] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:44:07] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:44:07] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:44:08] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:44:08] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:44:08] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:44:08] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:44:08] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:44:08] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:44:08] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:44:08] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:44:09] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:44:09] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:45:30] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:45:30] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:45:33] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:45:33] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:45:33] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:45:33] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:45:33] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:45:33] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:45:35] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:45:56] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:45:57] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:45:57] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 16:47:09] User: Guest | Event: Event | Description: TokenService
+[2025-06-22 16:47:12] User: Guest | Event: Event | Description: TokenService
+[2025-06-22 16:47:13] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 16:47:13] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 16:47:16] User: b | Event: Event | Description: LOGIN
+[2025-06-22 16:47:16] User: b | Event: Event | Description: TokenService
+[2025-06-22 16:47:16] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 16:47:16] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:47:16] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 16:47:16] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 16:47:17] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 16:47:46] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 16:47:47] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 16:47:47] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:24:53] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:24:53] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:24:58] User: b | Event: Event | Description: LOGIN
+[2025-06-22 22:24:58] User: b | Event: Event | Description: TokenService
+[2025-06-22 22:24:58] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:24:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:24:58] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 22:24:58] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 22:24:59] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:25:27] User: b | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:25:29] User: b | Event: Event | Description: Shipping successful
+[2025-06-22 22:25:29] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:25:29] User: b | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:25:29] User: b | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:25:29] User: b | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:25:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:26:07] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:26:08] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:26:08] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 22:26:08] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 22:26:08] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:26:08] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:26:12] User: c | Event: Event | Description: LOGIN
+[2025-06-22 22:26:20] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:26:20] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:26:23] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:26:23] User: m | Event: Event | Description: TokenService
+[2025-06-22 22:26:23] User: m | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:26:31] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=dfsa Matches=1
+[2025-06-22 22:26:31] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:26:31] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:26:31] User: m | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 22:26:31] User: m | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 22:26:33] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:26:34] User: m | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-22 22:26:34] User: m | Event: Event | Description: ADD_TO_CART
+[2025-06-22 22:26:45] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:27:28] User: m | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:27:29] User: m | Event: Event | Description: Shipping successful
+[2025-06-22 22:27:29] User: m | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:27:29] User: m | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:27:29] User: m | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:27:29] User: m | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:28:51] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:36:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:36:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:36:44] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:36:47] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:36:47] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:36:48] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:36:48] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:36:51] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:36:51] User: m | Event: Event | Description: TokenService
+[2025-06-22 22:36:51] User: m | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:36:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:37:23] User: m | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:37:24] User: m | Event: Event | Description: Shipping successful
+[2025-06-22 22:37:24] User: m | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:37:24] User: m | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:37:25] User: m | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:37:25] User: m | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:39:13] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:39:13] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:39:14] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:39:14] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:39:18] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:39:18] User: m | Event: Event | Description: TokenService
+[2025-06-22 22:39:18] User: m | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:39:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:39:42] User: m | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:39:43] User: m | Event: Event | Description: Shipping successful
+[2025-06-22 22:39:43] User: m | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:39:43] User: m | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:39:43] User: m | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:39:43] User: m | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:41:25] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:41:25] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:41:28] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:41:28] User: m | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
+[2025-06-22 22:41:28] User: m | Event: Event | Description: LOGIN_FAILED
+[2025-06-22 22:41:31] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:41:31] User: m | Event: Event | Description: TokenService
+[2025-06-22 22:41:31] User: m | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:41:32] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:42:06] User: m | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:42:06] User: m | Event: Event | Description: Shipping successful
+[2025-06-22 22:42:07] User: m | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:42:07] User: m | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:42:07] User: m | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:42:07] User: m | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:43:59] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:44:00] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:44:03] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:44:03] User: m | Event: Event | Description: TokenService
+[2025-06-22 22:44:03] User: m | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:44:05] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:44:33] User: m | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:44:34] User: m | Event: Event | Description: Shipping successful
+[2025-06-22 22:44:34] User: m | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:44:34] User: m | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:44:34] User: m | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:44:35] User: m | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:47:08] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:47:08] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:47:13] User: m | Event: Event | Description: LOGIN
+[2025-06-22 22:47:13] User: m | Event: Event | Description: TokenService
+[2025-06-22 22:47:13] User: m | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:47:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:47:17] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:47:36] User: m | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:47:36] User: m | Event: Event | Description: Shipping successful
+[2025-06-22 22:47:36] User: m | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:47:39] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:49:25] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:49:25] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:49:38] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:49:38] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:49:43] User: q | Event: Event | Description: LOGIN
+[2025-06-22 22:49:43] User: q | Event: Event | Description: TokenService
+[2025-06-22 22:49:43] User: q | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:49:55] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=dfsa Matches=1
+[2025-06-22 22:49:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:49:56] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:49:56] User: q | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 22:49:56] User: q | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 22:49:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:49:58] User: q | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-22 22:49:58] User: q | Event: Event | Description: ADD_TO_CART
+[2025-06-22 22:50:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:50:01] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:50:01] User: q | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-22 22:50:01] User: q | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-22 22:50:08] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:50:39] User: q | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:50:39] User: q | Event: Event | Description: Shipping successful
+[2025-06-22 22:50:39] User: q | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:50:39] User: q | Event: Event | Description: PURCHASE_CART_FAILED null
+[2025-06-22 22:50:39] User: q | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:50:40] User: q | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:50:48] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:53:09] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:53:09] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:53:14] User: q | Event: Event | Description: LOGIN
+[2025-06-22 22:53:14] User: q | Event: Event | Description: TokenService
+[2025-06-22 22:53:14] User: q | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:53:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:53:47] User: q | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:53:47] User: q | Event: Event | Description: Shipping successful
+[2025-06-22 22:53:47] User: q | Event: Event | Description: Successfully payed for cart
+[2025-06-22 22:53:47] User: q | Event: Event | Description: PURCHASE_CART_FAILED A collection with cascade="all-delete-orphan" was no longer referenced by the owning entity instance: DomainLayer.ShoppingCart.shoppingBags
+[2025-06-22 22:53:47] User: q | Event: Event | Description: Successfully canceled shipping for cart
+[2025-06-22 22:53:48] User: q | Event: Event | Description: Successfully canceled payment for cart
+[2025-06-22 22:56:09] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-22 22:56:09] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-22 22:56:12] User: q | Event: Event | Description: LOGIN
+[2025-06-22 22:56:12] User: q | Event: Event | Description: TokenService
+[2025-06-22 22:56:12] User: q | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-22 22:56:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=1837d54d-3dfa-436d-ae18-4daa16071943 FOUND
+[2025-06-22 22:56:44] User: q | Event: Event | Description: RESERVE_PRODUCT_SUCCESS
+[2025-06-22 22:56:45] User: q | Event: Event | Description: Shipping successful
+[2025-06-22 22:56:45] User: q | Event: Event | Description: Successfully payed for cart

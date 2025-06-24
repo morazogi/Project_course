@@ -13,9 +13,9 @@ import DomainLayer.ShoppingCart;
 import DomainLayer.Store;
 import DomainLayer.Order;
 import DomainLayer.Roles.RegisteredUser;
-import java.util.Map;
-import java.util.Date;
-import java.util.HashMap;
+
+import java.util.*;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.catalina.User;
@@ -305,7 +305,19 @@ public class UserCart {
         // create an order
 //        orderRepository.addOrder(new Order(mapper.writeValueAsString(cart), username , totalPrice));
         user.setCartReserved(false);
-//        user.getShoppingCart().clearBags();
+      //  List<ShoppingBag> shoppingBags =  user.getShoppingCart().getShoppingBags();
+        //for (ShoppingBag shoppingBag : shoppingBags) {
+          //  String storeId = shoppingBag.getStoreId();
+         //   for (Map.Entry<String, Integer> entry : shoppingBag.getProducts().entrySet()) {
+           //     String productId = entry.getKey();
+             //   Integer quantity = entry.getValue();
+               // Product product = productRepository.getById(productId);
+         //       if (product != null) {
+           //         user.getShoppingCart().removeProduct(storeId, productId, quantity);
+             //   }
+       //     }
+      //  }
+        user.getShoppingCart().sold();
         if(isRegisteredUser) userRepository.update((RegisteredUser) user);
         else guestRepository.update(user);
     }

@@ -62,6 +62,7 @@ public class ShoppingCart {
         for (ShoppingBag shoppingBag : shoppingBags) {
             shoppingBag.sold();
         }
+        shoppingBags.clear();
     }
     @Override
     public String toString() {
