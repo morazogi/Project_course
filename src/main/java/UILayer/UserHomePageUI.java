@@ -10,7 +10,6 @@ import PresentorLayer.UserConnectivityPresenter;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -20,159 +19,160 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+/** Store-manager dashboard (registered user). */
 @Route("/userhomepage")
 public class UserHomePageUI extends VerticalLayout {
 
-    private final IToken tokenService;
-    private final UserRepository userRepository;
-    private final ButtonPresenter buttonPresenter;
-    private final UserConnectivityPresenter userConnectivityPresenter;
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final PermissionsPresenter pp;
+    private final IToken                    tokenService;
+    private final UserRepository            userRepository;
+    private final ButtonPresenter           buttonPresenter;
+    private final UserConnectivityPresenter userConn;
+    private final PermissionsPresenter      pp;
 
+    /* UI elements we need to refresh */
+    private final ComboBox<String> storeDropdown = new ComboBox<>("Store");
+    private final VerticalLayout   storeContent  = new VerticalLayout();
+
+    private List<Store>            myStores      = List.of();   // filled in ctor
+    private String                 username;
+
+    /* ------------------------------------------------------------ */
     @Autowired
-    public UserHomePageUI(UserService userService, OwnerManagerService ownerManager, IToken tokenService, UserRepository userRepository, RegisteredService registeredService, StoreRepository storeRepository) {
-        // Get current user from session
+    public UserHomePageUI(UserService          userService,
+                          OwnerManagerService  ownerMgrService,
+                          IToken               tokenService,
+                          UserRepository       userRepository,
+                          RegisteredService    registeredService,
+                          StoreRepository      storeRepository) {
+
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
-        this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManager, tokenService, userRepository);
-        this.pp = new PermissionsPresenter(ownerManager, tokenService, userRepository);
+        this.userConn  = new UserConnectivityPresenter(userService, registeredService,
+                ownerMgrService, tokenService,
+                userRepository);
+        this.pp = new PermissionsPresenter(ownerMgrService, tokenService, userRepository);
+
+        /* ------------ security gate ---------------------------------- */
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String username = tokenService.extractUsername(token);
+        username     = tokenService.extractUsername(token);
 
-        RegisteredUser user = null;
+        RegisteredUser user;
+        try { user = userRepository.getById(username); }
+        catch (Exception e) { UI.getCurrent().navigate(""); return; }
+
+        /* ------------ stores list (once) ----------------------------- */
         try {
-            user = userRepository.getById(username);
+            myStores = userConn.getUserStoresName(token);
         } catch (Exception e) {
-            Notification.show(e.getMessage());
+            Notification.show(e.getMessage());          // fallback: empty list
+            myStores = List.of();
         }
-        if (user == null) {
-            UI.getCurrent().navigate("");
-            return;
-        }
-//        Store store = new Store();
-//        store.setId("saqw");
-//        store.addOwner(user.getID(), user.getID());
-//        boolean[] arr = new boolean[7];
-//        arr[0] = true;
-//        arr[1] = true;
-//        store.addManager(user.getID(), user.getID(), arr);
-//        store.setName("name");
-//        System.out.println(store.userIsManager(user.getID()));
-//        try {
-//            storeRepository.addStore(store.getId(), mapper.writeValueAsString(store));
-//            System.out.println("Serialized store JSON:\n" + mapper.writeValueAsString(store));
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
 
-        // Header bar
+        /* ------------ header ---------------------------------------- */
         H1 title = new H1("🛍️ Store Manager Dashboard");
-        Button signOutBtn = buttonPresenter.signOutButton(token);
-
         HorizontalLayout header = new HorizontalLayout(
                 new H4("👤 Hello, " + user.getUsername()),
-                signOutBtn
+                buttonPresenter.signOutButton(token)
         );
         header.setWidthFull();
         header.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
-        ComboBox<String> storeDropdown = new ComboBox<>("Store");
-        storeDropdown.setItems("Store 1", "Store 2", "Store 3"); // TODO add stores as a list or use it as an input?
-        storeDropdown.setPlaceholder("Select Store");
+        /* ------------ store dropdown -------------------------------- */
+        storeDropdown.setItems(myStores.stream().map(Store::getName).toList());
+        storeDropdown.setPlaceholder("Select / filter stores");
+        storeDropdown.setClearButtonVisible(true);
 
-        add(header, new Hr(), title, storeDropdown);
-        add(new HorizontalLayout(new Button("add store", e -> {UI.getCurrent().navigate("/addstore");}), new Button("add new product to store", e -> {UI.getCurrent().navigate("/addnewproduct");})));
-        Button searchStoreButton = new Button("Search store", e -> UI.getCurrent().navigate("/searchstore"));
-        Button searchProductButton = new Button("Search product", e -> UI.getCurrent().navigate("/searchproduct"));
-        Button editStoreButton = new Button("Edit store", e -> UI.getCurrent().navigate("/edit-store"));
-        add(new HorizontalLayout(searchStoreButton, searchProductButton, editStoreButton, new Button("Shopping cart", e -> UI.getCurrent().navigate("/shoppingcart"))));
-        // in case storeDropdown.getValue() == null
-        Map<String, Boolean> map1 = new HashMap<>();
-        map1.put("PERM_MANAGE_INVENTORY", false);
-        map1.put("PERM_MANAGE_STAFF", false);
-        map1.put("PERM_VIEW_STORE", false);
-        map1.put("PERM_UPDATE_POLICY", false);
-        map1.put("PERM_ADD_PRODUCT", false);
-        map1.put("PERM_REMOVE_PRODUCT", false);
-        map1.put("PERM_UPDATE_PRODUCT", false);
+        /* when value chosen or custom text entered */
+        storeDropdown.addValueChangeListener(e -> refreshStoreContent());
+        storeDropdown.addCustomValueSetListener(e -> {
+            storeDropdown.setValue(e.getDetail());
+            refreshStoreContent();
+        });
 
-        // Permissions and actions
-        //if(storeDropdown.getValue() != null)
-        LinkedList<Store> stores = new LinkedList<Store>();
-        try {
-            stores = userConnectivityPresenter.getUserStoresName(token);
-        } catch (Exception e) {
-            add(new Span(e.getMessage() + "\npremissions:"));
-        }
-        for (Store storeName : stores) {
-            add(new Span(storeName.getName()));
-            map1 = this.pp.getPremissions(user.getUsername(), storeName.getId(), user.getUsername());
-            ; //user.getManagerPermissions();
+        /* ------------ static action buttons ------------------------- */
+        HorizontalLayout quick = new HorizontalLayout(
+                new Button("add store",          ev -> UI.getCurrent().navigate("/addstore")),
+                new Button("add new product to store",
+                        ev -> UI.getCurrent().navigate("/addnewproduct"))
+        );
 
-            if (map1 != null) {
-                boolean[] permsArray = {
-                        Boolean.TRUE.equals(map1.get("PERM_MANAGE_INVENTORY")),
-                                Boolean.TRUE.equals(map1.get("PERM_MANAGE_STAFF")),
-                                        Boolean.TRUE.equals(map1.get("PERM_VIEW_STORE")),
-                                                Boolean.TRUE.equals(map1.get("PERM_UPDATE_POLICY")),
-                                                        Boolean.TRUE.equals(map1.get("PERM_ADD_PRODUCT")),
-                                                                Boolean.TRUE.equals(map1.get("PERM_REMOVE_PRODUCT")),
-                                                                        Boolean.TRUE.equals(map1.get("PERM_UPDATE_PRODUCT"))};
+        HorizontalLayout searches = new HorizontalLayout(
+                new Button("Search store",   ev -> UI.getCurrent().navigate("/searchstore")),
+                new Button("Search product", ev -> UI.getCurrent().navigate("/searchproduct")),
+                new Button("Edit store",     ev -> UI.getCurrent().navigate("/edit-store")),
+                new Button("Shopping cart",  ev -> UI.getCurrent().navigate("/shoppingcart"))
+        );
 
-                // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
-                // work over the store name -> store ID
+        /* ------------ assemble page --------------------------------- */
+        add(header, new Hr(), title,
+                storeDropdown, quick, searches,
+                storeContent);
 
-                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
-                boolean hasAnyPermission = false;
-                HorizontalLayout buttonLayout1 = new HorizontalLayout();
-                HorizontalLayout buttonLayout2 = new HorizontalLayout();
-
-                if (perms.getPermission(ManagerPermissions.PERM_VIEW_STORE)) {
-                    buttonLayout1.add(new Button("🏬 View Store"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
-                    buttonLayout1.add(new Button("📦 Manage Inventory"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_MANAGE_STAFF)) {
-                    buttonLayout1.add(new Button("👥 Manage Staff"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_ADD_PRODUCT)) {
-                    buttonLayout2.add(new Button("➕ Add Product"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT)) {
-                    buttonLayout2.add(new Button("❌ Remove Product"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT)) {
-                    buttonLayout2.add(new Button("✏️ Update Product"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_UPDATE_POLICY)) {
-                    buttonLayout2.add(new Button("📝 Update Policy"));
-                    hasAnyPermission = true;
-                }
-
-                if (map1 != null)
-                    add(buttonLayout1, buttonLayout2);
-
-                if (!hasAnyPermission) {
-                    add(new Paragraph("⚠️ You currently don’t have permissions for any store management actions. Contact the store owner to update your role."));
-                }
-            }
-        }
         setPadding(true);
         setSpacing(true);
         setAlignItems(Alignment.CENTER);
+
+        /* initial population */
+        refreshStoreContent();
+    }
+
+    /* ------------------------------------------------------------ */
+    /** Re-build the storeContent layout according to filter box. */
+    private void refreshStoreContent() {
+        storeContent.removeAll();
+
+        String filter = Optional.ofNullable(storeDropdown.getValue())
+                .orElse("").trim().toLowerCase();
+
+        for (Store store : myStores) {
+            if (!store.getName().toLowerCase().contains(filter)) continue;
+
+            storeContent.add(new Span(store.getName()));
+
+            Map<String,Boolean> perms = pp.getPremissions(
+                    username, store.getId(), username);
+
+            if (perms == null) perms = Map.of();
+
+            HorizontalLayout top    = new HorizontalLayout();
+            HorizontalLayout bottom = new HorizontalLayout();
+            boolean hasAny = false;
+
+            if (Boolean.TRUE.equals(perms.get("PERM_VIEW_STORE"))) {
+                top.add(new Button("🏬 View Store"));
+                hasAny = true;
+            }
+            if (Boolean.TRUE.equals(perms.get("PERM_MANAGE_INVENTORY"))) {
+                top.add(new Button("📦 Manage Inventory"));
+                hasAny = true;
+            }
+            if (Boolean.TRUE.equals(perms.get("PERM_MANAGE_STAFF"))) {
+                top.add(new Button("👥 Manage Staff"));
+                hasAny = true;
+            }
+            if (Boolean.TRUE.equals(perms.get("PERM_ADD_PRODUCT"))) {
+                bottom.add(new Button("➕ Add Product"));
+                hasAny = true;
+            }
+            if (Boolean.TRUE.equals(perms.get("PERM_REMOVE_PRODUCT"))) {
+                bottom.add(new Button("❌ Remove Product"));
+                hasAny = true;
+            }
+            if (Boolean.TRUE.equals(perms.get("PERM_UPDATE_PRODUCT"))) {
+                bottom.add(new Button("✏️ Update Product"));
+                hasAny = true;
+            }
+            if (Boolean.TRUE.equals(perms.get("PERM_UPDATE_POLICY"))) {
+                bottom.add(new Button("📝 Update Policy"));
+                hasAny = true;
+            }
+
+            if (hasAny) storeContent.add(top, bottom);
+            else storeContent.add(new Paragraph(
+                    "⚠️ You currently don’t have permissions for this store."));
+        }
     }
 }

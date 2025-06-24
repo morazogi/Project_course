@@ -41,7 +41,7 @@ public class LoginUI extends VerticalLayout {
             try {
                 String token = userConnectivityPresenter.login(username.getValue(), password.getValue());
                 UI.getCurrent().getSession().setAttribute("token", token);
-                UI.getCurrent().navigate("/userhomepage");
+                UI.getCurrent().navigate("/registeredhomepage");
                 //UI.getCurrent().navigate("/" + token);
             } catch (Exception exception) {
                 error.setText(exception.getMessage());

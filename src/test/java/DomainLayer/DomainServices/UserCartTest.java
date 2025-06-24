@@ -5,6 +5,7 @@ import DomainLayer.Product;
 import DomainLayer.Roles.Guest;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingCart;
+import DomainLayer.Store;
 import InfrastructureLayer.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for {@link UserCart}.  All collaborators are mocked; we use a real
- * {@link ShoppingCart} where needed to compute in-cart quantities.
+ * Unit tests for {@link UserCart}.
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -39,10 +39,19 @@ class UserCartTest {
     private final String storeId = "s1";
     private final String prodId  = "p1";
 
+    /* reusable mocked store */
+    private Store stubStore;
+
     @BeforeEach
     void setUp() {
         cartSvc = new UserCart(tokener, userRepo, storeRepo,
                 productRepo, orderRepo, guestRepo);
+
+        /* ---- stub store ---- */
+        stubStore = mock(Store.class);
+        when(stubStore.getId()).thenReturn(storeId);
+        when(stubStore.getProductQuantity(anyString())).thenReturn(10);   // default stock
+        when(storeRepo.getById(storeId)).thenReturn(stubStore);
     }
 
     /* ===============================================================
@@ -54,12 +63,10 @@ class UserCartTest {
         when(tokener.extractUsername(token)).thenReturn("alice");
         doNothing().when(tokener).validateToken(token);
 
-        /* product with ample stock */
         Product apple = new Product(storeId, "Apple", "", 1.0f, 10, 0d, "Food");
         apple.setId(prodId);
         when(productRepo.getById(prodId)).thenReturn(apple);
 
-        /* user with empty ShoppingCart */
         RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
         when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
         when(userRepo.getById("alice")).thenReturn(alice);
@@ -78,6 +85,7 @@ class UserCartTest {
         Product scarce = new Product(storeId, "Rare", "", 5f, 1, 0d, "Misc");
         scarce.setId(prodId);
         when(productRepo.getById(prodId)).thenReturn(scarce);
+        when(stubStore.getProductQuantity(prodId)).thenReturn(1);  // only 1 left
 
         RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
         when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
@@ -98,6 +106,7 @@ class UserCartTest {
 
         Guest guest = mock(Guest.class);
         when(guest.getUsername()).thenReturn("Guest-1");
+        when(guest.getShoppingCart()).thenReturn(new ShoppingCart("Guest-1")); // avoids “healing” update
         when(guestRepo.getById("Guest-1")).thenReturn(guest);
 
         cartSvc.removeFromCart("tok", storeId, prodId, 1);
@@ -109,7 +118,6 @@ class UserCartTest {
     @Test
     void removeFromCart_zeroQuantity_throws() {
         when(tokener.extractUsername("tok")).thenReturn("alice");
-
         assertThrows(IllegalArgumentException.class,
                 () -> cartSvc.removeFromCart("tok", storeId, prodId, 0));
     }

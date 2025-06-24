@@ -16,13 +16,15 @@ public class GuestRepository implements IRepo<Guest> {
     private final HashMap<String, Guest> repo = new HashMap<>();
 
     public Guest save(Guest guest) {
-        return repo.put(guest.getUsername(), guest); // if exists, returns old value
+        repo.put(guest.getUsername(), guest);
+        return guest;
     }
     public Guest update(Guest guest) {
-        if (repo.containsKey(guest.getUsername())) {
-            return repo.put(guest.getUsername(), guest); // update existing
-        }
-        throw new IllegalArgumentException("guest does not exist - thrown in GuestRepository");
+        if (!repo.containsKey(guest.getUsername()))
+            throw new IllegalArgumentException("guest does not exist - thrown in GuestRepository");
+
+        repo.put(guest.getUsername(), guest);   // overwrite
+        return guest;                           // ← return the updated object
     }
     public Guest getById(String id) {
         if (!repo.containsKey(id)) {

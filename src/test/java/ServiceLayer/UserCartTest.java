@@ -5,10 +5,9 @@ import DomainLayer.IToken;
 import DomainLayer.Product;
 import DomainLayer.Roles.Guest;
 import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingBag;
 import DomainLayer.ShoppingCart;
+import DomainLayer.Store;
 import InfrastructureLayer.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -31,7 +29,6 @@ import static org.mockito.Mockito.*;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class UserCartTest {
 
-    /* ------------- collaborators injected through ctor ------------- */
     @Mock IToken            tokener;
     @Mock UserRepository    userRepo;
     @Mock GuestRepository   guestRepo;
@@ -41,17 +38,24 @@ class UserCartTest {
 
     private UserCart cartService;
 
-    /* ---------- shared fixtures ---------- */
     private Product apple;
-    private final String storeId = "store-1";
+    private final String storeId   = "store-1";
     private final String productId = "p-apple";
+
+    private Store stubStore;
 
     @BeforeEach
     void init() {
         cartService = new UserCart(tokener, userRepo, storeRepo,
                 productRepo, orderRepo, guestRepo);
 
-        /* product in catalogue with 10 in stock */
+        /* ---- stub store ---- */
+        stubStore = mock(Store.class);
+        when(stubStore.getId()).thenReturn(storeId);
+        when(stubStore.getProductQuantity(anyString())).thenReturn(10); // default stock
+        when(storeRepo.getById(storeId)).thenReturn(stubStore);
+
+        /* catalogue product */
         apple = new Product(storeId, "Apple", "", 1.5f, 10, 0, "Food");
         apple.setId(productId);
         when(productRepo.getById(productId)).thenReturn(apple);
@@ -62,14 +66,12 @@ class UserCartTest {
        ================================================================ */
     @Test
     void addToCart_registeredUser_success_updatesRepo() throws Exception {
-        // token resolves to registered username
         when(tokener.extractUsername("tok")).thenReturn("alice");
         doNothing().when(tokener).validateToken("tok");
 
-        // user with empty cart
         RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
-        ShoppingCart   empty = mock(ShoppingCart.class);
-        when(empty.getShoppingBags()).thenReturn(new ArrayList<>()); // no bags yet
+        ShoppingCart empty = mock(ShoppingCart.class);
+        when(empty.getShoppingBags()).thenReturn(new ArrayList<>());
         when(alice.getShoppingCart()).thenReturn(empty);
         when(alice.getUsername()).thenReturn("alice");
         doNothing().when(alice).addProduct(storeId, productId, 3);
@@ -86,10 +88,11 @@ class UserCartTest {
         when(tokener.extractUsername("tok")).thenReturn("alice");
         doNothing().when(tokener).validateToken("tok");
 
-        apple.setQuantity(2); // only 2 left, we’ll ask for 5
+        apple.setQuantity(2);                          // only 2 left
+        when(stubStore.getProductQuantity(productId)).thenReturn(2);
 
         RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
-        ShoppingCart   empty = mock(ShoppingCart.class);
+        ShoppingCart empty = mock(ShoppingCart.class);
         when(empty.getShoppingBags()).thenReturn(new ArrayList<>());
         when(alice.getShoppingCart()).thenReturn(empty);
         when(userRepo.getById("alice")).thenReturn(alice);
@@ -112,6 +115,7 @@ class UserCartTest {
 
         Guest guest = mock(Guest.class);
         when(guest.getUsername()).thenReturn("Guest-42");
+        when(guest.getShoppingCart()).thenReturn(new ShoppingCart("Guest-42"));
         doNothing().when(guest).removeProduct(storeId, productId, 1);
         when(guestRepo.getById("Guest-42")).thenReturn(guest);
 
