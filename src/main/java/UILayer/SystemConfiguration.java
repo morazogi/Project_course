@@ -70,7 +70,7 @@ public class SystemConfiguration {
 
     @Bean
     public NotificationService NotificationService() {
-        return new NotificationService();
+        return new NotificationService(NotificationWebSocketHandler(), NotificationRepository(), TokenService());
     };
 
     @Bean
@@ -111,7 +111,7 @@ public class SystemConfiguration {
 
     @Bean
     public WebSocketConfigure WebSocketConfigure() {
-        return new WebSocketConfigure();
+        return new WebSocketConfigure(NotificationWebSocketHandler());
     };
 
     @Bean
@@ -121,7 +121,7 @@ public class SystemConfiguration {
 
     @Bean
     public NotificationWebSocketHandler NotificationWebSocketHandler() {
-        return new NotificationWebSocketHandler();
+        return new NotificationWebSocketHandler(TokenService());
     };
 
 
@@ -146,7 +146,6 @@ public class SystemConfiguration {
         return new BidService(paymentService, shippingService, tokenService,
                 storeRepository, productRepository, orderRepository);
     }
-
 
 //    @Bean
 //    public Module hibernateModule() {
