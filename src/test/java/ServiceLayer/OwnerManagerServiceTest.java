@@ -165,9 +165,9 @@ class OwnerManagerServiceTest {
             service = new OwnerManagerService(userRepo, storeRepo, productRepo,
                     orderRepo, discountRepo);
 
-            boolean ok = service.removeProduct("owner-1", "store-1", "prod-x");
+            String ok = service.removeProduct("owner-1", "store-1", "prod-x");
 
-            assertFalse(ok);     // exception → false
+            assertFalse(ok == "");     // exception → false
         }
     }
 

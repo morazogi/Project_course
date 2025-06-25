@@ -28,14 +28,13 @@ public class ShippingConnectivity {
 
     public String processShipping(String username, String state, String city, String address, String name, String zip) throws Exception {
         boolean isRegisterdUser = (!username.contains("Guest"));
-        Guest user;
+        Guest user = null;
         if(isRegisterdUser) {
             try {
                 user = (RegisteredUser) userRepository.getById(username);
             }
             catch (Exception e) {
                 EventLogger.logEvent(username, "PROCESS_SHIPPING - USER_NOT_FOUND:"+e.toString());
-                throw new IllegalArgumentException("User not found");
             }
         }
         else {
@@ -44,11 +43,9 @@ public class ShippingConnectivity {
             }
             catch (Exception e) {
                 EventLogger.logEvent(username, "PROCESS_SHIPPING - USER_NOT_FOUND:"+e.toString());
-                throw new IllegalArgumentException("User not found");
             }
         }
-        List<ShoppingBag> shoppingBags = user.getShoppingCart().getShoppingBags();
-        return proxyShipping.processShipping(state, city, address, shoppingBags.get(0).getProducts(), name, zip);
+        return proxyShipping.processShipping(state, city, address, null, name, zip);
     }
 
     public String cancelShipping(String username, String id) {

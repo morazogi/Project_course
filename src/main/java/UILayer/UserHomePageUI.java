@@ -124,7 +124,15 @@ public class UserHomePageUI extends VerticalLayout {
 
         // Permissions and actions
         //if(storeDropdown.getValue() != null)
-        LinkedList<Store> stores = new LinkedList<Store>();
+
+
+
+
+    /* ------------ assemble page --------------------------------- */
+    add(header, new Hr(),title,
+
+   quick,searches,
+    storeContent);LinkedList<Store> stores = new LinkedList<Store>();
         try {
             stores = userConn.getUserStoresName(token);
         } catch (Exception e) {
@@ -155,15 +163,6 @@ public class UserHomePageUI extends VerticalLayout {
 
             }
         }
-
-
-
-    /* ------------ assemble page --------------------------------- */
-    add(header, new Hr(),title,
-
-    storeDropdown,quick,searches,
-    storeContent);
-
     setPadding(true);
 
     setSpacing(true);

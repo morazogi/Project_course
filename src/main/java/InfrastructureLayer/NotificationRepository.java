@@ -23,7 +23,10 @@ public class NotificationRepository implements IRepo<Notifications> {
         return repo.getReferenceById(id);
     }
     public List<Notifications> getAll() {
-        return repo.findAll();
+        System.out.println("Calling repo.findAll()...");
+        List<Notifications> list = repo.findAll();
+        System.out.println("Got " + list.size() + " notifications");
+        return list;
     }
     public void deleteById(String notificationsID) {
         repo.deleteById(notificationsID);
@@ -35,7 +38,7 @@ public class NotificationRepository implements IRepo<Notifications> {
         return repo.existsById(id);
     }
 
-    public List<Notifications> findByUserID(String userID) { return repo.findByUserId(userID); }
-    public List<Notifications> findByStoreID(String storeID) { return repo.findByStoreId(storeID); }
+    public List<Notifications> findByUserID(String userId) { return repo.findByUserId(userId); }
+    public List<Notifications> findByStoreID(String storeId) { return repo.findByStoreId(storeId); }
 
 }

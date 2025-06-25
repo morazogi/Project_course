@@ -10,21 +10,21 @@ public class MockShipping implements IShipping {
 
     public String processShipping(String state, String city, String address, Map<String, Integer> products, String name, String zip) throws Exception {
         if(state == null | state.length() == 0) {
-            throw new Exception("Empty state");
+            return "Empty state";
         }
         if(city == null | city.length() == 0) {
-            throw new Exception("Empty city");
+            return "Empty city";
         }
         if(address == null | address.length() == 0) {
-            throw new Exception("Empty street");
+            return "Empty street";
         }
         try {
             Integer intHomeNumber = Integer.valueOf(zip);
             if(intHomeNumber < 1) {
-                throw new Exception("negative home number");
+                return "negative home number";
             }
         } catch (Exception e) {
-            throw new Exception("Invalid home number");
+            return "Invalid home number";
         }
         return "Shipping successful";
     }

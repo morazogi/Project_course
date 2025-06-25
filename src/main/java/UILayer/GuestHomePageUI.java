@@ -21,6 +21,8 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /** Guest catalogue – now auto-creates a guest token and fully supports add-to-cart. */
 @Route("/guesthomepage")
@@ -41,13 +43,15 @@ public class GuestHomePageUI extends VerticalLayout {
                            IToken tokenService,
                            UserRepository userRepo,
                            StoreRepository storeRepo,
-                           ProductRepository productRepo) {
+                           ProductRepository productRepo,
+                           NotificationService notificationService) {
 
         this.userService  = userService;
         this.tokenService = tokenService;
         this.token        = ensureGuestToken();          // ← NEW
 
         ButtonPresenter buttons = new ButtonPresenter(registeredService, tokenService);
+        connectToWebSocket(token);
 
         /* auth + cart buttons */
         add(new HorizontalLayout(
@@ -76,14 +80,12 @@ public class GuestHomePageUI extends VerticalLayout {
 
     /* ---------- helper: guarantee non-null token ---------- */
     private String ensureGuestToken() {
-        UI.getCurrent().getSession().setAttribute("token", tokenService.generateToken("Guest"));
         String t = (String) UI.getCurrent().getSession().getAttribute("token");
-//        String t = (String) UI.getCurrent().getSession().getAttribute("token");
-//        if (t == null) {                                              // first time for this browser tab
-//            String guestUsername = "Guest-" + UUID.randomUUID();
-//            t = tokenService.generateToken(guestUsername);            // generate valid token
-//            UI.getCurrent().getSession().setAttribute("token", t);
-//        }
+        if (t == null) {                                              // first time for this browser tab
+            String guestUsername = "Guest";
+            t = tokenService.generateToken(guestUsername);            // generate valid token
+            UI.getCurrent().getSession().setAttribute("token", t);
+        }
         return t;
     }
 
@@ -138,4 +140,20 @@ public class GuestHomePageUI extends VerticalLayout {
     public record ProductRow(String storeId, String storeName,
                              String productId, String productName,
                              int quantity, float price) {}
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
+    }
 }

@@ -5,6 +5,7 @@ import DomainLayer.IToken;
 import DomainLayer.DomainServices.*;
 import java.util.List;
 
+import DomainLayer.IUserRepository;
 import InfrastructureLayer.GuestRepository;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.StoreRepository;
@@ -37,7 +38,7 @@ public class RegisteredService {
         this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);
         this.history = new History(tokenService, orderRepository , userRepository);
         this.opener = new OpenStore(tokenService, storeRepository, userRepository);
-        this.notifyService = new ToNotify(notificationRepository, tokenService, notificationWebSocketHandler);
+        this.notifyService = new ToNotify(notificationRepository, tokenService, notificationWebSocketHandler, userRepository);
         this.guestRepository = guestRepository;
     }
 

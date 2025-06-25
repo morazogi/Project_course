@@ -22,6 +22,7 @@ public class NotificationSUI extends VerticalLayout {
 
         TextField username = new TextField("username");
         TextField message  = new TextField("message");
+        TextField storeId = new TextField("storeId");
 
         //Button connect = new Button("connect", e -> {
          //   String tokenToNotifications = tokenService.getToken(username.getValue());
@@ -42,7 +43,7 @@ public class NotificationSUI extends VerticalLayout {
     //    });
 
         Button send = new Button("send", e ->
-                notificationService.notifyUser(username.getValue(), message.getValue(), ""));
+                notificationService.notifyUser(username.getValue(), message.getValue(), storeId.getValue()));
 
         add(username, message, send);
         setAlignItems(Alignment.START);

@@ -134,5 +134,6 @@ class RealFlow1 {
         public void suspendUser(String t) {}
         public void unsuspendUser(String t) {}
         public List<String> showSuspended() { return List.of(); }
+        public String getToken(String username) {return "";}
     }
 }

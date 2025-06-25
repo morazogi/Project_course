@@ -68,7 +68,7 @@ public class SystemConfiguration {
 
     @Bean
     public NotificationService NotificationService() {
-        return new NotificationService(NotificationWebSocketHandler(), NotificationRepository(), TokenService());
+        return new NotificationService(NotificationWebSocketHandler(), NotificationRepository(), TokenService(), UserRepository());
     };
 
     @Bean
@@ -114,7 +114,7 @@ public class SystemConfiguration {
 
     @Bean
     public NotificationWebSocketHandler NotificationWebSocketHandler() {
-        return new NotificationWebSocketHandler(TokenService());
+        return new NotificationWebSocketHandler(TokenService(), NotificationRepository());
     };
 
 
