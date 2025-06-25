@@ -27,32 +27,32 @@ import java.util.*;
 @Route("/userhomepage")
 public class UserHomePageUI extends VerticalLayout {
 
-    private final IToken                    tokenService;
-    private final UserRepository            userRepository;
-    private final ButtonPresenter           buttonPresenter;
+    private final IToken tokenService;
+    private final UserRepository userRepository;
+    private final ButtonPresenter buttonPresenter;
     private final UserConnectivityPresenter userConn;
-    private final PermissionsPresenter      pp;
+    private final PermissionsPresenter pp;
 
     /* UI elements we need to refresh */
     private final ComboBox<String> storeDropdown = new ComboBox<>("Store");
-    private final VerticalLayout   storeContent  = new VerticalLayout();
+    private final VerticalLayout storeContent = new VerticalLayout();
 
-    private List<Store>            myStores      = List.of();   // filled in ctor
-    private String                 username;
+    private List<Store> myStores = List.of();   // filled in ctor
+    private String username;
 
     /* ------------------------------------------------------------ */
     @Autowired
-    public UserHomePageUI(UserService          userService,
-                          OwnerManagerService  ownerMgrService,
-                          IToken               tokenService,
-                          UserRepository       userRepository,
-                          RegisteredService    registeredService,
-                          StoreRepository      storeRepository) {
+    public UserHomePageUI(UserService userService,
+                          OwnerManagerService ownerMgrService,
+                          IToken tokenService,
+                          UserRepository userRepository,
+                          RegisteredService registeredService,
+                          StoreRepository storeRepository) {
 
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         this.buttonPresenter = new ButtonPresenter(registeredService, tokenService);
-        this.userConn  = new UserConnectivityPresenter(userService, registeredService,
+        this.userConn = new UserConnectivityPresenter(userService, registeredService,
                 ownerMgrService, tokenService,
                 userRepository);
         this.pp = new PermissionsPresenter(ownerMgrService, tokenService, userRepository);
@@ -60,11 +60,15 @@ public class UserHomePageUI extends VerticalLayout {
         /* ------------ security gate ---------------------------------- */
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         connectToWebSocket(token);
-        username     = tokenService.extractUsername(token);
+        username = tokenService.extractUsername(token);
 
         RegisteredUser user;
-        try { user = userRepository.getById(username); }
-        catch (Exception e) { UI.getCurrent().navigate(""); return; }
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            UI.getCurrent().navigate("");
+            return;
+        }
 
         /* ------------ stores list (once) ----------------------------- */
         try {
@@ -97,37 +101,77 @@ public class UserHomePageUI extends VerticalLayout {
 
         /* ------------ static action buttons ------------------------- */
         HorizontalLayout quick = new HorizontalLayout(
-                new Button("add store",          ev -> UI.getCurrent().navigate("/addstore")),
+                new Button("add store", ev -> UI.getCurrent().navigate("/addstore")),
                 new Button("add new product to store",
                         ev -> UI.getCurrent().navigate("/addnewproduct"))
         );
 
         HorizontalLayout searches = new HorizontalLayout(
-                new Button("Search store",   ev -> UI.getCurrent().navigate("/searchstore")),
+                new Button("Search store", ev -> UI.getCurrent().navigate("/searchstore")),
                 new Button("Search product", ev -> UI.getCurrent().navigate("/searchproduct")),
-                new Button("Edit store",     ev -> UI.getCurrent().navigate("/edit-store")),
-                new Button("Shopping cart",  ev -> UI.getCurrent().navigate("/shoppingcart"))
+                new Button("Edit store", ev -> UI.getCurrent().navigate("/edit-store")),
+                new Button("Shopping cart", ev -> UI.getCurrent().navigate("/shoppingcart"))
         );
+
+        Map<String, Boolean> map1 = new HashMap<>();
+        map1.put("PERM_MANAGE_INVENTORY", false);
+        map1.put("PERM_MANAGE_STAFF", false);
+        map1.put("PERM_VIEW_STORE", false);
+        map1.put("PERM_UPDATE_POLICY", false);
+        map1.put("PERM_ADD_PRODUCT", false);
+        map1.put("PERM_REMOVE_PRODUCT", false);
+        map1.put("PERM_UPDATE_PRODUCT", false);
+
+        // Permissions and actions
+        //if(storeDropdown.getValue() != null)
+        LinkedList<Store> stores = new LinkedList<Store>();
+        try {
+            stores = userConn.getUserStoresName(token);
+        } catch (Exception e) {
+            add(new Span(e.getMessage() + "\npremissions:"));
+        }
+        for (Store storeName : stores) {
+            add(new Span(storeName.getName()));
+            map1 = this.pp.getPremissions(user.getUsername(), storeName.getId(), user.getUsername());
+            ; //user.getManagerPermissions();
+
+            if (map1 != null) {
+                boolean[] permsArray = {
+                        Boolean.TRUE.equals(map1.get("PERM_MANAGE_INVENTORY")),
+                        Boolean.TRUE.equals(map1.get("PERM_MANAGE_STAFF")),
+                        Boolean.TRUE.equals(map1.get("PERM_VIEW_STORE")),
+                        Boolean.TRUE.equals(map1.get("PERM_UPDATE_POLICY")),
+                        Boolean.TRUE.equals(map1.get("PERM_ADD_PRODUCT")),
+                        Boolean.TRUE.equals(map1.get("PERM_REMOVE_PRODUCT")),
+                        Boolean.TRUE.equals(map1.get("PERM_UPDATE_PRODUCT"))};
+
+                // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
+                // work over the store name -> store ID
 
                 ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
 
                 if (map1 != null)
-                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConnectivityPresenter, token, storeName, perms));
+                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConn, token, storeName, perms));
 
             }
         }
 
 
-        /* ------------ assemble page --------------------------------- */
-        add(header, new Hr(), title,
-                storeDropdown, quick, searches,
-                storeContent);
 
-        setPadding(true);
-        setSpacing(true);
-        setAlignItems(Alignment.CENTER);
+    /* ------------ assemble page --------------------------------- */
+    add(header, new Hr(),title,
 
-       }
+    storeDropdown,quick,searches,
+    storeContent);
+
+    setPadding(true);
+
+    setSpacing(true);
+
+    setAlignItems(Alignment.CENTER);
+}
+
+
 
     public void connectToWebSocket(String token) {
         UI.getCurrent().getPage().executeJs("""
@@ -147,7 +191,7 @@ public class UserHomePageUI extends VerticalLayout {
 }
 
         /* initial population */
-        refreshStoreContent();
+    //    refreshStoreContent();
   //  }
 
 //    /* ------------------------------------------------------------ */

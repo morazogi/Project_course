@@ -76,12 +76,14 @@ public class GuestHomePageUI extends VerticalLayout {
 
     /* ---------- helper: guarantee non-null token ---------- */
     private String ensureGuestToken() {
+        UI.getCurrent().getSession().setAttribute("token", tokenService.generateToken("Guest"));
         String t = (String) UI.getCurrent().getSession().getAttribute("token");
-        if (t == null) {                                              // first time for this browser tab
-            String guestUsername = "Guest-" + UUID.randomUUID();
-            t = tokenService.generateToken(guestUsername);            // generate valid token
-            UI.getCurrent().getSession().setAttribute("token", t);
-        }
+//        String t = (String) UI.getCurrent().getSession().getAttribute("token");
+//        if (t == null) {                                              // first time for this browser tab
+//            String guestUsername = "Guest-" + UUID.randomUUID();
+//            t = tokenService.generateToken(guestUsername);            // generate valid token
+//            UI.getCurrent().getSession().setAttribute("token", t);
+//        }
         return t;
     }
 
