@@ -56,6 +56,7 @@ public class BidManagerUI extends VerticalLayout {
                 clear(store, prod, start, step, mins); status.setText("");
             } catch(Exception ex){ status.setText(ex.getMessage()); }
         });
+        connectToWebSocket(token);
 
         add(new HorizontalLayout(new H1("Bid Manager"), btns.homePageButton(token)),
                 new HorizontalLayout(store, prod),
@@ -68,5 +69,21 @@ public class BidManagerUI extends VerticalLayout {
     private static String toStr(NumberField f){ return f.getValue()==null? "": f.getValue().toString(); }
     private void clear(TextField a,TextField b,NumberField c,NumberField d,IntegerField e){
         a.clear(); b.clear(); c.clear(); d.clear(); e.clear();
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

@@ -6,6 +6,7 @@ import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.PermissionsPresenter;
+import PresentorLayer.ProductPresenter;
 import PresentorLayer.UserConnectivityPresenter;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -57,6 +59,7 @@ public class UserHomePageUI extends VerticalLayout {
 
         /* ------------ security gate ---------------------------------- */
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
         username     = tokenService.extractUsername(token);
 
         RegisteredUser user;
@@ -85,12 +88,12 @@ public class UserHomePageUI extends VerticalLayout {
         storeDropdown.setPlaceholder("Select / filter stores");
         storeDropdown.setClearButtonVisible(true);
 
-        /* when value chosen or custom text entered */
-        storeDropdown.addValueChangeListener(e -> refreshStoreContent());
-        storeDropdown.addCustomValueSetListener(e -> {
-            storeDropdown.setValue(e.getDetail());
-            refreshStoreContent();
-        });
+//        /* when value chosen or custom text entered */
+//        storeDropdown.addValueChangeListener(e -> refreshStoreContent());
+//        storeDropdown.addCustomValueSetListener(e -> {
+//            storeDropdown.setValue(e.getDetail());
+//            refreshStoreContent();
+//        });
 
         /* ------------ static action buttons ------------------------- */
         HorizontalLayout quick = new HorizontalLayout(
@@ -106,6 +109,15 @@ public class UserHomePageUI extends VerticalLayout {
                 new Button("Shopping cart",  ev -> UI.getCurrent().navigate("/shoppingcart"))
         );
 
+                ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
+
+                if (map1 != null)
+                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConnectivityPresenter, token, storeName, perms));
+
+            }
+        }
+
+
         /* ------------ assemble page --------------------------------- */
         add(header, new Hr(), title,
                 storeDropdown, quick, searches,
@@ -115,64 +127,83 @@ public class UserHomePageUI extends VerticalLayout {
         setSpacing(true);
         setAlignItems(Alignment.CENTER);
 
+       }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
+            }
+}
+
         /* initial population */
         refreshStoreContent();
-    }
+  //  }
 
-    /* ------------------------------------------------------------ */
-    /** Re-build the storeContent layout according to filter box. */
-    private void refreshStoreContent() {
-        storeContent.removeAll();
-
-        String filter = Optional.ofNullable(storeDropdown.getValue())
-                .orElse("").trim().toLowerCase();
-
-        for (Store store : myStores) {
-            if (!store.getName().toLowerCase().contains(filter)) continue;
-
-            storeContent.add(new Span(store.getName()));
-
-            Map<String,Boolean> perms = pp.getPremissions(
-                    username, store.getId(), username);
-
-            if (perms == null) perms = Map.of();
-
-            HorizontalLayout top    = new HorizontalLayout();
-            HorizontalLayout bottom = new HorizontalLayout();
-            boolean hasAny = false;
-
-            if (Boolean.TRUE.equals(perms.get("PERM_VIEW_STORE"))) {
-                top.add(new Button("🏬 View Store"));
-                hasAny = true;
-            }
-            if (Boolean.TRUE.equals(perms.get("PERM_MANAGE_INVENTORY"))) {
-                top.add(new Button("📦 Manage Inventory"));
-                hasAny = true;
-            }
-            if (Boolean.TRUE.equals(perms.get("PERM_MANAGE_STAFF"))) {
-                top.add(new Button("👥 Manage Staff"));
-                hasAny = true;
-            }
-            if (Boolean.TRUE.equals(perms.get("PERM_ADD_PRODUCT"))) {
-                bottom.add(new Button("➕ Add Product"));
-                hasAny = true;
-            }
-            if (Boolean.TRUE.equals(perms.get("PERM_REMOVE_PRODUCT"))) {
-                bottom.add(new Button("❌ Remove Product"));
-                hasAny = true;
-            }
-            if (Boolean.TRUE.equals(perms.get("PERM_UPDATE_PRODUCT"))) {
-                bottom.add(new Button("✏️ Update Product"));
-                hasAny = true;
-            }
-            if (Boolean.TRUE.equals(perms.get("PERM_UPDATE_POLICY"))) {
-                bottom.add(new Button("📝 Update Policy"));
-                hasAny = true;
-            }
-
-            if (hasAny) storeContent.add(top, bottom);
-            else storeContent.add(new Paragraph(
-                    "⚠️ You currently don’t have permissions for this store."));
-        }
-    }
-}
+//    /* ------------------------------------------------------------ */
+//    /** Re-build the storeContent layout according to filter box. */
+//    private void refreshStoreContent() {
+//        storeContent.removeAll();
+//
+//        String filter = Optional.ofNullable(storeDropdown.getValue())
+//                .orElse("").trim().toLowerCase();
+//
+//        for (Store store : myStores) {
+//            if (!store.getName().toLowerCase().contains(filter)) continue;
+//
+//            storeContent.add(new Span(store.getName()));
+//
+//            Map<String,Boolean> perms = pp.getPremissions(
+//                    username, store.getId(), username);
+//
+//            if (perms == null) perms = Map.of();
+//
+//            HorizontalLayout top    = new HorizontalLayout();
+//            HorizontalLayout bottom = new HorizontalLayout();
+//            boolean hasAny = false;
+//
+//            if (Boolean.TRUE.equals(perms.get("PERM_VIEW_STORE"))) {
+//                top.add(new Button("🏬 View Store"));
+//                hasAny = true;
+//            }
+//            if (Boolean.TRUE.equals(perms.get("PERM_MANAGE_INVENTORY"))) {
+//                top.add(new Button("📦 Manage Inventory"));
+//                hasAny = true;
+//            }
+//            if (Boolean.TRUE.equals(perms.get("PERM_MANAGE_STAFF"))) {
+//                top.add(new Button("👥 Manage Staff"));
+//                hasAny = true;
+//            }
+//            if (Boolean.TRUE.equals(perms.get("PERM_ADD_PRODUCT"))) {
+//                bottom.add(new Button("➕ Add Product"));
+//                hasAny = true;
+//            }
+//            if (Boolean.TRUE.equals(perms.get("PERM_REMOVE_PRODUCT"))) {
+//                bottom.add(new Button("❌ Remove Product"));
+//                hasAny = true;
+//            }
+//            if (Boolean.TRUE.equals(perms.get("PERM_UPDATE_PRODUCT"))) {
+//                bottom.add(new Button("✏️ Update Product"));
+//                hasAny = true;
+//            }
+//            if (Boolean.TRUE.equals(perms.get("PERM_UPDATE_POLICY"))) {
+//                bottom.add(new Button("📝 Update Policy"));
+//                hasAny = true;
+//            }
+//
+//            if (hasAny) storeContent.add(top, bottom);
+//            else storeContent.add(new Paragraph(
+//                    "⚠️ You currently don’t have permissions for this store."));
+//        }
+//    }
+//}

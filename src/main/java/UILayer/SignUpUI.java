@@ -27,6 +27,8 @@ public class SignUpUI extends VerticalLayout {
     @Autowired
     public SignUpUI(UserService userService, RegisteredService registeredService, OwnerManagerService ownerManagerService, IToken tokenService, UserRepository userRepository, StoreRepository storeRepository) {
         this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
 
         TextField username = new TextField("username");
         PasswordField password = new PasswordField("password");
@@ -42,5 +44,19 @@ public class SignUpUI extends VerticalLayout {
         add(new H2("sign up"), username, password, login, error);
         setAlignItems(FlexComponent.Alignment.CENTER);
     }
-
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
+    }
 }

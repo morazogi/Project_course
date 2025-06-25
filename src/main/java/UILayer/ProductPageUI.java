@@ -46,6 +46,8 @@ public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver
             if (parameters.get("storeid").isPresent()) {
                 String storeId = parameters.get("storeid").get();
                 String token = (String) UI.getCurrent().getSession().getAttribute("token");
+                connectToWebSocket(token);
+
                 add(new HorizontalLayout(buttonPresenter.signOutButton(token), buttonPresenter.homePageButton(token)));
                 add(productPresenter.getProductPage(productId, storeId));
                 setPadding(true);
@@ -56,5 +58,21 @@ public class ProductPageUI extends VerticalLayout implements BeforeEnterObserver
         } else {
             add(new Span("No fitting product"));
         }
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

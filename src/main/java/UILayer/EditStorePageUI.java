@@ -109,6 +109,7 @@ public class EditStorePageUI extends VerticalLayout {
                 conditional,
                 addDiscountButton
         );
+        connectToWebSocket(token);
 
         // Set Add Discount Form Styling and Padding
         addDiscountForm.setPadding(true);
@@ -118,5 +119,21 @@ public class EditStorePageUI extends VerticalLayout {
         // Notification Example for Adding Product/Discount
         Notification notification = new Notification("Product or Discount Added!", 3000);
         notification.open();
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

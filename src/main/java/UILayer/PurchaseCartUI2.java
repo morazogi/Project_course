@@ -81,6 +81,7 @@ public class PurchaseCartUI2 extends VerticalLayout {
                 error.setText(ex.getMessage());
             }
         });
+        connectToWebSocket(token);
 
         /* -------- layout -------- */
         add(
@@ -95,6 +96,22 @@ public class PurchaseCartUI2 extends VerticalLayout {
         );
         setPadding(true);
         setAlignItems(Alignment.CENTER);
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 
     /* ----- helper: guest token if missing ----- */

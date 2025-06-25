@@ -1,11 +1,9 @@
 package UILayer;
 
 import DomainLayer.*;
+import DomainLayer.DomainServices.NotificationWebSocketHandler;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
-import com.vaadin.flow.spring.SpringServlet;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -55,7 +53,7 @@ public class SystemConfiguration {
 
     @Bean
     public RegisteredService RegisteredService() {
-        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository());
+        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository(), NotificationWebSocketHandler());
     };
 
     @Bean
@@ -70,7 +68,7 @@ public class SystemConfiguration {
 
     @Bean
     public NotificationService NotificationService() {
-        return new NotificationService();
+        return new NotificationService(NotificationWebSocketHandler(), NotificationRepository(), TokenService());
     };
 
     @Bean
@@ -105,13 +103,8 @@ public class SystemConfiguration {
     };
 
     @Bean
-    public NotificationClientRepository NotificationClientRepository() {
-        return new NotificationClientRepository();
-    };
-
-    @Bean
     public WebSocketConfigure WebSocketConfigure() {
-        return new WebSocketConfigure();
+        return new WebSocketConfigure(NotificationWebSocketHandler());
     };
 
     @Bean
@@ -121,7 +114,7 @@ public class SystemConfiguration {
 
     @Bean
     public NotificationWebSocketHandler NotificationWebSocketHandler() {
-        return new NotificationWebSocketHandler();
+        return new NotificationWebSocketHandler(TokenService());
     };
 
 
@@ -146,7 +139,6 @@ public class SystemConfiguration {
         return new BidService(paymentService, shippingService, tokenService,
                 storeRepository, productRepository, orderRepository);
     }
-
 
 //    @Bean
 //    public Module hibernateModule() {

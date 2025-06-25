@@ -18,6 +18,7 @@ public class HomePageUI extends VerticalLayout {
     public HomePageUI(IToken tokenService) {
         this.tokenService = tokenService;
         UI.getCurrent().getSession().setAttribute("token", tokenService.generateToken("Guest"));
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
         setAlignItems(Alignment.CENTER);
         setSpacing(true);
         setPadding(true);
@@ -63,7 +64,25 @@ public class HomePageUI extends VerticalLayout {
         //Span footer = new Span("© 2025 MarketX Project");
 
         // Add everything to layout
+        connectToWebSocket(token);
+
         //add(title, subtitle, features, buttons, rolesTitle, roles, footer);
         add(title, subtitle, features, buttons, new HorizontalLayout(searchStoreButton, searchProductButton), roles);
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

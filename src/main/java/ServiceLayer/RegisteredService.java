@@ -3,9 +3,13 @@ package ServiceLayer;
 import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IToken;
 import DomainLayer.DomainServices.*;
-import InfrastructureLayer.*;
 import java.util.List;
 
+import InfrastructureLayer.GuestRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import InfrastructureLayer.OrderRepository;
 import InfrastructureLayer.NotificationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,7 +22,7 @@ public class RegisteredService {
     private final Rate rateService;
     private final History history;
     private final OpenStore opener;
-    private final toNotify notifyService;
+    private final ToNotify notifyService;
     private final GuestRepository guestRepository;
 
     public RegisteredService(IToken tokenService,
@@ -26,13 +30,14 @@ public class RegisteredService {
                              UserRepository userRepository,
                              ProductRepository productRepository,
                              OrderRepository orderRepository,
-                             NotificationRepository notificationRepository, GuestRepository guestRepository) {
+                             NotificationRepository notificationRepository, GuestRepository guestRepository,
+                             NotificationWebSocketHandler notificationWebSocketHandler) {
         this.tokenService = tokenService;
         this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
         this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);
         this.history = new History(tokenService, orderRepository , userRepository);
         this.opener = new OpenStore(tokenService, storeRepository, userRepository);
-        this.notifyService = new toNotify(notificationRepository, tokenService);
+        this.notifyService = new ToNotify(notificationRepository, tokenService, notificationWebSocketHandler);
         this.guestRepository = guestRepository;
     }
 

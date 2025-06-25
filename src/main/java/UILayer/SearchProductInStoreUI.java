@@ -50,6 +50,8 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
             add(new Span("No fitting store"));
         }
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
+
         TextField lowestPrice = new TextField("lowest price");
         TextField highestPrice = new TextField("highest price");
         TextField lowestProductRating = new TextField("lowest product rating");
@@ -72,5 +74,19 @@ public class SearchProductInStoreUI extends VerticalLayout implements BeforeEnte
         add(new HorizontalLayout(new H1("search products"), buttonPresenter.homePageButton(token)), new HorizontalLayout(lowestPrice, highestPrice, lowestProductRating, highestProductRating, category), new HorizontalLayout(productName, searchProduct), new HorizontalLayout(categoryName, searchProductByCategory));
 
     }
-
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
+    }
 }

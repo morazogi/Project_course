@@ -98,7 +98,7 @@ public class AuctionManagerUI extends VerticalLayout {
                 counterField,
                 new HorizontalLayout(acceptBtn, declineBtn, counterBtn)
         );
-
+        connectToWebSocket(token);
         renderOffers();
         setPadding(true);
         setAlignItems(Alignment.CENTER);
@@ -115,5 +115,20 @@ public class AuctionManagerUI extends VerticalLayout {
         }
         for (Offer o : offers)
             offerDisplayArea.add(new Span(o.toString()));
+    }
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }
