@@ -76,18 +76,21 @@ public class OwnerManagerService {
      * @param ownerId ID of the store owner
      * @param storeId ID of the store
      * @param productId ID of the product to remove
-     * @return true if successful, false otherwise
      */
     @Transactional
-    public boolean removeProduct(String ownerId, String storeId, String productId) {
+    public String removeProduct(String ownerId, String storeId, String productId) {
         try {
             EventLogger.logEvent(ownerId, "REMOVE_PRODUCT_START");
-            boolean result = inventoryService.removeProduct(ownerId, storeId, productId);
+            boolean resul = inventoryService.removeProduct(ownerId, storeId, productId);
             EventLogger.logEvent(ownerId, "REMOVE_PRODUCT_SUCCESS");
-            return result;
+            if (resul) {
+                return "Removed product";
+            } else {
+                return "Failed to remove product";
+            }
         } catch (Exception e) {
             ErrorLogger.logError(ownerId, "REMOVE_PRODUCT_FAILED", e.getMessage());
-            return false;
+            return "Failed to remove product " + e.getMessage();
         }
     }
 
@@ -100,18 +103,20 @@ public class OwnerManagerService {
      * @param description New description (null if unchanged)
      * @param price New price (-1 if unchanged)
      * @param category New category (null if unchanged)
-     * @return true if successful, false otherwise
      */
     @Transactional
-    public boolean updateProductDetails(String ownerId, String storeId, String productId, String productName, String description, double price, String category) {
+    public String updateProductDetails(String ownerId, String storeId, String productId, String productName, String description, double price, String category) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_PRODUCT_DETAILS_START");
             boolean result = inventoryService.updateProductDetails(ownerId, storeId, productId, productName, description, price, category);
             EventLogger.logEvent(ownerId, "UPDATE_PRODUCT_DETAILS_SUCCESS");
-            return result;
+            if (result) {
+                return "Updated product details";
+            }
+            return "Failed to update product details";
         } catch (Exception e) {
             ErrorLogger.logError(ownerId, "UPDATE_PRODUCT_DETAILS_FAILED", e.getMessage());
-            return false;
+            return "Return to update product details " + e.getMessage();
         }
     }
 
@@ -121,18 +126,20 @@ public class OwnerManagerService {
      * @param storeId ID of the store
      * @param productId ID of the product
      * @param newQuantity New quantity
-     * @return true if successful, false otherwise
      */
     @Transactional
-    public boolean updateProductQuantity(String ownerId, String storeId, String productId, int newQuantity) {
+    public String updateProductQuantity(String ownerId, String storeId, String productId, int newQuantity) {
         try {
             EventLogger.logEvent(ownerId, "UPDATE_PRODUCT_QUANTITY_START");
             boolean result = inventoryService.updateProductQuantity(ownerId, storeId, productId, newQuantity);
             EventLogger.logEvent(ownerId, "UPDATE_PRODUCT_QUANTITY_SUCCESS");
-            return result;
+            if (result) {
+                return "Updated product quantity";
+            }
+            return "Failed to update product quantity";
         } catch (Exception e) {
             ErrorLogger.logError(ownerId, "UPDATE_PRODUCT_QUANTITY_FAILED", e.getMessage());
-            return false;
+            return "Failed to update product quantity";
         }
     }
 

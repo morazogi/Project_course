@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package DomainLayer.DomainServices;
 
 import ServiceLayer.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 

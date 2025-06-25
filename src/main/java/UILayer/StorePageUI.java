@@ -52,6 +52,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
             add(new Span("No fitting store"));
         }
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
         add(buttonPresenter.homePageButton(token), productPresenter.getStorePage(token, (String) UI.getCurrent().getSession().getAttribute("storeId")));
 
         Map<String, Boolean> perms = permissionsPresenter.getPremissions(token, (String) UI.getCurrent().getSession().getAttribute("storeId"));
@@ -79,5 +80,21 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
             }
             add(buttonLayout1, buttonLayout2);
         }
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

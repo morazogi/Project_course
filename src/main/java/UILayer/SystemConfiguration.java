@@ -1,11 +1,9 @@
 package UILayer;
 
 import DomainLayer.*;
+import DomainLayer.DomainServices.NotificationWebSocketHandler;
 import ServiceLayer.*;
 import InfrastructureLayer.*;
-import com.vaadin.flow.spring.SpringServlet;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -55,7 +53,7 @@ public class SystemConfiguration {
 
     @Bean
     public RegisteredService RegisteredService() {
-        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository());
+        return new RegisteredService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), NotificationRepository(), GuestRepository(), NotificationWebSocketHandler());
     };
 
     @Bean
@@ -102,11 +100,6 @@ public class SystemConfiguration {
     @Bean
     public UserService UserService() {
         return new UserService(TokenService(), StoreRepository(), UserRepository(), ProductRepository(), OrderRepository(), ShippingService(), PaymentService(),GuestRepository(), DiscountRepository());
-    };
-
-    @Bean
-    public NotificationClientRepository NotificationClientRepository() {
-        return new NotificationClientRepository();
     };
 
     @Bean

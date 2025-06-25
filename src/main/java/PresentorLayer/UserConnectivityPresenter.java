@@ -83,6 +83,37 @@ public class UserConnectivityPresenter {
         //System.out.println(mapper.writeValueAsString(user));
     }
 
+    public String getInformationAboutProduct(String token, String storeName, String productName) {
+        String username = tokenService.extractUsername(token);
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+
+        List<String> managedStores = user.getManagedStores();
+        List<Product> products = userService.getAllProducts(token);
+        for (String managedStore : managedStores) {
+            String jsonStore = userService.getStoreById(token, managedStore);
+            Store store = null;
+            try {
+                store = mapper.readValue(jsonStore, Store.class);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            if (store.getName().equals(storeName)) {
+                for (Product product: products) {
+                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(storeName)) {
+                        return "Product name: " + product.getName() + "\nProduct price: " + product.getPrice() + "\nProduct quantity: " + product.getQuantity() + "\nProduct category: "  + product.getCategory() + "\nProduct description: " + product.getDescription();
+                    }
+                }
+                return "could not find this product in the store";
+            }
+        }
+        return "user can't edit this store";
+    }
+
     public String addNewProductToStore(String token, String storeName, String productName, String description, String stringPrice, String stringQuantity, String category) {
         Double price = 0.0;
         Integer quantity = 0;
@@ -117,7 +148,75 @@ public class UserConnectivityPresenter {
                 return ownerManagerService.addProduct(user.getUsername(), store.getId(), productName, description, price.floatValue(), quantity, category);
             }
         }
-        return "Did not find store with that name";
+        return "user can't edit this store";
+    }
+
+    public String removeProductFromStore(String token, String storeName, String productName) {
+        String username = tokenService.extractUsername(token);
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+
+        List<String> managedStores = user.getManagedStores();
+        List<Product> products = userService.getAllProducts(token);
+        for (String managedStore : managedStores) {
+            String jsonStore = userService.getStoreById(token, managedStore);
+            Store store = null;
+            try {
+                store = mapper.readValue(jsonStore, Store.class);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            if (store.getName().equals(storeName)) {
+                for (Product product: products) {
+                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(storeName)) {
+                        return ownerManagerService.removeProduct(user.getUsername(), store.getId(), productName);
+                    }
+                    return "could not find this product in the store";
+                }
+            }
+        }
+        return "user can't edit this store";
+    }
+
+    public String updateProduct(String token, String storeName, String productName, String description, String price, String newProductName, String category) {
+        Double doublePrice = 0.0;
+        try {
+            doublePrice = Double.valueOf(price);
+        } catch (Exception e) {
+            return "Invalid price";
+        }
+        String username = tokenService.extractUsername(token);
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+
+        List<String> managedStores = user.getManagedStores();
+        List<Product> products = userService.getAllProducts(token);
+        for (String managedStore : managedStores) {
+            String jsonStore = userService.getStoreById(token, managedStore);
+            Store store = null;
+            try {
+                store = mapper.readValue(jsonStore, Store.class);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+            if (store.getName().equals(storeName)) {
+                for (Product product: products) {
+                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(storeName)) {
+                        return ownerManagerService.updateProductDetails(user.getShoppingCart().getUserId(), store.getId(), product.getId(), newProductName, description, doublePrice, category);
+                    }
+                }
+                return "could not find this product in the store";
+            }
+        }
+        return "user can't edit this store";
     }
 
     public void signUp(String username, String password) throws Exception{

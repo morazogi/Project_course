@@ -57,6 +57,7 @@ public class AuctionUI extends VerticalLayout {
                     offer.getValue()));
             updateBoard();
         });
+        connectToWebSocket(token);
 
         add(new H1("Make / Counter an Offer"),
                 new HorizontalLayout(store, prod, offer, send),
@@ -70,5 +71,20 @@ public class AuctionUI extends VerticalLayout {
     private void updateBoard(){
         board.removeAll();
         board.add(presenter.getAuctionsComponent());
+    }
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

@@ -5,29 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 import InfrastructureLayer.NotificationRepository;
 import DomainLayer.IToken;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
-import org.aspectj.apache.bcel.generic.RET;
 import utils.Notifications;
 
 
-public class toNotify {
+public class ToNotify {
     private NotificationRepository notificationRepo;
     private IToken tokenService;
+    private NotificationWebSocketHandler notificationWebSocketHandler;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public toNotify(NotificationRepository notificationRepo, IToken tokenService) {
+    public ToNotify(NotificationRepository notificationRepo, IToken tokenService, NotificationWebSocketHandler notificationWebSocketHandler) {
         this.tokenService = tokenService;
         this.notificationRepo = notificationRepo;
+        this.notificationWebSocketHandler = notificationWebSocketHandler;
     }
 
-    public List<String> getUserNotifications(String token) {
+    public List<Notifications> getUserNotifications(String token) {
         String receiverUsername = tokenService.extractUsername(token);
         List<Notifications> notifications = notificationRepo.findByUserID(receiverUsername);
-        ArrayList<String> messages = new ArrayList<>();
+        ArrayList<Notifications> messages = new ArrayList<>();
         for (Notifications notification : notifications) {
-            messages.add(notification.getMessage());
+            messages.add(notification);
         }
         return messages;
     }
@@ -50,9 +51,28 @@ public class toNotify {
     public void sendNotificationToUser(String storeId, String userId, String message) throws Exception {
         try {
             Notifications notification = new Notifications(message, userId, storeId);
-            notificationRepo.save(notification);
+            if(tokenService.getToken(userId).equals("")) {
+                notificationRepo.save(notification);
+            } else {
+                notificationWebSocketHandler.sendNotificationToClient(userId, notification.getMessage());
+            }
         } catch (Exception e) {
             throw new RuntimeException("Failed to serialize notification", e);
         }
     }
+
+    public void sendAllUserNotifications(String token) {
+        try {
+            List<Notifications> notifications = getUserNotifications(token);
+            for (Notifications notification : notifications) {
+                String username = tokenService.extractUsername(token);
+                notificationWebSocketHandler.sendNotificationToClient(username, notification.getMessage());
+                notificationRepo.delete(notification);
+
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
 }   

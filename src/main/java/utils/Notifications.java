@@ -8,9 +8,8 @@ import java.util.UUID;
 @Table(name = "notifications")
 public class Notifications {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false)
-    private String id;
+    private String id = UUID.randomUUID().toString();
     @Column(name = "message", nullable = false)
     private String message;
     @Column(name = "user_id", nullable = false)

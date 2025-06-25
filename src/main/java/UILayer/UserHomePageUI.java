@@ -6,6 +6,7 @@ import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.PermissionsPresenter;
+import PresentorLayer.ProductPresenter;
 import PresentorLayer.UserConnectivityPresenter;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,6 +46,7 @@ public class UserHomePageUI extends VerticalLayout {
         this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManager, tokenService, userRepository);
         this.pp = new PermissionsPresenter(ownerManager, tokenService, userRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
         String username = tokenService.extractUsername(token);
 
         RegisteredUser user = null;
@@ -130,49 +133,33 @@ public class UserHomePageUI extends VerticalLayout {
                 // work over the store name -> store ID
 
                 ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
-                boolean hasAnyPermission = false;
-                HorizontalLayout buttonLayout1 = new HorizontalLayout();
-                HorizontalLayout buttonLayout2 = new HorizontalLayout();
-
-                if (perms.getPermission(ManagerPermissions.PERM_VIEW_STORE)) {
-                    buttonLayout1.add(new Button("🏬 View Store"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY)) {
-                    buttonLayout1.add(new Button("📦 Manage Inventory"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_MANAGE_STAFF)) {
-                    buttonLayout1.add(new Button("👥 Manage Staff"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_ADD_PRODUCT)) {
-                    buttonLayout2.add(new Button("➕ Add Product"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT)) {
-                    buttonLayout2.add(new Button("❌ Remove Product"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT)) {
-                    buttonLayout2.add(new Button("✏️ Update Product"));
-                    hasAnyPermission = true;
-                }
-                if (perms.getPermission(ManagerPermissions.PERM_UPDATE_POLICY)) {
-                    buttonLayout2.add(new Button("📝 Update Policy"));
-                    hasAnyPermission = true;
-                }
 
                 if (map1 != null)
-                    add(buttonLayout1, buttonLayout2);
+                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConnectivityPresenter, token, storeName, perms));
 
-                if (!hasAnyPermission) {
-                    add(new Paragraph("⚠️ You currently don’t have permissions for any store management actions. Contact the store owner to update your role."));
-                }
             }
         }
+
+
         setPadding(true);
         setSpacing(true);
         setAlignItems(Alignment.CENTER);
-    }
+
+       }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
+            }
 }

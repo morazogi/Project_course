@@ -49,6 +49,8 @@ public class PurchaseCartUI extends VerticalLayout {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
+
         String username = tokenService.extractUsername(token);
         RegisteredUser user = null;
         try {
@@ -125,5 +127,21 @@ public class PurchaseCartUI extends VerticalLayout {
         setPadding(true);
         setAlignItems(Alignment.CENTER);
         this.storeRepository = storeRepository;
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

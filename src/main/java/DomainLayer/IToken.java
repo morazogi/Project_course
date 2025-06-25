@@ -16,4 +16,5 @@ public interface IToken {
     public void suspendUser(String token);
     public void unsuspendUser(String token);
     public List<String> showSuspended();
+    public String getToken(String username);
 }

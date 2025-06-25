@@ -5,6 +5,7 @@ import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.UserRepository;
 import ServiceLayer.EventLogger;
+import ServiceLayer.OwnerManagerService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -355,18 +356,31 @@ public class ProductPresenter {
         return storePage;
     }
 
-    //public boolean addProduct(String name, String description,double price, int quantity, double rating, String category, String storeName){
-    //   String storeId = "";
-    //    for(Map.Entry<String, String> entry : this.storeRepository.getStores().entrySet()){
-    //        if (entry.getValue().contains(storeName)) {
-    //            storeId = entry.getKey();
-    //       }
-    //    }
-    //    if (storeId.equals("")) {
-    //        EventLogger.logEvent("", "adding product failed we found no store named " + storeName);
-    //    }
-    //    this.storeRepository.
-    //    this.productRepository.save();
-    //}
+    public VerticalLayout getInventoryList(String token, String storeId, OwnerManagerService ownerManagerService) {
+        String username = tokenService.extractUsername(token);
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("dfsa");
+        }
 
+        VerticalLayout productList = new VerticalLayout();
+        List<Product> items = userService.getAllProducts(token);
+        List<Product> products = items.stream().map(item -> {
+            try {
+                if (item.getStoreId().equals(storeId)) {
+                    return item;
+                }
+                return null;
+            } catch (Exception exception) {
+                return null;
+            }
+        }).filter(Objects::nonNull).toList();
+        for (Product product : products) {
+            productList.add(new VerticalLayout(new QuantiyButton(user.getShoppingCart().getUserId(), ownerManagerService, product)) );
+            }
+        return productList;
+    }
 }
