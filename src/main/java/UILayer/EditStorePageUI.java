@@ -32,19 +32,19 @@ public class EditStorePageUI extends VerticalLayout {
         this.userConnectivityPresenter = new UserConnectivityPresenter(userService, registeredService, ownerManagerService, tokenService, userRepository);
         // Store Selection and Sign-out Section
         ComboBox<String> storeDropdown = new ComboBox<>("Store");
-        storeDropdown.setItems("Store 1", "Store 2", "Store 3"); // Example store names
+        //storeDropdown.setItems("Store 1", "Store 2", "Store 3");
         storeDropdown.setPlaceholder("Select Store");
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         Button signOutButton = buttonPresenter.signOutButton(token);
 
         HorizontalLayout topBar = new HorizontalLayout(
                 new H2("Store Manager Dashboard"),
-                storeDropdown,
                 signOutButton
         );
         topBar.setAlignItems(Alignment.CENTER);
         add(topBar);
 
+        /*
         // Add New Product Section
         TextField productName = new TextField("Product Name");
         TextField productDescription = new TextField("Description");
@@ -70,10 +70,13 @@ public class EditStorePageUI extends VerticalLayout {
                 addProductButton
         );
 
+
+
         // Set Add Product Form Styling and Padding
         addProductForm.setPadding(true);
         addProductForm.setAlignItems(Alignment.CENTER);
         add(addProductForm);
+ */
 
         // Set New Discount Section
         TextField storeName = new TextField("Store name");
@@ -90,9 +93,12 @@ public class EditStorePageUI extends VerticalLayout {
         TextField conditionalDiscounted = new TextField("Conditional Discounted");
 
         Button addDiscountButton = new Button("Add Discount", e -> {
-            add(new Span(userConnectivityPresenter.addDiscount(token, storeName.getValue(), discountLevel.getValue().floatValue(), logicComposition.getValue().floatValue(),
-                    numericalComposition.getValue().floatValue(), percentDiscount.getValue().floatValue(), discountedItem.getValue(), discountCondition.getValue().floatValue(),
-                    discountLimiter.getValue().floatValue(), conditional.getValue().floatValue(),  conditionalDiscounted.getValue())));
+                String str = this.userConnectivityPresenter.addDiscount(token, storeName.getValue(), discountLevel.getValue().floatValue(), logicComposition.getValue().floatValue(),
+                        numericalComposition.getValue().floatValue(), percentDiscount.getValue().floatValue(), discountedItem.getValue(), discountCondition.getValue().floatValue(),
+                        discountLimiter.getValue().floatValue(), conditional.getValue().floatValue(), conditionalDiscounted.getValue());
+            //add(new Span(userConnectivityPresenter.addDiscount(token, storeName.getValue(), discountLevel.getValue().floatValue(), logicComposition.getValue().floatValue(),
+            //       numericalComposition.getValue().floatValue(), percentDiscount.getValue().floatValue(), discountedItem.getValue(), discountCondition.getValue().floatValue(),
+            //      discountLimiter.getValue().floatValue(), conditional.getValue().floatValue(),  conditionalDiscounted.getValue())));
         });
 
         VerticalLayout addDiscountForm = new VerticalLayout(

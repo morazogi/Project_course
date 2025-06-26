@@ -1,12 +1,12 @@
 package DomainLayer.DomainServices;
 import DomainLayer.Roles.Guest;
-import InfrastructureLayer.OrderRepository;
-import InfrastructureLayer.ProductRepository;
-import InfrastructureLayer.StoreRepository;
+import infrastructureLayer.OrderRepository;
+import infrastructureLayer.ProductRepository;
+import infrastructureLayer.StoreRepository;
 import ServiceLayer.EventLogger;
 import DomainLayer.IToken;
-import InfrastructureLayer.UserRepository;
-import InfrastructureLayer.GuestRepository;
+import infrastructureLayer.UserRepository;
+import infrastructureLayer.GuestRepository;
 import DomainLayer.Product;
 import DomainLayer.ShoppingBag;
 import DomainLayer.ShoppingCart;
@@ -22,6 +22,7 @@ import org.apache.catalina.User;
 
 public class UserCart {
     private final IToken Tokener;
+
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;

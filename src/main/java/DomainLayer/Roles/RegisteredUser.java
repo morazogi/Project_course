@@ -76,4 +76,39 @@ public class RegisteredUser extends Guest {
         this.managedStores = managedStores;
     }
 
+
+    public boolean isOwnerOf(String storeId) {
+        return ownedStores.contains(storeId);
+    }
+
+    public boolean isManagerOf(String storeId) {
+        return managedStores.contains(storeId);
+    }
+
+    /**
+     * Promotes the user to an Owner for a store.
+     * This overrides any previous role (e.g., manager).
+     */
+    public void promoteToOwner(String storeId) {
+        removeRoleFromStore(storeId);
+        ownedStores.add(storeId);
+    }
+
+    /**
+     * Assigns the user as a Manager for a store.
+     * This overrides any previous role (e.g., owner).
+     */
+    public void assignAsManager(String storeId) {
+        removeRoleFromStore(storeId);
+        managedStores.add(storeId);
+    }
+
+    /**
+     * Removes the user from all roles for a given store.
+     */
+    public void removeRoleFromStore(String storeId) {
+        ownedStores.remove(storeId);
+        managedStores.remove(storeId);
+    }
+
 }

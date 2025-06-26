@@ -4,7 +4,7 @@ import DomainLayer.ManagerPermissions;
 import DomainLayer.Product;
 import DomainLayer.Store;
 import InfrastructureLayer.ProductRepository;
-import InfrastructureLayer.StoreRepository;
+import infrastructureLayer.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

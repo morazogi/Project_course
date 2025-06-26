@@ -4,6 +4,8 @@ import DomainLayer.*;
 import DomainLayer.DomainServices.*;
 import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.*;
+import infrastructureLayer.StoreRepository;
+import infrastructureLayer.UserRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -26,10 +28,10 @@ class RealFlow1 {
 
     private static UserRepository userRepo;
     private static StoreRepository storeRepo;
-    private static ProductRepository productRepo;
-    private static DiscountRepository discountRepo;
-    private static OrderRepository orderRepo;
-    private static GuestRepository guestRepo;
+    private static InfrastructureLayer.ProductRepository productRepo;
+    private static InfrastructureLayer.DiscountRepository discountRepo;
+    private static InfrastructureLayer.OrderRepository orderRepo;
+    private static InfrastructureLayer.GuestRepository guestRepo;
 
     private static StubTokenService tokenSvc;
     private static OpenStore openStoreMS;

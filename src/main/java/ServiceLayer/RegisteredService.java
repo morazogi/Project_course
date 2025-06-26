@@ -3,7 +3,7 @@ package ServiceLayer;
 import DomainLayer.DomainServices.UserConnectivity;
 import DomainLayer.IToken;
 import DomainLayer.DomainServices.*;
-import InfrastructureLayer.*;
+import infrastructureLayer.*;
 import java.util.List;
 
 import InfrastructureLayer.NotificationRepository;

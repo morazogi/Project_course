@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 import DomainLayer.IUserRepository; // Assuming this is your Spring Data JPA repository interface
 import DomainLayer.Roles.RegisteredUser;
 import org.springframework.beans.factory.annotation.Autowired;

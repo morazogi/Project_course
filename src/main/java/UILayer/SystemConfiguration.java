@@ -2,7 +2,7 @@ package UILayer;
 
 import DomainLayer.*;
 import ServiceLayer.*;
-import InfrastructureLayer.*;
+import infrastructureLayer.*;
 import com.vaadin.flow.spring.SpringServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,7 @@ import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 @Configuration
 public class SystemConfiguration {
     @Bean
-    public DiscountRepository DiscountRepository() {
+    public infrastructureLayer.DiscountRepository DiscountRepository() {
         return new DiscountRepository();
     };
 

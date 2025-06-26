@@ -3,8 +3,8 @@ import DomainLayer.IStoreRepository;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
 import DomainLayer.Store;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.UserRepository;
+import infrastructureLayer.StoreRepository;
+import infrastructureLayer.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
