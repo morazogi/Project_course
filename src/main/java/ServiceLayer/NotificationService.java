@@ -27,7 +27,11 @@ public class NotificationService {
 
     public void notifyUser(String userId, String message, String storeId) {
         try {
-            toNotify.sendNotificationToUser(storeId, userId, message);
+            if (storeId.equals("")) {
+                toNotify.sendNotificationToUser(storeId, userId, message);
+            } else {
+                toNotify.sendNotificationToStore("", storeId, message);
+            }
         } catch (Exception e) {
             // Log exception for debugging
             e.printStackTrace();

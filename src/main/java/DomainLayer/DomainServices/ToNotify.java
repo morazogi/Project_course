@@ -14,6 +14,7 @@ import InfrastructureLayer.UserRepository;
 import ServiceLayer.OwnerManagerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.notification.Notification;
+import org.springframework.stereotype.Repository;
 import utils.Notifications;
 
 
@@ -51,9 +52,18 @@ public class ToNotify {
     }
 
     public void sendNotificationToStore(String token, String storeId, String message) throws Exception {
-        String senderUsername = tokenService.extractUsername(token);
-        Notifications notification = new Notifications(message, senderUsername, storeId);
-        notificationRepo.save(notification);
+        try {
+            List<RegisteredUser> users = userRepository.getAll();
+            for (RegisteredUser user : users) {
+                List<String> managedStores = user.getManagedStores();
+                List<String> managedStoresfg = managedStores;
+                if (managedStoresfg.contains(storeId)) {
+                    notificationWebSocketHandler.sendNotificationToClient(user.getUsername(), message);
+                }
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     public void sendNotificationToUser(String storeId, String userId, String message) throws Exception {

@@ -35,6 +35,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
     private final PermissionsPresenter permissionsPresenter;
     private final ButtonPresenter buttonPresenter;
     private final UserConnectivityPresenter userConnectivityPresenter;
+    private final OwnerManagerService ownerManagerService;
 
     @Autowired
     public StorePageUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository, OwnerManagerService ownerManagerService, RegisteredService registeredService) {
@@ -42,6 +43,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
         permissionsPresenter = new PermissionsPresenter(ownerManagerService, configuredTokenService, configuredUserRepository);
         buttonPresenter = new ButtonPresenter(registeredService, configuredTokenService);
         userConnectivityPresenter = new UserConnectivityPresenter(configuredUserService, registeredService, ownerManagerService, configuredTokenService, configuredUserRepository);
+        this.ownerManagerService = ownerManagerService;
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }
@@ -75,7 +77,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
             ManagerPermissions perms = new ManagerPermissions(permsArray, userConnectivityPresenter.getUsername(token), (String) UI.getCurrent().getSession().getAttribute("token"));
 
             if (map1 != null)
-                add(new PermissionButtonsUI(productPresenter, userConnectivityPresenter, token, userConnectivityPresenter.getStore(token, (String) UI.getCurrent().getSession().getAttribute("storeId")), perms));
+                add(new PermissionButtonsUI(productPresenter, userConnectivityPresenter, token, userConnectivityPresenter.getStore(token, (String) UI.getCurrent().getSession().getAttribute("storeId")), perms, ownerManagerService));
         }
     }
 

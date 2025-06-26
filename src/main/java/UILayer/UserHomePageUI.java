@@ -159,7 +159,7 @@ public class UserHomePageUI extends VerticalLayout {
                 ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
 
                 if (map1 != null)
-                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConn, token, storeName, perms));
+                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConn, token, storeName, perms, ownerMgrService));
 
             }
         }
