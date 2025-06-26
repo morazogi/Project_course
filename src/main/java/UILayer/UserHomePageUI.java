@@ -2,8 +2,8 @@ package UILayer;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.UserRepository;
+import infrastructureLayer.StoreRepository;
+import infrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.PermissionsPresenter;
 import PresentorLayer.ProductPresenter;

@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 import DomainLayer.IStoreRepository;
 import DomainLayer.Store;
 import org.springframework.beans.factory.annotation.Autowired;

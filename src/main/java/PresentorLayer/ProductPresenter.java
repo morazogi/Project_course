@@ -18,7 +18,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import InfrastructureLayer.ProductRepository;
-import InfrastructureLayer.StoreRepository;
+import infrastructureLayer.StoreRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;

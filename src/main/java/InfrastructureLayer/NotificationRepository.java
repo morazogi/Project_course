@@ -1,4 +1,4 @@
-package InfrastructureLayer;
+package infrastructureLayer;
 import java.util.List;
 import DomainLayer.INotificationRepository;
 

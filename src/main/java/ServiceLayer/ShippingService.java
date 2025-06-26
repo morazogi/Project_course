@@ -1,8 +1,8 @@
 package ServiceLayer;
 import DomainLayer.*;
 import DomainLayer.DomainServices.ShippingConnectivity;
-import InfrastructureLayer.GuestRepository;
-import InfrastructureLayer.UserRepository;
+import infrastructureLayer.GuestRepository;
+import infrastructureLayer.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 

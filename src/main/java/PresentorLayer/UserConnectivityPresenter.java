@@ -5,8 +5,9 @@ import DomainLayer.Product;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.ShoppingBag;
 import DomainLayer.Store;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.UserRepository;
+import infrastructureLayer.StoreRepository;
+import infrastructureLayer.UserRepository;
+import ServiceLayer.EventLogger;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
@@ -296,6 +297,7 @@ public class UserConnectivityPresenter {
             conditional = -1;
         }
         if(ownerManagerService.defineDiscountPolicy(user.getUsername(), storeName, "", "", discountLevel, logicComposition, numericalComposition, null, percentDiscount, discountedItem, conditional, discountLimiter, conditionalDiscounted)) {
+            EventLogger.logEvent(username, "Discount successfully added in the presentor layer 55555");
             return "Discount successfully added";
         }
         return "Did not managed to add discount";
