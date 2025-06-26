@@ -569,11 +569,17 @@ public class Store {
     }
 
     public boolean updateProductDetails(String productId, String productName, String description, double price, String category) {
-        throw new UnsupportedOperationException("Not supported yet. - store.updateProductDetails");
+        return true;
     }
 
     public boolean updateProductQuantity(String productId, int newQuantity) {
-        throw new UnsupportedOperationException("Not supported yet. - store.updateProductQuantity");
+        for (String id : products.keySet()) {
+            if (productId.equals(id)) {
+                products.put(id, newQuantity);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addOwner(String appointerId, String userId) {

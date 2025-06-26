@@ -4,6 +4,7 @@ import DomainLayer.IToken;
 import ServiceLayer.NotificationService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
@@ -13,15 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class NotificationSUI extends VerticalLayout {
 
     private final NotificationService notificationService;
-    private final IToken tokenService;
 
     @Autowired
-    public NotificationSUI(NotificationService notificationService, IToken tokenService) {
+    public NotificationSUI(NotificationService notificationService) {
         this.notificationService = notificationService;
-        this.tokenService = tokenService;
 
         TextField username = new TextField("username");
         TextField message  = new TextField("message");
+        TextField storeId = new TextField("store name");
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
 
         //Button connect = new Button("connect", e -> {
          //   String tokenToNotifications = tokenService.getToken(username.getValue());
@@ -42,9 +44,9 @@ public class NotificationSUI extends VerticalLayout {
     //    });
 
         Button send = new Button("send", e ->
-                notificationService.notifyUser(username.getValue(), message.getValue(), ""));
+                notificationService.notifyUser(username.getValue(), message.getValue(), storeId.getValue()));
 
-        add(username, message, send);
+        add(new H1("notifications"), username, message, send);
         setAlignItems(Alignment.START);
     }
 

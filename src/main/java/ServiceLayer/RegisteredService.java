@@ -9,6 +9,7 @@ import InfrastructureLayer.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class RegisteredService {
 
@@ -25,6 +26,14 @@ public class RegisteredService {
                              UserRepository userRepository,
                              ProductRepository productRepository,
                              OrderRepository orderRepository,
+                             NotificationRepository notificationRepository, GuestRepository guestRepository,
+                             NotificationWebSocketHandler notificationWebSocketHandler) {
+        this.tokenService = tokenService;
+        this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
+        this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);
+        this.history = new History(tokenService, orderRepository , userRepository);
+        this.opener = new OpenStore(tokenService, storeRepository, userRepository);
+        this.notifyService = new ToNotify(notificationRepository, tokenService, notificationWebSocketHandler, userRepository);
                              NotificationRepository notificationRepository,
                              GuestRepository guestRepository,
                              NotificationWebSocketHandler ws) {
@@ -37,7 +46,6 @@ public class RegisteredService {
         this.guestRepository = guestRepository;
     }
 
-    /* ───────────────────── session / store helpers ─────────────────── */
 
     @Transactional
     public String logoutRegistered(String token) throws Exception {
@@ -47,7 +55,7 @@ public class RegisteredService {
             EventLogger.logEvent(username, "LOGOUT");
             return tokenService.generateToken("Guest");
         } catch (IllegalArgumentException e) {
-            EventLogger.logEvent(username, "LOGOUT_FAILED");
+            EventLogger.logEvent(username, "LOGOUT_FAILED" );
             throw new RuntimeException("Invalid token");
         }
     }

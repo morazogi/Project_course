@@ -7,6 +7,7 @@ import DomainLayer.ShoppingBag;
 import DomainLayer.Store;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
+import ServiceLayer.EventLogger;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
@@ -118,7 +119,7 @@ public class UserConnectivityPresenter {
             }
             if (store.getName().equals(storeName)) {
                 for (Product product: products) {
-                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(storeName)) {
+                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(productName)) {
                         return "Product name: " + product.getName() + "\nProduct price: " + product.getPrice() + "\nProduct quantity: " + product.getQuantity() + "\nProduct category: "  + product.getCategory() + "\nProduct description: " + product.getDescription();
                     }
                 }
@@ -186,11 +187,11 @@ public class UserConnectivityPresenter {
             }
             if (store.getName().equals(storeName)) {
                 for (Product product: products) {
-                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(storeName)) {
-                        return ownerManagerService.removeProduct(user.getUsername(), store.getId(), productName);
+                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(productName)) {
+                        return ownerManagerService.removeProduct(user.getUsername(), store.getId(), product.getId());
                     }
-                    return "could not find this product in the store";
                 }
+                return "could not find this product in store";
             }
         }
         return "user can't edit this store";
@@ -223,7 +224,7 @@ public class UserConnectivityPresenter {
             }
             if (store.getName().equals(storeName)) {
                 for (Product product: products) {
-                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(storeName)) {
+                    if (product.getStoreId().equals(store.getId()) & product.getName().equals(productName)) {
                         return ownerManagerService.updateProductDetails(user.getShoppingCart().getUserId(), store.getId(), product.getId(), newProductName, description, doublePrice, category);
                     }
                 }
@@ -310,6 +311,7 @@ public class UserConnectivityPresenter {
             conditional = -1;
         }
         if(ownerManagerService.defineDiscountPolicy(user.getUsername(), storeName, "", "", discountLevel, logicComposition, numericalComposition, null, percentDiscount, discountedItem, conditional, discountLimiter, conditionalDiscounted)) {
+            EventLogger.logEvent(username, "Discount successfully added in the presentor layer 55555");
             return "Discount successfully added";
         }
         return "Did not managed to add discount";
@@ -322,6 +324,18 @@ public class UserConnectivityPresenter {
 
     public Map<String,Integer> getCartProducts(String token) {
         return userService.getCartProducts(token);
+    }
+
+    public Store getStore(String token, String storeId) {
+        try {
+            return mapper.readValue(userService.getStoreById(token, storeId), Store.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getUsername(String token) {
+        return tokenService.extractUsername(token);
     }
 
 }

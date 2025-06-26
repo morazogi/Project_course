@@ -69,13 +69,12 @@ public class LoginUI extends VerticalLayout {
                     """, token);
 
                 /* ── delay 300 ms so the socket is OPEN before we push the greeting ── */
-                CompletableFuture.delayedExecutor(300, TimeUnit.MILLISECONDS).execute(
-                        () -> notificationService.notifyUser(username.getValue(),
-                                "Hello " + username.getValue(), "")
+                String tokenToSend = token;
+                CompletableFuture.delayedExecutor(1000, TimeUnit.MILLISECONDS).execute(
+                        () -> notificationService.sendNotificationsForUser(tokenToSend)
+                            //    notificationService.notifyUser(username.getValue(),
+                              //  "Hello " + username.getValue(), "");
                 );
-
-                notificationService.sendNotificationsForUser(token);
-
                 ui.getSession().setAttribute("token", token);
                 UI.getCurrent().navigate("/registeredhomepage");
                 //UI.getCurrent().navigate("/" + token);

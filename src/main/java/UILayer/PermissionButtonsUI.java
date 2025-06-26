@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class PermissionButtonsUI extends VerticalLayout {
 
-    @Autowired
-    public OwnerManagerService ownerManagerService;
-
-    public PermissionButtonsUI(ProductPresenter productPresenter, UserConnectivityPresenter userConnectivityPresenter, String token, Store storeName, ManagerPermissions perms) {
+    public PermissionButtonsUI(ProductPresenter productPresenter, UserConnectivityPresenter userConnectivityPresenter, String token, Store storeName, ManagerPermissions perms, OwnerManagerService ownerManagerService) {
         HorizontalLayout buttonLayout1 = new HorizontalLayout();
         HorizontalLayout buttonLayout2 = new HorizontalLayout();
         boolean hasAnyPermission = false;

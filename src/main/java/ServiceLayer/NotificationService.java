@@ -3,6 +3,7 @@ package ServiceLayer;
 import DomainLayer.DomainServices.ToNotify;
 import DomainLayer.DomainServices.NotificationWebSocketHandler;
 import InfrastructureLayer.NotificationRepository;
+import InfrastructureLayer.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,24 +14,24 @@ import java.util.List;
 @Service
 public class NotificationService {
 
-    private final NotificationWebSocketHandler handler;
     private final ObjectMapper mapper = new ObjectMapper();
     private final ToNotify toNotify;
 
     @Autowired
     public NotificationService(NotificationWebSocketHandler handler,
                                NotificationRepository repo,
-                               TokenService tokenService) {
-        this.handler = handler;
-        this.toNotify = new ToNotify(repo,tokenService, handler);
+                               TokenService tokenService,
+                               UserRepository userRepository) {
+        this.toNotify = new ToNotify(repo,tokenService, handler, userRepository);
     }
 
     public void notifyUser(String userId, String message, String storeId) {
         try {
-            try {
-                handler.sendNotificationToClient(userId, message);
-            } catch (Exception e) {}
-            toNotify.sendNotificationToUser(userId, message, storeId);
+            if (storeId.equals("")) {
+                toNotify.sendNotificationToUser(storeId, userId, message);
+            } else {
+                toNotify.sendNotificationToStore("", storeId, message);
+            }
         } catch (Exception e) {
             // Log exception for debugging
             e.printStackTrace();
@@ -38,10 +39,12 @@ public class NotificationService {
     }
 
     public void sendNotificationsForUser(String token) {
-        List<Notifications> usernotifications = toNotify.getUserNotifications(token);
-        for (Notifications notification : usernotifications) {
-            handler.sendNotificationToClient(notification.getUserId(), notification.getMessage());
-        }
+//        List<Notifications> usernotifications = toNotify.getUserNotifications(token);
+//        String receiverUsername = tokenService.extractUsername(token);
+//        for (Notifications notification : usernotifications) {
+//            handler.sendNotificationToClient(receiverUsername, notification.getUserId());
+//            System.out.println(notification);
+//        }
         toNotify.sendAllUserNotifications(token);
     }
 

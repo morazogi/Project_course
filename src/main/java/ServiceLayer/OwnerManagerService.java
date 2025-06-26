@@ -32,7 +32,7 @@ public class OwnerManagerService {
     private final QueryMicroservice notificationService;
     private final PurchaseHistoryMicroservice purchaseHistoryService;
 
-    public OwnerManagerService(UserRepository userRepository, StoreRepository storeRepository, ProductRepository productRepository, OrderRepository orderRepository, DiscountRepository discountRepository) {
+    public OwnerManagerService(InfrastructureLayer.UserRepository userRepository, StoreRepository storeRepository, InfrastructureLayer.ProductRepository productRepository, InfrastructureLayer.OrderRepository orderRepository, InfrastructureLayer.DiscountRepository discountRepository) {
         // Initialize repositories
         ICustomerInquiryRepository inquiryRepository = new CustomerInquiryRepository();
 
@@ -62,12 +62,12 @@ public class OwnerManagerService {
     public String addProduct(String ownerId, String storeId, String productName, String description, float price, int quantity, String category) {
         try {
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_START");
-            String result = inventoryService.addProduct(ownerId, storeId, productName, description, (float) price, quantity, category);
+            inventoryService.addProduct(ownerId, storeId, productName, description, (float) price, quantity, category);
             EventLogger.logEvent(ownerId, "ADD_PRODUCT_SUCCESS");
-            return result;
+            return "Added product to store";
         } catch (Exception e) {
             ErrorLogger.logError(ownerId, "ADD_PRODUCT_FAILED", e.getMessage());
-            return null;
+            return "Failed to add product to store" + e.getMessage();
         }
     }
 

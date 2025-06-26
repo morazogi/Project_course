@@ -7,6 +7,7 @@ import static DomainLayer.ManagerPermissions.*;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
+import org.hibernate.Hibernate;
 
 public class InventoryManagementMicroservice {
     private StoreRepository storeRepository;
@@ -64,6 +65,7 @@ public class InventoryManagementMicroservice {
             return null;
         }
         Store store = storeRepository.getById(storeId);
+        Hibernate.initialize(store);
         if (store == null) {
             throw new IllegalArgumentException("Store does not exist");
         }
@@ -122,7 +124,11 @@ public class InventoryManagementMicroservice {
             return false;
         }
 
-        return store.removeProduct(productId);
+        if(store.removeProduct(productId)) {
+            storeRepository.update(store);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -148,7 +154,16 @@ public class InventoryManagementMicroservice {
             return false;
         }
 
-        return store.updateProductDetails(productId, productName, description, price, category);
+        if(store.updateProductDetails(productId, productName, description, price, category)) {
+            Product olProdu = productRepository.getById(productId);
+            Product updateProduc = new Product(storeId, productName, description, (float) price, olProdu.getQuantity(), olProdu.getRating(), category);
+            updateProduc.setId(productId);
+            productRepository.delete(olProdu);
+            productRepository.update(updateProduc);
+            storeRepository.update(store);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -170,7 +185,10 @@ public class InventoryManagementMicroservice {
         if (store == null) {
             return false;
         }
-
-        return store.updateProductQuantity(productId, newQuantity);
+        if(store.updateProductQuantity(productId, newQuantity)) {
+            storeRepository.update(store);
+            return true;
+        }
+        return false;
     }
 }

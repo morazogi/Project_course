@@ -124,7 +124,15 @@ public class UserHomePageUI extends VerticalLayout {
 
         // Permissions and actions
         //if(storeDropdown.getValue() != null)
-        LinkedList<Store> stores = new LinkedList<Store>();
+
+
+
+
+    /* ------------ assemble page --------------------------------- */
+    add(header, new Hr(),title,
+
+   quick,searches,
+    storeContent);LinkedList<Store> stores = new LinkedList<Store>();
         try {
             stores = userConn.getUserStoresName(token);
         } catch (Exception e) {
@@ -151,19 +159,10 @@ public class UserHomePageUI extends VerticalLayout {
                 ManagerPermissions perms = new ManagerPermissions(permsArray, user.getUsername(), storeName.getId());
 
                 if (map1 != null)
-                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConn, token, storeName, perms));
+                    add(new PermissionButtonsUI(new ProductPresenter(userService, tokenService, userRepository), userConn, token, storeName, perms, ownerMgrService));
 
             }
         }
-
-
-
-    /* ------------ assemble page --------------------------------- */
-    add(header, new Hr(),title,
-
-    storeDropdown,quick,searches,
-    storeContent);
-
     setPadding(true);
 
     setSpacing(true);

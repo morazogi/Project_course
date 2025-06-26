@@ -1,5 +1,6 @@
 package DomainLayer.DomainServices;
 
+import InfrastructureLayer.NotificationRepository;
 import ServiceLayer.TokenService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,42 +20,38 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
     private static final ConcurrentHashMap<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
     private final TokenService tokenService;
+    private final NotificationRepository notificationRepo;  // Add this
 
     @Autowired
-    public NotificationWebSocketHandler(TokenService tokenService) {
+    public NotificationWebSocketHandler(TokenService tokenService,
+                                        NotificationRepository notificationRepo) {
         this.tokenService = tokenService;
-    }
-
-    // This method handles incoming WebSocket messages (not used for notifications, but can be extended)
-    @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String payload = message.getPayload();
-        String resolved = payload;
-
-        // Try to parse the message as JSON
-        try {
-            JsonNode node = mapper.readTree(payload);
-            if (node.has("message")) {
-                resolved = node.get("message").asText();
-            }
-        } catch (Exception ignored) {}
-
-        // Display the message in the UI (for debugging or any future use case)
-        sendMessageToUI(session, resolved);
+        this.notificationRepo = notificationRepo;  // Assign
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String token = extractToken(session);
-        System.out.println("Extracted token: " + token);  // Log token
+        System.out.println("Extracted token: " + token);
 
         if (token != null) {
-            String userId = tokenService.extractUsername(token);  // Extract userId
-            System.out.println("Extracted userId: " + userId);  // Log userId
+            String userId = tokenService.extractUsername(token);
+            System.out.println("Extracted userId: " + userId);
 
             if (userId != null) {
-                userSessions.put(userId, session);  // Store session
+                userSessions.put(userId, session);
                 System.out.println("Established WebSocket connection for userId: " + userId);
+
+                // Fetch saved notifications for this user
+                var savedNotifications = notificationRepo.findByUserID(userId);
+
+                for (var notif : savedNotifications) {
+                    // Send notification message to client
+                    sendNotificationToClient(userId, notif.getMessage());
+
+                    // Delete notification after sending
+                    notificationRepo.delete(notif);
+                }
             } else {
                 System.err.println("Failed to extract userId from token.");
             }

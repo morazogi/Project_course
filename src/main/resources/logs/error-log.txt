@@ -35,3 +35,26 @@
 [2025-06-22 16:32:54] User: b | Error: Error in shipping | Details: could not connect to shipping system
 [2025-06-22 16:37:41] User: b | Error: Error in shipping | Details: could not connect to shipping system
 [2025-06-22 16:39:14] User: b | Error: Error in shipping | Details: could not connect to shipping system
+[2025-06-26 00:48:40] User: owner-1 | Error: REMOVE_PRODUCT_FAILED | Details: nope
+[2025-06-26 00:48:40] User: owner-1 | Error: ADD_PRODUCT_FAILED | Details: boom
+[2025-06-26 00:48:40] User: alice | Error: Failed to cancel payment | Details: boom
+[2025-06-26 00:48:40] User: alice | Error: Failed to pay  | Details: gateway down
+[2025-06-26 00:48:41] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:48:41] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:48:41] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:48:41] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:48:41] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:48:41] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:50:43] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:50:43] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:50:43] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:50:43] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:50:43] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:50:43] User: username | Error: Error in shipping | Details: User not found
+[2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-26 16:43:42] User: a | Error: UPDATE_PRODUCT_QUANTITY_FAILED | Details: Not supported yet. - store.updateProductQuantity

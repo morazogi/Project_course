@@ -345,4 +345,61 @@ public class StoreManagementMicroservice {
         Store store = getStoreById(storeId);      // throws if store not found
         return store.isFounder(userId) || store.userIsOwner(userId);
     }
+
+    public boolean removeStoreOwnerWithUserSync(String removerId, String storeId, String ownerId) {
+        Store store = getStoreById(storeId);
+        if (store.checkIfSuperior(removerId, ownerId)) {
+            synchronized (store) {
+                LinkedList<String> subordinates = store.getAllSubordinates(ownerId);
+                store.terminateOwnership(ownerId);
+                userRepository.getById(ownerId).removeStore(storeId);
+                for (String sid : subordinates) {
+                    userRepository.getById(sid).removeStore(storeId);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean relinquishOwnershipWithUserSync(String ownerId, String storeId) {
+        Store store = getStoreById(storeId);
+        if (!store.isFounder(ownerId) && store.userIsOwner(ownerId)) {
+            synchronized (store) {
+                LinkedList<String> subordinates = store.getAllSubordinates(ownerId);
+                store.terminateOwnership(ownerId);
+                userRepository.getById(ownerId).removeStore(storeId);
+                for (String sid : subordinates) {
+                    userRepository.getById(sid).removeStore(storeId);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeManagerWithUserSync(String removerId, String storeId, String managerId) {
+        Store store = getStoreById(storeId);
+        if (store.checkIfSuperior(removerId, managerId)) {
+            synchronized (store) {
+                store.terminateManagment(managerId);
+                userRepository.getById(managerId).removeStore(storeId);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean relinquishManagerWithUserSync(String managerId, String storeId) {
+        Store store = getStoreById(storeId);
+        if (!store.isFounder(managerId) && store.userIsManager(managerId)) {
+            synchronized (store) {
+                store.terminateManagment(managerId);
+                userRepository.getById(managerId).removeStore(storeId);
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

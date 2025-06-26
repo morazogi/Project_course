@@ -8,6 +8,7 @@ import ServiceLayer.*;
 import InfrastructureLayer.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
@@ -51,6 +52,28 @@ public class SystemConfiguration {
                 DiscountRepository(), StoreRepository(), GuestRepository());
     }
     @Bean public ShippingService ShippingService() {
+    @Bean
+    public NotificationService NotificationService() {
+        return new NotificationService(NotificationWebSocketHandler(), NotificationRepository(), TokenService(), UserRepository());
+    };
+
+    @Bean
+    public OrderService OrderService() {
+        return new OrderService(OrderRepository());
+    };
+
+    @Bean
+    public OwnerManagerService OwnerManagerService() {
+        return new OwnerManagerService(UserRepository(), StoreRepository(), ProductRepository(), OrderRepository(), DiscountRepository());
+    };
+
+    @Bean
+    public PaymentService PaymentService() {
+        return new PaymentService(UserRepository(), ProductRepository(), ProxyPayment(), TokenService(), DiscountRepository(), StoreRepository(), GuestRepository() );
+    };
+
+    @Bean
+    public ShippingService ShippingService() {
         return new ShippingService(ProxyShipping(), TokenService(), UserRepository(), GuestRepository());
     }
     @Bean public TokenService TokenService() { return new TokenService(); }
@@ -66,6 +89,16 @@ public class SystemConfiguration {
     @Bean public NotificationWebSocketHandler NotificationWebSocketHandler() {
         return new NotificationWebSocketHandler(TokenService());
     }
+    @Bean
+    public WebSocketClient WebSocketClient() {
+        return new StandardWebSocketClient();
+    };
+
+    @Bean
+    public NotificationWebSocketHandler NotificationWebSocketHandler() {
+        return new NotificationWebSocketHandler(TokenService(), NotificationRepository());
+    };
+
 
     @Bean
     public AuctionService AuctionService(PaymentService paymentService,
@@ -98,3 +131,14 @@ public class SystemConfiguration {
                 storeRepository, productRepository, orderRepository);
     }
 }
+
+    @Bean
+    public RolesService RolesService() {
+        return new RolesService(StoreRepository(), UserRepository());
+    }
+
+//    @Bean
+//    public Module hibernateModule() {
+//        // Use Hibernate6Module for Hibernate 6.x. For older versions, it might be Hibernate5Module.
+//        return new Hibernate6Module();
+//    }
