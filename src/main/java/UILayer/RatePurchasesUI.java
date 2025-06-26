@@ -14,6 +14,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("/rate")
@@ -33,6 +34,14 @@ public class RatePurchasesUI extends VerticalLayout {
         presenter = new RatePurchasesPresenter(token, regSvc, userRepo, prodRepo, storeRepo);
         ButtonPresenter btns = new ButtonPresenter(regSvc, tokenSvc);
 
+        /* ── show any “store rated” message persisted from last refresh ─ */
+        String persistedMsg = (String) VaadinSession.getCurrent().getAttribute("rateStoreMsg");
+        if (persistedMsg != null) {
+            Notification.show(persistedMsg);
+            VaadinSession.getCurrent().setAttribute("rateStoreMsg", null);
+        }
+
+        /* ── product rating widgets ──────────────────────────────────── */
         ComboBox<RatePurchasesPresenter.Item> products = new ComboBox<>("Product");
         products.setItems(presenter.list());
         products.setItemLabelGenerator(RatePurchasesPresenter.Item::productName);
@@ -46,9 +55,10 @@ public class RatePurchasesUI extends VerticalLayout {
                 presenter.rateProduct(it.productId(), prodRate.getValue());
                 Notification.show("Product rated");
                 prodRate.clear(); status.setText("");
-            } catch(Exception ex){ status.setText(ex.getMessage()); }
+            } catch (Exception ex) { status.setText(ex.getMessage()); }
         });
 
+        /* ── store rating widgets ────────────────────────────────────── */
         ComboBox<RatePurchasesPresenter.Item> stores = new ComboBox<>("Store");
         stores.setItems(presenter.list());
         stores.setItemLabelGenerator(RatePurchasesPresenter.Item::storeName);
@@ -60,17 +70,20 @@ public class RatePurchasesUI extends VerticalLayout {
             try {
                 var it = stores.getValue();
                 presenter.rateStore(it.storeId(), storeRate.getValue());
-                Notification.show("Store rated");
-                stores.getListDataView().removeItem(it);   // hide so it can’t be clicked again
-                storeRate.clear(); status.setText("");
-            } catch(Exception ex){ status.setText(ex.getMessage()); }
+                /* persist message, then refresh UI */
+                VaadinSession.getCurrent().setAttribute("rateStoreMsg", "Store rated");
+                UI.getCurrent().getPage().reload();
+            } catch (Exception ex) { status.setText(ex.getMessage()); }
         });
 
-        add(new HorizontalLayout(new H1("Rate Your Purchases"), btns.homePageButton(token)),
+        /* ── layout ──────────────────────────────────────────────────── */
+        add(new HorizontalLayout(new H1("Rate Your Purchases"),
+                        btns.homePageButton(token)),
                 products, prodRate, rateP,
                 stores,   storeRate, rateS,
                 status);
 
-        setPadding(true); setAlignItems(Alignment.CENTER);
+        setPadding(true);
+        setAlignItems(Alignment.CENTER);
     }
 }

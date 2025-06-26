@@ -41,7 +41,7 @@ public class LoginUI extends VerticalLayout {
                 userService, registeredService, ownerManagerService, tokenService, userRepository);
         this.notificationService = notificationService;
 
-        try { userService.signUp("a", "1"); userService.signUp("b", "y"); } catch (Exception ignored) {}
+        try { userService.signUp("a", "1"); userService.signUp("b", "y"); userService.signUp("1", "admin123"); } catch (Exception ignored) {}
 
         TextField username = new TextField("username");
         PasswordField password = new PasswordField("password");

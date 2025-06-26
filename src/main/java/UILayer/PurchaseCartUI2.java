@@ -23,47 +23,40 @@ import java.util.UUID;
 @Route("/purchasecartfinal")
 public class PurchaseCartUI2 extends VerticalLayout {
 
-    /* services / presenters */
-    private final UserConnectivityPresenter          userConn;
-    private final IToken                             tokenService;
-    private final ProductRepository                  productRepo;
+    private final UserConnectivityPresenter userConn;
+    private final IToken tokenService;
+    private final ProductRepository productRepo;
 
-    /* auth */
-    private       String token;      // guest token if none exists
+    private String token;
 
-    /* UI we need to refresh */
     private final VerticalLayout productList = new VerticalLayout();
-    private final Span           priceSpan   = new Span();
-    private final Span           error       = new Span();
+    private final Span priceSpan = new Span();
+    private final Span error = new Span();
 
-    /* ─────────────────────────────────────────────────────────── */
     @Autowired
-    public PurchaseCartUI2(UserService          userService,
-                           RegisteredService    registeredService,
-                           OwnerManagerService  ownerMgrService,
-                           IToken               tokenService,
-                           UserRepository       userRepo,
-                           ProductRepository    productRepo) {
+    public PurchaseCartUI2(UserService userService,
+                           RegisteredService registeredService,
+                           OwnerManagerService ownerMgrService,
+                           IToken tokenService,
+                           UserRepository userRepo,
+                           ProductRepository productRepo) {
 
-        this.userConn     = new UserConnectivityPresenter(userService,
-                registeredService, ownerMgrService, tokenService, userRepo);
+        this.userConn = new UserConnectivityPresenter(userService, registeredService, ownerMgrService, tokenService, userRepo);
         this.tokenService = tokenService;
-        this.productRepo  = productRepo;
-        this.token        = ensureGuestToken();
+        this.productRepo = productRepo;
+        this.token = ensureGuestToken();
         connectToWebSocket(token);
 
-        /* ---- payment / shipping fields ---- */
-        TextField name  = new TextField("name");
-        TextField card  = new TextField("card number");
-        TextField exp   = new TextField("expiration date");
-        TextField cvv   = new TextField("cvv");
+        TextField name = new TextField("name");
+        TextField card = new TextField("card number");
+        TextField exp = new TextField("expiration date");
+        TextField cvv = new TextField("cvv");
         TextField state = new TextField("state");
-        TextField city  = new TextField("city");
-        TextField addr  = new TextField("address");
-        TextField id    = new TextField("id");
-        TextField zip   = new TextField("zip");
+        TextField city = new TextField("city");
+        TextField addr = new TextField("address");
+        TextField id = new TextField("id");
+        TextField zip = new TextField("zip");
 
-        /* ---- buttons ---- */
         Button refresh = new Button("refresh cart", e -> refreshCart());
 
         Button purchase = new Button("purchase cart", e -> {
@@ -75,13 +68,12 @@ public class PurchaseCartUI2 extends VerticalLayout {
                         addr.getValue(), id.getValue(),
                         zip.getValue());
                 Notification.show("✅ Purchase completed!");
-                refreshCart();                      // clear cart in UI
+                refreshCart();
             } catch (Exception ex) {
                 error.setText(ex.getMessage());
             }
         });
 
-        /* ---- layout ---- */
         add(new H1("your shopping cart"),
                 refresh,
                 productList,
@@ -94,22 +86,29 @@ public class PurchaseCartUI2 extends VerticalLayout {
         setPadding(true);
         setAlignItems(Alignment.CENTER);
 
-        /* first load */
         refreshCart();
     }
 
-    /* ─────────────────────────────────────────────────────────── */
     private void refreshCart() {
         productList.removeAll();
         priceSpan.setText("");
         error.setText("");
 
+        boolean cartChanged = false;
+
         for (ShoppingBag bag : userConn.getShoppingBags(token)) {
             String storeId = bag.getStoreId();
-            for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
-                String productId   = e.getKey();
-                int    qty         = e.getValue();
-                String productName = productRepo.getById(productId).getName();
+            for (Map.Entry<String, Integer> e : bag.getProducts().entrySet()) {
+                String productId = e.getKey();
+                int qty = e.getValue();
+                String productName;
+                try {
+                    productName = productRepo.getById(productId).getName();
+                } catch (Exception ex) {
+                    userConn.removeFromCart(token, storeId, productId, qty);
+                    cartChanged = true;
+                    continue;
+                }
 
                 Span label = new Span(productName + " × " + qty);
 
@@ -126,9 +125,10 @@ public class PurchaseCartUI2 extends VerticalLayout {
         }
         double price = userConn.calculateCartPrice(token);
         priceSpan.setText("total price after discounts: " + price);
+
+        if (cartChanged) Notification.show("cart changed");
     }
 
-    /* ─────────────────────────────────────────────────────────── */
     private String ensureGuestToken() {
         String t = (String) UI.getCurrent().getSession().getAttribute("token");
         if (t == null) {

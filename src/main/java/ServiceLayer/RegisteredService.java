@@ -5,24 +5,19 @@ import DomainLayer.IToken;
 import DomainLayer.DomainServices.*;
 import java.util.List;
 
-import InfrastructureLayer.GuestRepository;
-import InfrastructureLayer.ProductRepository;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.UserRepository;
-import InfrastructureLayer.OrderRepository;
-import InfrastructureLayer.NotificationRepository;
+import InfrastructureLayer.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class RegisteredService {
+
     private final IToken tokenService;
     private final UserConnectivity userConnectivity;
-    private final Rate rateService;
-    private final History history;
-    private final OpenStore opener;
-    private final ToNotify notifyService;
+    private final Rate       rateService;
+    private final History    history;
+    private final OpenStore  opener;
+    private final ToNotify   notifyService;
     private final GuestRepository guestRepository;
 
     public RegisteredService(IToken tokenService,
@@ -30,17 +25,19 @@ public class RegisteredService {
                              UserRepository userRepository,
                              ProductRepository productRepository,
                              OrderRepository orderRepository,
-                             NotificationRepository notificationRepository, GuestRepository guestRepository,
-                             NotificationWebSocketHandler notificationWebSocketHandler) {
-        this.tokenService = tokenService;
-        this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
-        this.rateService = new Rate(tokenService, storeRepository, userRepository, productRepository);
-        this.history = new History(tokenService, orderRepository , userRepository);
-        this.opener = new OpenStore(tokenService, storeRepository, userRepository);
-        this.notifyService = new ToNotify(notificationRepository, tokenService, notificationWebSocketHandler);
+                             NotificationRepository notificationRepository,
+                             GuestRepository guestRepository,
+                             NotificationWebSocketHandler ws) {
+        this.tokenService    = tokenService;
+        this.userConnectivity= new UserConnectivity(tokenService, userRepository, guestRepository);
+        this.rateService     = new Rate(tokenService, storeRepository, userRepository, productRepository);
+        this.history         = new History(tokenService, orderRepository, userRepository);
+        this.opener          = new OpenStore(tokenService, storeRepository, userRepository);
+        this.notifyService   = new ToNotify(notificationRepository, tokenService, ws);
         this.guestRepository = guestRepository;
     }
 
+    /* ───────────────────── session / store helpers ─────────────────── */
 
     @Transactional
     public String logoutRegistered(String token) throws Exception {
@@ -50,7 +47,7 @@ public class RegisteredService {
             EventLogger.logEvent(username, "LOGOUT");
             return tokenService.generateToken("Guest");
         } catch (IllegalArgumentException e) {
-            EventLogger.logEvent(username, "LOGOUT_FAILED" );
+            EventLogger.logEvent(username, "LOGOUT_FAILED");
             throw new RuntimeException("Invalid token");
         }
     }
@@ -67,6 +64,8 @@ public class RegisteredService {
         }
     }
 
+    /* ───────────────────── rating operations ───────────────────────── */
+
     @Transactional
     public boolean rateStore(String token, String storeId, int rate) throws Exception {
         try {
@@ -74,7 +73,9 @@ public class RegisteredService {
             return rateService.rateStore(token, storeId, rate);
         } catch (IllegalArgumentException e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_STORE_FAILED");
-            throw new RuntimeException("Invalid token");
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "Could not rate store" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
 
@@ -85,22 +86,32 @@ public class RegisteredService {
             return rateService.rateProduct(token, productId, rate);
         } catch (IllegalArgumentException e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_PRODUCT_FAILED");
-            throw new RuntimeException("Invalid token");
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "Could not rate product" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
 
     @Transactional
-    public boolean rateStoreAndProduct(String token, String storeId, String productId, int storeRate, int productRate) throws Exception {
+    public boolean rateStoreAndProduct(String token,
+                                       String storeId,
+                                       String productId,
+                                       int storeRate,
+                                       int productRate) throws Exception {
         try {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_STORE_AND_PRODUCT");
-            boolean storeRated = rateService.rateStore(token, storeId, storeRate);
-            boolean productRated = rateService.rateProduct(token, productId, productRate);
-            return storeRated && productRated;
+            boolean okStore   = rateService.rateStore  (token, storeId,   storeRate);
+            boolean okProduct = rateService.rateProduct(token, productId, productRate);
+            return okStore && okProduct;
         } catch (IllegalArgumentException e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "RATE_STORE_AND_PRODUCT_FAILED");
-            throw new RuntimeException("Invalid token");
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "Could not rate" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
+
+    /* ───────────────────── history / notification ──────────────────── */
 
     @Transactional
     public List<String> getUserOrderHistory(String token) throws Exception {
@@ -126,7 +137,7 @@ public class RegisteredService {
         }
     }
 
-    public IToken getTokenService() {
-                return tokenService;
-            }
+    /* ───────────────────── misc accessor ───────────────────────────── */
+
+    public IToken getTokenService() { return tokenService; }
 }

@@ -41,17 +41,21 @@ public class UserService {
                        GuestRepository guestRepository,
                        DiscountRepository discountRepository) {
         this.productRepository = productRepository;
-        this.storeRepository = storeRepository;
-        this.guestRepository = guestRepository;
-        this.userRepository = userRepository;
-        this.tokenService = tokenService;
-        this.shippingService = shippingService;
-        this.paymentService = paymentService;
-        this.userConnectivity = new UserConnectivity(tokenService, userRepository, guestRepository);
-        this.userCart = new UserCart(tokenService, userRepository, storeRepository, productRepository, orderRepository, guestRepository);
-        this.search = new Search(productRepository, storeRepository);
-        this.discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
+        this.storeRepository   = storeRepository;
+        this.guestRepository   = guestRepository;
+        this.userRepository    = userRepository;
+        this.tokenService      = tokenService;
+        this.shippingService   = shippingService;
+        this.paymentService    = paymentService;
+        this.userConnectivity  = new UserConnectivity(tokenService, userRepository, guestRepository);
+        this.userCart          = new UserCart(tokenService, userRepository, storeRepository,
+                productRepository, orderRepository, guestRepository);
+        this.search            = new Search(productRepository, storeRepository);
+        this.discountPolicy    = new DiscountPolicyMicroservice(storeRepository, userRepository,
+                productRepository, discountRepository);
     }
+
+    /* ───────────────────────── login / signup ───────────────────────── */
 
     @Transactional
     public String login(String username, String password) throws JsonProcessingException {
@@ -59,6 +63,9 @@ public class UserService {
             EventLogger.logEvent(username, "LOGIN");
             return userConnectivity.login(username, password);
         } catch (IllegalArgumentException e) {
+            if (e.getMessage() != null &&
+                    e.getMessage().toLowerCase().contains("suspended"))
+                throw new RuntimeException("suspended");
             EventLogger.logEvent(username, "LOGIN_FAILED");
             throw new RuntimeException("Invalid username or password");
         }
@@ -70,9 +77,41 @@ public class UserService {
             userConnectivity.signUp(username, password);
         } catch (IllegalArgumentException e) {
             EventLogger.logEvent(username, "SIGNUP_FAILED");
-            throw new RuntimeException("User already exists");
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "User already exists" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
+
+    /* ───────────────────────── cart-clean helpers ───────────────────── */
+
+    /** Remove any items whose product-ID no longer exists. */
+    private boolean cleanMissingProducts(String token) {
+        boolean changed = false;
+        for (ShoppingBag bag : getShoppingCart(token)) {
+            String storeId = bag.getStoreId();
+            for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
+                String productId = e.getKey();
+                int    qty       = e.getValue();
+                try { productRepository.getById(productId); }
+                catch (Exception ex) {
+                    try { userCart.removeFromCart(token, storeId, productId, qty); }
+                    catch (Exception ignored) {}
+                    changed = true;
+                }
+            }
+        }
+        return changed;
+    }
+
+    /** True ⇢ after clean-up the cart is empty. */
+    private boolean cartIsEmpty(String token) {
+        for (ShoppingBag bag : getShoppingCart(token))
+            if (!bag.getProducts().isEmpty()) return false;
+        return true;
+    }
+
+    /* ───────────────────────── cart operations ──────────────────────── */
 
     @Transactional
     public void removeFromCart(String token, String storeId, String productId, Integer quantity) {
@@ -80,8 +119,11 @@ public class UserService {
             userCart.removeFromCart(token, storeId, productId, quantity);
             EventLogger.logEvent(tokenService.extractUsername(token), "REMOVE_FROM_CART");
         } catch (Exception e) {
-            EventLogger.logEvent(tokenService.extractUsername(token), "REMOVE_FROM_CART_FAILED " + e.getMessage());
-            throw new RuntimeException("Failed to remove product from cart");
+            EventLogger.logEvent(tokenService.extractUsername(token),
+                    "REMOVE_FROM_CART_FAILED " + e.getMessage());
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "Failed to remove product from cart" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
 
@@ -91,11 +133,13 @@ public class UserService {
             userCart.addToCart(token, storeId, productId, quantity);
             EventLogger.logEvent(tokenService.extractUsername(token), "ADD_TO_CART");
             return "Product added to cart";
-        } catch (IllegalArgumentException e) {            // <<― propagate readable stock-error
-            EventLogger.logEvent(tokenService.extractUsername(token), "ADD_TO_CART_FAILED " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            EventLogger.logEvent(tokenService.extractUsername(token),
+                    "ADD_TO_CART_FAILED " + e.getMessage());
             return e.getMessage();
         } catch (Exception e) {
-            EventLogger.logEvent(tokenService.extractUsername(token), "ADD_TO_CART_FAILED " + e.getMessage());
+            EventLogger.logEvent(tokenService.extractUsername(token),
+                    "ADD_TO_CART_FAILED " + e.getMessage());
             return "Failed to add product to cart";
         }
     }
@@ -106,7 +150,7 @@ public class UserService {
             return userCart.reserveCart(token);
         } catch (Exception e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "RESERVE_CART_FAILED");
-            throw new RuntimeException("Failed to purchase cart");
+            throw new RuntimeException("Failed to reserve cart");
         }
     }
 
@@ -121,39 +165,49 @@ public class UserService {
                              String address,
                              String id,
                              String zip) {
-        String paymentTransactionId = null;
+        String paymentTransactionId  = null;
         String shippingTransactionId = null;
         try {
+            /* auto-clean & validate */
+            if (cleanMissingProducts(token))
+                throw new RuntimeException("cart changed");
+
+            if (cartIsEmpty(token))
+                throw new RuntimeException("cart is empty");
+
             Double price = reserveCart(token);
-            shippingTransactionId = shippingService.processShipping(token, state, city, address, name, zip);
-            paymentTransactionId = paymentService.processPayment(token, name, cardNumber, expirationDate, cvv, id);
+
+            shippingTransactionId = shippingService.processShipping(
+                    token, state, city, address, name, zip);
+            paymentTransactionId  = paymentService.processPayment(
+                    token, name, cardNumber, expirationDate, cvv, id);
             userCart.purchaseCart(token, price);
+
         } catch (Exception e) {
-            EventLogger.logEvent(tokenService.extractUsername(token), "PURCHASE_CART_FAILED " + e.getMessage());
-            if (shippingTransactionId != null) {
+            EventLogger.logEvent(tokenService.extractUsername(token),
+                    "PURCHASE_CART_FAILED " + e.getMessage());
+            if (shippingTransactionId != null)
                 shippingService.cancelShipping(token, shippingTransactionId);
-            }
-            if (paymentTransactionId != null) {
-                paymentService.cancelPayment(token, paymentTransactionId);
-            }
-            throw new RuntimeException("Failed to purchase cart " + e.getMessage());
+            if (paymentTransactionId  != null)
+                paymentService.cancelPayment(token,  paymentTransactionId);
+
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "Failed to purchase cart" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
+
+    /* ─────────────────────― search / miscellaneous ―─────────────────── */
 
     @Transactional
     public List<String> findProduct(String token, String name, String category) {
-        try {
-            tokenService.validateToken(token);                      // may throw
-
-        } catch (Exception ex) {                                    // ⇐ catch token failure
+        try { tokenService.validateToken(token); }
+        catch (Exception ex) {
             throw new PermissionException(
                     "No permission: you must be logged-in to search products.");
         }
-
-        /* normal path */
         return search.findProduct(name == null ? "" : name, category);
     }
-
 
     @Transactional
     public List<Product> getAllProducts(String token) {
@@ -183,7 +237,9 @@ public class UserService {
             return search.searchStoreByName(storeName);
         } catch (Exception e) {
             EventLogger.logEvent(tokenService.extractUsername(token), "SEARCH_STORE_FAILED");
-            throw new RuntimeException("Failed to search store");
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "Failed to search store" : e.getMessage();
+            throw new RuntimeException(msg);
         }
     }
 
@@ -193,12 +249,13 @@ public class UserService {
             return search.getStoreById(storeId);
         } catch (Exception e) {
             String username = "unknown";
-            try {
-                username = tokenService.extractUsername(token);
-            } catch (Exception ignored) {
-            }
-            EventLogger.logEvent(username, "SEARCH_STORE_FAILED: " + e.getClass().getName() + " - " + e.getMessage());
-            throw new RuntimeException("Failed to search store. Cause: " + e.getMessage(), e);
+            try { username = tokenService.extractUsername(token); }
+            catch (Exception ignored) {}
+            EventLogger.logEvent(username,
+                    "SEARCH_STORE_FAILED: " + e.getClass().getName() +
+                            " - " + e.getMessage());
+            throw new RuntimeException("Failed to search store. Cause: " +
+                    e.getMessage(), e);
         }
     }
 
@@ -222,25 +279,27 @@ public class UserService {
 
     @Transactional
     public double calculateCartPrice(String token) {
-        if (token == null) {
+        if (token == null)
             throw new IllegalArgumentException("Token cannot be null");
-        }
+
         String username = tokenService.extractUsername(token);
         Guest user;
         boolean isRegistered = !username.contains("Guest");
         try {
-            if (isRegistered) {
-                user = (RegisteredUser) userRepository.getById(username);
-            } else {
-                user = guestRepository.getById(username);
-            }
+            user = isRegistered
+                    ? (RegisteredUser) userRepository.getById(username)
+                    : guestRepository.getById(username);
         } catch (Exception e) {
-            throw new RuntimeException("User not found");
+            String msg = (e.getMessage() == null || e.getMessage().isBlank())
+                    ? "User not found" : e.getMessage();
+            throw new RuntimeException(msg);
         }
+
         ShoppingCart cart = user.getShoppingCart();
         double total = 0;
         for (ShoppingBag bag : cart.getShoppingBags()) {
-            total += discountPolicy.calculatePrice(bag.getStoreId(), bag.getProducts());
+            total += discountPolicy.calculatePrice(bag.getStoreId(),
+                    bag.getProducts());
         }
         return total;
     }
@@ -251,12 +310,13 @@ public class UserService {
      */
     @Transactional
     public Map<String,Integer> getCartProducts(String token) {
-        if (token == null) throw new IllegalArgumentException("Token cannot be null");
+        if (token == null)
+            throw new IllegalArgumentException("Token cannot be null");
+
         String username = tokenService.extractUsername(token);
-        Guest user;
-        boolean registered = !username.contains("Guest");
-        if (registered) user = userRepository.getById(username);
-        else             user = guestRepository.getById(username);
+        Guest user = username.contains("Guest")
+                ? guestRepository.getById(username)
+                : userRepository.getById(username);
 
         Map<String,Integer> result = new LinkedHashMap<>();
         for (ShoppingBag bag : user.getShoppingCart().getShoppingBags()) {
@@ -272,22 +332,22 @@ public class UserService {
 
     @Transactional
     public List<ShoppingBag> getShoppingCart(String token) {
-        if (token == null) throw new IllegalArgumentException("Token cannot be null");
-        String username = tokenService.extractUsername(token);
-        Guest user;
-        boolean registered = !username.contains("Guest");
-        if (registered) user = userRepository.getById(username);
-        else             user = guestRepository.getById(username);
+        if (token == null)
+            throw new IllegalArgumentException("Token cannot be null");
 
-        List<ShoppingBag> shoppingBags = new ArrayList<ShoppingBag>();
+        String username = tokenService.extractUsername(token);
+        Guest user = username.contains("Guest")
+                ? guestRepository.getById(username)
+                : userRepository.getById(username);
+
+        List<ShoppingBag> shoppingBags = new ArrayList<>();
         for (ShoppingBag bag : user.getShoppingCart().getShoppingBags()) {
-            ShoppingBag shoppingBag = new ShoppingBag(bag.getStoreId());
+            ShoppingBag copy = new ShoppingBag(bag.getStoreId());
             for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
-                shoppingBag.addProduct(e.getKey(), e.getValue());
+                copy.addProduct(e.getKey(), e.getValue());
             }
-            shoppingBags.add(shoppingBag);
+            shoppingBags.add(copy);
         }
         return shoppingBags;
     }
-
 }
