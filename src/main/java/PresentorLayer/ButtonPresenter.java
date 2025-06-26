@@ -39,9 +39,9 @@ public class ButtonPresenter {
     public Button homePageButton(String token) {
         Button homePage = new Button("Home page", e -> {
             if (tokenService.extractUsername(token).equals("Guest")) {
-                UI.getCurrent().navigate("/home");
+                UI.getCurrent().navigate("/guesthomepage");
             } else {
-                UI.getCurrent().navigate("/userhomepage");
+                UI.getCurrent().navigate("/registeredhomepage");
             }
         });
         return homePage;

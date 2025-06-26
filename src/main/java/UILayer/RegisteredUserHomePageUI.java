@@ -50,6 +50,7 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
 
         /* ----- guard ----- */
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
         String username;
         try { username = tokenService.extractUsername(token); }
         catch (Exception e) { username = null; }
@@ -110,6 +111,20 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
             }
         }
         return rows;
+    } public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 
     private Grid<GuestHomePageUI.ProductRow> buildGrid() {

@@ -35,6 +35,7 @@ public class ShippingConnectivity {
             }
             catch (Exception e) {
                 EventLogger.logEvent(username, "PROCESS_SHIPPING - USER_NOT_FOUND:"+e.toString());
+                throw new IllegalArgumentException("User not found");
             }
         }
         else {
@@ -43,6 +44,7 @@ public class ShippingConnectivity {
             }
             catch (Exception e) {
                 EventLogger.logEvent(username, "PROCESS_SHIPPING - USER_NOT_FOUND:"+e.toString());
+                throw new IllegalArgumentException("User not found");
             }
         }
         return proxyShipping.processShipping(state, city, address, null, name, zip);

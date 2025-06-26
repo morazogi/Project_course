@@ -310,4 +310,16 @@ public class UserConnectivityPresenter {
         return userService.getCartProducts(token);
     }
 
+    public Store getStore(String token, String storeId) {
+        try {
+            return mapper.readValue(userService.getStoreById(token, storeId), Store.class);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public String getUsername(String token) {
+        return tokenService.extractUsername(token);
+    }
+
 }
