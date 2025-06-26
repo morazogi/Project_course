@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "guests")
 public class Guest {
 
