@@ -51,6 +51,11 @@ public class UserConnectivityPresenter {
         userService.purchaseCart(token, name, cardNumber, expirationDate, cvv, state, city, address, id, zip);
     }
 
+
+    public List<ShoppingBag> getShoppingBags(String token) {
+                return userService.getShoppingCart(token);
+            }
+
     public void addStore(String token, String storeName) throws Exception {
         String storeId = registeredService.openStore(token, storeName);
         System.out.println(storeId);
@@ -81,6 +86,15 @@ public class UserConnectivityPresenter {
         }
 
         //System.out.println(mapper.writeValueAsString(user));
+    }
+
+
+    public void removeFromCart(String token,
+                               String storeId,
+                               String productId,
+                               int quantity) {
+
+        userService.removeFromCart(token, storeId, productId, quantity);
     }
 
     public String getInformationAboutProduct(String token, String storeName, String productName) {

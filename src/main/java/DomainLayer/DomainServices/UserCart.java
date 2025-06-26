@@ -270,6 +270,10 @@ public class UserCart {
                 String pid = e.getKey(); int qty = e.getValue();
                 store.sellProduct(pid, qty);
                 storeRepository.update(store);
+                if (customer instanceof RegisteredUser ru) {
+                                        if (!ru.getProducts().contains(pid))
+                                                ru.addProduct(pid);
+                                    }
                 orderRepository.save(new Order(cart.toString(), store.getId(), username, new Date()));
             }
         }
@@ -277,5 +281,7 @@ public class UserCart {
         customer.setCartReserved(false);
         if (customer instanceof RegisteredUser ru) userRepository.update(ru);
         else                                       guestRepository.update(customer);
+        if (customer instanceof RegisteredUser ru) userRepository.update(ru);
+                else                                       guestRepository.update(customer);
     }
 }

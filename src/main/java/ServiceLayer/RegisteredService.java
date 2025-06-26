@@ -125,4 +125,8 @@ public class RegisteredService {
             throw new RuntimeException("Invalid token");
         }
     }
+
+    public IToken getTokenService() {
+                return tokenService;
+            }
 }

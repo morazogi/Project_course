@@ -29,20 +29,21 @@ import java.util.Map;
 @Route("/registeredhomepage")
 public class RegisteredUserHomePageUI extends VerticalLayout {
 
-    private final UserService          userService;
-    private final StoreRepository      storeRepo;
-    private final ProductRepository    productRepo;
-    private Grid<GuestHomePageUI.ProductRow> grid;
+    private final UserService       userService;
+    private final StoreRepository   storeRepo;
+    private final ProductRepository productRepo;
+
+    private Grid<GuestHomePageUI.ProductRow>      grid;
     private ListDataProvider<GuestHomePageUI.ProductRow> dataProvider;
 
     @Autowired
-    public RegisteredUserHomePageUI(UserService userService,
-                                    RegisteredService registeredService,
-                                    OwnerManagerService ownerMgrService,
-                                    IToken tokenService,
-                                    UserRepository userRepo,
-                                    StoreRepository storeRepo,
-                                    ProductRepository productRepo) {
+    public RegisteredUserHomePageUI(UserService          userService,
+                                    RegisteredService    registeredService,
+                                    OwnerManagerService  ownerMgrService,
+                                    IToken               tokenService,
+                                    UserRepository       userRepo,
+                                    StoreRepository      storeRepo,
+                                    ProductRepository    productRepo) {
 
         this.userService = userService;
         this.storeRepo   = storeRepo;
@@ -65,7 +66,8 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
                 new H4("👋 Hello, " + username),
                 buttons.signOutButton(token),
                 new Button("Store dashboard", e -> UI.getCurrent().navigate("/userhomepage")),
-                new Button("Shopping cart",  e -> UI.getCurrent().navigate("/purchasecartfinal"))
+                new Button("Shopping cart",  e -> UI.getCurrent().navigate("/purchasecartfinal")),
+                new Button("Rate my purchases", e -> UI.getCurrent().navigate("/rate"))
         ));
 
         /* filter */
@@ -97,16 +99,18 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
     private List<GuestHomePageUI.ProductRow> loadRows() {
         List<GuestHomePageUI.ProductRow> rows = new ArrayList<>();
         for (Store s : storeRepo.getAll()) {
-            String storeId   = s.getId();
-            String storeName = s.getName();
+            String storeId     = s.getId();
+            String storeName   = s.getName();
+            double storeRating = s.getRating();
             for (Map.Entry<String,Integer> e : s.getProducts().entrySet()) {
                 String productId = e.getKey();
-                int qty          = e.getValue();
+                int    qty       = e.getValue();
                 productRepo.findById(productId).ifPresent(p ->
                         rows.add(new GuestHomePageUI.ProductRow(
                                 storeId, storeName,
                                 productId, p.getName(),
-                                qty, p.getPrice())));
+                                qty, p.getPrice(),
+                                storeRating, p.getRating())));
             }
         }
         return rows;
@@ -118,6 +122,8 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
         g.addColumn(GuestHomePageUI.ProductRow::productName).setHeader("Product");
         g.addColumn(GuestHomePageUI.ProductRow::quantity)   .setHeader("Qty");
         g.addColumn(GuestHomePageUI.ProductRow::price)      .setHeader("Price");
+        g.addColumn(GuestHomePageUI.ProductRow::storeRating).setHeader("Store ★").setAutoWidth(true);
+        g.addColumn(GuestHomePageUI.ProductRow::productRating).setHeader("Product ★").setAutoWidth(true);
         g.addComponentColumn(row -> {
             Button btn = new Button("Add to cart", e -> {
                 String token = (String) UI.getCurrent().getSession().getAttribute("token");

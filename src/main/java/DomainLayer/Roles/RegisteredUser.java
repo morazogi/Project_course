@@ -28,7 +28,7 @@ public class RegisteredUser extends Guest {
     private List<String> managedStores = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "products", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_purchased_products", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "product_id")
     private List<String> products = new ArrayList<>();
 
@@ -84,4 +84,8 @@ public class RegisteredUser extends Guest {
     public void setManagedStores(List<String> managedStores) {
         this.managedStores = managedStores;
     }
+
+        public List<String> getProducts() {     // ← new
+                return products;
+            }
 }

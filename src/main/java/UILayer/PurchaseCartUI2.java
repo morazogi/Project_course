@@ -1,11 +1,11 @@
 package UILayer;
 
 import DomainLayer.IToken;
+import DomainLayer.ShoppingBag;
+import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.UserRepository;
 import PresentorLayer.UserConnectivityPresenter;
-import ServiceLayer.OwnerManagerService;
-import ServiceLayer.RegisteredService;
-import ServiceLayer.UserService;
+import ServiceLayer.*;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -23,50 +23,48 @@ import java.util.UUID;
 @Route("/purchasecartfinal")
 public class PurchaseCartUI2 extends VerticalLayout {
 
-    private final UserConnectivityPresenter userConn;
-    private final IToken tokenService;
-    private String      token;        // will be (guest)-initialised if missing
+    /* services / presenters */
+    private final UserConnectivityPresenter          userConn;
+    private final IToken                             tokenService;
+    private final ProductRepository                  productRepo;
 
+    /* auth */
+    private       String token;      // guest token if none exists
+
+    /* UI we need to refresh */
+    private final VerticalLayout productList = new VerticalLayout();
+    private final Span           priceSpan   = new Span();
+    private final Span           error       = new Span();
+
+    /* ─────────────────────────────────────────────────────────── */
     @Autowired
-    public PurchaseCartUI2(UserService userService,
-                           RegisteredService registeredService,
-                           OwnerManagerService ownerMgrService,
-                           IToken tokenService,
-                           UserRepository userRepo) {
+    public PurchaseCartUI2(UserService          userService,
+                           RegisteredService    registeredService,
+                           OwnerManagerService  ownerMgrService,
+                           IToken               tokenService,
+                           UserRepository       userRepo,
+                           ProductRepository    productRepo) {
 
-        this.userConn    = new UserConnectivityPresenter(userService, registeredService,
-                ownerMgrService, tokenService, userRepo);
+        this.userConn     = new UserConnectivityPresenter(userService,
+                registeredService, ownerMgrService, tokenService, userRepo);
         this.tokenService = tokenService;
+        this.productRepo  = productRepo;
         this.token        = ensureGuestToken();
+        connectToWebSocket(token);
 
-        /* -------- payment / shipping fields -------- */
-        TextField name   = new TextField("name");
-        TextField card   = new TextField("card number");
-        TextField exp    = new TextField("expiration date");
-        TextField cvv    = new TextField("cvv");
-        TextField state  = new TextField("state");
-        TextField city   = new TextField("city");
-        TextField addr   = new TextField("address");
-        TextField id     = new TextField("id");
-        TextField zip    = new TextField("zip");
+        /* ---- payment / shipping fields ---- */
+        TextField name  = new TextField("name");
+        TextField card  = new TextField("card number");
+        TextField exp   = new TextField("expiration date");
+        TextField cvv   = new TextField("cvv");
+        TextField state = new TextField("state");
+        TextField city  = new TextField("city");
+        TextField addr  = new TextField("address");
+        TextField id    = new TextField("id");
+        TextField zip   = new TextField("zip");
 
-        Span priceSpan   = new Span();
-        Span error       = new Span();
-        VerticalLayout productList = new VerticalLayout();
-        productList.setPadding(false);
-
-        /* -------- buttons -------- */
-        Button calc = new Button("calculate price", e -> {
-            try {
-                productList.removeAll();
-                Map<String,Integer> items = userConn.getCartProducts(token);
-                items.forEach((p, q) -> productList.add(new Span(p + " × " + q)));
-                double price = userConn.calculateCartPrice(token);
-                priceSpan.setText("total price after discounts: " + price);
-            } catch (Exception ex) {
-                error.setText(ex.getMessage());
-            }
-        });
+        /* ---- buttons ---- */
+        Button refresh = new Button("refresh cart", e -> refreshCart());
 
         Button purchase = new Button("purchase cart", e -> {
             try {
@@ -77,28 +75,71 @@ public class PurchaseCartUI2 extends VerticalLayout {
                         addr.getValue(), id.getValue(),
                         zip.getValue());
                 Notification.show("✅ Purchase completed!");
+                refreshCart();                      // clear cart in UI
             } catch (Exception ex) {
                 error.setText(ex.getMessage());
             }
         });
-        connectToWebSocket(token);
 
-        /* -------- layout -------- */
-        add(
-                new H1("purchase cart"),
-                calc,
+        /* ---- layout ---- */
+        add(new H1("your shopping cart"),
+                refresh,
                 productList,
                 priceSpan,
                 new HorizontalLayout(name, card, exp, cvv, id),
                 new HorizontalLayout(state, city, addr, zip),
                 purchase,
-                error
-        );
+                error);
+
         setPadding(true);
         setAlignItems(Alignment.CENTER);
+
+        /* first load */
+        refreshCart();
     }
 
-    public void connectToWebSocket(String token) {
+    /* ─────────────────────────────────────────────────────────── */
+    private void refreshCart() {
+        productList.removeAll();
+        priceSpan.setText("");
+        error.setText("");
+
+        for (ShoppingBag bag : userConn.getShoppingBags(token)) {
+            String storeId = bag.getStoreId();
+            for (Map.Entry<String,Integer> e : bag.getProducts().entrySet()) {
+                String productId   = e.getKey();
+                int    qty         = e.getValue();
+                String productName = productRepo.getById(productId).getName();
+
+                Span label = new Span(productName + " × " + qty);
+
+                Button rm = new Button("Remove 1", ev -> {
+                    try {
+                        userConn.removeFromCart(token, storeId, productId, 1);
+                        refreshCart();
+                    } catch (Exception ex) {
+                        error.setText(ex.getMessage());
+                    }
+                });
+                productList.add(new HorizontalLayout(label, rm));
+            }
+        }
+        double price = userConn.calculateCartPrice(token);
+        priceSpan.setText("total price after discounts: " + price);
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    private String ensureGuestToken() {
+        String t = (String) UI.getCurrent().getSession().getAttribute("token");
+        if (t == null) {
+            String guestName = "Guest-" + UUID.randomUUID();
+            t = tokenService.generateToken(guestName);
+            UI.getCurrent().getSession().setAttribute("token", t);
+        }
+        return t;
+    }
+
+    private void connectToWebSocket(String token) {
         UI.getCurrent().getPage().executeJs("""
                 window._shopWs?.close();
                 window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
@@ -112,16 +153,5 @@ public class PurchaseCartUI2 extends VerticalLayout {
                   n.opened = true;
                 };
                 """, token);
-    }
-
-    /* ----- helper: guest token if missing ----- */
-    private String ensureGuestToken() {
-        String t = (String) UI.getCurrent().getSession().getAttribute("token");
-        if (t == null) {
-            String guestName = "Guest-" + UUID.randomUUID();
-            t = tokenService.generateToken(guestName);
-            UI.getCurrent().getSession().setAttribute("token", t);
-        }
-        return t;
     }
 }
