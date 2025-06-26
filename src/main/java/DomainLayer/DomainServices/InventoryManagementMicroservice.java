@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static DomainLayer.ManagerPermissions.*;
 import InfrastructureLayer.ProductRepository;
-import infrastructureLayer.StoreRepository;
-import infrastructureLayer.UserRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
 
 public class InventoryManagementMicroservice {
     private StoreRepository storeRepository;

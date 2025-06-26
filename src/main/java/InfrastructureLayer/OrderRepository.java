@@ -1,4 +1,4 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 import DomainLayer.IOrderRepository;
 import DomainLayer.Order;
 import org.springframework.beans.factory.annotation.Autowired;

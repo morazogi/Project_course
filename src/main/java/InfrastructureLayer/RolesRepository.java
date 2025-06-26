@@ -1,13 +1,15 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 
 
 import DomainLayer.DomainServices.StoreManagementMicroservice;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
+import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.Map;
 
+@Repository
 public class RolesRepository {
     private final StoreManagementMicroservice storeManagementMicroservice;
 

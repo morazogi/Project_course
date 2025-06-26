@@ -3,7 +3,7 @@ package ServiceLayer;
 
 import DomainLayer.*;
 import DomainLayer.DomainServices.*;
-import infrastructureLayer.*;
+import InfrastructureLayer.*;
 
 import DomainLayer.DomainServices.InventoryManagementMicroservice;
 import DomainLayer.DomainServices.PurchasePolicyMicroservice;
@@ -32,7 +32,7 @@ public class OwnerManagerService {
     private final QueryMicroservice notificationService;
     private final PurchaseHistoryMicroservice purchaseHistoryService;
 
-    public OwnerManagerService(infrastructureLayer.UserRepository userRepository, StoreRepository storeRepository, InfrastructureLayer.ProductRepository productRepository, InfrastructureLayer.OrderRepository orderRepository, InfrastructureLayer.DiscountRepository discountRepository) {
+    public OwnerManagerService(InfrastructureLayer.UserRepository userRepository, StoreRepository storeRepository, InfrastructureLayer.ProductRepository productRepository, InfrastructureLayer.OrderRepository orderRepository, InfrastructureLayer.DiscountRepository discountRepository) {
         // Initialize repositories
         ICustomerInquiryRepository inquiryRepository = new CustomerInquiryRepository();
 

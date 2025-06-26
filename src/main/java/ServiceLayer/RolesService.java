@@ -1,6 +1,9 @@
 package ServiceLayer;
 //import DomainLayer.EventLogger;
-import infrastructureLayer.RolesRepository;
+import DomainLayer.DomainServices.StoreManagementMicroservice;
+import InfrastructureLayer.RolesRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -13,8 +16,8 @@ public class RolesService {
 
     private final RolesRepository rolesRepository;
 
-    public RolesService(RolesRepository rolesRepository) {
-        this.rolesRepository = rolesRepository;
+    public RolesService(StoreRepository storeRepository, UserRepository userRepository) {
+        this.rolesRepository = new RolesRepository(new StoreManagementMicroservice(storeRepository, userRepository));
     }
 
     @Transactional

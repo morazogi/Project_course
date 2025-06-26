@@ -3,8 +3,8 @@ package DomainLayer.DomainServices;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
-import infrastructureLayer.GuestRepository;
-import infrastructureLayer.UserRepository;
+import InfrastructureLayer.GuestRepository;
+import InfrastructureLayer.UserRepository;
 import ServiceLayer.EventLogger;
 
 import org.mindrot.jbcrypt.BCrypt;

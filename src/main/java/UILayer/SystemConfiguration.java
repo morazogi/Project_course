@@ -6,6 +6,7 @@ import ServiceLayer.*;
 import InfrastructureLayer.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
@@ -138,6 +139,11 @@ public class SystemConfiguration {
                                  OrderRepository orderRepository) {
         return new BidService(paymentService, shippingService, tokenService,
                 storeRepository, productRepository, orderRepository);
+    }
+
+    @Bean
+    public RolesService RolesService() {
+        return new RolesService(StoreRepository(), UserRepository());
     }
 
 //    @Bean

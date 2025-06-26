@@ -1,4 +1,4 @@
-package infrastructureLayer;
+package InfrastructureLayer;
 
 import DomainLayer.Roles.Guest;
 import DomainLayer.Roles.RegisteredUser;
