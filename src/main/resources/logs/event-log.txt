@@ -1046,3 +1046,93 @@
 [2025-06-27 00:49:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-27 00:49:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
 [2025-06-27 00:49:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 01:03:23] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:03:24] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:03:39] User: a | Event: Event | Description: LOGIN
+[2025-06-27 01:03:42] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:03:45] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:03:46] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:04:07] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:04:20] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:04:29] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:06:34] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:08:25] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:08:34] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:08:36] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:22:44] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:22:46] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 01:22:46] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 01:22:50] User: a | Event: Event | Description: LOGIN
+[2025-06-27 01:22:50] User: a | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
+[2025-06-27 01:22:50] User: a | Event: Event | Description: LOGIN_FAILED
+[2025-06-27 01:22:55] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:23:02] User: a | Event: Event | Description: LOGIN
+[2025-06-27 01:23:02] User: a | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
+[2025-06-27 01:23:02] User: a | Event: Event | Description: LOGIN_FAILED
+[2025-06-27 01:23:06] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:23:30] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:23:57] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:24:11] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:24:12] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 01:24:12] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 01:24:14] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:24:19] User: a | Event: Event | Description: LOGIN
+[2025-06-27 01:24:19] User: a | Event: Event | Description: LOGIN_FAILED - WRONG_PASSWORD
+[2025-06-27 01:24:19] User: a | Event: Event | Description: LOGIN_FAILED
+[2025-06-27 01:24:23] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:24:52] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:24:53] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:24:53] User: 1 | Event: Event | Description: LOGIN
+[2025-06-27 01:32:26] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:32:27] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 01:32:27] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 01:32:29] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 01:32:30] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 01:32:30] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 01:32:33] User: a | Event: Event | Description: LOGIN
+[2025-06-27 01:32:33] User: a | Event: Event | Description: TokenService
+[2025-06-27 01:32:33] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 11:29:53] User: a | Event: Event | Description: LOGIN
+[2025-06-27 11:29:53] User: a | Event: Event | Description: TokenService
+[2025-06-27 11:29:53] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 11:30:07] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-27 11:30:07] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-27 11:30:07] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-27 11:30:07] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-27 11:30:07] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:07] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:07] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-27 11:30:09] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:09] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:09] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:09] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:20] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=Store Matches=1
+[2025-06-27 11:30:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:26] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:26] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:26] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:26] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:28] User: a | Event: Event | Description: CLOSE_STORE_START
+[2025-06-27 11:30:28] User: a | Event: Event | Description: CLOSE_STORE_SUCCESS
+[2025-06-27 11:30:41] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=Store Matches=1
+[2025-06-27 11:30:42] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:42] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:42] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:42] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:42] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:46] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:46] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:46] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:46] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:47] User: a | Event: Event | Description: REOPEN_STORE_START
+[2025-06-27 11:30:47] User: a | Event: Event | Description: REOPEN_STORE_SUCCESS
+[2025-06-27 11:30:56] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=Store Matches=1
+[2025-06-27 11:30:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 11:30:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 11:30:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 11:30:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND

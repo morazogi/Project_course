@@ -342,11 +342,14 @@ public class ProductPresenter {
         if (!userService.getStoreById(token, storeId).isEmpty()) {
             try {
                 Store store = mapper.readValue(userService.getStoreById(token, storeId), Store.class);
-                storePage.add(new Span("is the store open now: " + store.isOpen()));
-                storePage.add(new Span("store rating: " + store.getRating()));
-                storePage.add(new HorizontalLayout(new H1(store.getName()), new Button("search in store", e -> {
-                    UI.getCurrent().navigate("/" + "searchproduct" + "/" + storeId);
-                })), getAllProductsInStore(token, storeId));
+                if (store.isOpen()) {
+                    storePage.add(new Span("store rating: " + store.getRating()));
+                    storePage.add(new HorizontalLayout(new H1(store.getName()), new Button("search in store", e -> {
+                        UI.getCurrent().navigate("/" + "searchproduct" + "/" + storeId);
+                    })), getAllProductsInStore(token, storeId));
+                } else {
+                    storePage.add(new Span("store is close"));
+                }
             } catch (Exception e) {
                 Notification.show(e.getMessage());
             }

@@ -131,11 +131,6 @@ public class PurchaseCartUI2 extends VerticalLayout {
 
     private String ensureGuestToken() {
         String t = (String) UI.getCurrent().getSession().getAttribute("token");
-        if (t == null) {
-            String guestName = "Guest-" + UUID.randomUUID();
-            t = tokenService.generateToken(guestName);
-            UI.getCurrent().getSession().setAttribute("token", t);
-        }
         return t;
     }
 

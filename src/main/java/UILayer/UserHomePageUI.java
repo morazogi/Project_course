@@ -121,6 +121,8 @@ public class UserHomePageUI extends VerticalLayout {
         map1.put("PERM_ADD_PRODUCT", false);
         map1.put("PERM_REMOVE_PRODUCT", false);
         map1.put("PERM_UPDATE_PRODUCT", false);
+        map1.put("PERM_OPEN_STORE", false);
+        map1.put("PERM_CLOSE_STORE", false);
 
         // Permissions and actions
         //if(storeDropdown.getValue() != null)
@@ -151,8 +153,9 @@ public class UserHomePageUI extends VerticalLayout {
                         Boolean.TRUE.equals(map1.get("PERM_UPDATE_POLICY")),
                         Boolean.TRUE.equals(map1.get("PERM_ADD_PRODUCT")),
                         Boolean.TRUE.equals(map1.get("PERM_REMOVE_PRODUCT")),
-                        Boolean.TRUE.equals(map1.get("PERM_UPDATE_PRODUCT"))};
-
+                        Boolean.TRUE.equals(map1.get("PERM_UPDATE_PRODUCT")),
+                        Boolean.TRUE.equals(map1.get("PERM_OPEN_STORE")),
+                        Boolean.TRUE.equals(map1.get("PERM_CLOSE_STORE")),};
                 // if it doesnt work to check maybe to go throw that path stright to the store and in it to the mannager for premissions
                 // work over the store name -> store ID
 

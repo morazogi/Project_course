@@ -34,15 +34,6 @@ public class RegisteredService {
         this.history = new History(tokenService, orderRepository , userRepository);
         this.opener = new OpenStore(tokenService, storeRepository, userRepository);
         this.notifyService = new ToNotify(notificationRepository, tokenService, notificationWebSocketHandler, userRepository);
-                             NotificationRepository notificationRepository,
-                             GuestRepository guestRepository,
-                             NotificationWebSocketHandler ws) {
-        this.tokenService    = tokenService;
-        this.userConnectivity= new UserConnectivity(tokenService, userRepository, guestRepository);
-        this.rateService     = new Rate(tokenService, storeRepository, userRepository, productRepository);
-        this.history         = new History(tokenService, orderRepository, userRepository);
-        this.opener          = new OpenStore(tokenService, storeRepository, userRepository);
-        this.notifyService   = new ToNotify(notificationRepository, tokenService, ws);
         this.guestRepository = guestRepository;
     }
 

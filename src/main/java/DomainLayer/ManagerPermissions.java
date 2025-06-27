@@ -22,6 +22,8 @@ public class ManagerPermissions {
     public static final String PERM_ADD_PRODUCT = "PERM_ADD_PRODUCT";
     public static final String PERM_REMOVE_PRODUCT = "PERM_REMOVE_PRODUCT";
     public static final String PERM_UPDATE_PRODUCT = "PERM_UPDATE_PRODUCT";
+    public static final String PERM_OPEN_STORE = "PERM_OPEN_STORE";
+    public static final String PERM_CLOSE_STORE = "PERM_CLOSE_STORE";
 
     @EmbeddedId
     private ManagerPermissionsPK id;
@@ -60,6 +62,8 @@ public class ManagerPermissions {
         permissions.put(PERM_ADD_PRODUCT, false);
         permissions.put(PERM_REMOVE_PRODUCT, false);
         permissions.put(PERM_UPDATE_PRODUCT, false);
+        permissions.put(PERM_OPEN_STORE, false);
+        permissions.put(PERM_CLOSE_STORE, false);
     }
 
     public ManagerPermissionsPK getId() {
@@ -95,7 +99,7 @@ public class ManagerPermissions {
     }
 
     public void setPermissionsFromAarray(boolean[] perm) {
-        if (perm == null || perm.length < 7) {
+        if (perm == null || perm.length < 9) {
             System.err.println("Permissions array is null or too short.");
             return;
         }
@@ -106,6 +110,8 @@ public class ManagerPermissions {
         this.permissions.put(PERM_ADD_PRODUCT, perm[4]);
         this.permissions.put(PERM_REMOVE_PRODUCT, perm[5]);
         this.permissions.put(PERM_UPDATE_PRODUCT, perm[6]);
+        this.permissions.put(PERM_CLOSE_STORE, perm[5]);
+        this.permissions.put(PERM_OPEN_STORE, perm[6]);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class UserConnectivityPresenter {
             System.out.println("dfsa");
         }
         System.out.println(ownerManagerService.appointStoreOwner(user.getUsername(), storeId, user.getUsername()));
-        boolean[] arr = new boolean[7];
+        boolean[] arr = new boolean[9];
         arr[0] = true;
         arr[1] = true;
         arr[2] = true;
@@ -77,6 +77,8 @@ public class UserConnectivityPresenter {
         arr[4] = true;
         arr[5] = true;
         arr[6] = true;
+        arr[7] = true;
+        arr[8] = true;
         System.out.println(ownerManagerService.appointStoreManager(user.getUsername(), storeId, user.getUsername(), arr));
         username = tokenService.extractUsername(token);
         user = null;
@@ -336,6 +338,38 @@ public class UserConnectivityPresenter {
 
     public String getUsername(String token) {
         return tokenService.extractUsername(token);
+    }
+
+    public String openStore(String token, String storeId) {
+        String username = "";
+        try {
+            username = tokenService.extractUsername(token);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+        return ownerManagerService.reopenStore(user.getShoppingCart().getUserId(), storeId);
+    }
+
+    public String closeStore(String token, String storeId) {
+        String username = "";
+        try {
+            username = tokenService.extractUsername(token);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+        return ownerManagerService.closeStore(user.getShoppingCart().getUserId(), storeId);
     }
 
 }

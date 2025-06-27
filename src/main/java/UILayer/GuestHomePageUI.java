@@ -1,7 +1,6 @@
 package UILayer;
 
 import DomainLayer.IToken;
-import DomainLayer.Product;
 import DomainLayer.Store;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.StoreRepository;
@@ -21,8 +20,6 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /** Guest catalogue – now auto-creates a guest token and fully supports add-to-cart. */
 @Route("/guesthomepage")
@@ -37,13 +34,6 @@ public class GuestHomePageUI extends VerticalLayout {
     private ListDataProvider<ProductRow> dataProvider;
 
     @Autowired
-    public GuestHomePageUI(UserService          userService,
-                           RegisteredService    registeredService,
-                           OwnerManagerService  ownerMgrService,
-                           IToken               tokenService,
-                           UserRepository       userRepo,
-                           StoreRepository      storeRepo,
-                           ProductRepository    productRepo) {
     public GuestHomePageUI(UserService userService,
                            RegisteredService registeredService,
                            OwnerManagerService ownerMgrService,
@@ -90,13 +80,6 @@ public class GuestHomePageUI extends VerticalLayout {
         UI.getCurrent().getSession().setAttribute("token",
                 tokenService.generateToken("Guest"));
         return (String) UI.getCurrent().getSession().getAttribute("token");
-        String t = (String) UI.getCurrent().getSession().getAttribute("token");
-        if (t == null) {                                              // first time for this browser tab
-            String guestUsername = "Guest";
-            t = tokenService.generateToken(guestUsername);            // generate valid token
-            UI.getCurrent().getSession().setAttribute("token", t);
-        }
-        return t;
     }
 
     /* ---------- filter ---------- */
@@ -151,15 +134,14 @@ public class GuestHomePageUI extends VerticalLayout {
         return g;
     }
 
-    /* DTO – now includes ratings */
-    public record ProductRow(String storeId,   String storeName,
-                             String productId, String productName,
-                             int quantity,     float  price,
-                             double storeRating, double productRating) {}
-                             int quantity, float price) {}
+        /* DTO – now includes ratings */
+        public record ProductRow(String storeId,   String storeName,
+                                 String productId, String productName,
+                                 int quantity,     float  price,
+                                 double storeRating, double productRating) {}
 
-    public void connectToWebSocket(String token) {
-        UI.getCurrent().getPage().executeJs("""
+        public void connectToWebSocket(String token) {
+            UI.getCurrent().getPage().executeJs("""
                 window._shopWs?.close();
                 window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
                 window._shopWs.onmessage = ev => {
@@ -172,5 +154,7 @@ public class GuestHomePageUI extends VerticalLayout {
                   n.opened = true;
                 };
                 """, token);
+        }
+
+
     }
-}
