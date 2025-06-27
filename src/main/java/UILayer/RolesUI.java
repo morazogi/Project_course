@@ -57,11 +57,15 @@ public class RolesUI extends VerticalLayout {
 
         // ─── Appoint Manager ────────────────────
         Checkbox[] perms = new Checkbox[] {
-                new Checkbox("Edit Store"),
-                new Checkbox("Manage Inventory"),
-                new Checkbox("Handle Purchases"),
-                new Checkbox("Manage Discounts"),
-                new Checkbox("Appoint Roles")
+                new Checkbox("PERM_MANAGE_INVENTORY"),
+                new Checkbox("PERM_MANAGE_STAFF"),
+                new Checkbox("PERM_VIEW_STORE"),
+                new Checkbox("PERM_UPDATE_POLICY"),
+                new Checkbox("PERM_ADD_PRODUCT"),
+                new Checkbox("PERM_REMOVE_PRODUCT"),
+                new Checkbox("PERM_UPDATE_PRODUCT"),
+                new Checkbox("PERM_OPEN_STORE"),
+                new Checkbox("PERM_CLOSE_STORE")
         };
 
         Button appointManager = new Button("Appoint Manager", e -> {
