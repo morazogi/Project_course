@@ -52,7 +52,7 @@ public class RolesService {
             return result;
         } catch (Exception e) {
             EventLogger.logEvent(appointerId, "APPOINT_MANAGER_FAILED " + e.getMessage());
-            throw new RuntimeException("Failed to appoint store manager");
+            throw new RuntimeException("Failed to appoint store manager" + e.getMessage());
         }
     }
 

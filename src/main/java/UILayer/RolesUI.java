@@ -1,6 +1,7 @@
 package UILayer;
 
 import DomainLayer.IToken;
+import InfrastructureLayer.UserRepository;
 import PresentorLayer.ButtonPresenter;
 import PresentorLayer.RolesPresenter;
 import ServiceLayer.RegisteredService;
@@ -28,12 +29,14 @@ public class RolesUI extends VerticalLayout {
     public RolesUI(IToken tokenSvc,
                    RolesService rolesSvc,
                    UserService userSvc,
-                   RegisteredService regSvc) {
+                   RegisteredService regSvc,
+                   UserRepository userRepository) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
-        String username = token != null ? tokenSvc.extractUsername(token) : "unknown";
+        String userId = token != null ? userRepository.getById(tokenSvc.extractUsername(token)).getShoppingCart().getUserId() : "unknown";
+        //String username = token != null ? tokenSvc.extractUsername(token) : "unknown";
 
-        this.presenter = new RolesPresenter(username, token, rolesSvc, userSvc);
+        this.presenter = new RolesPresenter(userId, token, rolesSvc, userSvc, tokenSvc, userRepository);
         ButtonPresenter btns = new ButtonPresenter(regSvc, tokenSvc);
 
         /* Input fields */
@@ -62,7 +65,7 @@ public class RolesUI extends VerticalLayout {
         };
 
         Button appointManager = new Button("Appoint Manager", e -> {
-            boolean[] selected = new boolean[5];
+            boolean[] selected = new boolean[9];
             for (int i = 0; i < perms.length; i++)
                 selected[i] = perms[i].getValue();
 

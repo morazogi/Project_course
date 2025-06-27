@@ -1,4 +1,6 @@
 package PresentorLayer;
+import DomainLayer.IToken;
+import InfrastructureLayer.UserRepository;
 import ServiceLayer.RolesService;
 import ServiceLayer.UserService;
 import DomainLayer.Store;
@@ -11,15 +13,21 @@ public class RolesPresenter {
     private final RolesService rolesService;
     private final UserService userService;
     private final ObjectMapper mapper = new ObjectMapper();
+    private final IToken tokenService;
+    private final UserRepository userRepository;
 
     public RolesPresenter(String username,
                           String token,
                           RolesService rolesService,
-                          UserService userService) {
+                          UserService userService,
+                          IToken tokenService,
+                          UserRepository userRepository) {
         this.username = username;
         this.token = token;
         this.rolesService = rolesService;
         this.userService = userService;
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
     }
 
     public String appointOwner(String storeName, String targetUsername) {
@@ -54,7 +62,7 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.appointStoreManager(username, storeId, targetUsername, permissions);
+            rolesService.appointStoreManager(username, storeId, userRepository.getById(targetUsername).getShoppingCart().getUserId(), permissions);
             return "Manager appointed successfully.";
         } catch (Exception e) {
             return "Failed to appoint manager: " + e.getMessage();

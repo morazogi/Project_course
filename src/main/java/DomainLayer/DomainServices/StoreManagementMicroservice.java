@@ -85,16 +85,20 @@ public class StoreManagementMicroservice {
     public boolean appointStoreOwner(String appointerId, String storeId, String userId) {
 
         if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
-            return false;
+            if (!(getStoreById(storeId) != null && getStoreById(storeId).getFounder().equals(userId))) {
+                return false;
+            }
         }
         Store store = getStoreById(storeId);
         synchronized (store) {
-            if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
             store.addOwner(appointerId, userId);
             getUserById(userId).addOwnedStore(storeId);
+            storeRepository.update(store);
+            userRepository.update(getUserById(userId));
             return true;
         }
     }
+
     public String sendOwnershipProposal(String userId, String storeId, String proposalText) {
         Store store = getStoreById(storeId);
         RegisteredUser user = getUserById(userId);
@@ -173,34 +177,35 @@ public class StoreManagementMicroservice {
     }
 
         public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
-            if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
-                return false;
+            if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
+                if (!(getStoreById(storeId) != null && getStoreById(storeId).getFounder().equals(userId))) {
+                    return false;
+                }
             }
 
-
             Store store = getStoreById(storeId); // Make sure getStoreById uses your StoreRepository
-            synchronized (store) {
                 //if (store.userIsOwner(userId) || store.userIsManager(userId)) {
                 //    return false;
                 //}
-                store.addManager(appointerId, userId, permissions);
-                // Changes to 'store' will be automatically flushed by the @Transactional context
+            store.addManager(appointerId, userId, permissions);
+            // Changes to 'store' will be automatically flushed by the @Transactional context
 
                 // --- IMPORTANT CHANGE HERE ---
-                RegisteredUser managerUser = getUserById(userId); // Get the user object
+                RegisteredUser managerUser = getUserById(userId);
                 if (managerUser == null) {
                     // Handle case where user is not found (e.g., log error, throw exception, return false)
                     System.err.println("Error: User with ID " + userId + " not found for manager appointment.");
+                    System.out.println("5");
                     return false;
                 }
-                managerUser.addManagedStore(storeId); // Modify the user object in memory
+            managerUser.addManagedStore(storeId); // Modify the user object in memory
 
                 // Explicitly save the modified user object to persist changes
-                // This 'save' operation will participate in the transaction started by the ServiceLayer.
-                userRepository.save(managerUser); // <--- ADD THIS LINE!
-
+                // This 'save' operation will participate in the transaction started by the ServiceLayer
+                userRepository.update(managerUser); // <--- ADD THIS LINE!
+                storeRepository.update(store);
                 return true;
-            }
+
         }
     /**
      * Sends a proposal to a user to appoint them as a manager for a store.
