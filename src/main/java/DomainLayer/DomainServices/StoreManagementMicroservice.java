@@ -56,7 +56,6 @@ public class StoreManagementMicroservice {
         }
         return RegisteredUser;
     }
-
     // Add permission check method
     private boolean checkPermission(String userId, String storeId, String permissionType) {
         Store store = getStoreById(storeId);
@@ -65,12 +64,12 @@ public class StoreManagementMicroservice {
         }
 
         // Owners have all permissions
-        if (store.userIsOwner(userId)) {
+        if (store.userIsOwner(userId) && userRepository.getById(userId).isOwnerOf(storeId)) {
             return true;
         }
 
         // Check if manager has specific permission
-        if (store.userIsManager(userId)) {
+        if (store.userIsManager(userId) && userRepository.getById(userId).isManagerOf(storeId)) {
             return store.userHasPermissions(userId, permissionType);
         }
 
@@ -84,6 +83,10 @@ public class StoreManagementMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean appointStoreOwner(String appointerId, String storeId, String userId) {
+
+        if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
+            return false;
+        }
         Store store = getStoreById(storeId);
         synchronized (store) {
             if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
@@ -131,10 +134,17 @@ public class StoreManagementMicroservice {
             synchronized (store) {
                 LinkedList<String> firedUsers = store.getAllSubordinates(ownerId);
                 store.terminateOwnership(ownerId);
-                for(String s:firedUsers){
-                    getUserById(s).removeStore(storeId);
+                for (String s : firedUsers) {
+                    RegisteredUser user = getUserById(s);
+                    user.removeStore(storeId);
+                    userRepository.update(user); // <-- update each fired user
                 }
-                getUserById(ownerId).removeStore(storeId);
+
+                RegisteredUser owner = getUserById(ownerId);
+                owner.removeStore(storeId);
+                userRepository.update(owner);
+
+                storeRepository.update(store);
             }
             return true;
         }
@@ -161,36 +171,37 @@ public class StoreManagementMicroservice {
         }
         return false;
     }
-        public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
-            if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
+
+    public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
+        if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
+            return false;
+        }
+
+
+        Store store = getStoreById(storeId); // Make sure getStoreById uses your StoreRepository
+        synchronized (store) {
+            //if (store.userIsOwner(userId) || store.userIsManager(userId)) {
+            //    return false;
+            //}
+            store.addManager(appointerId, userId, permissions);
+            // Changes to 'store' will be automatically flushed by the @Transactional context
+
+            // --- IMPORTANT CHANGE HERE ---
+            RegisteredUser managerUser = getUserById(userId); // Get the user object
+            if (managerUser == null) {
+                // Handle case where user is not found (e.g., log error, throw exception, return false)
+                System.err.println("Error: User with ID " + userId + " not found for manager appointment.");
                 return false;
             }
+            managerUser.addManagedStore(storeId); // Modify the user object in memory
 
+            // Explicitly save the modified user object to persist changes
+            // This 'save' operation will participate in the transaction started by the ServiceLayer.
+            userRepository.save(managerUser); // <--- ADD THIS LINE!
 
-            Store store = getStoreById(storeId); // Make sure getStoreById uses your StoreRepository
-            synchronized (store) {
-                //if (store.userIsOwner(userId) || store.userIsManager(userId)) {
-                //    return false;
-                //}
-                store.addManager(appointerId, userId, permissions);
-                // Changes to 'store' will be automatically flushed by the @Transactional context
-
-                // --- IMPORTANT CHANGE HERE ---
-                RegisteredUser managerUser = getUserById(userId); // Get the user object
-                if (managerUser == null) {
-                    // Handle case where user is not found (e.g., log error, throw exception, return false)
-                    System.err.println("Error: User with ID " + userId + " not found for manager appointment.");
-                    return false;
-                }
-                managerUser.addManagedStore(storeId); // Modify the user object in memory
-
-                // Explicitly save the modified user object to persist changes
-                // This 'save' operation will participate in the transaction started by the ServiceLayer.
-                userRepository.save(managerUser); // <--- ADD THIS LINE!
-
-                return true;
-            }
+            return true;
         }
+    }
     /**
      * Sends a proposal to a user to appoint them as a manager for a store.
      * The method checks if the store and user exist, and ensures the user is not already an owner
@@ -253,6 +264,8 @@ public class StoreManagementMicroservice {
             synchronized (store) {
                 store.terminateManagment(managerId);
                 getUserById(managerId).removeStore(storeId);
+                userRepository.update(getUserById(managerId));
+                storeRepository.update(store);
             }
             return true;
         }
@@ -396,7 +409,10 @@ public class StoreManagementMicroservice {
         if (!store.isFounder(managerId) && store.userIsManager(managerId)) {
             synchronized (store) {
                 store.terminateManagment(managerId);
-                userRepository.getById(managerId).removeStore(storeId);
+                RegisteredUser manager = userRepository.getById(managerId);
+                manager.removeStore(storeId);
+                userRepository.update(manager);       // <-- added update for user
+                storeRepository.update(store);        // <-- added update for store
             }
             return true;
         }
