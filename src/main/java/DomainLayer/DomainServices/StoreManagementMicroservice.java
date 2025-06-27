@@ -92,6 +92,7 @@ public class StoreManagementMicroservice {
             if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
             store.addOwner(appointerId, userId);
             getUserById(userId).addOwnedStore(storeId);
+
             return true;
         }
     }
@@ -129,6 +130,11 @@ public class StoreManagementMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean removeStoreOwner(String removerId, String storeId, String ownerId) {
+
+        if(!checkPermission(removerId,storeId, PERM_MANAGE_STAFF)) {
+            return false;
+        }
+
         Store store = getStoreById(storeId);
         if(store.checkIfSuperior(removerId,ownerId)){
             synchronized (store) {

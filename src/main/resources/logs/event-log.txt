@@ -388,3 +388,47 @@
 [2025-06-27 16:06:45] User: a | Event: Event | Description: SIGNUP_FAILED
 [2025-06-27 16:06:56] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
 [2025-06-27 16:06:56] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:24:35] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:24:35] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:24:37] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 16:24:50] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:24:50] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:24:52] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:24:53] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:24:53] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:24:54] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:24:54] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:24:55] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:24:55] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:24:58] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:24:58] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:24:59] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:24:59] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:24:59] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:25:00] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:25:00] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:25:10] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:25:10] User: a | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:25:31] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:25:31] User: a | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:25:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:25:32] User: a | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:25:46] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:25:46] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:48:12] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:48:12] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:48:14] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:48:14] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:48:14] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:48:15] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:48:15] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:48:26] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:48:27] User: a | Event: Event | Description: REMOVE_OWNER_FAILED could not delete collection rows: [DomainLayer.Store.ownerToSubordinates#cd2c204b-9c4c-49e2-8895-bb0d96b3c790]; SQL [update store_owner_subordinates set store_id=null where store_id=? and owner_id=?]
+[2025-06-27 16:48:40] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:48:40] User: a | Event: Event | Description: REMOVE_OWNER_FAILED could not delete collection rows: [DomainLayer.Store.ownerToSubordinates#cd2c204b-9c4c-49e2-8895-bb0d96b3c790]; SQL [update store_owner_subordinates set store_id=null where store_id=? and owner_id=?]
+[2025-06-27 16:48:41] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:48:41] User: a | Event: Event | Description: REMOVE_OWNER_FAILED could not delete collection rows: [DomainLayer.Store.ownerToSubordinates#cd2c204b-9c4c-49e2-8895-bb0d96b3c790]; SQL [update store_owner_subordinates set store_id=null where store_id=? and owner_id=?]
+[2025-06-27 16:48:42] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:48:42] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:48:47] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:48:47] User: a | Event: Event | Description: REMOVE_OWNER_FAILED could not delete collection rows: [DomainLayer.Store.ownerToSubordinates#cd2c204b-9c4c-49e2-8895-bb0d96b3c790]; SQL [update store_owner_subordinates set store_id=null where store_id=? and owner_id=?]
