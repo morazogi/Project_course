@@ -56,6 +56,7 @@ public class StoreManagementMicroservice {
         }
         return RegisteredUser;
     }
+
     // Add permission check method
     private boolean checkPermission(String userId, String storeId, String permissionType) {
         Store store = getStoreById(storeId);

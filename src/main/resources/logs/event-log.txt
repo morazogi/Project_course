@@ -1136,3 +1136,33 @@
 [2025-06-27 11:30:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
 [2025-06-27 11:30:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-27 11:30:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:11:45] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 16:11:49] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 16:11:51] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:11:51] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:11:55] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:11:55] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:11:55] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:11:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:11:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:11:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 16:11:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 16:12:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:12:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:12:00] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 16:12:00] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 16:12:04] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-27 16:12:04] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-27 16:12:04] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-27 16:12:04] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-27 16:12:04] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 16:12:04] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 16:12:04] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-27 16:12:05] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:12:05] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=cace4da8-960b-42f4-abeb-6bb7cc338ef6 FOUND
+[2025-06-27 16:12:05] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=23bce8b3-5902-442f-8fdc-b98a042b4c17 FOUND
+[2025-06-27 16:12:05] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=cace4da8-960b-42f4-abeb-6bb7cc338ef6 FOUND
+[2025-06-27 16:12:05] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 16:12:05] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-27 16:12:05] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 16:12:05] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
