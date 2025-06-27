@@ -104,29 +104,29 @@ public class AdminOperationsMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean suspendMember(String adminId, String userId) {
-        // Verify admin permissions
-        if (!isSystemAdmin(adminId)) {
-            return false;
-        }
+        if (!isSystemAdmin(adminId)) return false;
         try {
-            // Get all stores where user has roles
             RegisteredUser user = userRepository.getById(userId);
-            List<String> userManagedStores = user.getManagedStores();
-            List<String> userOwnedStores = user.getOwnedStores();
-            // Revoke all roles in all stores
-            for (String StoreID : userManagedStores) {
-                getStoreById(StoreID).terminateManagment(userId);
-            }
-            for (String StoreID : userOwnedStores) {
-                getStoreById(StoreID).terminateOwnership(userId);
-            }
 
-            // Remove user membership
+            List<String> managed = user.getManagedStores() == null
+                    ? new ArrayList<>() : user.getManagedStores();
+            List<String> owned   = user.getOwnedStores()   == null
+                    ? new ArrayList<>() : user.getOwnedStores();
+
+            for (String sId : managed) {
+                Store s = getStoreById(sId);
+                if (s != null) s.terminateManagment(userId);
+            }
+            for (String sId : owned) {
+                Store s = getStoreById(sId);
+                if (s != null) s.terminateOwnership(userId);
+            }
             return true;
         } catch (Exception e) {
             return false;
         }
     }
+
     public boolean unSuspendMember(String adminId, String userId) {
         if (!isSystemAdmin(adminId)) {
             return false;

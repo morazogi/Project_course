@@ -2,6 +2,7 @@ package DomainLayer.DomainServices;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
@@ -26,11 +27,14 @@ public class OpenStore {
         }
         Tokener.validateToken(token);
         String username = Tokener.extractUsername(token);
-        if (userRepository.getById(username) == null) {
-            throw new IllegalArgumentException("User does not exist");
-        }
-        Store store = new Store(username, name);
-        storeRepository.save(store);
-        return store.getId();
+            RegisteredUser user = userRepository.getById(username);
+            String userId = user.getShoppingCart().getUserId();
+            if (userRepository.getById(username) == null) {
+                throw new IllegalArgumentException("User does not exist");
+            }
+            Store store = new Store(username, name);
+            store.setFounder(userId);
+            storeRepository.save(store);
+            return store.getId();
     }
 }

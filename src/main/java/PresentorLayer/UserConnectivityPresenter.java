@@ -52,6 +52,11 @@ public class UserConnectivityPresenter {
         userService.purchaseCart(token, name, cardNumber, expirationDate, cvv, state, city, address, id, zip);
     }
 
+
+    public List<ShoppingBag> getShoppingBags(String token) {
+                return userService.getShoppingCart(token);
+            }
+
     public void addStore(String token, String storeName) throws Exception {
         String storeId = registeredService.openStore(token, storeName);
         System.out.println(storeId);
@@ -64,7 +69,7 @@ public class UserConnectivityPresenter {
             System.out.println("dfsa");
         }
         System.out.println(ownerManagerService.appointStoreOwner(user.getUsername(), storeId, user.getUsername()));
-        boolean[] arr = new boolean[7];
+        boolean[] arr = new boolean[9];
         arr[0] = true;
         arr[1] = true;
         arr[2] = true;
@@ -72,6 +77,8 @@ public class UserConnectivityPresenter {
         arr[4] = true;
         arr[5] = true;
         arr[6] = true;
+        arr[7] = true;
+        arr[8] = true;
         System.out.println(ownerManagerService.appointStoreManager(user.getUsername(), storeId, user.getUsername(), arr));
         username = tokenService.extractUsername(token);
         user = null;
@@ -82,6 +89,15 @@ public class UserConnectivityPresenter {
         }
 
         //System.out.println(mapper.writeValueAsString(user));
+    }
+
+
+    public void removeFromCart(String token,
+                               String storeId,
+                               String productId,
+                               int quantity) {
+
+        userService.removeFromCart(token, storeId, productId, quantity);
     }
 
     public String getInformationAboutProduct(String token, String storeName, String productName) {
@@ -322,6 +338,38 @@ public class UserConnectivityPresenter {
 
     public String getUsername(String token) {
         return tokenService.extractUsername(token);
+    }
+
+    public String openStore(String token, String storeId) {
+        String username = "";
+        try {
+            username = tokenService.extractUsername(token);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+        return ownerManagerService.reopenStore(user.getShoppingCart().getUserId(), storeId);
+    }
+
+    public String closeStore(String token, String storeId) {
+        String username = "";
+        try {
+            username = tokenService.extractUsername(token);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        RegisteredUser user = null;
+        try {
+            user = userRepository.getById(username);
+        } catch (Exception e) {
+            Notification.show(e.getMessage());
+        }
+        return ownerManagerService.closeStore(user.getShoppingCart().getUserId(), storeId);
     }
 
 }

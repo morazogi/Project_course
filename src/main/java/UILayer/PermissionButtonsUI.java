@@ -34,7 +34,7 @@ public class PermissionButtonsUI extends VerticalLayout {
             hasAnyPermission = true;
         }
         if (perms.getPermission(ManagerPermissions.PERM_ADD_PRODUCT)) {
-            buttonLayout2.add(new Button("➕ Add Product", e -> {
+            buttonLayout1.add(new Button("➕ Add Product", e -> {
                 TextField productName = new TextField("product name");
                 TextField description = new TextField("description");
                 TextField price = new TextField("price");
@@ -81,6 +81,21 @@ public class PermissionButtonsUI extends VerticalLayout {
             buttonLayout2.add(new Button("📝 Update Policy"));
             hasAnyPermission = true;
         }
+        if (perms.getPermission(ManagerPermissions.PERM_OPEN_STORE)) {
+            buttonLayout2.add(new Button("open store", e -> {
+                add(new Span(userConnectivityPresenter.openStore(token, storeName.getId())));
+            }));
+            hasAnyPermission = true;
+        }
+
+        if (perms.getPermission(ManagerPermissions.PERM_CLOSE_STORE)) {
+            buttonLayout2.add(new Button("close store", e -> {
+                add(new Span(userConnectivityPresenter.closeStore(token, storeName.getId())));
+            }));
+            hasAnyPermission = true;
+        }
+
+
 
         if (!hasAnyPermission) {
             add(new Paragraph("⚠️ You currently don’t have permissions for any store management actions. Contact the store owner to update your role."));

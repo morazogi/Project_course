@@ -89,6 +89,15 @@ public class Product {
     }
 
     public boolean addRating(String username, double rate) {
-        return false;
+                if (rate < 1 || rate > 5) return false;
+
+                        /* very small, stateless average: old+new / 2
+           (good enough until you introduce a proper ratings table) */
+                if (this.rating == 0)
+                        this.rating = rate;
+                else
+                    this.rating = (this.rating + rate) / 2.0;
+
+                        return true;
     }
 }

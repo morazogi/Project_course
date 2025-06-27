@@ -16,6 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -32,12 +35,13 @@ class RateTest {
     @Mock UserRepository    userRepo;
     @Mock ProductRepository productRepo;
 
-    private Rate service;            // system under test
-    private final RegisteredUser dummyUser = Mockito.mock(RegisteredUser.class);
+    private Rate service;                      // system under test
+    private RegisteredUser dummyUser;          // will be spied per-test
 
     @BeforeEach
     void init() {
-        service = new Rate(tokener, storeRepo, userRepo, productRepo);
+        service   = new Rate(tokener, storeRepo, userRepo, productRepo);
+        dummyUser = Mockito.mock(RegisteredUser.class);
     }
 
     /* =============================================================
@@ -72,7 +76,6 @@ class RateTest {
         when(tokener.extractUsername("tok")).thenReturn("user");
         doNothing().when(tokener).validateToken("tok");
         when(storeRepo.getById("noStore")).thenReturn(null);
-
         when(userRepo.getById("user")).thenReturn(dummyUser);
 
         assertThrows(IllegalArgumentException.class,
@@ -83,7 +86,7 @@ class RateTest {
                            rateProduct
        ============================================================= */
     @Test
-    void rateProduct_happyPath_savesAndReturnsTrue() {
+    void rateProduct_happyPath_removesFromListAndSaves() {
         String token = "tok";
         String user  = "bob";
         String pid   = "p1";
@@ -93,15 +96,23 @@ class RateTest {
 
         Product prod = mock(Product.class);
         when(productRepo.getById(pid)).thenReturn(prod);
+
+        /* user owns that product */
+        List<String> products = new ArrayList<>(List.of(pid));
+        when(dummyUser.getProducts()).thenReturn(products);
         when(userRepo.getById(user)).thenReturn(dummyUser);
-        when(prod.addRating(user, 5)).thenReturn(true);
+        when(prod.addRating(user, 5)).thenReturn(true);   // ignored but harmless
 
         assertTrue(service.rateProduct(token, pid, 5));
         verify(productRepo).save(prod);
+        verify(userRepo).update(dummyUser);
+
+        /* product ID must have been removed */
+        assertFalse(products.contains(pid));
     }
 
     @Test
-    void rateProduct_duplicateRating_returnsFalseAndNoSave() {
+    void rateProduct_notPurchasedOrAlreadyRated_throws() {
         String token = "tok";
         String user  = "bob";
         String pid   = "p1";
@@ -111,10 +122,16 @@ class RateTest {
 
         Product prod = mock(Product.class);
         when(productRepo.getById(pid)).thenReturn(prod);
-        when(userRepo.getById(user)).thenReturn(dummyUser);
-        when(prod.addRating(user, 4)).thenReturn(false);        // already rated
 
-        assertFalse(service.rateProduct(token, pid, 4));
+        /* user does NOT own that product */
+        List<String> products = new ArrayList<>();        // empty list
+        when(dummyUser.getProducts()).thenReturn(products);
+        when(userRepo.getById(user)).thenReturn(dummyUser);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> service.rateProduct(token, pid, 4));
+
         verify(productRepo, never()).save(any());
+        verify(userRepo,  never()).update(any());
     }
 }

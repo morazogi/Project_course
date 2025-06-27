@@ -7,6 +7,7 @@ import DomainLayer.ShoppingCart;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Entity
+@PrimaryKeyJoinColumn(name = "username")
 @Table(name = "registered_users")
 public class RegisteredUser extends Guest {
 
@@ -25,6 +26,11 @@ public class RegisteredUser extends Guest {
     @CollectionTable(name = "managed_stores", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "store_id")
     private List<String> managedStores = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_purchased_products", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "product_id")
+    private List<String> products = new ArrayList<>();
 
     @Column(name = "hashed_password",nullable = false)
     private String hashedPassword;
@@ -57,6 +63,9 @@ public class RegisteredUser extends Guest {
     public void addManagedStore(String storeId) {
         managedStores.add(storeId);
     }
+    public void addProduct(String productId) {
+        products.add(productId);
+    }
     public void removeStore(String storeId) {
         this.ownedStores.remove(storeId);
         this.managedStores.remove(storeId);
@@ -76,6 +85,9 @@ public class RegisteredUser extends Guest {
         this.managedStores = managedStores;
     }
 
+        public List<String> getProducts() {     // ← new
+                return products;
+            }
 
     public boolean isOwnerOf(String storeId) {
         return ownedStores.contains(storeId);

@@ -281,7 +281,7 @@ public class StoreManagementMicroservice {
             }
             return true;
         }
-        return false;
+        throw new RuntimeException("User is not store founder");
     }
     /**
      * Reopen a store
@@ -291,13 +291,13 @@ public class StoreManagementMicroservice {
      */
     public boolean reopenStore(String founderId, String storeId) {
         Store store = getStoreById(storeId);
-        if (store.isFounder(founderId)){
+        if (store.isFounder(founderId)) {
             synchronized (store) {
                 store.openTheStore();
             }
             return true;
         }
-        return false;
+        throw new RuntimeException("User is not store founder");
     }
     /**
      * Get information about store roles

@@ -1,7 +1,6 @@
 package UILayer;
 
 import DomainLayer.IToken;
-import DomainLayer.Product;
 import DomainLayer.Store;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.StoreRepository;
@@ -21,20 +20,18 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /** Guest catalogue – now auto-creates a guest token and fully supports add-to-cart. */
 @Route("/guesthomepage")
 public class GuestHomePageUI extends VerticalLayout {
 
-    private final UserService    userService;
-    private final IToken         tokenService;
-    private final String         token;          // guest token we just created/loaded
+    private final UserService userService;
+    private final IToken      tokenService;
+    private final String      token;          // guest token we just created/loaded
 
     /* grid data */
-    private Grid<ProductRow>                grid;
-    private ListDataProvider<ProductRow>    dataProvider;
+    private Grid<ProductRow>             grid;
+    private ListDataProvider<ProductRow> dataProvider;
 
     @Autowired
     public GuestHomePageUI(UserService userService,
@@ -48,7 +45,7 @@ public class GuestHomePageUI extends VerticalLayout {
 
         this.userService  = userService;
         this.tokenService = tokenService;
-        this.token        = ensureGuestToken();          // ← NEW
+        this.token        = ensureGuestToken();
 
         ButtonPresenter buttons = new ButtonPresenter(registeredService, tokenService);
         connectToWebSocket(token);
@@ -80,13 +77,9 @@ public class GuestHomePageUI extends VerticalLayout {
 
     /* ---------- helper: guarantee non-null token ---------- */
     private String ensureGuestToken() {
-        String t = (String) UI.getCurrent().getSession().getAttribute("token");
-        if (t == null) {                                              // first time for this browser tab
-            String guestUsername = "Guest";
-            t = tokenService.generateToken(guestUsername);            // generate valid token
-            UI.getCurrent().getSession().setAttribute("token", t);
-        }
-        return t;
+        UI.getCurrent().getSession().setAttribute("token",
+                tokenService.generateToken("Guest"));
+        return (String) UI.getCurrent().getSession().getAttribute("token");
     }
 
     /* ---------- filter ---------- */
@@ -98,18 +91,21 @@ public class GuestHomePageUI extends VerticalLayout {
     }
 
     /* ---------- load catalogue ---------- */
-    private List<ProductRow> loadRows(StoreRepository storeRepo, ProductRepository productRepo) {
+    private List<ProductRow> loadRows(StoreRepository storeRepo,
+                                      ProductRepository productRepo) {
         List<ProductRow> rows = new ArrayList<>();
         for (Store s : storeRepo.getAll()) {
-            String storeId   = s.getId();
-            String storeName = s.getName();
+            String storeId     = s.getId();
+            String storeName   = s.getName();
+            double storeRating = s.getRating();
             for (Map.Entry<String,Integer> e : s.getProducts().entrySet()) {
                 String productId = e.getKey();
-                int qty          = e.getValue();
+                int    qty       = e.getValue();
                 productRepo.findById(productId).ifPresent(p ->
                         rows.add(new ProductRow(storeId, storeName,
                                 productId, p.getName(),
-                                qty, p.getPrice())));
+                                qty, p.getPrice(),
+                                storeRating, p.getRating())));
             }
         }
         return rows;
@@ -118,10 +114,12 @@ public class GuestHomePageUI extends VerticalLayout {
     /* ---------- grid ---------- */
     private Grid<ProductRow> buildGrid() {
         Grid<ProductRow> g = new Grid<>();
-        g.addColumn(ProductRow::storeName) .setHeader("Store").setAutoWidth(true);
-        g.addColumn(ProductRow::productName).setHeader("Product");
-        g.addColumn(ProductRow::quantity)   .setHeader("Qty");
-        g.addColumn(ProductRow::price)      .setHeader("Price");
+        g.addColumn(ProductRow::storeName)     .setHeader("Store").setAutoWidth(true);
+        g.addColumn(ProductRow::productName)   .setHeader("Product");
+        g.addColumn(ProductRow::quantity)      .setHeader("Qty");
+        g.addColumn(ProductRow::price)         .setHeader("Price");
+        g.addColumn(ProductRow::storeRating)   .setHeader("Store ★").setAutoWidth(true);
+        g.addColumn(ProductRow::productRating) .setHeader("Product ★").setAutoWidth(true);
         g.addComponentColumn(row -> {
             Button add = new Button("Add to cart", e -> {
                 String msg = userService.addToCart(token,
@@ -136,13 +134,14 @@ public class GuestHomePageUI extends VerticalLayout {
         return g;
     }
 
-    /* DTO */
-    public record ProductRow(String storeId, String storeName,
-                             String productId, String productName,
-                             int quantity, float price) {}
+        /* DTO – now includes ratings */
+        public record ProductRow(String storeId,   String storeName,
+                                 String productId, String productName,
+                                 int quantity,     float  price,
+                                 double storeRating, double productRating) {}
 
-    public void connectToWebSocket(String token) {
-        UI.getCurrent().getPage().executeJs("""
+        public void connectToWebSocket(String token) {
+            UI.getCurrent().getPage().executeJs("""
                 window._shopWs?.close();
                 window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
                 window._shopWs.onmessage = ev => {
@@ -155,5 +154,7 @@ public class GuestHomePageUI extends VerticalLayout {
                   n.opened = true;
                 };
                 """, token);
+        }
+
+
     }
-}

@@ -6,204 +6,185 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Unit tests for {@link OwnerManagerService} that verify its façade logic
- * without touching real micro-service internals.  We intercept each inner
- * micro-service with {@code Mockito.mockConstruction}.
+ * Unit-tests for {@link OwnerManagerService}.
+ *
+ * <p>The real service creates its own micro-services in the constructor, so we
+ * build the instance normally and then <em>replace</em> those micro-services
+ * with Mockito mocks via {@link ReflectionTestUtils}.</p>
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class OwnerManagerServiceTest {
 
-    /* -------- repositories injected into the service ctor -------- */
-    @Mock UserRepository      userRepo;
-    @Mock StoreRepository     storeRepo;
-    @Mock ProductRepository   productRepo;
-    @Mock OrderRepository     orderRepo;
-    @Mock DiscountRepository  discountRepo;
+    // ─── Repositories (constructor parameters) ──────────────────────────────────
+    @Mock UserRepository            userRepository;
+    @Mock StoreRepository           storeRepository;
+    @Mock ProductRepository         productRepository;
+    @Mock OrderRepository           orderRepository;
+    @Mock DiscountRepository        discountRepository;
 
-    /* -- will be built fresh in each test (inside try-with-resources) -- */
+    // ─── Micro-services we want to verify ───────────────────────────────────────
+    @Mock InventoryManagementMicroservice inventoryService;
+    @Mock PurchasePolicyMicroservice      purchasePolicyService;
+    @Mock DiscountPolicyMicroservice      discountPolicyService;
+    @Mock StoreManagementMicroservice     storeManagementService;
+    @Mock QueryMicroservice               notificationService;
+    @Mock PurchaseHistoryMicroservice     purchaseHistoryService;
+
     private OwnerManagerService service;
 
-    /* ================================================================
-                                 addProduct
-       ================================================================ */
+    @BeforeEach
+    void setUp() {
+        service = new OwnerManagerService(
+                userRepository, storeRepository, productRepository,
+                orderRepository, discountRepository);
+
+        // swap-in the mocks created above
+        ReflectionTestUtils.setField(service, "inventoryService",        inventoryService);
+        ReflectionTestUtils.setField(service, "purchasePolicyService",   purchasePolicyService);
+        ReflectionTestUtils.setField(service, "discountPolicyService",   discountPolicyService);
+        ReflectionTestUtils.setField(service, "storeManagementService",  storeManagementService);
+        ReflectionTestUtils.setField(service, "notificationService",     notificationService);
+        ReflectionTestUtils.setField(service, "purchaseHistoryService",  purchaseHistoryService);
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────
+    //  Inventory management
+    // ────────────────────────────────────────────────────────────────────────────
+
     @Test
-    void addProduct_happyPath_returnsProductId() throws Exception {
-        try (MockedConstruction<InventoryManagementMicroservice> invMock =
-                     Mockito.mockConstruction(InventoryManagementMicroservice.class,
-                             (mock, ctx) ->
-                                     when(mock.addProduct(
-                                             eq("owner-1"), eq("store-1"),
-                                             eq("Beer"), eq("Cold brew"),
-                                             eq(12f), eq(20), eq("Drinks")
-                                     )).thenReturn("prod-123"));
-             /* the other micro-services are constructed but not used here,
-                so we don’t need to stub behaviour – just intercept them */
-             MockedConstruction<PurchasePolicyMicroservice> _1 =
-                     Mockito.mockConstruction(PurchasePolicyMicroservice.class);
-             MockedConstruction<DiscountPolicyMicroservice> _2 =
-                     Mockito.mockConstruction(DiscountPolicyMicroservice.class);
-             MockedConstruction<StoreManagementMicroservice> _3 =
-                     Mockito.mockConstruction(StoreManagementMicroservice.class);
-             MockedConstruction<QueryMicroservice> _4 =
-                     Mockito.mockConstruction(QueryMicroservice.class);
-             MockedConstruction<PurchaseHistoryMicroservice> _5 =
-                     Mockito.mockConstruction(PurchaseHistoryMicroservice.class))
-        {
-            service = new OwnerManagerService(userRepo, storeRepo, productRepo,
-                    orderRepo, discountRepo);
+    void addProduct_success_returnsProductId() {
+        when(inventoryService.addProduct(
+                "owner", "store", "TV", "Nice", 99.9f, 5, "ELEC"))
+                .thenReturn("prod-123");
 
-            String id = service.addProduct(
-                    "owner-1", "store-1", "Beer", "Cold brew",
-                    12f, 20, "Drinks");
+        String id = service.addProduct("owner", "store",
+                "TV", "Nice", 99.9f, 5, "ELEC");
 
-            assertEquals("prod-123", id);
-            // verify the delegation really happened
-            InventoryManagementMicroservice inv =
-                    invMock.constructed().get(0);
-            verify(inv).addProduct("owner-1", "store-1",
-                    "Beer", "Cold brew",
-                    12f, 20, "Drinks");
-        }
+        assertEquals("prod-123", id);
+        verify(inventoryService).addProduct("owner","store",
+                "TV","Nice",99.9f,5,"ELEC");
     }
 
     @Test
-    void addProduct_whenInnerThrows_returnsNull() {
-        try (MockedConstruction<InventoryManagementMicroservice> invMock =
-                     Mockito.mockConstruction(InventoryManagementMicroservice.class,
-                             (mock, ctx) -> when(mock.addProduct(any(), any(), any(), any(),
-                                     anyFloat(), anyInt(), any()))
-                                     .thenThrow(new RuntimeException("boom")));
-             MockedConstruction<PurchasePolicyMicroservice> _1 =
-                     Mockito.mockConstruction(PurchasePolicyMicroservice.class);
-             MockedConstruction<DiscountPolicyMicroservice> _2 =
-                     Mockito.mockConstruction(DiscountPolicyMicroservice.class);
-             MockedConstruction<StoreManagementMicroservice> _3 =
-                     Mockito.mockConstruction(StoreManagementMicroservice.class);
-             MockedConstruction<QueryMicroservice> _4 =
-                     Mockito.mockConstruction(QueryMicroservice.class);
-             MockedConstruction<PurchaseHistoryMicroservice> _5 =
-                     Mockito.mockConstruction(PurchaseHistoryMicroservice.class))
-        {
-            service = new OwnerManagerService(userRepo, storeRepo, productRepo,
-                    orderRepo, discountRepo);
+    void addProduct_failure_returnsNull() {
+        when(inventoryService.addProduct(any(), any(), any(), any(), anyFloat(), anyInt(), any()))
+                .thenThrow(new RuntimeException("db down"));
 
-            String result = service.addProduct(
-                    "owner-1", "store-1", "Fail", "desc", 5f, 1, "Misc");
+        String id = service.addProduct("o","s","X","Y",1f,1,"C");
 
-            assertNull(result);  // facade converts exception → null
-        }
+        assertNull(id);
     }
 
-    /* ================================================================
-                          appointStoreOwner
-       ================================================================ */
     @Test
-    void appointStoreOwner_success_returnsTrue() {
-        try (MockedConstruction<InventoryManagementMicroservice> _inv =
-                     Mockito.mockConstruction(InventoryManagementMicroservice.class);
-             MockedConstruction<PurchasePolicyMicroservice> _1 =
-                     Mockito.mockConstruction(PurchasePolicyMicroservice.class);
-             MockedConstruction<DiscountPolicyMicroservice> _2 =
-                     Mockito.mockConstruction(DiscountPolicyMicroservice.class);
-             MockedConstruction<StoreManagementMicroservice> smMock =
-                     Mockito.mockConstruction(StoreManagementMicroservice.class,
-                             (mock, ctx) ->
-                                     when(mock.appointStoreOwner("alice", "store-1", "bob"))
-                                             .thenReturn(true));
-             MockedConstruction<QueryMicroservice> _4 =
-                     Mockito.mockConstruction(QueryMicroservice.class);
-             MockedConstruction<PurchaseHistoryMicroservice> _5 =
-                     Mockito.mockConstruction(PurchaseHistoryMicroservice.class))
-        {
-            service = new OwnerManagerService(userRepo, storeRepo, productRepo,
-                    orderRepo, discountRepo);
+    void removeProduct_success_returnsFriendlyMessage() {
+        when(inventoryService.removeProduct("owner","store","prod"))
+                .thenReturn(true);
 
-            boolean ok = service.appointStoreOwner("alice", "store-1", "bob");
+        String msg = service.removeProduct("owner","store","prod");
 
-            assertTrue(ok);
-            StoreManagementMicroservice sm = smMock.constructed().get(0);
-            verify(sm).appointStoreOwner("alice", "store-1", "bob");
-        }
+        assertEquals("Removed product", msg);
     }
 
-    /* ================================================================
-                              removeProduct
-       ================================================================ */
     @Test
-    void removeProduct_failure_returnsFalse() {
-        try (MockedConstruction<InventoryManagementMicroservice> invMock =
-                     Mockito.mockConstruction(InventoryManagementMicroservice.class,
-                             (mock, ctx) ->
-                                     when(mock.removeProduct(any(), any(), any()))
-                                             .thenThrow(new RuntimeException("nope")));
-             MockedConstruction<PurchasePolicyMicroservice> _1 =
-                     Mockito.mockConstruction(PurchasePolicyMicroservice.class);
-             MockedConstruction<DiscountPolicyMicroservice> _2 =
-                     Mockito.mockConstruction(DiscountPolicyMicroservice.class);
-             MockedConstruction<StoreManagementMicroservice> _3 =
-                     Mockito.mockConstruction(StoreManagementMicroservice.class);
-             MockedConstruction<QueryMicroservice> _4 =
-                     Mockito.mockConstruction(QueryMicroservice.class);
-             MockedConstruction<PurchaseHistoryMicroservice> _5 =
-                     Mockito.mockConstruction(PurchaseHistoryMicroservice.class))
-        {
-            service = new OwnerManagerService(userRepo, storeRepo, productRepo,
-                    orderRepo, discountRepo);
+    void removeProduct_notRemoved_returnsFailureMessage() {
+        when(inventoryService.removeProduct(any(), any(), any()))
+                .thenReturn(false);
 
-            String ok = service.removeProduct("owner-1", "store-1", "prod-x");
+        String msg = service.removeProduct("o","s","p");
 
-            assertFalse(ok == "");     // exception → false
-        }
+        assertEquals("Failed to remove product", msg);
     }
 
-    /* ================================================================
-                          getManagerPermissions
-       ================================================================ */
     @Test
-    void getManagerPermissions_happy_returnsMap() {
-        Map<String, Boolean> perms = Map.of("view", true, "edit", false);
+    void updateProductDetails_success_returnsFriendlyMessage() {
+        when(inventoryService.updateProductDetails(
+                "owner","store","prod","New","Desc",5.0,"CAT")).thenReturn(true);
 
-        try (MockedConstruction<InventoryManagementMicroservice> _inv =
-                     Mockito.mockConstruction(InventoryManagementMicroservice.class);
-             MockedConstruction<PurchasePolicyMicroservice> _1 =
-                     Mockito.mockConstruction(PurchasePolicyMicroservice.class);
-             MockedConstruction<DiscountPolicyMicroservice> _2 =
-                     Mockito.mockConstruction(DiscountPolicyMicroservice.class);
-             MockedConstruction<StoreManagementMicroservice> smMock =
-                     Mockito.mockConstruction(StoreManagementMicroservice.class,
-                             (mock, ctx) ->
-                                     when(mock.getManagerPermissions(
-                                             "alice", "store-1", "mgr-1"))
-                                             .thenReturn(perms));
-             MockedConstruction<QueryMicroservice> _4 =
-                     Mockito.mockConstruction(QueryMicroservice.class);
-             MockedConstruction<PurchaseHistoryMicroservice> _5 =
-                     Mockito.mockConstruction(PurchaseHistoryMicroservice.class))
-        {
-            service = new OwnerManagerService(userRepo, storeRepo, productRepo,
-                    orderRepo, discountRepo);
+        String msg = service.updateProductDetails(
+                "owner","store","prod","New","Desc",5.0,"CAT");
 
-            Map<String, Boolean> result =
-                    service.getManagerPermissions("alice", "store-1", "mgr-1");
+        assertEquals("Updated product details", msg);
+    }
 
-            assertEquals(perms, result);
-            StoreManagementMicroservice sm = smMock.constructed().get(0);
-            verify(sm).getManagerPermissions("alice", "store-1", "mgr-1");
-        }
+    @Test
+    void updateProductDetails_failure_returnsFailureMessage() {
+        when(inventoryService.updateProductDetails(any(),any(),any(),any(),any(),anyDouble(),any()))
+                .thenReturn(false);
+
+        String msg = service.updateProductDetails("o","s","p",null,null,-1,"C");
+
+        assertEquals("Failed to update product details", msg);
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────
+    //  Purchase policy
+    // ────────────────────────────────────────────────────────────────────────────
+
+    @Test
+    void definePurchasePolicy_success_returnsPolicyId() {
+        when(purchasePolicyService.definePurchasePolicy(
+                "owner","store","MinAge", Collections.emptyMap()))
+                .thenReturn("pol-7");
+
+        String id = service.definePurchasePolicy(
+                "owner","store","MinAge", Collections.emptyMap());
+
+        assertEquals("pol-7", id);
+    }
+
+    @Test
+    void updatePurchasePolicy_exception_returnsFalse() {
+        when(purchasePolicyService.updatePurchasePolicy(any(),any(),any(),any()))
+                .thenThrow(new RuntimeException("broken"));
+
+        boolean ok = service.updatePurchasePolicy(
+                "o","s","id", Map.of("k","v"));
+
+        assertFalse(ok);
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────
+    //  Store-owner flow
+    // ────────────────────────────────────────────────────────────────────────────
+
+    @Test
+    void appointStoreOwner_success() {
+        when(storeManagementService.appointStoreOwner("app","store","user"))
+                .thenReturn(true);
+
+        assertTrue(service.appointStoreOwner("app","store","user"));
+        verify(storeManagementService).appointStoreOwner("app","store","user");
+    }
+
+    @Test
+    void appointStoreOwner_failure() {
+        when(storeManagementService.appointStoreOwner(any(),any(),any()))
+                .thenThrow(new RuntimeException("boom"));
+
+        assertFalse(service.appointStoreOwner("a","s","u"));
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────
+    //  Role info – simple happy-path
+    // ────────────────────────────────────────────────────────────────────────────
+    @Test
+    void getStoreRoleInfo_success() {
+        when(storeManagementService.getStoreRoleInfo("owner","store"))
+                .thenReturn("{json:true}");
+
+        String json = service.getStoreRoleInfo("owner", "store");
+
+        assertEquals("{json:true}", json);
     }
 }

@@ -1,7 +1,9 @@
+/* ────────────────────────────────────────────────────────────────
+   src/main/java/UILayer/RegisteredUserHomePageUI.java
+   ──────────────────────────────────────────────────────────────── */
 package UILayer;
 
 import DomainLayer.IToken;
-import DomainLayer.Product;
 import DomainLayer.Store;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.StoreRepository;
@@ -29,26 +31,28 @@ import java.util.Map;
 @Route("/registeredhomepage")
 public class RegisteredUserHomePageUI extends VerticalLayout {
 
-    private final UserService          userService;
-    private final StoreRepository      storeRepo;
-    private final ProductRepository    productRepo;
-    private Grid<GuestHomePageUI.ProductRow> grid;
+    private final UserService       userService;
+    private final StoreRepository   storeRepo;
+    private final ProductRepository productRepo;
+
+    private Grid<GuestHomePageUI.ProductRow>           grid;
     private ListDataProvider<GuestHomePageUI.ProductRow> dataProvider;
 
+    /* ────────────────────────────────────────────────────────── */
     @Autowired
-    public RegisteredUserHomePageUI(UserService userService,
-                                    RegisteredService registeredService,
-                                    OwnerManagerService ownerMgrService,
-                                    IToken tokenService,
-                                    UserRepository userRepo,
-                                    StoreRepository storeRepo,
-                                    ProductRepository productRepo) {
+    public RegisteredUserHomePageUI(UserService          userService,
+                                    RegisteredService    registeredService,
+                                    OwnerManagerService  ownerMgrService,
+                                    IToken               tokenService,
+                                    UserRepository       userRepo,
+                                    StoreRepository      storeRepo,
+                                    ProductRepository    productRepo) {
 
         this.userService = userService;
         this.storeRepo   = storeRepo;
         this.productRepo = productRepo;
 
-        /* ----- guard ----- */
+        /* ---- access guard: redirect guests ---- */
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
         connectToWebSocket(token);
         String username;
@@ -59,17 +63,24 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
             return;
         }
 
+        /* ---- header bar ---------------------------------------------------- */
         ButtonPresenter buttons = new ButtonPresenter(registeredService, tokenService);
 
-        /* header */
-        add(new HorizontalLayout(
+        HorizontalLayout header = new HorizontalLayout(
                 new H4("👋 Hello, " + username),
                 buttons.signOutButton(token),
-                new Button("Store dashboard", e -> UI.getCurrent().navigate("/userhomepage")),
-                new Button("Shopping cart",  e -> UI.getCurrent().navigate("/purchasecartfinal"))
-        ));
+                new Button("Store dashboard",  e -> UI.getCurrent().navigate("/userhomepage")),
+                new Button("Shopping cart",    e -> UI.getCurrent().navigate("/purchasecartfinal")),
+                new Button("Rate my purchases",e -> UI.getCurrent().navigate("/rate"))
+        );
 
-        /* filter */
+        /* **Admin console** button only for user “1” */
+        if ("1".equals(username)) {
+            header.add(new Button("Admin console", e -> UI.getCurrent().navigate("/admin")));
+        }
+        add(header);
+
+        /* ---- inline filter ------------------------------------------------- */
         TextField filter = new TextField();
         filter.setPlaceholder("Filter by store or product…");
         filter.setClearButtonVisible(true);
@@ -77,7 +88,7 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
         filter.addValueChangeListener(e -> applyFilter(e.getValue()));
         add(filter);
 
-        /* grid */
+        /* ---- product grid -------------------------------------------------- */
         grid         = buildGrid();
         dataProvider = new ListDataProvider<>(loadRows());
         grid.setItems(dataProvider);
@@ -87,7 +98,7 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
         setSpacing(true);
     }
 
-    /* ---------- helpers ---------- */
+    /* ────────────────────────────────────────────────────────── */
     private void applyFilter(String text) {
         String q = text == null ? "" : text.trim().toLowerCase();
         dataProvider.setFilter(r ->
@@ -95,19 +106,22 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
                         r.productName().toLowerCase().contains(q));
     }
 
+    /* build list including ratings */
     private List<GuestHomePageUI.ProductRow> loadRows() {
         List<GuestHomePageUI.ProductRow> rows = new ArrayList<>();
         for (Store s : storeRepo.getAll()) {
-            String storeId   = s.getId();
-            String storeName = s.getName();
+            String  storeId     = s.getId();
+            String  storeName   = s.getName();
+            double  storeRating = s.getRating();
             for (Map.Entry<String,Integer> e : s.getProducts().entrySet()) {
                 String productId = e.getKey();
-                int qty          = e.getValue();
+                int    qty       = e.getValue();
                 productRepo.findById(productId).ifPresent(p ->
                         rows.add(new GuestHomePageUI.ProductRow(
-                                storeId, storeName,
-                                productId, p.getName(),
-                                qty, p.getPrice())));
+                                storeId,  storeName,
+                                productId,p.getName(),
+                                qty,      p.getPrice(),
+                                storeRating, p.getRating())));
             }
         }
         return rows;
@@ -127,23 +141,25 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
                 """, token);
     }
 
+    /* grid definition */
     private Grid<GuestHomePageUI.ProductRow> buildGrid() {
         Grid<GuestHomePageUI.ProductRow> g = new Grid<>();
-        g.addColumn(GuestHomePageUI.ProductRow::storeName).setHeader("Store").setAutoWidth(true);
-        g.addColumn(GuestHomePageUI.ProductRow::productName).setHeader("Product");
-        g.addColumn(GuestHomePageUI.ProductRow::quantity)   .setHeader("Qty");
-        g.addColumn(GuestHomePageUI.ProductRow::price)      .setHeader("Price");
+        g.addColumn(GuestHomePageUI.ProductRow::storeName)    .setHeader("Store").setAutoWidth(true);
+        g.addColumn(GuestHomePageUI.ProductRow::productName)  .setHeader("Product");
+        g.addColumn(GuestHomePageUI.ProductRow::quantity)     .setHeader("Quantity");
+        g.addColumn(GuestHomePageUI.ProductRow::price)        .setHeader("Price");
+        g.addColumn(GuestHomePageUI.ProductRow::storeRating)  .setHeader("Store ★").setAutoWidth(true);
+        g.addColumn(GuestHomePageUI.ProductRow::productRating).setHeader("Product ★").setAutoWidth(true);
+
         g.addComponentColumn(row -> {
-            Button btn = new Button("Add to cart", e -> {
-                String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                String msg   = userService.addToCart(token,
-                        row.storeId(),
-                        row.productId(),
-                        1);
+            Button add = new Button("Add to cart", e -> {
+                String tkn = (String) UI.getCurrent().getSession().getAttribute("token");
+                String msg = userService.addToCart(tkn, row.storeId(), row.productId(), 1);
                 Notification.show(msg);
             });
-            return btn;
+            return add;
         }).setHeader(new Span());
+
         g.setAllRowsVisible(true);
         return g;
     }

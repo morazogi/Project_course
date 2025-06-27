@@ -518,15 +518,18 @@ public class OwnerManagerService {
      * @return true if successful, false otherwise
      */
     @Transactional
-    public boolean closeStore(String founderId, String storeId) {
+    public String closeStore(String founderId, String storeId) {
         try {
             EventLogger.logEvent(founderId, "CLOSE_STORE_START");
             boolean result = storeManagementService.closeStore(founderId, storeId);
             EventLogger.logEvent(founderId, "CLOSE_STORE_SUCCESS");
-            return result;
+            if (result) {
+                return "Closed store";
+            }
+            return "Failed to close store";
         } catch (Exception e) {
             ErrorLogger.logError(founderId, "CLOSE_STORE_FAILED", e.getMessage());
-            return false;
+            return "Failed to close store" + e.getMessage();
         }
     }
 
@@ -539,15 +542,18 @@ public class OwnerManagerService {
      * @return true if successful, false otherwise
      */
     @Transactional
-    public boolean reopenStore(String founderId, String storeId) {
+    public String reopenStore(String founderId, String storeId) {
         try {
             EventLogger.logEvent(founderId, "REOPEN_STORE_START");
             boolean result = storeManagementService.reopenStore(founderId, storeId);
             EventLogger.logEvent(founderId, "REOPEN_STORE_SUCCESS");
-            return result;
+            if (result) {
+                return "Opened store";
+            }
+            return "Failed to open store";
         } catch (Exception e) {
             ErrorLogger.logError(founderId, "REOPEN_STORE_FAILED", e.getMessage());
-            return false;
+            return "Failed to open store" + e.getMessage();
         }
     }
 
