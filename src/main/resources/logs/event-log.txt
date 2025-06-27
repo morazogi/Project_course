@@ -148,3 +148,165 @@
 [2025-06-26 16:37:31] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-26 16:37:31] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
 [2025-06-26 16:37:31] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:43:28] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-26 16:43:28] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-26 16:43:32] User: a | Event: Event | Description: LOGIN
+[2025-06-26 16:43:32] User: a | Event: Event | Description: TokenService
+[2025-06-26 16:43:32] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-26 16:43:38] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-26 16:43:38] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=8237b4d3-776d-4f09-a33e-aebcb79120ea FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=da4e0aa2-d095-4278-bd15-85cb7abaa6c0 FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=a8bff53e-0a18-4715-bd5b-61d921e24eab FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=abb09d42-61aa-4d3d-8722-866ae2797d2f FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=d573af97-37eb-423f-becf-4107ae30226a FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=f74dfb52-57f0-44ca-ad5c-a4fb7696d12b FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=cd11a2b5-38f7-4fcb-8895-e15c0f06547e FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=521ba64d-73e4-47c3-8078-39d59d10d33a FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=e4140d01-1abc-4f83-9d3c-683420a93b0a FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=8237b4d3-776d-4f09-a33e-aebcb79120ea FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=da4e0aa2-d095-4278-bd15-85cb7abaa6c0 FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=a8bff53e-0a18-4715-bd5b-61d921e24eab FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=abb09d42-61aa-4d3d-8722-866ae2797d2f FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=d573af97-37eb-423f-becf-4107ae30226a FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=f74dfb52-57f0-44ca-ad5c-a4fb7696d12b FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=cd11a2b5-38f7-4fcb-8895-e15c0f06547e FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=521ba64d-73e4-47c3-8078-39d59d10d33a FOUND
+[2025-06-26 16:44:19] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=e4140d01-1abc-4f83-9d3c-683420a93b0a FOUND
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:44:19] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:54:28] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-26 16:54:28] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-26 16:54:34] User: a | Event: Event | Description: LOGIN
+[2025-06-26 16:54:34] User: a | Event: Event | Description: TokenService
+[2025-06-26 16:54:34] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-26 16:54:37] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-26 16:54:37] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-26 16:54:56] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-26 16:54:56] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-26 16:54:56] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-26 16:54:56] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-26 16:54:56] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:54:56] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:54:56] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-26 16:55:58] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-26 16:55:58] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-26 16:56:10] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-26 16:56:10] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:56:10] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-26 16:56:10] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-26 16:56:10] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:56:10] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:56:10] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-26 16:56:14] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-26 16:56:14] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-26 16:56:25] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-26 16:56:25] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-26 16:56:28] User: a | Event: Event | Description: LOGIN
+[2025-06-26 16:56:28] User: a | Event: Event | Description: TokenService
+[2025-06-26 16:56:28] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-26 16:56:30] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-26 16:56:30] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-26 16:56:35] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-26 16:56:35] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-26 16:56:35] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-26 16:56:35] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-26 16:56:35] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-26 16:56:35] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-26 16:56:35] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-26 16:56:38] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-26 16:56:38] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-27 15:12:06] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:12:06] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:12:12] User: a | Event: Event | Description: LOGIN
+[2025-06-27 15:12:12] User: a | Event: Event | Description: TokenService
+[2025-06-27 15:12:12] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 15:12:15] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:12:15] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:13:18] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-27 15:14:19] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:14:19] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:14:51] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:14:51] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:15:01] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:15:01] User: a | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:15:14] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:15:14] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:15:23] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:15:23] User: a | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:15:31] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:15:31] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:16:37] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:18:48] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:18:48] User: a | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:19:54] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 15:20:18] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:20:18] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:20:35] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:20:35] User: Guest | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:21:08] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:21:08] User: Guest | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:21:09] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:21:09] User: Guest | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:21:16] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:21:16] User: Guest | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:21:22] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:21:22] User: Guest | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:21:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:21:32] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:22:06] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 15:22:18] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:22:18] User: Guest | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:22:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:22:32] User: Guest | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:22:39] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:22:39] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:36:26] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 15:36:47] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:36:47] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:38:05] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:38:05] User: Guest | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:38:16] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:38:16] User: Guest | Event: Event | Description: APPOINT_MANAGER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:38:21] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:38:21] User: Guest | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:38:30] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:38:30] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:38:33] User: a | Event: Event | Description: LOGIN
+[2025-06-27 15:38:33] User: a | Event: Event | Description: TokenService
+[2025-06-27 15:38:33] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 15:38:34] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:38:34] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:38:52] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:38:52] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:38:58] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:38:58] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:39:06] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:39:06] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:40:34] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:40:34] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:40:38] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:40:38] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790

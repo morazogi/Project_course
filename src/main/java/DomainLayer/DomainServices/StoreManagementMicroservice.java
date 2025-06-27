@@ -130,10 +130,17 @@ public class StoreManagementMicroservice {
             synchronized (store) {
                 LinkedList<String> firedUsers = store.getAllSubordinates(ownerId);
                 store.terminateOwnership(ownerId);
-                for(String s:firedUsers){
-                    getUserById(s).removeStore(storeId);
+                for (String s : firedUsers) {
+                    RegisteredUser user = getUserById(s);
+                    user.removeStore(storeId);
+                    userRepository.update(user); // <-- update each fired user
                 }
-                getUserById(ownerId).removeStore(storeId);
+
+                RegisteredUser owner = getUserById(ownerId);
+                owner.removeStore(storeId);
+                userRepository.update(owner);
+
+                storeRepository.update(store);
             }
             return true;
         }
@@ -160,6 +167,7 @@ public class StoreManagementMicroservice {
         }
         return false;
     }
+
         public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
             if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
                 return false;
@@ -252,6 +260,8 @@ public class StoreManagementMicroservice {
             synchronized (store) {
                 store.terminateManagment(managerId);
                 getUserById(managerId).removeStore(storeId);
+                userRepository.update(getUserById(managerId));
+                storeRepository.update(store);
             }
             return true;
         }

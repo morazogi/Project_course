@@ -57,3 +57,4 @@
 [2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
 [2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
 [2025-06-26 00:56:37] User: username | Error: Error in shipping | Details: Cannot invoke "DomainLayer.Roles.Guest.getShoppingCart()" because "user" is null
+[2025-06-27 15:13:18] User: a | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Store not found
