@@ -310,3 +310,81 @@
 [2025-06-27 15:40:34] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
 [2025-06-27 15:40:38] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
 [2025-06-27 15:40:38] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:53:53] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:53:53] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:53:57] User: a | Event: Event | Description: LOGIN
+[2025-06-27 15:53:57] User: a | Event: Event | Description: TokenService
+[2025-06-27 15:53:57] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 15:53:58] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:53:58] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:54:23] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:54:23] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:54:32] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:54:32] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:55:13] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:55:13] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:55:32] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 15:55:47] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:55:47] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:55:54] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:55:54] User: Guest | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:56:00] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:56:00] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:56:03] User: a | Event: Event | Description: LOGIN
+[2025-06-27 15:56:03] User: a | Event: Event | Description: TokenService
+[2025-06-27 15:56:03] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 15:56:04] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 15:56:04] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 15:56:14] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:56:14] User: a | Event: Event | Description: REMOVE_OWNER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 15:56:21] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 15:56:21] User: a | Event: Event | Description: REMOVE_MANAGER from store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:02:29] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 16:02:43] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:02:43] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:02:59] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:02:59] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:03:07] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:03:07] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:03:10] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:03:10] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:03:10] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:03:11] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:03:11] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:03:18] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:03:18] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:03:32] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:03:32] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:03:35] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:03:36] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:03:36] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:03:37] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:03:37] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:03:50] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:03:50] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:05:53] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:05:53] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:05:56] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:05:56] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:05:56] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:05:57] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:05:57] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:06:04] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:06:04] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:06:11] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 16:06:13] User: Guest | Event: Event | Description: TokenService
+[2025-06-27 16:06:29] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:06:29] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:06:35] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:06:35] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:06:35] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:06:35] User: Guest | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790
+[2025-06-27 16:06:41] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:06:41] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:06:44] User: a | Event: Event | Description: LOGIN
+[2025-06-27 16:06:44] User: a | Event: Event | Description: TokenService
+[2025-06-27 16:06:44] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-27 16:06:45] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-27 16:06:45] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-27 16:06:56] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=yuval Matches=3
+[2025-06-27 16:06:56] User: a | Event: Event | Description: APPOINT_OWNER for store cd2c204b-9c4c-49e2-8895-bb0d96b3c790

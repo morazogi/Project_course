@@ -83,6 +83,10 @@ public class StoreManagementMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean appointStoreOwner(String appointerId, String storeId, String userId) {
+
+        if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
+            return false;
+        }
         Store store = getStoreById(storeId);
         synchronized (store) {
             if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
