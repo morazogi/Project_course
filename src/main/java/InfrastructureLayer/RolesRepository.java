@@ -22,7 +22,7 @@ public class RolesRepository {
     }
 
     public boolean removeStoreOwner(String removerId, String storeId, String ownerId) {
-        return storeManagementMicroservice.removeStoreOwnerWithUserSync(removerId, storeId, ownerId);
+        return storeManagementMicroservice.removeStoreOwner(removerId, storeId, ownerId);
     }
 
     public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
@@ -30,7 +30,7 @@ public class RolesRepository {
     }
 
     public boolean removeStoreManager(String removerId, String storeId, String managerId) {
-        return storeManagementMicroservice.removeManagerWithUserSync(removerId, storeId, managerId);
+        return storeManagementMicroservice.removeStoreManager(removerId, storeId, managerId);
     }
 
     public boolean updateManagerPermissions(String ownerId, String storeId, String managerId, boolean[] permissions) {
@@ -38,11 +38,11 @@ public class RolesRepository {
     }
 
     public boolean relinquishOwnership(String ownerId, String storeId) {
-        return storeManagementMicroservice.relinquishOwnershipWithUserSync(ownerId, storeId);
+        return storeManagementMicroservice.relinquishOwnership(ownerId, storeId);
     }
 
     public boolean relinquishManagement(String managerId, String storeId) {
-        return storeManagementMicroservice.relinquishManagerWithUserSync(managerId, storeId);
+        return storeManagementMicroservice.relinquishManager(managerId, storeId);
     }
 
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
