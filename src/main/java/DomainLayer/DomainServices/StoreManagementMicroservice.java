@@ -64,12 +64,12 @@ public class StoreManagementMicroservice {
         }
 
         // Owners have all permissions
-        if (store.userIsOwner(userId)) {
+        if (store.userIsOwner(userId) && userRepository.getById(userId).isOwnerOf(storeId)) {
             return true;
         }
 
         // Check if manager has specific permission
-        if (store.userIsManager(userId)) {
+        if (store.userIsManager(userId) && userRepository.getById(userId).isManagerOf(storeId)) {
             return store.userHasPermissions(userId, permissionType);
         }
 
@@ -83,6 +83,10 @@ public class StoreManagementMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean appointStoreOwner(String appointerId, String storeId, String userId) {
+
+        if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
+            return false;
+        }
         Store store = getStoreById(storeId);
         synchronized (store) {
             if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
@@ -405,7 +409,10 @@ public class StoreManagementMicroservice {
         if (!store.isFounder(managerId) && store.userIsManager(managerId)) {
             synchronized (store) {
                 store.terminateManagment(managerId);
-                userRepository.getById(managerId).removeStore(storeId);
+                RegisteredUser manager = userRepository.getById(managerId);
+                manager.removeStore(storeId);
+                userRepository.update(manager);       // <-- added update for user
+                storeRepository.update(store);        // <-- added update for store
             }
             return true;
         }
