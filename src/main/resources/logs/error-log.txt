@@ -1,6 +1,6 @@
-[2025-06-28 04:28:17] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: boom
-[2025-06-28 04:28:17] User: o | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: broken
-[2025-06-28 04:28:17] User: alice | Error: Failed to cancel payment | Details: boom
-[2025-06-28 04:28:17] User: alice | Error: Failed to pay  | Details: gateway down
-[2025-06-28 04:28:17] User: john | Error: Failed to cancel shipping | Details: fail
-[2025-06-28 04:28:17] User: john | Error: Error in shipping | Details: svc down
+[2025-06-28 18:37:23] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: boom
+[2025-06-28 18:37:23] User: o | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: broken
+[2025-06-28 18:37:23] User: alice | Error: Failed to cancel payment | Details: boom
+[2025-06-28 18:37:23] User: alice | Error: Failed to pay  | Details: gateway down
+[2025-06-28 18:37:23] User: john | Error: Failed to cancel shipping | Details: fail
+[2025-06-28 18:37:23] User: john | Error: Error in shipping | Details: svc down

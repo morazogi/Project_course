@@ -19,11 +19,25 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+/**
+ * Exhaustive unit-suite for the discount engine, plus an extra scenario
+ * showing how to “merge” two quantity conditions (min 3, max 9) into a
+ * single 20 % discount using an AND + MAXIMUM block.
+ *
+ * If you run open-jdk-24, add/upgrade:
+ *
+ * <dependency>
+ *   <groupId>org.mockito</groupId>
+ *   <artifactId>mockito-inline</artifactId>
+ *   <version>5.11.0</version>
+ *   <scope>test</scope>
+ * </dependency>
+ */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DiscountPolicyTest {
 
-    /* ------------ mocked repositories ------------ */
+    /* ---------- mocked repositories ---------- */
     @Mock StoreRepository    storeRepo;
     @Mock UserRepository     userRepo;
     @Mock ProductRepository  productRepo;
@@ -31,12 +45,12 @@ class DiscountPolicyTest {
 
     private DiscountPolicyMicroservice service;
 
-    /* ------------ domain helpers ------------ */
+    /* ---------- domain helpers ---------- */
     private Store   store;
-    private Product p1;
-    private Product p2;
+    private Product p1;          // Apple
+    private Product p2;          // Headphones
 
-    /* ------------ discount IDs ------------ */
+    /* ---------- discount IDs ---------- */
     private final String productDiscId   = "disc-prod";
     private final String innerCatDiscId1 = "disc-cat-10";
     private final String innerCatDiscId2 = "disc-cat-20";
@@ -44,12 +58,17 @@ class DiscountPolicyTest {
     private final String storeDiscId     = "disc-store";
     private final String qMin3Id         = "disc-qMin3";
     private final String qMax6AndId      = "disc-qMax6";
+    private final String min3Id_20       = "disc-min3-20";
+    private final String max9Id_20       = "disc-max9-20";
+    private final String between3_9Id    = "disc-between3-9";
 
+    /* ========== COMMON SET-UP ========== */
     @BeforeEach
     void init() {
         service = new DiscountPolicyMicroservice(
                 storeRepo, userRepo, productRepo, discountRepo);
 
+        /* ----- store & products ----- */
         store = new Store("store-1", "owner-1");
         when(storeRepo.getById(store.getId())).thenReturn(store);
 
@@ -60,6 +79,7 @@ class DiscountPolicyTest {
         when(productRepo.getById(p1.getId())).thenReturn(p1);
         when(productRepo.getById(p2.getId())).thenReturn(p2);
 
+        /* ----- single 10 % product-level (multiplication) ----- */
         Discount productDisc = new Discount(
                 store.getId(), 1, 0, 2,
                 List.of(), .10f, "Apple",
@@ -67,11 +87,12 @@ class DiscountPolicyTest {
         productDisc.setId(productDiscId);
         when(discountRepo.getById(productDiscId)).thenReturn(productDisc);
 
-        Discount inner10 = new Discount(store.getId(), 1,0,0,
-                List.of(), .10f, "", 0,0,"");
+        /* ----- nested 10 % + 20 %, MAXIMUM composition at category level ----- */
+        Discount inner10 = new Discount(store.getId(), 1, 0, 0,
+                List.of(), .10f, "", 0, 0, "");
         inner10.setId(innerCatDiscId1);
-        Discount inner20 = new Discount(store.getId(), 1,0,0,
-                List.of(), .20f, "", 0,0,"");
+        Discount inner20 = new Discount(store.getId(), 1, 0, 0,
+                List.of(), .20f, "", 0, 0, "");
         inner20.setId(innerCatDiscId2);
         when(discountRepo.getById(innerCatDiscId1)).thenReturn(inner10);
         when(discountRepo.getById(innerCatDiscId2)).thenReturn(inner20);
@@ -84,6 +105,7 @@ class DiscountPolicyTest {
         catDisc.setId(catDiscId);
         when(discountRepo.getById(catDiscId)).thenReturn(catDisc);
 
+        /* ----- store-wide 15 % if cart ≥ 50 ₪ ----- */
         Discount storeDisc = new Discount(
                 store.getId(), 3, 0, 2,
                 List.of(), .15f, "",
@@ -91,6 +113,7 @@ class DiscountPolicyTest {
         storeDisc.setId(storeDiscId);
         when(discountRepo.getById(storeDiscId)).thenReturn(storeDisc);
 
+        /* ----- “3 ≤ qty ≤ 6” composite (10 % × 15 %) ----- */
         Discount qMin3 = new Discount(
                 store.getId(), 1, 0, 2,
                 List.of(),
@@ -106,7 +129,31 @@ class DiscountPolicyTest {
                 3, 6, "Apple");
         qMax6And.setId(qMax6AndId);
         when(discountRepo.getById(qMax6AndId)).thenReturn(qMax6And);
+
+        /* ----- NEW: 20 % if 3 ≤ qty ≤ 9 (AND + MAXIMUM) ----- */
+        Discount min3_20 = new Discount(
+                store.getId(), 1, 0, 0,
+                List.of(), .20f, "Apple",
+                2, 3, "Apple");
+        min3_20.setId(min3Id_20);
+        when(discountRepo.getById(min3Id_20)).thenReturn(min3_20);
+
+        Discount max9_20 = new Discount(
+                store.getId(), 1, 0, 0,
+                List.of(), .20f, "Apple",
+                3, 9, "Apple");
+        max9_20.setId(max9Id_20);
+        when(discountRepo.getById(max9Id_20)).thenReturn(max9_20);
+
+        Discount between3_9 = new Discount(
+                store.getId(), 1, 2, 1,          // AND + MAXIMUM
+                List.of(min3Id_20, max9Id_20),
+                0f, "", 0, 0, "");
+        between3_9.setId(between3_9Id);
+        when(discountRepo.getById(between3_9Id)).thenReturn(between3_9);
     }
+
+    /* ========== TESTS ========== */
 
     @Test
     void calculatePrice_noDiscounts_returnsFullPrice() {
@@ -136,12 +183,12 @@ class DiscountPolicyTest {
     void calculatePrice_storeWideMinPriceCondition_onlyIfThresholdMet() {
         store.setDiscountPolicy(List.of(storeDiscId));
 
-        float below = service.calculatePrice(store.getId(),
-                Map.of(p1.getId(), 1));
+        float below = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1));
         assertEquals(15f, below);
 
-        float above = service.calculatePrice(store.getId(),
-                Map.of(p1.getId(), 2, p2.getId(), 1));
+        float above = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 2, p2.getId(), 1));
         assertEquals(52f * 0.85f, above);
     }
 
@@ -166,6 +213,33 @@ class DiscountPolicyTest {
         assertEquals(105f, sevenApples);
     }
 
+    /* ---------- NEW SCENARIO: 20 % between 3 and 9 apples ---------- */
+    @Test
+    void betweenThreeAndNine_singleTwentyPercent() {
+        store.setDiscountPolicy(List.of(between3_9Id));
+
+        float below = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 2));
+        assertEquals(30f, below);
+
+        float edgeLow = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 3));
+        assertEquals(3 * 15f * 0.8f, edgeLow, 0.001);
+
+        float middle = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 8));
+        assertEquals(8 * 15f * 0.8f, middle, 0.001);
+
+        float edgeHigh = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 9));
+        assertEquals(9 * 15f * 0.8f, edgeHigh, 0.001);
+
+        float above = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 10));
+        assertEquals(150f, above);
+    }
+
+    /* ---------- OR composition ---------- */
     @Test
     void orComposition_allDiscountsApplyWhenAnyConditionTrue() {
         Discount d10 = new Discount(store.getId(), 1, 0, 2,
@@ -179,7 +253,7 @@ class DiscountPolicyTest {
         when(discountRepo.getById("d15or")).thenReturn(d15);
 
         Discount orGroup = new Discount(store.getId(), 1, 3, 2,
-                List.of("d10or", "d15or"), 0f, "", 0,0,"");
+                List.of("d10or", "d15or"), 0f, "", 0, 0, "");
         orGroup.setId("or");
         when(discountRepo.getById("or")).thenReturn(orGroup);
 
@@ -194,6 +268,7 @@ class DiscountPolicyTest {
         assertEquals(15f, oneApple);
     }
 
+    /* ---------- XOR composition ---------- */
     @Test
     void xorComposition_allDiscountsApplyOnlyWhenExactlyOneConditionTrue() {
         Discount d10 = new Discount(store.getId(), 1, 0, 2,
@@ -207,7 +282,7 @@ class DiscountPolicyTest {
         when(discountRepo.getById("d15")).thenReturn(d15);
 
         Discount xorGroup = new Discount(store.getId(), 1, 1, 2,
-                List.of("d10", "d15"), 0f, "", 0,0,"");
+                List.of("d10", "d15"), 0f, "", 0, 0, "");
         xorGroup.setId("xor");
         when(discountRepo.getById("xor")).thenReturn(xorGroup);
 
@@ -222,6 +297,7 @@ class DiscountPolicyTest {
         assertEquals(75f, fiveApples);
     }
 
+    /* ---------- AND composition ---------- */
     @Test
     void andComposition_allDiscountsApplyWhenAllConditionsTrue() {
         Discount d10 = new Discount(store.getId(), 1, 0, 2,
@@ -235,7 +311,7 @@ class DiscountPolicyTest {
         when(discountRepo.getById("and15")).thenReturn(d15);
 
         Discount andGroup = new Discount(store.getId(), 1, 2, 2,
-                List.of("and10", "and15"), 0f, "", 0,0,"");
+                List.of("and10", "and15"), 0f, "", 0, 0, "");
         andGroup.setId("and");
         when(discountRepo.getById("and")).thenReturn(andGroup);
 
@@ -259,7 +335,7 @@ class DiscountPolicyTest {
         when(discountRepo.getById("andFalse15")).thenReturn(d15);
 
         Discount andGroup = new Discount(store.getId(), 1, 2, 2,
-                List.of("andFalse10", "andFalse15"), 0f, "", 0,0,"");
+                List.of("andFalse10", "andFalse15"), 0f, "", 0, 0, "");
         andGroup.setId("andFalse");
         when(discountRepo.getById("andFalse")).thenReturn(andGroup);
 
@@ -270,6 +346,7 @@ class DiscountPolicyTest {
         assertEquals(15f, price);
     }
 
+    /* ---------- single discount condition false ---------- */
     @Test
     void undefinedSingleDiscount_conditionFalse_noDiscount() {
         Discount big = new Discount(store.getId(), 3, 0, 2,
@@ -284,20 +361,21 @@ class DiscountPolicyTest {
         assertEquals(15f, price);
     }
 
+    /* ---------- additive clamp (total can’t go < 0) ---------- */
     @Test
     void additiveClamp_totalCannotGoBelowZero() {
         Discount d70 = new Discount(store.getId(), 1, 0, 0,
-                List.of(), .70f, "Apple", 0,0,"");
+                List.of(), .70f, "Apple", 0, 0, "");
         d70.setId("d70");
         when(discountRepo.getById("d70")).thenReturn(d70);
 
         Discount d40 = new Discount(store.getId(), 1, 0, 0,
-                List.of(), .40f, "Apple", 0,0,"");
+                List.of(), .40f, "Apple", 0, 0, "");
         d40.setId("d40");
         when(discountRepo.getById("d40")).thenReturn(d40);
 
         Discount group = new Discount(store.getId(), 1, 3, 0,
-                List.of("d70", "d40"), 0f, "", 0,0,"");
+                List.of("d70", "d40"), 0f, "", 0, 0, "");
         group.setId("addClamp");
         when(discountRepo.getById("addClamp")).thenReturn(group);
 
@@ -307,5 +385,4 @@ class DiscountPolicyTest {
                 store.getId(), Map.of(p1.getId(), 1));
         assertEquals(0f, price);
     }
-
 }
