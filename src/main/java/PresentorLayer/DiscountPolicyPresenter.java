@@ -1,5 +1,6 @@
 package PresentorLayer;
 
+import DomainLayer.Discount;
 import DomainLayer.Store;
 import ServiceLayer.OwnerManagerService;
 
@@ -21,7 +22,7 @@ public class DiscountPolicyPresenter {
         this.perms    = perms;
     }
 
-    /* ---------------- stores current user can update -------------------- */
+    /* ---------------- stores current user can update ------------------ */
     public List<Store> updatableStores(String token) {
         try {
             return userConn.getUserStoresName(token).stream()
@@ -35,13 +36,50 @@ public class DiscountPolicyPresenter {
         }
     }
 
-    /* ---------------- fetch discount IDs for a store -------------------- */
+    /* ---------------- fetch discount IDs for a store ------------------ */
     public List<String> storeDiscountIds(String token, String storeId) {
         Store s = userConn.getStore(token, storeId);
         return s == null ? List.of() : s.getDiscountPolicy();
     }
 
-    /* ---------------- simple voucher ------------------------------------ */
+    /* ---------------- readable label for a discount ------------------- */
+    /* ------------------------------------------------------------------
+     *  Human-friendly label for a discount ID
+     * ------------------------------------------------------------------ */
+    public String discountLabel(String discountId) {
+        if (discountId == null) return "";
+
+        Discount d = ownerMgr.getDiscountById(discountId);
+        if (d == null) {                       // fallback: shorten the raw id
+            return discountId.length() <= 8 ? discountId
+                    : discountId.substring(0, 8) + "...";
+        }
+
+        /* -------- scope text (Product / Category / Store-wide) -------- */
+        // up-cast to Enum<?> to avoid the package-private enum visibility issue
+        String levelName = ((Enum<?>) d.getLevel()).name();
+        String target;
+        switch (levelName) {
+            case "PRODUCT"  -> target = d.getDiscounted().isBlank()
+                    ? "Product"
+                    : d.getDiscounted();
+            case "CATEGORY" -> target = (d.getDiscounted().isBlank()
+                    ? "Category"
+                    : d.getDiscounted()) + " (cat)";
+            default         -> target = "Store-wide";
+        }
+
+        int pct = Math.round(d.getPercentDiscount() * 100);
+
+        /* parent “block” discounts have 0 % */
+        if (pct == 0) {
+            String logicName = ((Enum<?>) d.getLogicComposition()).name();
+            return "[" + logicName + "] " + target;
+        }
+        return target + " " + pct + "%";
+    }
+
+    /* ---------------- simple voucher ---------------------------------- */
     public String addDiscount(String token,
                               String storeName,
                               float level,
@@ -53,35 +91,35 @@ public class DiscountPolicyPresenter {
                               float limiter,
                               float conditional,
                               String conditionalDiscounted) {
-        return userConn.addDiscount(token, storeName, level, logicComp, numComp, percent,
-                discounted, discountCondition, limiter, conditional, conditionalDiscounted);
+        return userConn.addDiscount(
+                token, storeName, level, logicComp, numComp, percent, discounted,
+                discountCondition, limiter, conditional, conditionalDiscounted);
     }
 
-    /* ---------------- composite (parent) block -------------------------- */
+    /* ---------------- composite (parent) block ------------------------ */
     public String addCompositeDiscount(String token,
                                        String storeName,
                                        float logicComp,
                                        float numComp,
                                        List<String> children) {
 
-        /* Level 0 → UNDEFINED (treated as STORE);  percent = 0;  no condition */
         return userConn.addDiscount(
                 token,
                 storeName,
-                0f,                // level
+                0f,                     // level UNDEFINED (store)
                 logicComp,
                 numComp,
-                0f,                // percent
-                "",                // discounted item
-                -1f,               // discountCondition
-                -1f,               // limiter
-                -1f,               // conditional
-                "",                // conditionalDiscounted
-                children           // nested children
+                0f,                     // percent
+                "",                     // discounted
+                -1f,                    // no condition
+                -1f,
+                -1f,
+                "",
+                children                // nested children
         );
     }
 
-    /* ---------------- removal ------------------------------------------- */
+    /* ---------------- removal ----------------------------------------- */
     public String removeDiscount(String token, String storeId, String discountId) {
         String user = userConn.getUsername(token);
         boolean ok  = ownerMgr.removeDiscountFromDiscountPolicy(user, storeId, discountId);

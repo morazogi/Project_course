@@ -32,41 +32,40 @@ public class DiscountManagementUI extends VerticalLayout {
     private final DiscountPolicyPresenter presenter;
     private final String token;
 
-    private final ComboBox<Store>   storeBox     = new ComboBox<>("Store");
-    private final ComboBox<String>  existingBox  = new ComboBox<>("Existing discounts");
-    private final ComboBox<String>  scopeBox     = new ComboBox<>("Scope");
-    private final NumberField       percentField = new NumberField("Percent %");
-    private final ComboBox<String>  condBox      = new ComboBox<>("Condition");
-    private final NumberField       limitField   = new NumberField("Value");
-    private final TextField         itemField    = new TextField("Item / Category");
+    /* ───── controls ───────────────────────────────────────────────────── */
+    private final ComboBox<Store>  storeBox     = new ComboBox<>("Store");
+    private final ComboBox<String> existingBox  = new ComboBox<>("Existing discounts");
+    private final ComboBox<String> scopeBox     = new ComboBox<>("Scope");
+    private final NumberField      percentField = new NumberField("Percent %");
+    private final ComboBox<String> condBox      = new ComboBox<>("Condition");
+    private final NumberField      limitField   = new NumberField("Value");
+    private final TextField        itemField    = new TextField("Item / Category");
 
-    /* ─── NEW controls for “combine” ─────────────────────────────────────── */
-    private final ComboBox<String> logicBox  = new ComboBox<>("Logic");
-    private final ComboBox<String> numBox    = new ComboBox<>("Numeric rule");
+    /* extra controls for “combine” */
+    private final ComboBox<String>           logicBox  = new ComboBox<>("Logic");
+    private final ComboBox<String>           numBox    = new ComboBox<>("Numeric rule");
     private final MultiSelectComboBox<String> childBox =
             new MultiSelectComboBox<>("Children to combine");
 
-    /* --------------------------------------------------------------------- */
+    /* ------------------------------------------------------------------- */
     @Autowired
-    public DiscountManagementUI(UserService       userService,
-                                RegisteredService registeredService,
+    public DiscountManagementUI(UserService         userService,
+                                RegisteredService   registeredService,
                                 OwnerManagerService ownerMgrService,
-                                IToken            tokenService,
-                                UserRepository    userRepository) {
+                                IToken              tokenService,
+                                UserRepository      userRepository) {
 
-        /* presenters the same way UserHomePageUI builds them */
+        /* presenters (same construction used elsewhere) */
         UserConnectivityPresenter userConn =
                 new UserConnectivityPresenter(userService, registeredService,
                         ownerMgrService, tokenService, userRepository);
-
         PermissionsPresenter perms =
                 new PermissionsPresenter(ownerMgrService, tokenService, userRepository);
-
         presenter = new DiscountPolicyPresenter(userConn, ownerMgrService, perms);
 
         token = (String) UI.getCurrent().getSession().getAttribute("token");
 
-        /* ----------------------- UI wiring -------------------------------- */
+        /* ───── combo-box & field setup ─────────────────────────────────── */
         List<Store> stores = presenter.updatableStores(token);
         storeBox.setItems(stores);
         storeBox.setItemLabelGenerator(Store::getName);
@@ -74,6 +73,11 @@ public class DiscountManagementUI extends VerticalLayout {
 
         scopeBox.setItems("Store", "Category", "Product");
         scopeBox.setValue("Store");
+
+        /* whole-number % input */
+        percentField.setMin(0);
+        percentField.setMax(100);
+        percentField.setStep(1);
 
         condBox.setItems("None", "Min price", "Min quantity", "Max quantity");
         condBox.setValue("None");
@@ -83,6 +87,10 @@ public class DiscountManagementUI extends VerticalLayout {
 
         numBox.setItems("Additive", "Maximum", "Multiplication");
         numBox.setValue("Additive");
+
+        /* readable labels for discount IDs */
+        existingBox.setItemLabelGenerator(presenter::discountLabel);
+        childBox.setItemLabelGenerator(presenter::discountLabel);
 
         Button addBtn     = new Button("Add",     e -> addDiscount());
         Button combineBtn = new Button("Combine", e -> combineDiscounts());
@@ -107,10 +115,12 @@ public class DiscountManagementUI extends VerticalLayout {
         setAlignItems(Alignment.STRETCH);
     }
 
-    /* --------------------------------------------------------------------- */
+    /* ------------------------------------------------------------------- */
     private void refreshDiscountList() {
         Store s = storeBox.getValue();
         if (s == null) {
+            existingBox.clear();
+            childBox.clear();
             existingBox.setItems(List.of());
             childBox.setItems(List.of());
         } else {
@@ -120,7 +130,7 @@ public class DiscountManagementUI extends VerticalLayout {
         }
     }
 
-    /* -------------------------- simple add ------------------------------- */
+    /* ---------------- simple voucher add ------------------------------- */
     private void addDiscount() {
         Store s = storeBox.getValue();
         if (s == null) { Notification.show("Pick a store"); return; }
@@ -131,8 +141,10 @@ public class DiscountManagementUI extends VerticalLayout {
             default         -> 3f;
         };
 
-        float percent = percentField.getValue() == null ? 0f : percentField.getValue().floatValue();
-        String discOn = itemField.getValue() == null  ? "" : itemField.getValue();
+        float pct = percentField.getValue() == null ? 0f
+                : percentField.getValue().floatValue() / 100f;
+
+        String discOn = itemField.getValue() == null ? "" : itemField.getValue();
 
         float conditional = switch (condBox.getValue()) {
             case "Min price"    -> 1f;
@@ -141,25 +153,26 @@ public class DiscountManagementUI extends VerticalLayout {
             default             -> -1f;
         };
 
-        float limit = limitField.getValue() == null ? -1f : limitField.getValue().floatValue();
+        float limit = limitField.getValue() == null ? -1f
+                : limitField.getValue().floatValue();
 
         String msg = presenter.addDiscount(token,
                 s.getName(),
                 level,
-                0f,          // logicComposition – single voucher
-                0f,          // numericalComposition – additive
-                percent,
+                0f,          // logicComposition
+                0f,          // numericalComposition
+                pct,
                 discOn,
-                conditional, // discountCondition
-                limit,       // discountLimiter
-                conditional, // conditional (pass again)
-                discOn);     // conditionalDiscounted
+                conditional,
+                limit,
+                conditional, // same again
+                discOn);
 
         Notification.show(msg);
         refreshDiscountList();
     }
 
-    /* -------------------------- combine ---------------------------------- */
+    /* ---------------- combine selected children ------------------------ */
     private void combineDiscounts() {
         Store store = storeBox.getValue();
         if (store == null) { Notification.show("Pick a store first"); return; }
@@ -171,12 +184,12 @@ public class DiscountManagementUI extends VerticalLayout {
             case "XOR" -> 1f;
             case "AND" -> 2f;
             case "OR"  -> 3f;
-            default    -> 0f;           // UNDEFINED
+            default    -> 0f;
         };
         float numeric = switch (numBox.getValue()) {
             case "Maximum"        -> 1f;
             case "Multiplication" -> 2f;
-            default               -> 0f; // additive
+            default               -> 0f;
         };
 
         String msg = presenter.addCompositeDiscount(
@@ -184,13 +197,13 @@ public class DiscountManagementUI extends VerticalLayout {
                 store.getName(),
                 logic,
                 numeric,
-                List.copyOf(children)      // immutable snapshot
+                List.copyOf(children)
         );
         Notification.show(msg);
         refreshDiscountList();
     }
 
-    /* -------------------------- remove ----------------------------------- */
+    /* ---------------- remove ------------------------------------------- */
     private void removeDiscount() {
         Store s = storeBox.getValue();
         String id = existingBox.getValue();

@@ -31,6 +31,8 @@ public class OwnerManagerService {
     private final StoreManagementMicroservice storeManagementService;
     private final QueryMicroservice notificationService;
     private final PurchaseHistoryMicroservice purchaseHistoryService;
+    private final DiscountRepository discountRepository;
+
 
     public OwnerManagerService(InfrastructureLayer.UserRepository userRepository, StoreRepository storeRepository, InfrastructureLayer.ProductRepository productRepository, InfrastructureLayer.OrderRepository orderRepository, InfrastructureLayer.DiscountRepository discountRepository) {
         // Initialize repositories
@@ -43,6 +45,7 @@ public class OwnerManagerService {
         this.storeManagementService = new StoreManagementMicroservice(storeRepository, userRepository);
         this.notificationService = new QueryMicroservice(inquiryRepository);
         this.purchaseHistoryService = new PurchaseHistoryMicroservice();
+        this.discountRepository = discountRepository;
     }
 
     // ==================== 1. Inventory Management Functions ====================
@@ -772,5 +775,13 @@ public class OwnerManagerService {
     }
     public boolean isFounderOrOwner(String userId, String storeId) {
         return storeManagementService.isFounderOrOwner(userId, storeId);
+    }
+
+    public Discount getDiscountById(String discountId) {
+        try {
+            return discountRepository.getById(discountId);
+        } catch (Exception ignored) {
+            return null;
+        }
     }
 }

@@ -345,3 +345,57 @@
 [2025-06-28 04:49:56] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
 [2025-06-28 04:49:56] User: removeProduct | Event: Event | Description: Product removed from cart
 [2025-06-28 04:49:56] User: a | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-28 05:10:41] User: a | Event: Event | Description: LOGIN
+[2025-06-28 05:10:41] User: a | Event: Event | Description: TokenService
+[2025-06-28 05:10:41] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-28 05:10:47] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-28 05:10:47] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-28 05:10:47] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-28 05:10:47] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-28 05:10:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-28 05:10:47] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-28 05:10:47] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-28 05:10:48] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:10:48] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:10:48] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-28 05:10:48] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-28 05:10:58] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:10:58] User: a | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-28 05:10:58] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-28 05:11:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:03] User: a | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-28 05:11:03] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-28 05:11:07] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:07] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:07] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-28 05:11:07] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-28 05:11:08] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-28 05:11:08] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-28 05:11:09] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:15] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-28 05:11:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:15] User: a | Event: Event | Description: DEFINE_DISCOUNT_POLICY_START
+[2025-06-28 05:11:15] User: a | Event: Event | Description: DEFINE_DISCOUNT_POLICY_SUCCESS
+[2025-06-28 05:11:15] User: a | Event: Event | Description: Discount successfully added
+[2025-06-28 05:11:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:24] User: a | Event: Event | Description: SEARCH_STORE_FAILED: java.lang.IllegalArgumentException - Store not found
+[2025-06-28 05:11:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:24] User: a | Event: Event | Description: DEFINE_DISCOUNT_POLICY_START
+[2025-06-28 05:11:24] User: a | Event: Event | Description: DEFINE_DISCOUNT_POLICY_SUCCESS
+[2025-06-28 05:11:24] User: a | Event: Event | Description: Discount successfully added
+[2025-06-28 05:11:24] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:25] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:25] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b21d7777-84ac-4635-8856-2291562b3a7b FOUND
+[2025-06-28 05:11:25] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-28 05:11:25] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-28 05:11:27] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-28 05:11:27] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-28 05:11:27] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-28 05:11:27] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-28 05:11:34] User: a | Event: Event | Description: REMOVE_FROM_CART_FAILED null
+[2025-06-28 05:11:34] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-28 05:11:34] User: a | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-28 05:11:35] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-28 05:11:35] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-28 05:11:35] User: a | Event: Event | Description: REMOVE_FROM_CART

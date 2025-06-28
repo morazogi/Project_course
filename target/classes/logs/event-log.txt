@@ -322,3 +322,26 @@
 [2025-06-28 04:45:54] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
 [2025-06-28 04:45:54] User: removeProduct | Event: Event | Description: Product removed from cart
 [2025-06-28 04:45:54] User: a | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-28 04:49:45] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-28 04:49:45] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-28 04:49:47] User: a | Event: Event | Description: LOGIN
+[2025-06-28 04:49:47] User: a | Event: Event | Description: TokenService
+[2025-06-28 04:49:47] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-28 04:49:51] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-28 04:49:54] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-28 04:49:54] User: a | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-28 04:49:54] User: a | Event: Event | Description: REMOVE_FROM_CART_FAILED null
+[2025-06-28 04:49:55] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-28 04:49:55] User: a | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-28 04:49:55] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-28 04:49:55] User: a | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-28 04:49:56] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-28 04:49:56] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-28 04:49:56] User: a | Event: Event | Description: REMOVE_FROM_CART
