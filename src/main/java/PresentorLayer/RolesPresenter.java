@@ -36,7 +36,7 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.appointStoreOwner(username, storeId, targetUsername);
+            rolesService.appointStoreOwner(username, storeId, userRepository.getById(targetUsername).getShoppingCart().getUserId());
             return "Owner appointed successfully.";
         } catch (Exception e) {
             return "Failed to appoint owner: " + e.getMessage();
@@ -49,7 +49,7 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.removeStoreOwner(username, storeId, targetUsername);
+            rolesService.removeStoreOwner(username, storeId, userRepository.getById(targetUsername).getShoppingCart().getUserId());
             return "Owner removed successfully.";
         } catch (Exception e) {
             return "Failed to remove owner: " + e.getMessage();
@@ -75,7 +75,7 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.removeStoreManager(username, storeId, targetUsername);
+            rolesService.removeStoreManager(username, storeId, userRepository.getById(targetUsername).getShoppingCart().getUserId());
             return "Manager removed successfully.";
         } catch (Exception e) {
             return "Failed to remove manager: " + e.getMessage();
@@ -88,7 +88,7 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.updateManagerPermissions(username, storeId, managerUsername, newPermissions);
+            rolesService.updateManagerPermissions(username, storeId, userRepository.getById(managerUsername).getShoppingCart().getUserId(), newPermissions);
             return "Permissions updated.";
         } catch (Exception e) {
             return "Failed to update permissions: " + e.getMessage();
