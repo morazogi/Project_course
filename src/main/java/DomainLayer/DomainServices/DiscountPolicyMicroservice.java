@@ -91,6 +91,9 @@ public class DiscountPolicyMicroservice {
        1)  Add discount to policy
        ====================================================================== */
 
+    /* ======================================================================
+       1)  Add discount to policy   (UPDATED)
+       ====================================================================== */
     public boolean addDiscountToDiscountPolicy(String ownerId,
                                                String storeId,
                                                String discountId,          // parent-discount ID ("" → top-level)
@@ -104,13 +107,14 @@ public class DiscountPolicyMicroservice {
                                                float limiter,
                                                String conditionalDiscounted)
     {
+        /* ----- permission check ----- */
         if (!checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY))
             return false;
 
         Store store = getStoreById(storeId);
         if (store == null) return false;
 
-        /* 1. create & persist the new discount                                */
+        /* ----- 1. create & persist the new discount ----- */
         Discount newDisc = new Discount(
                 storeId,
                 level, logicComposition, numericalComposition,
@@ -119,10 +123,12 @@ public class DiscountPolicyMicroservice {
         );
         if (discountRepository.save(newDisc) == null) return false;
 
-        /* 2. attach it to store or to an existing parent discount             */
+        /* ----- 2. attach it either to the store or to an existing parent ----- */
         if (discountId == null || discountId.isBlank()) {
-            store.addDiscount(newDisc.getId());                // top level
+            /* top-level parent */
+            store.addDiscount(newDisc.getId());
         } else {
+            /* nested inside an existing parent */
             Discount parent = discountRepository.getById(discountId);
             if (parent != null) {
                 List<String> children = new ArrayList<>(parent.getDiscounts());
@@ -130,15 +136,22 @@ public class DiscountPolicyMicroservice {
                 parent.setDiscounts(children);
                 discountRepository.update(parent);
             } else {
-                // parent not found – treat as top-level
-                store.addDiscount(newDisc.getId());
+                store.addDiscount(newDisc.getId());     // fallback: treat as top-level
             }
         }
 
-        /* 3. persist the store                                                */
+        /* ----- ★ NEW: detach the children we just nested from the top level ----- */
+        if (discountsId != null && !discountsId.isEmpty()) {
+            List<String> topPolicy = new ArrayList<>(store.getDiscountPolicy());
+            topPolicy.removeAll(discountsId);           // only detach – do NOT delete entities
+            store.setDiscountPolicy(topPolicy);
+        }
+
+        /* ----- 3. persist store ----- */
         storeRepository.update(store);
         return true;
     }
+
 
     /* ======================================================================
        2)  Remove discount from policy   (FIXED)

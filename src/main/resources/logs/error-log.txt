@@ -4,3 +4,8 @@
 [2025-06-28 04:28:17] User: alice | Error: Failed to pay  | Details: gateway down
 [2025-06-28 04:28:17] User: john | Error: Failed to cancel shipping | Details: fail
 [2025-06-28 04:28:17] User: john | Error: Error in shipping | Details: svc down
+[2025-06-28 19:03:29] User: a | Error: UPDATE_DISCOUNT_POLICY_FAILED | Details: null
+[2025-06-28 19:03:30] User: a | Error: UPDATE_DISCOUNT_POLICY_FAILED | Details: null
+[2025-06-28 19:03:33] User: a | Error: UPDATE_DISCOUNT_POLICY_FAILED | Details: null
+[2025-06-28 19:04:09] User: a | Error: UPDATE_DISCOUNT_POLICY_FAILED | Details: null
+[2025-06-28 19:04:10] User: a | Error: UPDATE_DISCOUNT_POLICY_FAILED | Details: null

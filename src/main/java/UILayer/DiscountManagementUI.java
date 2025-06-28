@@ -160,6 +160,7 @@ public class DiscountManagementUI extends VerticalLayout {
     }
 
     /* -------------------------- combine ---------------------------------- */
+    /* -------------------------- combine ---------------------------------- */
     private void combineDiscounts() {
         Store store = storeBox.getValue();
         if (store == null) { Notification.show("Pick a store first"); return; }
@@ -171,12 +172,12 @@ public class DiscountManagementUI extends VerticalLayout {
             case "XOR" -> 1f;
             case "AND" -> 2f;
             case "OR"  -> 3f;
-            default    -> 0f;           // UNDEFINED
+            default    -> 0f;
         };
         float numeric = switch (numBox.getValue()) {
             case "Maximum"        -> 1f;
             case "Multiplication" -> 2f;
-            default               -> 0f; // additive
+            default               -> 0f;
         };
 
         String msg = presenter.addCompositeDiscount(
@@ -184,11 +185,16 @@ public class DiscountManagementUI extends VerticalLayout {
                 store.getName(),
                 logic,
                 numeric,
-                List.copyOf(children)      // immutable snapshot
+                List.copyOf(children)
         );
+
+        /* ---------- new: prune children from top level ---------- */
+
+
         Notification.show(msg);
         refreshDiscountList();
     }
+
 
     /* -------------------------- remove ----------------------------------- */
     private void removeDiscount() {
