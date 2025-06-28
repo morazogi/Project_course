@@ -1,14 +1,9 @@
 package DomainLayer;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+@Repository
+public interface IStoreRepository extends JpaRepository<Store, String> {
 
-public interface IStoreRepository {
-    void addStore(String storeId , String storeJson);
-    void removeStore(String store);
-    String getStore(String storeId);
-    void updateStore(String storeId, String storeJson);
-    List<String> findAll();
-    Map<String, String> getStores();
+    Store findByNameContaining(String name);
 }

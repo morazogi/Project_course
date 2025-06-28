@@ -19,23 +19,24 @@ class RegisteredUserTest {
 
     @BeforeEach
     void setUp() {
-        user = new RegisteredUser("username");
+        user = new RegisteredUser("username","password");
         mapper = new ObjectMapper();
     }
 
     @Test
     void testParameterizedConstructor() {
         String name = "Alice";
-        RegisteredUser ru = new RegisteredUser(name);
-        assertEquals(name, ru.getName());
+        String HashedPassword = "password";
+        RegisteredUser ru = new RegisteredUser(name,HashedPassword);
+        assertEquals(name, ru.getUsername());
         assertEquals(name, ru.getUsername());
     }
 
     @Test
     void testSetName() {
         String newName = "Bob";
-        user.setName(newName);
-        assertEquals(newName, user.getName());
+        user.setUsername(newName);
+        assertEquals(newName, user.getUsername());
         assertEquals(newName, user.getUsername());
     }
 

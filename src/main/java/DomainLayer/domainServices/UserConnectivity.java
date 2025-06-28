@@ -1,30 +1,27 @@
 package DomainLayer.DomainServices;
 
-import DomainLayer.User;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.IToken;
 import DomainLayer.IUserRepository;
+import InfrastructureLayer.GuestRepository;
+import InfrastructureLayer.UserRepository;
 import ServiceLayer.EventLogger;
-import io.micrometer.observation.Observation.Event;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Objects;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Component
 public class UserConnectivity {
     private IToken Tokener;
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
+    private GuestRepository guestRepository;
+
     private ObjectMapper mapper = new ObjectMapper();
 
-    public UserConnectivity(IToken Tokener, IUserRepository userRepository) {
+    public UserConnectivity(IToken Tokener, UserRepository userRepository, GuestRepository guestRepository) {
         this.userRepository = userRepository;
         this.Tokener = Tokener;
     }
@@ -37,12 +34,12 @@ public class UserConnectivity {
             EventLogger.logEvent(username, "LOGIN_FAILED - EMPTY");
             throw new IllegalArgumentException("Username and password cannot be empty");
         }
-        String hashedpass = userRepository.getUserPass(username);
-        if(hashedpass == null){
+        String hashedPassword = userRepository.getById(username).getHashedPassword();
+        if(hashedPassword == null){
             EventLogger.logEvent(username, "LOGIN_FAILED - USER_NOT_EXIST");
             throw new IllegalArgumentException("User does not exist");
         }
-        if (!BCrypt.checkpw(password, hashedpass)) {
+        if (!BCrypt.checkpw(password, hashedPassword)) {
             EventLogger.logEvent(username, "LOGIN_FAILED - WRONG_PASSWORD");
             throw new IllegalArgumentException("Invalid username or password");
         }
@@ -59,14 +56,14 @@ public class UserConnectivity {
             EventLogger.logEvent(username, "SIGNUP_FAILED - EMPTY");
             throw new IllegalArgumentException("Username and password cannot be empty");
         }
-        if (userRepository.isUserExist(username)) {
+        if (userRepository.existsById(username)) {
             EventLogger.logEvent(username, "SIGNUP_FAILED - USER_EXIST");
             throw new IllegalArgumentException("User already exists");
         }
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        RegisteredUser user = new RegisteredUser(username);
-        userRepository.addUser(username, hashedPassword , mapper.writeValueAsString(user));
-        return user.getID();
+        RegisteredUser user = new RegisteredUser(username,hashedPassword);
+        userRepository.save(user);
+        return user.getUsername();
     }
 
     public void logout(String username ,String token) {

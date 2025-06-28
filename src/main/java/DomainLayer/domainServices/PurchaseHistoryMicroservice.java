@@ -11,24 +11,22 @@ import java.util.Date;
 import java.util.List;
 
 public class PurchaseHistoryMicroservice {
-    private IOrderRepository orders;
+    private OrderRepository orders;
     private ObjectMapper mapper = new ObjectMapper();
 
-    public void PurchaseHistoryMicroservice(IOrderRepository orderRepository) {
+    public void PurchaseHistoryMicroservice(OrderRepository orderRepository) {
         this.orders = orderRepository;
     }
 
     public List<String> getStorePurchaseHistory(String ownerId, String storeId, Date startDate, Date endDate) throws JsonProcessingException {
         // Implementation would call domain layer
-        List<String> lst = this.orders.getOrderByStoreId(storeId);
+        List<Order> lst = this.orders.findByStoreID(storeId);
         List<String> returnList = new ArrayList<String>();
-        for (String order : lst) {
-            Order order1= mapper.readValue(order, Order.class);
-            if(order1.getDate().before(endDate) && order1.getDate().after(startDate))
-                returnList.add(order);
+        for (Order order : lst) {
+            if(order.getDate().before(endDate) && order.getDate().after(startDate))
+                returnList.add(order.getId());
         }
         return returnList;
-
         // orderrepository get the orders from the store id and filter;
     }
 }

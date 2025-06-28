@@ -4,21 +4,28 @@ import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import ServiceLayer.ErrorLogger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Microservice handling system administrator operations
  */
 public class AdminOperationsMicroservice {
-    private final IUserRepository userRepository;
-    private final IStoreRepository storeRepository;
+    private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
     private final QueryMicroservice notificationService;
     private final String SYSTEM_ADMIN_ROLE = "1";
     private ObjectMapper mapper = new ObjectMapper();
 
-    public AdminOperationsMicroservice(IUserRepository userRepository, IStoreRepository storeRepository) {
+    public AdminOperationsMicroservice(UserRepository userRepository, StoreRepository storeRepository) {
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.notificationService = new QueryMicroservice();
@@ -29,14 +36,13 @@ public class AdminOperationsMicroservice {
             return null;
         }
         try {
-            Store store = mapper.readValue(storeRepository.getStore(storeId), Store.class);
-            if (storeRepository.getStore(storeId) == null) {
-                throw new IllegalArgumentException("Store does not exist");
+            if (storeRepository.existsById(storeId)) {
+                return storeRepository.getById(storeId);
             }
-            return store;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        } catch (EntityNotFoundException e) {
+            ErrorLogger.logError("username-null","EntityNotFoundException:  '"+e.toString()+"'.  in AdminOperationsMicroservice -> getStoreById","couldn't find store");
         }
+        return null;
     }
     /**
      * Closes a store by system administrator
@@ -70,7 +76,10 @@ public class AdminOperationsMicroservice {
                         "Store Closure Notice",
                         "Store " + storeId + " has been closed by system administrator.","admin"
                     );*/
-                    RegisteredUser user = mapper.readValue(userRepository.getUser(staffMember), RegisteredUser.class);
+                    if(!userRepository.existsById(staffMember)) {
+                        throw new EntityNotFoundException(staffMember);
+                    }
+                    RegisteredUser user = (RegisteredUser) userRepository.getById(staffMember);
                     user.getManagedStores().remove(storeId);
                     user.getOwnedStores().remove(storeId);
                 }
@@ -78,7 +87,8 @@ public class AdminOperationsMicroservice {
                 return true;
             }
             return false;
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
+            ErrorLogger.logError(adminId,"EntityNotFoundException: '"+e.toString()+"'. in AdminOperationsMicroservice -> adminCloseStore","couldn't find user");
             return false;
         }
     }
@@ -94,29 +104,29 @@ public class AdminOperationsMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean suspendMember(String adminId, String userId) {
-        // Verify admin permissions
-        if (!isSystemAdmin(adminId)) {
-            return false;
-        }
+        if (!isSystemAdmin(adminId)) return false;
         try {
-            // Get all stores where user has roles
-            RegisteredUser user = mapper.readValue(userRepository.getUser(userId), RegisteredUser.class);
-            LinkedList<String> userManagedStores = user.getManagedStores();
-            LinkedList<String> userOwnedStores = user.getOwnedStores();
-            // Revoke all roles in all stores
-            for (String StoreID : userManagedStores) {
-                getStoreById(StoreID).terminateManagment(userId);
-            }
-            for (String StoreID : userOwnedStores) {
-                getStoreById(StoreID).terminateOwnership(userId);
-            }
+            RegisteredUser user = userRepository.getById(userId);
 
-            // Remove user membership
+            List<String> managed = user.getManagedStores() == null
+                    ? new ArrayList<>() : user.getManagedStores();
+            List<String> owned   = user.getOwnedStores()   == null
+                    ? new ArrayList<>() : user.getOwnedStores();
+
+            for (String sId : managed) {
+                Store s = getStoreById(sId);
+                if (s != null) s.terminateManagment(userId);
+            }
+            for (String sId : owned) {
+                Store s = getStoreById(sId);
+                if (s != null) s.terminateOwnership(userId);
+            }
             return true;
         } catch (Exception e) {
             return false;
         }
     }
+
     public boolean unSuspendMember(String adminId, String userId) {
         if (!isSystemAdmin(adminId)) {
             return false;

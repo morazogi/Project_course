@@ -1,12 +1,9 @@
 package DomainLayer;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface IOrderRepository {
-    void addOrder(String order, String storeId, String userId);
-    void removeOrder(String order, String storeId, String userId);
-    List<String> getOrderByStoreId(String storeId);
-    List<String> getOrderByUserId(String userId);
-    List<String> getOrderHistory(String username);
-
+public interface IOrderRepository extends JpaRepository<Order, String> {
+    List<Order> findByStoreId(String storeId);
+    List<Order> findByUserId(String userId);
 }

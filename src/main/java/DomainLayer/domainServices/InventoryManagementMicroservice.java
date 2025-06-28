@@ -1,19 +1,22 @@
 package DomainLayer.DomainServices;
 
 import DomainLayer.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static DomainLayer.ManagerPermissions.*;
-import static utils.JsonUtils.mapper;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import org.hibernate.Hibernate;
 
 public class InventoryManagementMicroservice {
-    private IStoreRepository storeRepository;
-    private IProductRepository productRepository;
+    private StoreRepository storeRepository;
+    private ProductRepository productRepository;
     private ObjectMapper mapper = new ObjectMapper();
     // Standard permission strings
 
 
-    public InventoryManagementMicroservice(IStoreRepository storeRepository, IProductRepository productRepository) {
+    public InventoryManagementMicroservice(StoreRepository storeRepository, ProductRepository productRepository) {
         this.storeRepository = storeRepository;
         this.productRepository = productRepository;
     }
@@ -24,7 +27,7 @@ public class InventoryManagementMicroservice {
      * @param storeRepository Repository for stores
      * @param userRepository  Repository for users
      */
-    public void setRepositories(IStoreRepository storeRepository, IUserRepository userRepository) {
+    public void setRepositories(StoreRepository storeRepository, UserRepository userRepository) {
         this.storeRepository = storeRepository;
     }
 
@@ -61,15 +64,12 @@ public class InventoryManagementMicroservice {
         if (storeRepository == null) {
             return null;
         }
-        try {
-            Store store = mapper.readValue(storeRepository.getStore(storeId), Store.class);
-            if (storeRepository.getStore(storeId) == null) {
-                throw new IllegalArgumentException("Store does not exist");
-            }
-            return store;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        Store store = storeRepository.getById(storeId);
+        Hibernate.initialize(store);
+        if (store == null) {
+            throw new IllegalArgumentException("Store does not exist");
         }
+        return store;
     }
 
     /**
@@ -84,7 +84,7 @@ public class InventoryManagementMicroservice {
      * @param category    Category of the product
      * @return Product ID if successful, null otherwise
      */
-    public String addProduct(String userId, String storeId, String productName, String description, double price, int quantity, String category) {
+    public String addProduct(String userId, String storeId, String productName, String description, float price, int quantity, String category) {
         // Check if user has permission
         if (!checkPermission(userId, storeId, ManagerPermissions.PERM_ADD_PRODUCT)) {
             return null; // No permission
@@ -94,9 +94,15 @@ public class InventoryManagementMicroservice {
         if (store == null) {
             return null;
         }
-
-        return store.addProduct(productName, description, price, quantity, category);
-
+        Product product = new Product(storeId, productName, description, price, quantity, -1, category);
+        productRepository.save(product);
+        store.addProduct(product.getId(), product.getQuantity());
+        try {
+            storeRepository.update(store);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return product.getId();
     }
 
     /**
@@ -118,7 +124,11 @@ public class InventoryManagementMicroservice {
             return false;
         }
 
-        return store.removeProduct(productId);
+        if(store.removeProduct(productId)) {
+            storeRepository.update(store);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -144,7 +154,16 @@ public class InventoryManagementMicroservice {
             return false;
         }
 
-        return store.updateProductDetails(productId, productName, description, price, category);
+        if(store.updateProductDetails(productId, productName, description, price, category)) {
+            Product olProdu = productRepository.getById(productId);
+            Product updateProduc = new Product(storeId, productName, description, (float) price, olProdu.getQuantity(), olProdu.getRating(), category);
+            updateProduc.setId(productId);
+            productRepository.delete(olProdu);
+            productRepository.update(updateProduc);
+            storeRepository.update(store);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -166,7 +185,10 @@ public class InventoryManagementMicroservice {
         if (store == null) {
             return false;
         }
-
-        return store.updateProductQuantity(productId, newQuantity);
+        if(store.updateProductQuantity(productId, newQuantity)) {
+            storeRepository.update(store);
+            return true;
+        }
+        return false;
     }
 }

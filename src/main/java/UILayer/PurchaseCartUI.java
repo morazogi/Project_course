@@ -4,9 +4,14 @@ import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.DomainServices.DiscountPolicyMicroservice;
 import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.DiscountRepository;
+import ServiceLayer.ErrorLogger;
 import ServiceLayer.ProductService;
 import ServiceLayer.RegisteredService;
-import ServiceLayer.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -28,15 +33,15 @@ public class PurchaseCartUI extends VerticalLayout {
 
     private final ProductService productService;
     private final RegisteredService registeredService;
-    private final IProductRepository productRepository;
+    private final ProductRepository productRepository;
     private final IToken tokenService;
-    private final IUserRepository userRepository;
-    private final IDiscountRepository discountRepository;
+    private final UserRepository userRepository;
+    private final DiscountRepository discountRepository;
     private final StoreRepository storeRepository;
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    public PurchaseCartUI(ProductService productService, RegisteredService registeredService, IProductRepository productRepository, IToken tokenService, IUserRepository userRepository, StoreRepository storeRepository, IDiscountRepository discountRepository) {
+    public PurchaseCartUI(ProductService productService, RegisteredService registeredService, ProductRepository productRepository, IToken tokenService, UserRepository userRepository, StoreRepository storeRepository, DiscountRepository discountRepository) {
         this.productService = productService;
         this.registeredService = registeredService;
         this.productRepository = productRepository;
@@ -44,13 +49,14 @@ public class PurchaseCartUI extends VerticalLayout {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
+
         String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
         RegisteredUser user = null;
         try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
+            user = userRepository.getById(username);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            ErrorLogger.logError(username,e.toString(),"user "+username+" not found in class purchaseCartUI");
         }
         // Buttons and Navigation
         Button signOut = new Button("🔐 Sign out", e -> {
@@ -99,7 +105,7 @@ public class PurchaseCartUI extends VerticalLayout {
             DiscountPolicyMicroservice discountPolicy = new DiscountPolicyMicroservice(storeRepository, userRepository, productRepository, discountRepository);
             Map<Product, Integer> products = new HashMap<Product, Integer>();
             for (String product : shoppingBag.getProducts().keySet()) {
-                products.put(productRepository.getReferenceById(product), shoppingBag.getProducts().get(product));
+                products.put(productRepository.getById(product), shoppingBag.getProducts().get(product));
             }
 
             Product firstProduct = products.keySet().iterator().next();
@@ -117,9 +123,25 @@ public class PurchaseCartUI extends VerticalLayout {
         // Buttons for Confirm/Cancel
         HorizontalLayout buttonLayout = new HorizontalLayout(confirmPurchase, cancelPurchase);
         add(productGrid, totalField, buttonLayout);
-
+        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecartfinal");}));
         setPadding(true);
         setAlignItems(Alignment.CENTER);
         this.storeRepository = storeRepository;
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

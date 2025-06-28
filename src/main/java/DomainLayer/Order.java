@@ -10,8 +10,9 @@ import java.util.UUID;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     @Column(name = "info", nullable = false, columnDefinition = "TEXT")
     private final String info;

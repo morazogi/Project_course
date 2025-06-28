@@ -1,42 +1,6 @@
-[2025-05-24 22:04:31] User: admin | Error: Failed to delete product | Details: java.lang.IllegalArgumentException: ID not found
-[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_MANAGER_PERMISSIONS_FAILED | Details: Failed to update manager permissions
-[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_REMOVE_PRODUCT_FAILED | Details: Failed to remove product
-[2025-05-24 22:04:31] User: owner1 | Error: ADD_PRODUCT_FAILED | Details: Failed to add product
-[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_STORE_OWNER_FAILED | Details: Failed to remove store owner
-[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_PURCHASE_POLICY_FAILED | Details: Failed to remove purchase policy
-[2025-05-24 22:04:31] User: manager1 | Error: RELINQUISH_MANAGEMENT_FAILED | Details: Failed to relinquish management
-[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: Failed to update purchase policy
-[2025-05-24 22:04:31] User: founder1 | Error: REOPEN_STORE_FAILED | Details: Failed to reopen store
-[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_ADD_PRODUCT_FAILED | Details: Failed to add product
-[2025-05-24 22:04:31] User: founder1 | Error: CLOSE_STORE_FAILED | Details: Failed to close store
-[2025-05-24 22:04:31] User: user1 | Error: SEND_OWNERSHIP_PROPOSAL_FAILED | Details: Failed to send ownership proposal
-[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_PRODUCT_QUANTITY_FAILED | Details: Failed to update product quantity
-[2025-05-24 22:04:31] User: user1 | Error: RESPOND_TO_MANAGER_APPOINTMENT_FAILED | Details: Failed to respond to manager appointment
-[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_STORE_MANAGER_FAILED | Details: Failed to remove store manager
-[2025-05-24 22:04:31] User: owner1 | Error: GET_CUSTOMER_INQUIRIES_FAILED | Details: Failed to get customer inquiries
-[2025-05-24 22:04:31] User: owner1 | Error: APPOINT_STORE_MANAGER_FAILED | Details: Failed to appoint store manager
-[2025-05-24 22:04:31] User: owner1 | Error: RELINQUISH_OWNERSHIP_FAILED | Details: Failed to relinquish ownership
-[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_UPDATE_PRODUCT_DETAILS_FAILED | Details: Failed to update product details
-[2025-05-24 22:04:31] User: owner1 | Error: GET_MANAGER_PERMISSIONS_FAILED | Details: Failed to get manager permissions
-[2025-05-24 22:04:31] User: user1 | Error: SEND_MANAGEMENT_PROPOSAL_FAILED | Details: Failed to send management proposal
-[2025-05-24 22:04:31] User: owner1 | Error: GET_STORE_ROLE_INFO_FAILED | Details: Failed to get store role info
-[2025-05-24 22:04:31] User: manager1 | Error: MANAGER_UPDATE_PRODUCT_QUANTITY_FAILED | Details: Failed to update product quantity
-[2025-05-24 22:04:31] User: owner1 | Error: DEFINE_PURCHASE_POLICY_FAILED | Details: Failed to define purchase policy
-[2025-05-24 22:04:31] User: owner1 | Error: RESPOND_TO_CUSTOMER_INQUIRY_FAILED | Details: Failed to respond to customer inquiry
-[2025-05-24 22:04:31] User: owner1 | Error: REMOVE_PRODUCT_FAILED | Details: Failed to remove product
-[2025-05-24 22:04:31] User: owner1 | Error: UPDATE_PRODUCT_DETAILS_FAILED | Details: Failed to update product details
-[2025-05-24 22:04:32] User: owner1 | Error: APPOINT_STORE_OWNER_FAILED | Details: Failed to appoint store owner
-[2025-05-24 22:04:32] User: user1 | Error: RESPOND_TO_OWNER_APPOINTMENT_FAILED | Details: Failed to respond to owner appointment
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Failed to pay  | Details: Exception for payment: Product not found: 1
-[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Empty state
-[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Empty street
-[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Invalid home number
-[2025-05-24 22:04:32] User: username | Error: Error in shipping | Details: Empty city
+[2025-06-28 04:28:17] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: boom
+[2025-06-28 04:28:17] User: o | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: broken
+[2025-06-28 04:28:17] User: alice | Error: Failed to cancel payment | Details: boom
+[2025-06-28 04:28:17] User: alice | Error: Failed to pay  | Details: gateway down
+[2025-06-28 04:28:17] User: john | Error: Failed to cancel shipping | Details: fail
+[2025-06-28 04:28:17] User: john | Error: Error in shipping | Details: svc down

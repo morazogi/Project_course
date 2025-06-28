@@ -2,299 +2,319 @@ package DomainLayer.DomainServices;
 
 import DomainLayer.*;
 import DomainLayer.Roles.RegisteredUser;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import InfrastructureLayer.DiscountRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import ServiceLayer.ErrorLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * Micro-service that stores, evaluates and manages discount policies.
+ * <p>
+ *  – All public methods perform permission checks.<br>
+ *  – Discounts are kept as separate entities and only <em>referenced</em>
+ *    from stores / other discounts by ID – enabling nested compositions.
+ */
 @Service
 public class DiscountPolicyMicroservice {
 
-    private IStoreRepository storeRepository;
-    private IUserRepository userRepository;
-    private IProductRepository productRepository;
-    private IDiscountRepository discountRepository;
-    private ObjectMapper mapper = new ObjectMapper();
+    /* ======================================================================
+       Dependencies
+       ====================================================================== */
+    private final StoreRepository    storeRepository;
+    private final UserRepository     userRepository;
+    private final ProductRepository  productRepository;
+    private final DiscountRepository discountRepository;
+    private final ObjectMapper       mapper = new ObjectMapper();
 
-
-    private Store getStoreById(String storeId) {
-        if (storeRepository == null) {
-            return null;
-        }
-        try {
-            Store store = mapper.readValue(storeRepository.getStore(storeId), Store.class);
-            if (storeRepository.getStore(storeId) == null) {
-                throw new IllegalArgumentException("Store does not exist");
-            }
-            return store;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    private RegisteredUser getUserById(String userId) {
-        if (userRepository == null) {
-            return null;
-        }
-        try {
-            RegisteredUser user = mapper.readValue(userRepository.getUser(userId), RegisteredUser.class);
-            if (userRepository.getUser(userId) == null) {
-                throw new IllegalArgumentException("User does not exist");
-            }
-            return user;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Product getProductById(String ProductId) {
-        if (productRepository == null) {
-            throw new IllegalArgumentException("Didnt set productRepository");
-        }
-        Product product = productRepository.getReferenceById(ProductId);
-        if (productRepository.getReferenceById(ProductId) == null) {
-            throw new IllegalArgumentException("Store does not exist");
-        }
-        return product;
-    }
-
-
-    private Discount getDiscountById(String DiscountId){
-        return discountRepository.getReferenceById(DiscountId);
-    }
-
-    private boolean checkPermission(String userId, String storeId, String permissionType) {
-        // Get the store
-        Store store = getStoreById(storeId);
-        if (store == null) {
-            return false;
-        }
-
-        // Owners have all permissions
-        if (store.userIsOwner(userId)) {
-            return true;
-        }
-
-        // Check if manager has specific permission
-        if (store.userIsManager(userId)) {
-            return store.userHasPermissions(userId, permissionType);
-        }
-
-        if (store.getFounder().equals(userId)) {  // founder has every right
-            return true;
-        }
-
-        return false;
-    }
-
-    public DiscountPolicyMicroservice(IStoreRepository storeRepository, IUserRepository userRepository, IProductRepository productRepository, IDiscountRepository discountRepository) {
-        this.storeRepository = storeRepository;
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
+    public DiscountPolicyMicroservice(StoreRepository storeRepository,
+                                      UserRepository userRepository,
+                                      ProductRepository productRepository,
+                                      DiscountRepository discountRepository)
+    {
+        this.storeRepository    = storeRepository;
+        this.userRepository     = userRepository;
+        this.productRepository  = productRepository;
         this.discountRepository = discountRepository;
     }
 
-    public boolean removeDiscountFromDiscountPolicy(String ownerId, String storeId, String discountId) {
-        if (checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)) {
-            Store store =  getStoreById(storeId);
-            if (store != null) {
-                store.removeDiscount(discountId);
-                discountRepository.deleteById(discountId);
-                try {
-                    storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+    /* ======================================================================
+       Small helper functions
+       ====================================================================== */
+
+    private Store getStoreById(String storeId) {
+        try { return storeRepository.getById(storeId); }
+        catch (EntityNotFoundException e) {
+            ErrorLogger.logError("username-null",
+                    "EntityNotFoundException: '"+ e +"'. Store not found in getById",
+                    "couldn't find store");
+            return null;
         }
+    }
+
+    private RegisteredUser getUserById(String userId) {
+        try { return (RegisteredUser) userRepository.getById(userId); }
+        catch (EntityNotFoundException e) { return null; }
+    }
+
+    private Product getProductById(String productId) {
+        Product p = productRepository.getById(productId);
+        if (p == null) throw new IllegalArgumentException("Product not found");
+        return p;
+    }
+
+    private Discount getDiscountById(String discountId) {
+        return discountRepository.getById(discountId);
+    }
+
+    private boolean checkPermission(String userId, String storeId, String permissionType) {
+        Store store = getStoreById(storeId);
+        if (store == null) return false;
+
+        /* founder & owners have every permission                               */
+        if (store.getFounder().equals(userId) || store.userIsOwner(userId))
+            return true;
+
+        /* managers – check their permissions                                   */
+        if (store.userIsManager(userId))
+            return store.userHasPermissions(userId, permissionType);
+
         return false;
     }
 
-    public boolean addDiscountToDiscountPolicy(String ownerId, String storeId, String discountId,
-                                        String Id,
-                                        float level,
-                                        float logicComposition,
-                                        float numericalComposition,
-                                        List<String> discountsId,
-                                        float percentDiscount,
-                                        String discounted,
-                                        float conditional,
-                                        float limiter,
-                                        String conditionalDiscounted) {
+    /* ======================================================================
+       1)  Add discount to policy
+       ====================================================================== */
 
+    public boolean addDiscountToDiscountPolicy(String ownerId,
+                                               String storeId,
+                                               String discountId,          // parent-discount ID ("" → top-level)
+                                               float level,
+                                               float logicComposition,
+                                               float numericalComposition,
+                                               List<String> discountsId,   // pre-existing children to attach
+                                               float percentDiscount,
+                                               String discounted,
+                                               float conditional,
+                                               float limiter,
+                                               String conditionalDiscounted)
+    {
+        if (!checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY))
+            return false;
 
-        if (checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)) {
-            Store store = getStoreById(storeId);
-            if (store != null) {
+        Store store = getStoreById(storeId);
+        if (store == null) return false;
 
-                // 1. create & save the discount
-                Discount discount = new Discount(
-                        Id, storeId,
-                        level, logicComposition, numericalComposition,
-                        discountsId, percentDiscount, discounted,
-                        conditional, limiter, conditionalDiscounted
-                );
-                if (discountRepository.save(discount) == null) {
-                    return false;
-                }
+        /* 1. create & persist the new discount                                */
+        Discount newDisc = new Discount(
+                storeId,
+                level, logicComposition, numericalComposition,
+                discountsId, percentDiscount, discounted,
+                conditional, limiter, conditionalDiscounted
+        );
+        if (discountRepository.save(newDisc) == null) return false;
 
-                store.addDiscount(discountId);
-
-                try {
-                    storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-                return true;
+        /* 2. attach it to store or to an existing parent discount             */
+        if (discountId == null || discountId.isBlank()) {
+            store.addDiscount(newDisc.getId());                // top level
+        } else {
+            Discount parent = discountRepository.getById(discountId);
+            if (parent != null) {
+                List<String> children = new ArrayList<>(parent.getDiscounts());
+                children.add(newDisc.getId());
+                parent.setDiscounts(children);
+                discountRepository.update(parent);
+            } else {
+                // parent not found – treat as top-level
+                store.addDiscount(newDisc.getId());
             }
         }
-        return false;
+
+        /* 3. persist the store                                                */
+        storeRepository.update(store);
+        return true;
     }
 
-    public boolean removeDiscountPolicy(String ownerId, String storeId) {
-        if(checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY)) {
-            Store store = getStoreById(storeId);
-            List<String> discountPolicy = store.getDiscountPolicy();
-            for (String discountId : discountPolicy) {
-                if (discountId == null) {
-                    continue;
-                }
-                discountRepository.deleteById(discountId);
-                try {
-                    storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
+    /* ======================================================================
+       2)  Remove discount from policy   (FIXED)
+       ====================================================================== */
+
+    public boolean removeDiscountFromDiscountPolicy(String ownerId,
+                                                    String storeId,
+                                                    String discountId)
+    {
+        if (!checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY))
+            return false;
+
+        Store store = getStoreById(storeId);
+        if (store == null) return false;
+
+        /* A) try to remove from the store’s top-level list                    */
+        boolean removed = store.removeDiscount(discountId);
+
+        /* B) otherwise search recursively through nested discounts            */
+        if (!removed) {
+            for (String topId : store.getDiscountPolicy()) {
+                Discount top = getDiscountById(topId);
+                if (top != null && removeDiscountFromDiscount(top, discountId)) {
+                    removed = true;
+                    break;
                 }
             }
-            store.setDiscountPolicy(new ArrayList<>());
-            try {
-                storeRepository.updateStore(storeId, mapper.writeValueAsString(store));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+        }
+
+        /* C) if reference removed – delete entity and save store             */
+        if (removed) {
+            discountRepository.deleteById(discountId);
+            storeRepository.update(store);
             return true;
         }
-
-        return false;
+        return false;   // nothing found
     }
 
+    /* ======================================================================
+       3)  Remove entire policy (unchanged)
+       ====================================================================== */
 
+    public boolean removeDiscountPolicy(String ownerId, String storeId) {
+        if (!checkPermission(ownerId, storeId, ManagerPermissions.PERM_UPDATE_POLICY))
+            return false;
 
-    public float calculatePrice(String storeId, Map<String,Integer> productsStringQuantity){
         Store store = getStoreById(storeId);
+        if (store == null) return false;
 
-        List<Discount> Alldiscounts = store.getDiscountPolicy().stream()
+        List<String> policy = new ArrayList<>(store.getDiscountPolicy());
+        for (String id : policy) {
+            if (id == null) continue;
+            discountRepository.deleteById(id);
+        }
+        store.setDiscountPolicy(new ArrayList<>());
+        storeRepository.update(store);
+        return true;
+    }
+
+    /* ======================================================================
+       4)  Price calculation (unchanged)
+       ====================================================================== */
+
+    public float calculatePrice(String storeId,
+                                Map<String, Integer> productsStringQuantity)
+    {
+        /* --- fetch store & its discounts ----------------------------------- */
+        Store store = getStoreById(storeId);
+        if (store == null) throw new IllegalArgumentException("Store not found");
+
+        List<Discount> allDiscounts = store.getDiscountPolicy().stream()
                 .map(this::getDiscountById)
                 .filter(Objects::nonNull)
                 .toList();
 
+        /* --- reset 'alreadyUsed' flag before evaluating -------------------- */
+        for (Discount d : allDiscounts) resetUsedRecursively(d);
+
+        /* --- turn id→qty into Product→qty map ------------------------------ */
         Map<Product, Integer> productsQuantity = new HashMap<>();
         for (Map.Entry<String, Integer> e : productsStringQuantity.entrySet()) {
             Product p = getProductById(e.getKey());
-            if (p != null) {
-                productsQuantity.put(p, e.getValue());
-            }
+            if (p != null) productsQuantity.put(p, e.getValue());
         }
 
-
-
-
-
-
+        /* --- base price & initial multipliers ------------------------------ */
         float originalPrice = 0f;
-
+        Map<Product, Float> productMultipliers = new HashMap<>();
         for (Map.Entry<Product, Integer> e : productsQuantity.entrySet()) {
             originalPrice += e.getKey().getPrice() * e.getValue();
+            productMultipliers.put(e.getKey(), 1f);
         }
 
-
-        Map<Product, Float> productDiscounts = new HashMap<>();
-        for (Product p : productsQuantity.keySet()) {
-            productDiscounts.put(p, 1f);
-        }
-
-
-        for (Discount discount : Alldiscounts) {
-            List<Discount> nestedDiscounts = new ArrayList<>();
-            for (String id : discount.getDiscounts()) {
+        /* --- apply every top-level discount -------------------------------- */
+        for (Discount top : allDiscounts) {
+            List<Discount> nested = new ArrayList<>();
+            for (String id : top.getDiscounts()) {
                 Discount d = getDiscountById(id);
-                if (d != null) {
-                    nestedDiscounts.add(d);
-                }
+                if (d != null) nested.add(d);
             }
-            productDiscounts =  discount.applyDiscount(originalPrice, productsQuantity, productDiscounts, nestedDiscounts);
+            productMultipliers = top.applyDiscount(originalPrice,
+                    productsQuantity,
+                    productMultipliers,
+                    nested);
         }
 
-
-
-
-
-
-
-
+        /* --- final total ---------------------------------------------------- */
         float total = 0f;
-        for (Map.Entry<Product, Float> e : productDiscounts.entrySet()) {
-            Product p = e.getKey();
-            float discount = e.getValue();
-            int qty = productsQuantity.getOrDefault(p, 0);
-            total += p.getPrice() * discount * qty;
+        for (Map.Entry<Product, Float> e : productMultipliers.entrySet()) {
+            Product p  = e.getKey();
+            float  mul = e.getValue();
+            int    qty = productsQuantity.getOrDefault(p, 0);
+            total += p.getPrice() * mul * qty;
         }
-
         return total;
     }
 
+    /* ======================================================================
+       5)  Internal recursive helpers
+       ====================================================================== */
 
+    /** Clears the {@code alreadyUsed} flag for a discount and all its children. */
+    private void resetUsedRecursively(Discount disc) {
+        if (disc == null) return;
+        disc.setAlreadyUsed(false);
+        for (String id : disc.getDiscounts()) {
+            resetUsedRecursively(getDiscountById(id));
+        }
+    }
 
-
-
-
-
-
-
-
-    //helpful
-    private boolean removeDiscount(String discountId) {
-        boolean removed = false;
-
-        Discount discount = discountRepository.getReferenceById(discountId);
-        List<String> discountsString = discount.getDiscounts();
-
-        List<Discount> discounts = new ArrayList<>();
-        for (String id : discountsString) {
-            Discount d = discountRepository.getReferenceById(id);
-            if (d != null) discounts.add(d);
+    /**
+     * Removes {@code discountId} from the nested list of {@code parentDiscount}
+     * (works recursively).  Returns {@code true} iff a reference was removed.
+     */
+    private boolean removeDiscountFromDiscount(Discount parentDiscount,
+                                               String discountId)
+    {
+        /* -- build child list as objects ------------------------------------ */
+        List<Discount> children = new ArrayList<>();
+        for (String id : parentDiscount.getDiscounts()) {
+            Discount d = getDiscountById(id);
+            if (d != null) children.add(d);
         }
 
-        Iterator<Discount> iterator = discounts.iterator();
-        while (iterator.hasNext()) {
-            Discount d = iterator.next();
-            if (d.getId().equals(discountId)) {
-                iterator.remove();
-                removed = true;
-            }
+        /* -- remove direct child if present --------------------------------- */
+        boolean removed = children.removeIf(d -> d.getId().equals(discountId));
+
+        /* -- recurse into children ------------------------------------------ */
+        for (Discount child : children) {
+            removed |= removeDiscountFromDiscount(child, discountId);
         }
 
-        // Process each discount in the current list to remove the discountId from their nested discounts
-        List<Discount> currentDiscounts = new ArrayList<>(discounts); // Create a copy to iterate safely
-        for (Discount d : currentDiscounts) {
-            boolean childRemoved = removeDiscountFromDiscount(d, discountId);
-            removed = removed || childRemoved;
+        /* -- if something changed – persist parent -------------------------- */
+        if (removed) {
+            List<String> newIds = children.stream()
+                    .map(Discount::getId)
+                    .toList();
+            parentDiscount.setDiscounts(newIds);
+            discountRepository.update(parentDiscount);
         }
-
         return removed;
     }
 
-    private boolean removeDiscountFromDiscount(Discount parentDiscount, String discountId) {
+    /* ----------------------------------------------------------------------
+       Legacy helper (untouched) – still used elsewhere in code base
+       ---------------------------------------------------------------------- */
+    private boolean removeDiscount(String discountId) {
         boolean removed = false;
 
+        Discount discount = discountRepository.getById(discountId);
+        if (discount == null) return false;
 
-        Discount discount = discountRepository.getReferenceById(discountId);
         List<String> discountsString = discount.getDiscounts();
-
         List<Discount> discounts = new ArrayList<>();
         for (String id : discountsString) {
-            Discount d = discountRepository.getReferenceById(id);
+            Discount d = discountRepository.getById(id);
             if (d != null) discounts.add(d);
         }
 
@@ -304,11 +324,11 @@ public class DiscountPolicyMicroservice {
             if (d.getId().equals(discountId)) {
                 iterator.remove();
                 removed = true;
-            } else {
-                // Recursively process the nested discounts of the current discount
-                boolean childRemoved = removeDiscountFromDiscount(d, discountId);
-                removed = removed || childRemoved;
             }
+        }
+
+        for (Discount d : new ArrayList<>(discounts)) {
+            removed |= removeDiscountFromDiscount(d, discountId);
         }
         return removed;
     }

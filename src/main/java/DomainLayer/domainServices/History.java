@@ -1,22 +1,18 @@
 package DomainLayer.DomainServices;
-
+import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import DomainLayer.IOrderRepository;
-import DomainLayer.IStoreRepository;
+import DomainLayer.Order;
+import InfrastructureLayer.*;
 import DomainLayer.IToken;
-import DomainLayer.IUserRepository;
 
 public class History {
     private IToken Tokener;
-    private ObjectMapper mapper = new ObjectMapper();
-    private IOrderRepository orderRepository;
-    private IUserRepository userRepository;
+    private OrderRepository orderRepository;
+    private UserRepository userRepository;
 
 
-    public History(IToken Tokener, IOrderRepository orderRepository, IUserRepository userRepository) {
+    public History(IToken Tokener, OrderRepository orderRepository, UserRepository userRepository) {
         this.Tokener = Tokener;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
@@ -31,6 +27,11 @@ public class History {
         if (username == null) {
             throw new IllegalArgumentException("Invalid token");
         }
-        return orderRepository.getOrderHistory(username);
+        ArrayList<String> ordersInString = new ArrayList<>();
+        List<Order> orders = orderRepository.findByUserID(username);
+        for (Order o : orders){
+            ordersInString.add(o.toString());
+        }
+        return ordersInString;
     }
 }

@@ -1,104 +1,129 @@
 package DomainLayer;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 @Table(name = "manager_permissions")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ManagerPermissions {
-    public static final String PERM_MANAGE_INVENTORY = "manageInventory";
-    public static final String PERM_MANAGE_STAFF = "manageStaff";
-    public static final String PERM_VIEW_STORE = "viewStore";
-    public static final String PERM_UPDATE_POLICY = "updatePolicy";
-    public static final String PERM_ADD_PRODUCT = "addProduct";
-    public static final String PERM_REMOVE_PRODUCT = "removeProduct";
-    public static final String PERM_UPDATE_PRODUCT = "updateProduct";
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
 
-    @Column(name = "manage_inventory")
-    private boolean manageInventory;
+    public static final String PERM_MANAGE_INVENTORY = "PERM_MANAGE_INVENTORY";
+    public static final String PERM_MANAGE_STAFF = "PERM_MANAGE_STAFF";
+    public static final String PERM_VIEW_STORE = "PERM_VIEW_STORE";
+    public static final String PERM_UPDATE_POLICY = "PERM_UPDATE_POLICY";
+    public static final String PERM_ADD_PRODUCT = "PERM_ADD_PRODUCT";
+    public static final String PERM_REMOVE_PRODUCT = "PERM_REMOVE_PRODUCT";
+    public static final String PERM_UPDATE_PRODUCT = "PERM_UPDATE_PRODUCT";
+    public static final String PERM_OPEN_STORE = "PERM_OPEN_STORE";
+    public static final String PERM_CLOSE_STORE = "PERM_CLOSE_STORE";
 
-    @Column(name = "manage_staff")
-    private boolean manageStaff;
+    @EmbeddedId
+    private ManagerPermissionsPK id;
 
-    @Column(name = "view_store")
-    private boolean viewStore;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "manager_permission_entries",
+            joinColumns = {
+                    @JoinColumn(name = "store_id", referencedColumnName = "store_id"),
+                    @JoinColumn(name = "manager_id", referencedColumnName = "manager_id")
+            }
+    )
+    @MapKeyColumn(name = "permission_name")
+    @Column(name = "permission_value")
+    private Map<String, Boolean> permissions = new HashMap<>();
 
-    @Column(name = "update_policy")
-    private boolean updatePolicy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", insertable = false, updatable = false)
+    private Store store;
 
-    @Column(name = "add_product")
-    private boolean addProduct;
-
-    @Column(name = "remove_product")
-    private boolean removeProduct;
-
-    @Column(name = "update_product")
-    private boolean updateProduct;
-
-    public ManagerPermissions() {}
-
-    public ManagerPermissions(boolean[] perm) {
-        this.manageInventory = perm[0];
-        this.manageStaff = perm[1];
-        this.viewStore = perm[2];
-        this.updatePolicy = perm[3];
-        this.addProduct = perm[4];
-        this.removeProduct = perm[5];
-        this.updateProduct = perm[6];
+    public ManagerPermissions() {
+        initializeDefaultPermissions();
     }
 
-    public boolean isManageInventory() { return manageInventory; }
-    public boolean isManageStaff() { return manageStaff; }
-    public boolean isViewStore() { return viewStore; }
-    public boolean isUpdatePolicy() { return updatePolicy; }
-    public boolean isAddProduct() { return addProduct; }
-    public boolean isRemoveProduct() { return removeProduct; }
-    public boolean isUpdateProduct() { return updateProduct; }
-
-    public void setPermissions(boolean[] perm) {
-        this.manageInventory = perm[0];
-        this.manageStaff = perm[1];
-        this.viewStore = perm[2];
-        this.updatePolicy = perm[3];
-        this.addProduct = perm[4];
-        this.removeProduct = perm[5];
-        this.updateProduct = perm[6];
+    public ManagerPermissions(boolean[] permArray, String managerId, String storeId) {
+        this.id = new ManagerPermissionsPK(managerId, storeId);
+        initializeDefaultPermissions();
+        setPermissionsFromAarray(permArray);
     }
 
-    public boolean getPermission(String permission) {
-        switch (permission) {
-            case PERM_MANAGE_INVENTORY:
-                return manageInventory;
-            case PERM_MANAGE_STAFF:
-                return manageStaff;
-            case PERM_VIEW_STORE:
-                return viewStore;
-            case PERM_UPDATE_POLICY:
-                return updatePolicy;
-            case PERM_ADD_PRODUCT:
-                return addProduct;
-            case PERM_REMOVE_PRODUCT:
-                return removeProduct;
-            case PERM_UPDATE_PRODUCT:
-                return updateProduct;
-            default:
-                return false;
-        }
+    private void initializeDefaultPermissions() {
+        permissions.put(PERM_MANAGE_INVENTORY, false);
+        permissions.put(PERM_MANAGE_STAFF, false);
+        permissions.put(PERM_VIEW_STORE, false);
+        permissions.put(PERM_UPDATE_POLICY, false);
+        permissions.put(PERM_ADD_PRODUCT, false);
+        permissions.put(PERM_REMOVE_PRODUCT, false);
+        permissions.put(PERM_UPDATE_PRODUCT, false);
+        permissions.put(PERM_OPEN_STORE, false);
+        permissions.put(PERM_CLOSE_STORE, false);
+    }
+
+    public ManagerPermissionsPK getId() {
+        return id;
+    }
+
+    public void setId(ManagerPermissionsPK id) {
+        this.id = id;
+    }
+
+    public String getManagerId() {
+        return id != null ? id.getManagerId() : null;
+    }
+
+    public String getStoreId() {
+        return id != null ? id.getStoreId() : null;
     }
 
     public Map<String, Boolean> getPermissions() {
-        return Map.of(
-                PERM_MANAGE_INVENTORY, manageInventory,
-                PERM_MANAGE_STAFF, manageStaff,
-                PERM_VIEW_STORE, viewStore,
-                PERM_UPDATE_POLICY, updatePolicy,
-                PERM_ADD_PRODUCT, addProduct,
-                PERM_REMOVE_PRODUCT, removeProduct,
-                PERM_UPDATE_PRODUCT, updateProduct
-        );
+        return permissions;
+    }
+
+    public void setPermissions(Map<String, Boolean> permissions) {
+        this.permissions = permissions;
+    }
+
+    public boolean getPermission(String permission) {
+        return permissions.getOrDefault(permission, false);
+    }
+
+    public void setPermission(String permission, boolean value) {
+        this.permissions.put(permission, value);
+    }
+
+    public void setPermissionsFromAarray(boolean[] perm) {
+        if (perm == null || perm.length < 9) {
+            System.err.println("Permissions array is null or too short.");
+            return;
+        }
+        this.permissions.put(PERM_MANAGE_INVENTORY, perm[0]);
+        this.permissions.put(PERM_MANAGE_STAFF, perm[1]);
+        this.permissions.put(PERM_VIEW_STORE, perm[2]);
+        this.permissions.put(PERM_UPDATE_POLICY, perm[3]);
+        this.permissions.put(PERM_ADD_PRODUCT, perm[4]);
+        this.permissions.put(PERM_REMOVE_PRODUCT, perm[5]);
+        this.permissions.put(PERM_UPDATE_PRODUCT, perm[6]);
+        this.permissions.put(PERM_CLOSE_STORE, perm[5]);
+        this.permissions.put(PERM_OPEN_STORE, perm[6]);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ManagerPermissions)) return false;
+        ManagerPermissions that = (ManagerPermissions) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

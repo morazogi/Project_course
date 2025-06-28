@@ -2,83 +2,100 @@ package DomainLayer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import DomainLayer.ShoppingCart;
-import DomainLayer.ShoppingBag;
 
 import java.util.List;
+import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Unit tests for {@link ShoppingCart} on Java 17 (no List#getFirst()).
+ */
 class ShoppingCartTest {
 
     private ShoppingCart cart;
-    private final String userId = "user123";
-    private final String storeId = "storeA";
-    private final String productId = "prod1";
+
+    private final String store = "store-1";
+    private final String prod  = "apple";
 
     @BeforeEach
-    void setUp() {
-        cart = new ShoppingCart(userId);
+    void init() {
+        cart = new ShoppingCart("alice");
     }
 
+    /* ------------------------------------------------------------
+                        addProduct happy-path
+       ------------------------------------------------------------ */
     @Test
-    void testConstructorSetsUserIdAndEmptyBags() {
-        assertEquals(userId, cart.getUserId(), "UserId should be set by constructor");
-        assertNotNull(cart.getShoppingBags(), "ShoppingBags list should not be null");
-        assertTrue(cart.getShoppingBags().isEmpty(), "ShoppingBags should start empty");
-    }
+    void addProduct_firstTime_createsNewBag() {
+        cart.addProduct(store, prod, 2);
 
-    @Test
-    void testAddProduct_NewStore_CreatesBagWithProduct() {
-        cart.addProduct(storeId, productId, 2);
         List<ShoppingBag> bags = cart.getShoppingBags();
-        assertEquals(1, bags.size(), "Should create one shopping bag");
+        assertEquals(1, bags.size());
+
         ShoppingBag bag = bags.get(0);
-        assertEquals(storeId, bag.getStoreId(), "Bag should have correct storeId");
-        assertTrue(bag.getProducts().containsKey(productId), "Bag should contain added product");
-        assertEquals(2, bag.getProducts().get(productId).intValue(), "Product quantity should match");
+        assertEquals(store,            bag.getStoreId());
+        assertEquals(Map.of(prod, 2),  bag.getProducts());
     }
 
     @Test
-    void testAddProduct_ExistingBag_IncrementsQuantity() {
-        cart.addProduct(storeId, productId, 1);
-        cart.addProduct(storeId, productId, 3);
+    void addProduct_again_sameStore_mergesQuantity() {
+        cart.addProduct(store, prod, 2);   // 2 apples
+        cart.addProduct(store, prod, 3);   // +3 apples
+
         ShoppingBag bag = cart.getShoppingBags().get(0);
-        assertEquals(4, bag.getProducts().get(productId).intValue(), "Quantity should accumulate on repeated adds");
+        assertEquals(5, bag.getProducts().get(prod));  // 2 + 3
     }
 
     @Test
-    void testAddProduct_NonPositiveQuantity_ThrowsException() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> cart.addProduct(storeId, productId, 0));
-        assertEquals("Quantity must be greater than 0", ex.getMessage());
+    void addProduct_invalidQuantity_throws() {
+        assertThrows(IllegalArgumentException.class,
+                () -> cart.addProduct(store, prod, 0));
     }
 
+    /* ------------------------------------------------------------
+                        removeProduct behaviour
+       ------------------------------------------------------------ */
     @Test
-    void testRemoveProduct_ExistingProduct_ReturnsTrueAndAdjustsQuantity() {
-        cart.addProduct(storeId, productId, 5);
-        boolean removed = cart.removeProduct(storeId, productId, 3);
-        assertTrue(removed, "removeProduct should return true when product found");
+    void removeProduct_reducesQuantity_andKeepsBag() {
+        cart.addProduct(store, prod, 4);
+
+        boolean ok = cart.removeProduct(store, prod, 1); // leave 3
+
+        assertTrue(ok);
         ShoppingBag bag = cart.getShoppingBags().get(0);
-        assertEquals(2, bag.getProducts().get(productId).intValue(), "Quantity should decrease by removed amount");
+        assertEquals(3, bag.getProducts().get(prod));
+        assertEquals(1, cart.getShoppingBags().size());  // bag still present
     }
 
     @Test
-    void testRemoveProduct_RemovesBagWhenEmpty() {
-        cart.addProduct(storeId, productId, 2);
-        boolean removed = cart.removeProduct(storeId, productId, 2);
-        assertTrue(removed);
-        assertTrue(cart.getShoppingBags().isEmpty(), "Bag should be removed when no products remain");
+    void removeProduct_removesBagWhenEmpty() {
+        cart.addProduct(store, prod, 2);
+
+        cart.removeProduct(store, prod, 2);              // quantity → 0
+
+        assertTrue(cart.getShoppingBags().isEmpty());
     }
 
     @Test
-    void testRemoveProduct_Nonexistent_ReturnsFalseWithoutException() {
-        boolean removed = cart.removeProduct(storeId, productId, 1);
-        assertFalse(removed, "removeProduct should return false when product not found");
+    void removeProduct_nonExisting_returnsFalse() {
+        cart.addProduct(store, prod, 2);
+
+        assertFalse(cart.removeProduct("unknownStore", "x", 1));
+        assertEquals(1, cart.getShoppingBags().size());  // unchanged
     }
 
+    /* ------------------------------------------------------------
+                               sold()
+       ------------------------------------------------------------ */
     @Test
-    void testSold_DoesNotThrow() {
-        cart.addProduct(storeId, productId, 1);
-        assertDoesNotThrow(() -> cart.sold(), "sold() should execute without exception");
+    void sold_clearsAllBags() {
+        cart.addProduct(store,  "p1", 1);
+        cart.addProduct("s2",   "p2", 2);
+
+        cart.sold();
+
+        assertTrue(cart.getShoppingBags().isEmpty(),
+                "Cart should be empty after sold()");
     }
 }

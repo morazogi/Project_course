@@ -6,6 +6,9 @@ import java.util.Map;
 import DomainLayer.Store;
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.IStoreRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
 import DomainLayer.IUserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,11 +18,11 @@ import static DomainLayer.ManagerPermissions.PERM_MANAGE_STAFF;
 
 public class StoreManagementMicroservice {
     // Add standard permission constants
-    private IStoreRepository storeRepository;
-    private IUserRepository userRepository;
+    private StoreRepository storeRepository;
+    private UserRepository userRepository;
     private ObjectMapper mapper = new ObjectMapper();
 
-    public StoreManagementMicroservice(IStoreRepository storeRepository,IUserRepository userRepository) {
+    public StoreManagementMicroservice(StoreRepository storeRepository,UserRepository userRepository) {
         this.storeRepository = storeRepository;
         this.userRepository = userRepository;
     }
@@ -28,7 +31,7 @@ public class StoreManagementMicroservice {
      * @param storeRepository Repository for stores
      * @param userRepository Repository for users
      */
-    public void setRepositories(IStoreRepository storeRepository, IUserRepository userRepository) {
+    public void setRepositories(StoreRepository storeRepository, UserRepository userRepository) {
         this.storeRepository = storeRepository;
         this.userRepository = userRepository;
     }
@@ -37,29 +40,21 @@ public class StoreManagementMicroservice {
         if (storeRepository == null) {
             return null;
         }
-        try {
-            Store store = mapper.readValue(storeRepository.getStore(storeId), Store.class);
-            if (storeRepository.getStore(storeId) == null) {
-                throw new IllegalArgumentException("Store does not exist");
-            }
-            return store;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        Store store = storeRepository.getById(storeId);
+        if (store == null) {
+            throw new IllegalArgumentException("Store does not exist");
         }
+        return store;
     }
     private RegisteredUser getUserById(String userId) {
         if (userRepository == null) {
             return null;
         }
-        try {
-            RegisteredUser user = mapper.readValue(userRepository.getUser(userId), RegisteredUser.class);
-            if (userRepository.getUser(userId) == null) {
-                throw new IllegalArgumentException("User does not exist");
-            }
-            return user;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        RegisteredUser RegisteredUser = userRepository.getById(userId);
+        if (RegisteredUser == null) {
+            throw new IllegalArgumentException("User does not exist");
         }
+        return RegisteredUser;
     }
     // Add permission check method
     private boolean checkPermission(String userId, String storeId, String permissionType) {
@@ -69,12 +64,12 @@ public class StoreManagementMicroservice {
         }
 
         // Owners have all permissions
-        if (store.userIsOwner(userId)) {
+        if (store.userIsOwner(userId) && userRepository.getById(userId).isOwnerOf(storeId)) {
             return true;
         }
 
         // Check if manager has specific permission
-        if (store.userIsManager(userId)) {
+        if (store.userIsManager(userId) && userRepository.getById(userId).isManagerOf(storeId)) {
             return store.userHasPermissions(userId, permissionType);
         }
 
@@ -88,14 +83,22 @@ public class StoreManagementMicroservice {
      * @return true if successful, false otherwise
      */
     public boolean appointStoreOwner(String appointerId, String storeId, String userId) {
+
+        if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
+            if (!(getStoreById(storeId) != null && getStoreById(storeId).getFounder().equals(userId))) {
+                return false;
+            }
+        }
         Store store = getStoreById(storeId);
         synchronized (store) {
-            if (store.userIsOwner(userId)||store.userIsManager(userId)) return false;
             store.addOwner(appointerId, userId);
             getUserById(userId).addOwnedStore(storeId);
+            storeRepository.update(store);
+            userRepository.update(getUserById(userId));
             return true;
         }
     }
+
     public String sendOwnershipProposal(String userId, String storeId, String proposalText) {
         Store store = getStoreById(storeId);
         RegisteredUser user = getUserById(userId);
@@ -135,10 +138,17 @@ public class StoreManagementMicroservice {
             synchronized (store) {
                 LinkedList<String> firedUsers = store.getAllSubordinates(ownerId);
                 store.terminateOwnership(ownerId);
-                for(String s:firedUsers){
-                    getUserById(s).removeStore(storeId);
+                for (String s : firedUsers) {
+                    RegisteredUser user = getUserById(s);
+                    user.removeStore(storeId);
+                    userRepository.update(user); // <-- update each fired user
                 }
-                getUserById(ownerId).removeStore(storeId);
+
+                RegisteredUser owner = getUserById(ownerId);
+                owner.removeStore(storeId);
+                userRepository.update(owner);
+
+                storeRepository.update(store);
             }
             return true;
         }
@@ -165,21 +175,38 @@ public class StoreManagementMicroservice {
         }
         return false;
     }
-    public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
-        if (!checkPermission(appointerId, storeId, PERM_MANAGE_STAFF)) {
-            return false;
-        }
 
-        Store store = getStoreById(storeId);
-        synchronized (store) {
-            if (store.userIsOwner(userId) || store.userIsManager(userId)) {
-                return false;
+        public boolean appointStoreManager(String appointerId, String storeId, String userId, boolean[] permissions) {
+            if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
+                if (!(getStoreById(storeId) != null && getStoreById(storeId).getFounder().equals(userId))) {
+                    return false;
+                }
             }
+
+            Store store = getStoreById(storeId); // Make sure getStoreById uses your StoreRepository
+                //if (store.userIsOwner(userId) || store.userIsManager(userId)) {
+                //    return false;
+                //}
             store.addManager(appointerId, userId, permissions);
-            getUserById(userId).addManagedStore(storeId);
-            return true;
+            // Changes to 'store' will be automatically flushed by the @Transactional context
+
+                // --- IMPORTANT CHANGE HERE ---
+                RegisteredUser managerUser = getUserById(userId);
+                if (managerUser == null) {
+                    // Handle case where user is not found (e.g., log error, throw exception, return false)
+                    System.err.println("Error: User with ID " + userId + " not found for manager appointment.");
+                    System.out.println("5");
+                    return false;
+                }
+            managerUser.addManagedStore(storeId); // Modify the user object in memory
+
+                // Explicitly save the modified user object to persist changes
+                // This 'save' operation will participate in the transaction started by the ServiceLayer
+                userRepository.update(managerUser); // <--- ADD THIS LINE!
+                storeRepository.update(store);
+                return true;
+
         }
-    }
     /**
      * Sends a proposal to a user to appoint them as a manager for a store.
      * The method checks if the store and user exist, and ensures the user is not already an owner
@@ -242,6 +269,8 @@ public class StoreManagementMicroservice {
             synchronized (store) {
                 store.terminateManagment(managerId);
                 getUserById(managerId).removeStore(storeId);
+                userRepository.update(getUserById(managerId));
+                storeRepository.update(store);
             }
             return true;
         }
@@ -261,7 +290,7 @@ public class StoreManagementMicroservice {
             }
             return true;
         }
-        return false;
+        throw new RuntimeException("User is not store founder");
     }
     /**
      * Reopen a store
@@ -271,13 +300,13 @@ public class StoreManagementMicroservice {
      */
     public boolean reopenStore(String founderId, String storeId) {
         Store store = getStoreById(storeId);
-        if (store.isFounder(founderId)){
+        if (store.isFounder(founderId)) {
             synchronized (store) {
                 store.openTheStore();
             }
             return true;
         }
-        return false;
+        throw new RuntimeException("User is not store founder");
     }
     /**
      * Get information about store roles
@@ -301,11 +330,11 @@ public class StoreManagementMicroservice {
      */
     public Map<String, Boolean> getManagerPermissions(String ownerId, String storeId, String managerId) {
         Store store = getStoreById(storeId);
-        if (store.checkIfSuperior(ownerId,managerId)&&store.userIsManager(managerId)){
+        // Allow if owner == manager
+        if ((store.checkIfSuperior(ownerId, managerId) || ownerId.equals(managerId)) && store.userIsManager(managerId)) {
             return store.getPremissions(managerId);
         }
-        Map<String, Boolean> fakeAnswer = new HashMap<>();
-        return fakeAnswer;
+        return new HashMap<>();
     }
     public boolean relinquishManagement(String managerID, String storeId) {
         Store store = getStoreById(storeId);
@@ -319,4 +348,80 @@ public class StoreManagementMicroservice {
         return false;
 
     }
+
+    public boolean appointStoreFounder(String founderId, String storeId) {
+        throw new RuntimeException("store founder can't be appointed - error thrown in storeManagementMicroservice");
+    }
+
+    /**
+     * Return <code>true</code> if the user is the store’s founder **or**
+     * already appears in the owner list.
+     *
+     * @param userId  the user to check
+     * @param storeId the store in question
+     */
+    public boolean isFounderOrOwner(String userId, String storeId) {
+        Store store = getStoreById(storeId);      // throws if store not found
+        return store.isFounder(userId) || store.userIsOwner(userId);
+    }
+
+    public boolean removeStoreOwnerWithUserSync(String removerId, String storeId, String ownerId) {
+        Store store = getStoreById(storeId);
+        if (store.checkIfSuperior(removerId, ownerId)) {
+            synchronized (store) {
+                LinkedList<String> subordinates = store.getAllSubordinates(ownerId);
+                store.terminateOwnership(ownerId);
+                userRepository.getById(ownerId).removeStore(storeId);
+                for (String sid : subordinates) {
+                    userRepository.getById(sid).removeStore(storeId);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean relinquishOwnershipWithUserSync(String ownerId, String storeId) {
+        Store store = getStoreById(storeId);
+        if (!store.isFounder(ownerId) && store.userIsOwner(ownerId)) {
+            synchronized (store) {
+                LinkedList<String> subordinates = store.getAllSubordinates(ownerId);
+                store.terminateOwnership(ownerId);
+                userRepository.getById(ownerId).removeStore(storeId);
+                for (String sid : subordinates) {
+                    userRepository.getById(sid).removeStore(storeId);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeManagerWithUserSync(String removerId, String storeId, String managerId) {
+        Store store = getStoreById(storeId);
+        if (store.checkIfSuperior(removerId, managerId)) {
+            synchronized (store) {
+                store.terminateManagment(managerId);
+                userRepository.getById(managerId).removeStore(storeId);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean relinquishManagerWithUserSync(String managerId, String storeId) {
+        Store store = getStoreById(storeId);
+        if (!store.isFounder(managerId) && store.userIsManager(managerId)) {
+            synchronized (store) {
+                store.terminateManagment(managerId);
+                RegisteredUser manager = userRepository.getById(managerId);
+                manager.removeStore(storeId);
+                userRepository.update(manager);       // <-- added update for user
+                storeRepository.update(store);        // <-- added update for store
+            }
+            return true;
+        }
+        return false;
+    }
+
 }

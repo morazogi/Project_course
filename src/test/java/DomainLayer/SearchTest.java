@@ -1,93 +1,130 @@
 package DomainLayer;
 
-import DomainLayer.Product;
-import DomainLayer.IProductRepository;
-import DomainLayer.IStoreRepository;
-import DomainLayer.Store;
 import DomainLayer.DomainServices.Search;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import DomainLayer.Product;
+import DomainLayer.Store;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class SearchTest {
 
-    private IProductRepository productRepository;
-    private IStoreRepository storeRepository;
-    private Search search;
+    /* ------------ mocked repositories ------------ */
+    @Mock ProductRepository productRepo;
+    @Mock StoreRepository   storeRepo;
+
+    private Search service;
     private final ObjectMapper mapper = new ObjectMapper();
 
+    /* ------------ domain fixtures ------------ */
+    private Store   store;
+    private Product apple;          // Food
+    private Product headphones;     // Tech
+
     @BeforeEach
-    void setUp() {
-        productRepository = mock(IProductRepository.class);
-        storeRepository = mock(IStoreRepository.class);
-        search = new Search(productRepository, storeRepository);
+    void setup() {
+        service = new Search(productRepo, storeRepo);
+
+        /* ---------- store ---------- */
+        store = new Store("owner-1", "TechMart");
+        store.setId("store-1");
+
+        /* ---------- products ---------- */
+        apple = new Product(store.getId(), "Apple", "", 15f, 100, 0d, "Food");
+        apple.setId("p-apple");
+
+        headphones = new Product(store.getId(), "Headphones", "", 22f, 100, 0d, "Tech");
+        headphones.setId("p-head");
+    }
+
+    /* ------------------------------------------------
+                          searchByName
+       ------------------------------------------------ */
+    @Test
+    void searchByName_partialMatch_returnsOneProduct() throws Exception {
+        when(productRepo.getAll()).thenReturn(List.of(apple, headphones));
+
+        String json = service.searchByName("app");           // matches “Apple”
+        List<Product> result = mapper.readValue(json, new TypeReference<>() {});
+
+        assertEquals(1, result.size());
+        assertEquals(apple.getId(), result.get(0).getId());  // <-- get(0) works on Java 17
+    }
+
+    /* ------------------------------------------------
+                        searchByCategory
+       ------------------------------------------------ */
+    @Test
+    void searchByCategory_caseInsensitive() throws Exception {
+        when(productRepo.getAll()).thenReturn(List.of(apple, headphones));
+
+        String json = service.searchByCategory("FOOD");      // uppercase on purpose
+        List<Product> result = mapper.readValue(json, new TypeReference<>() {});
+
+        assertEquals(List.of(apple.getId()),
+                result.stream().map(Product::getId).toList());
+    }
+
+    /* ------------------------------------------------
+                       getProductsByStore
+       ------------------------------------------------ */
+    @Test
+    void getProductsByStore_returnsAllProductsInStore() throws Exception {
+        // store contains 2 apples & 1 headphones
+        store.setProducts(Map.of(apple.getId(), 2, headphones.getId(), 1));
+
+        when(storeRepo.getById(store.getId())).thenReturn(store);
+        when(productRepo.getById(apple.getId())).thenReturn(apple);
+        when(productRepo.getById(headphones.getId())).thenReturn(headphones);
+
+        List<Product> result = service.getProductsByStore(store.getId());
+
+        assertEquals(2, result.size());
+        assertTrue(result.containsAll(List.of(apple, headphones)));
     }
 
     @Test
-    void searchByName_ShouldReturnMatchingProducts() throws JsonProcessingException {
-        // Arrange
-        Product product = new Product("1", "store1", "Socks", "Warm", 10, 5, 3.0, "clothing");
-        when(productRepository.findAll()).thenReturn(List.of(product));
-
-        // Act
-        String json = search.searchByName("Socks");
-
-        // Assert
-        assertTrue(json.contains("Socks"));
-        verify(productRepository).findAll();
+    void getProductsByStore_storeMissing_throwsIllegalArgument() {
+        when(storeRepo.getById("no-such")).thenReturn(null);
+        assertThrows(IllegalArgumentException.class,
+                () -> service.getProductsByStore("no-such"));
     }
 
+    /* ------------------------------------------------
+                           findProduct
+       ------------------------------------------------ */
     @Test
-    void searchByCategory_ShouldReturnMatchingProducts() throws JsonProcessingException {
-        // Arrange
-        Product product = new Product("2", "store1", "Hat", "Stylish", 20, 5, 4.5, "accessories");
-        when(productRepository.findAll()).thenReturn(List.of(product));
+    void findProduct_nameAndCategory_filtersCorrectly() {
+        when(productRepo.getAll()).thenReturn(List.of(apple, headphones));
 
-        // Act
-        String json = search.searchByCategory("accessories");
-
-        // Assert
-        assertTrue(json.contains("Hat"));
-        verify(productRepository).findAll();
+        List<String> ids = service.findProduct("head", "tech");   // case-insensitive
+        assertEquals(List.of(headphones.getId()), ids);
     }
 
-//    @Test
-//    void getProductsByStore_ShouldReturnStoreProducts() throws JsonProcessingException {
-//        // Arrange
-//        Product product = new Product("3", "store2", "Shoes", "Running shoes", 50, 10, 4.0, "shoes");
-//        Store store = new Store();
-//        store.setId("store2");
-//        store.addNewProduct(product.getId(), 10);
-//
-//        when(storeRepository.getStore("store2")).thenReturn(mapper.writeValueAsString(store));
-//        when(productRepository.getProduct("3")).thenReturn(product);
-//
-//        // Act
-//        String json = search.getProductsByStore("store2");
-//
-//        // Assert
-//        assertTrue(json.contains("Shoes"));
-//        verify(storeRepository).getStore("store2");
-//        verify(productRepository).getProduct("3");
-//    }
+    /* ------------------------------------------------
+                           getStoreById
+       ------------------------------------------------ */
+    @Test
+    void getStoreById_returnsJsonOfStore() throws Exception {
+        when(storeRepo.getById(store.getId())).thenReturn(store);
 
-//    @Test
-//    void getProductsByStore_ShouldThrowException_WhenStoreNotFound() {
-//        // Arrange
-//        when(storeRepository.getStore("invalid-store")).thenReturn(null);
-//
-//        // Act & Assert
-//        Exception e = assertThrows(IllegalArgumentException.class, () ->
-//                search.getProductsByStore("invalid-store")
-//        );
-//        assertEquals("Store not found", e.getMessage());
-//        verify(storeRepository).getStore("invalid-store");
-//    }
+        String json = service.getStoreById(store.getId());
+        assertTrue(json.contains("\"name\":\"TechMart\""));
+    }
 }
