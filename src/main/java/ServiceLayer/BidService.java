@@ -87,6 +87,15 @@ public class BidService {
                     String state, String city, String address,
                     String id,    String zip) {
 
+        /* ──────── basic card-data sanity ──────── */
+        if (!card.matches("\\d{13,19}"))
+            throw new RuntimeException("Invalid card number");
+        if (!exp.matches("(0[1-9]|1[0-2])\\/\\d{2}"))
+            throw new RuntimeException("Invalid expiry – use MM/YY");
+        if (!cvv.matches("\\d{3,4}"))
+            throw new RuntimeException("Invalid CVV");
+
+
         BidSale b = bids.get(bidId);
         if (b == null)              throw new RuntimeException("bid not found");
         if (!b.isAwaitingPayment()) throw new RuntimeException("not payable");
@@ -94,32 +103,62 @@ public class BidService {
         String buyer = tokenService.extractUsername(token);
         if (!buyer.equals(b.getWinner())) throw new RuntimeException("not your bid");
 
-        /* 1. charge card */
-        paymentService.processPayment(token, name, card, exp, cvv, id);
-
-        /* 2. arrange shipping */
-        shippingService.processShipping(token, state, city, address, name, zip);
-
-        /* 3. reserve then sell one unit */
+        /* ──────── sanity before we touch external services ──────── */
         Store   store   = storeRepo.getById(b.getStoreId());
+        if (store == null) throw new RuntimeException("store not found");
+        if (!store.isOpenNow())
+            throw new RuntimeException("Cannot purchase – store '" + store.getName() + "' is closed");
+
         Product product = productRepo.getById(b.getProductId());
         if (product == null) throw new RuntimeException("product missing");
 
-        if (!store.reserveProduct(product.getId(), 1))      // ★ NEW
-            throw new RuntimeException("out of stock");
+        /* ──────── reserve stock first ──────── */
+        boolean reserved = false;
+        String  shippingTx = null;
+        String  paymentTx  = null;
+        try {
+            if (!store.reserveProduct(product.getId(), 1))
+                throw new RuntimeException("out of stock");
+            reserved = true;
+            storeRepo.update(store);                              // persist reservation
 
-        store.sellProduct(product.getId(), 1);              // now succeeds
-        product.setQuantity(product.getQuantity() - 1);
+            /* 1. arrange shipping, then 2. charge card */
+            shippingTx = shippingService.processShipping(
+                    token, state, city, address, name, zip);
+            paymentTx  = paymentService.processPayment(
+                    token, name, card, exp, cvv, id);
 
-        storeRepo.update(store);
-        productRepo.save(product);
+            /* 3. commit sale */
+            store.sellProduct(product.getId(), 1);
+            product.setQuantity(product.getQuantity() - 1);
+            storeRepo.update(store);
+            productRepo.save(product);
 
-        /* 4. record order */
-        orderRepo.save(new DomainLayer.Order("bid:" + bidId,
-                store.getId(), buyer, new Date()));
+            /* 4. record order & remove bid */
+            orderRepo.save(new DomainLayer.Order("bid:" + bidId,
+                    store.getId(), buyer, new Date()));
+            bids.remove(bidId);
 
-        /* 5. remove bid from board */
-        bids.remove(bidId);
+        } catch (Exception ex) {
+
+            /* rollback everything we managed to do */
+            if (reserved) {
+                try {
+                    store.unreserveProduct(product.getId(), 1);
+                    storeRepo.update(store);
+                } catch (Exception ignored) {}
+            }
+            if (shippingTx != null) {
+                try { shippingService.cancelShipping(token, shippingTx); } catch (Exception ignored) {}
+            }
+            if (paymentTx != null)  {
+                try { paymentService.cancelPayment(token, paymentTx);   } catch (Exception ignored) {}
+            }
+
+            String msg = (ex.getMessage() == null || ex.getMessage().isBlank())
+                    ? "Failed to pay for bid" : ex.getMessage();
+            throw new RuntimeException(msg);
+        }
     }
 
 }

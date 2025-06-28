@@ -39,6 +39,7 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
     private ListDataProvider<GuestHomePageUI.ProductRow> dataProvider;
 
     /* ────────────────────────────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────── */
     @Autowired
     public RegisteredUserHomePageUI(UserService          userService,
                                     RegisteredService    registeredService,
@@ -69,9 +70,13 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
         HorizontalLayout header = new HorizontalLayout(
                 new H4("👋 Hello, " + username),
                 buttons.signOutButton(token),
-                new Button("Store dashboard",  e -> UI.getCurrent().navigate("/userhomepage")),
-                new Button("Shopping cart",    e -> UI.getCurrent().navigate("/purchasecartfinal")),
-                new Button("Rate my purchases",e -> UI.getCurrent().navigate("/rate"))
+                new Button("Store dashboard", e -> UI.getCurrent().navigate("/userhomepage")),
+                new Button("Shopping cart",   e -> UI.getCurrent().navigate("/purchasecartfinal")),
+                new Button("Rate my purchases", e -> UI.getCurrent().navigate("/rate")),
+
+                /* ★ NEW buttons ↓↓↓ */
+                new Button("Bid board",      e -> UI.getCurrent().navigate("/Bid")),
+                new Button("Auctions",       e -> UI.getCurrent().navigate("/auction"))
         );
 
         /* **Admin console** button only for user “1” */
@@ -97,6 +102,7 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
         setPadding(true);
         setSpacing(true);
     }
+
 
     /* ────────────────────────────────────────────────────────── */
     private void applyFilter(String text) {

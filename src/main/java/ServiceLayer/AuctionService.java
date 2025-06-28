@@ -84,13 +84,19 @@ public class AuctionService {
     }
 
     /*────────────────────────── buyer payment ──────────────────────*/
-    /*────────────────────────── buyer payment ──────────────────────*/
     @Transactional
     public void pay(String auctionId,
                     String token,
                     String name, String cardNumber, String expDate, String cvv,
                     String state, String city, String address,
                     String id,    String zip) {
+
+        if (!cardNumber.matches("\\d{13,19}"))
+            throw new RuntimeException("Invalid card number");
+        if (!expDate.matches("(0[1-9]|1[0-2])\\/\\d{2}"))
+            throw new RuntimeException("Invalid expiry – use MM/YY");
+        if (!cvv.matches("\\d{3,4}"))
+            throw new RuntimeException("Invalid CVV");
 
         Auction a = auctions.get(auctionId);
         if (a == null)              throw new RuntimeException("auction not found");
@@ -99,32 +105,62 @@ public class AuctionService {
         String buyer = tokenService.extractUsername(token);
         if (!buyer.equals(a.getWinner())) throw new RuntimeException("not your auction");
 
-        /* 1. charge card */
-        paymentService.processPayment(token, name, cardNumber, expDate, cvv, id);
-
-        /* 2. arrange shipping */
-        shippingService.processShipping(token, state, city, address, name, zip);
-
-        /* 3. reserve then sell one unit */
+        /* ──────── sanity before we touch external services ──────── */
         Store   store   = storeRepository.getById(a.getStoreId());
+        if (store == null) throw new RuntimeException("store not found");
+        if (!store.isOpenNow())
+            throw new RuntimeException("Cannot purchase – store '" + store.getName() + "' is closed");
+
         Product product = productRepository.getById(a.getProductId());
         if (product == null) throw new RuntimeException("product missing");
 
-        if (!store.reserveProduct(product.getId(), 1))      // ★ NEW
-            throw new RuntimeException("out of stock");
+        /* ──────── reserve stock first ──────── */
+        boolean reserved = false;
+        String  shippingTx = null;
+        String  paymentTx  = null;
+        try {
+            if (!store.reserveProduct(product.getId(), 1))
+                throw new RuntimeException("out of stock");
+            reserved = true;
+            storeRepository.update(store);                         // persist reservation
 
-        store.sellProduct(product.getId(), 1);              // now succeeds
-        product.setQuantity(product.getQuantity() - 1);
+            /* 1. arrange shipping, then 2. charge card */
+            shippingTx = shippingService.processShipping(
+                    token, state, city, address, name, zip);
+            paymentTx  = paymentService.processPayment(
+                    token, name, cardNumber, expDate, cvv, id);
 
-        storeRepository.update(store);
-        productRepository.save(product);
+            /* 3. commit sale */
+            store.sellProduct(product.getId(), 1);
+            product.setQuantity(product.getQuantity() - 1);
+            storeRepository.update(store);
+            productRepository.save(product);
 
-        /* 4. optional order record */
-        orderRepository.save(new DomainLayer.Order("auction:" + auctionId,
-                store.getId(), buyer, new Date()));
+            /* 4. optional order record & close auction */
+            orderRepository.save(new DomainLayer.Order("auction:" + auctionId,
+                    store.getId(), buyer, new Date()));
+            auctions.remove(auctionId);
 
-        /* 5. close auction */
-        auctions.remove(auctionId);
+        } catch (Exception ex) {
+
+            /* rollback everything we managed to do */
+            if (reserved) {
+                try {
+                    store.unreserveProduct(product.getId(), 1);
+                    storeRepository.update(store);
+                } catch (Exception ignored) {}
+            }
+            if (shippingTx != null) {
+                try { shippingService.cancelShipping(token, shippingTx); } catch (Exception ignored) {}
+            }
+            if (paymentTx != null)  {
+                try { paymentService.cancelPayment(token, paymentTx);   } catch (Exception ignored) {}
+            }
+
+            String msg = (ex.getMessage() == null || ex.getMessage().isBlank())
+                    ? "Failed to pay for auction" : ex.getMessage();
+            throw new RuntimeException(msg);
+        }
     }
 
 }
