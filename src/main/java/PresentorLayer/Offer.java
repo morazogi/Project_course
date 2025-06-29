@@ -1,31 +1,35 @@
 package PresentorLayer;
 
 /**
- * A single customer offer shown to the auction-manager UI.
+ * A single customer offer shown in the auction-manager UI.
  * Carries readable names so the UI can just call toString().
  */
 public class Offer {
 
-    private final String buyer;        // who made the offer
-    private final String storeName;    // human-readable store name
-    private final String productName;  // human-readable product name
-    private final double price;        // $ offered
+    private final String auctionId;   // NEW — unique id to let the manager pick
+    private final String buyer;       // who made the offer
+    private final String storeName;   // human-readable
+    private final String productName; // human-readable
+    private final double price;       // $ offered
 
-    public Offer(String buyer,
+    public Offer(String auctionId,
+                 String buyer,
                  String storeName,
                  String productName,
                  double price) {
+        this.auctionId    = auctionId;
         this.buyer        = buyer;
         this.storeName    = storeName;
         this.productName  = productName;
         this.price        = price;
     }
 
-    /* getters in case you need them later */
-    public String  getBuyer()       { return buyer; }
-    public String  getStoreName()   { return storeName; }
-    public String  getProductName() { return productName; }
-    public double  getPrice()       { return price; }
+    /* getters */
+    public String  getAuctionId()  { return auctionId; }   // NEW
+    public String  getBuyer()      { return buyer; }
+    public String  getStoreName()  { return storeName; }
+    public String  getProductName(){ return productName; }
+    public double  getPrice()      { return price; }
 
     /** Pretty print for the Vaadin list */
     @Override
