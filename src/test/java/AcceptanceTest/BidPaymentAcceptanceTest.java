@@ -54,37 +54,37 @@ class BidPaymentAcceptanceTest {
 
     @BeforeEach
     void setUp() {
-        bidService = new BidService(paymentService, shippingService, tokenService, 
-                                   storeRepository, productRepository, orderRepository);
+        bidService = new BidService(paymentService, shippingService, tokenService,
+                storeRepository, productRepository, orderRepository);
         auctionService = new AuctionService(paymentService, shippingService, tokenService,
-                                           storeRepository, productRepository, orderRepository);
-        
+                storeRepository, productRepository, orderRepository);
+
         // Setup basic mocks
         when(tokenService.extractUsername(token)).thenReturn(username);
         when(storeRepository.getById(storeId)).thenReturn(store);
         when(productRepository.getById(productId)).thenReturn(product);
         when(productRepository.save(any(Product.class))).thenReturn(product);
         when(orderRepository.save(any(Order.class))).thenReturn(order);
-        
+
         // Setup product mock properly
         when(product.getId()).thenReturn(productId);
         when(product.getQuantity()).thenReturn(5);
-        
+
         // Setup store mock properly
         when(store.getId()).thenReturn(storeId);
         when(store.isOpenNow()).thenReturn(true);
         when(store.reserveProduct(anyString(), anyInt())).thenReturn(true);
-        
+
         // Create a bid
         BidSale bid = bidService.start(storeId, productId, 100.0, 10.0, 60);
         bidId = bid.getId();
-        
+
         // Place a winning bid
         bidService.place(bidId, username, 150.0);
-        
+
         // Mark bid as awaiting payment
         bid.markAwaitingPayment();
-        
+
         // Create an auction
         Auction auction = auctionService.create(storeId, productId, managerId, 100.0);
         auctionId = auction.getId();
@@ -94,18 +94,18 @@ class BidPaymentAcceptanceTest {
     void successfulPayment_shouldCallPaymentSystemAndUpdateSystemState() throws Exception {
         // Arrange - Setup successful payment and shipping
         when(paymentService.processPayment(eq(token), anyString(), anyString(), anyString(), anyString(), anyString()))
-            .thenReturn("payment-success");
+                .thenReturn("payment-success");
         when(shippingService.processShipping(eq(token), anyString(), anyString(), anyString(), anyString(), anyString()))
-            .thenReturn("shipping-success");
+                .thenReturn("shipping-success");
 
         // Act
         bidService.pay(bidId, token, "John Doe", "1234567890123456", "12/25", "123",
-                      "CA", "Los Angeles", "123 Main St", "ID123", "90210");
+                "CA", "Los Angeles", "123 Main St", "ID123", "90210");
 
         // Assert - Verify payment system was called
         verify(paymentService).processPayment(eq(token), anyString(), anyString(), anyString(), anyString(), anyString());
         verify(shippingService).processShipping(eq(token), anyString(), anyString(), anyString(), anyString(), anyString());
-        
+
         // Verify system state changes
         verify(store).reserveProduct(productId, 1);
         verify(store).sellProduct(productId, 1);
@@ -113,7 +113,7 @@ class BidPaymentAcceptanceTest {
         verify(storeRepository, times(2)).update(store);
         verify(productRepository).save(product);
         verify(orderRepository).save(any(Order.class));
-        
+
         // Verify bid was removed from active bids
         List<BidSale> remainingBids = bidService.open();
         assertFalse(remainingBids.stream().anyMatch(bid -> bid.getId().equals(bidId)));
@@ -124,27 +124,27 @@ class BidPaymentAcceptanceTest {
         // Arrange - User submits initial offer
         double userOffer = 120.0;
         auctionService.offer(auctionId, username, userOffer);
-        
+
         // Verify user's offer was accepted
         Auction auction = auctionService.list().stream()
                 .filter(a -> a.getId().equals(auctionId))
                 .findFirst()
                 .orElse(null);
-        
+
         assertNotNull(auction);
         assertEquals(userOffer, auction.getCurrentPrice());
         assertEquals(username, auction.getLastParty());
         assertTrue(auction.isWaitingConsent());
-        
+
         // Act - Manager accepts the offer
         auctionService.accept(auctionId, managerId);
-        
+
         // Assert - Verify offer was accepted and auction moved to payment stage
         auction = auctionService.list().stream()
                 .filter(a -> a.getId().equals(auctionId))
                 .findFirst()
                 .orElse(null);
-        
+
         assertNotNull(auction);
         assertFalse(auction.isWaitingConsent());
         assertTrue(auction.isAwaitingPayment());
@@ -154,20 +154,20 @@ class BidPaymentAcceptanceTest {
 
     @Test
     void auctionUserOffer_withLowerPrice_shouldThrowException() {
-        // Act & Assert - User tries to offer lower than current price
-        double lowerOffer = 90.0; // Lower than start price of 100.0
+        // Act & Assert - User tries to offer a non-positive price
+        double invalidOffer = 0.0; // Non-positive price always illegal
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            auctionService.offer(auctionId, username, lowerOffer);
+            auctionService.offer(auctionId, username, invalidOffer);
         });
-        
-        assertTrue(exception.getMessage().contains("price too low"));
-        
+
+        assertTrue(exception.getMessage().toLowerCase().contains("positive"));
+
         // Verify auction state remains unchanged
         Auction auction = auctionService.list().stream()
                 .filter(a -> a.getId().equals(auctionId))
                 .findFirst()
                 .orElse(null);
-        
+
         assertNotNull(auction);
         assertEquals(100.0, auction.getCurrentPrice()); // Original start price
         assertEquals(managerId, auction.getLastParty()); // Original manager
@@ -179,20 +179,20 @@ class BidPaymentAcceptanceTest {
         // Arrange - User submits initial offer
         double userOffer = 120.0;
         auctionService.offer(auctionId, username, userOffer);
-        
-        // Act & Assert - Another user tries to offer while waiting for consent
+
+        // Act & Assert - SAME user tries to offer again while waiting for consent
         Exception exception = assertThrows(IllegalStateException.class, () -> {
-            auctionService.offer(auctionId, "anotheruser", 130.0);
+            auctionService.offer(auctionId, username, 130.0);
         });
-        
+
         assertTrue(exception.getMessage().contains("pending consent"));
-        
+
         // Verify auction state remains unchanged
         Auction auction = auctionService.list().stream()
                 .filter(a -> a.getId().equals(auctionId))
                 .findFirst()
                 .orElse(null);
-        
+
         assertNotNull(auction);
         assertEquals(userOffer, auction.getCurrentPrice());
         assertEquals(username, auction.getLastParty());
@@ -204,7 +204,7 @@ class BidPaymentAcceptanceTest {
         Exception exception = assertThrows(RuntimeException.class, () -> {
             auctionService.offer(auctionId, "Guest123", 120.0);
         });
-        
+
         assertTrue(exception.getMessage().contains("must be logged-in"));
     }
 
@@ -213,25 +213,23 @@ class BidPaymentAcceptanceTest {
         // Arrange - User submits initial offer
         double userOffer = 120.0;
         auctionService.offer(auctionId, username, userOffer);
-        
-        // Manager declines the offer
+
+        // Manager declines the offer (auction remains open)
         auctionService.decline(auctionId, managerId);
-        
-        // After decline, auction is removed. Create a new auction for the manager to make a new offer.
-        Auction newAuction = auctionService.create(storeId, productId, managerId, 100.0);
-        String newAuctionId = newAuction.getId();
+
+        // Manager makes a new offer on the SAME auction
         double managerOffer = 110.0;
-        auctionService.offer(newAuctionId, managerId, managerOffer);
-        
-        // Assert - Verify manager's offer was accepted
+        auctionService.offer(auctionId, managerId, managerOffer);
+
+        // Assert - Verify manager's new offer recorded
         Auction auction = auctionService.list().stream()
-                .filter(a -> a.getId().equals(newAuctionId))
+                .filter(a -> a.getId().equals(auctionId))
                 .findFirst()
                 .orElse(null);
         assertNotNull(auction);
         assertEquals(managerOffer, auction.getCurrentPrice());
         assertEquals(managerId, auction.getLastParty());
-        assertFalse(auction.isWaitingConsent()); // Manager offers don't require consent
+        assertTrue(auction.isWaitingConsent()); // Manager offer now requires buyer response
     }
 
     @Test

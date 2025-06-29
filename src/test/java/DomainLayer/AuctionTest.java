@@ -1,6 +1,5 @@
 package DomainLayer;
 
-import DomainLayer.Auction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit-level tests for {@link Auction}.
+ * Updated for the new rules:
+ *   • Buyer may counter with a lower (but positive) price
+ *   • Only the party that spoke last is blocked while waitingConsent
+ *   • Illegal price ≤ 0 still throws
  */
 class AuctionTest {
 
@@ -23,7 +26,7 @@ class AuctionTest {
     }
 
     /* -------------------------------------------------------------
-                          initial state
+                        initial state
        ------------------------------------------------------------- */
     @Test
     void ctor_setsInitialFields() {
@@ -36,38 +39,38 @@ class AuctionTest {
     }
 
     /* -------------------------------------------------------------
-                       offer / accept happy-path
+                    offer / accept happy-path
        ------------------------------------------------------------- */
     @Test
     void offer_thenManagerAccept_flowWorks() {
-        auction.offer(buyer, 120.0);                     // buyer proposes
+        auction.offer(buyer, 90.0);                       // buyer proposes lower
         assertTrue(auction.isWaitingConsent());
         assertEquals(buyer,  auction.getLastParty());
-        assertEquals(120.0,  auction.getCurrentPrice());
+        assertEquals(90.0,   auction.getCurrentPrice());
 
-        auction.accept(manager);                        // manager accepts
+        auction.accept(manager);                          // manager accepts
         assertFalse(auction.isWaitingConsent());
-        assertEquals(buyer, auction.getLastParty());    // unchanged
+        assertEquals(buyer, auction.getLastParty());      // unchanged
     }
 
     /* -------------------------------------------------------------
-                          offer validations
+                        offer validations
        ------------------------------------------------------------- */
     @Test
-    void offer_tooLow_throwsIllegalArgument() {
+    void offer_negativePrice_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class,
-                () -> auction.offer(buyer, 90.0)); // < current + minIncrease
+                () -> auction.offer(buyer, 0.0));         // non-positive price
     }
 
     @Test
-    void offer_whileWaitingConsent_throwsIllegalState() {
-        auction.offer(buyer, 120.0);
+    void offer_samePartyWhileWaitingConsent_throwsIllegalState() {
+        auction.offer(buyer, 90.0);                       // first offer
         assertThrows(IllegalStateException.class,
-                () -> auction.offer("charlie", 130.0));
+                () -> auction.offer(buyer, 95.0));        // same party again
     }
 
     /* -------------------------------------------------------------
-                         accept validations
+                       accept validations
        ------------------------------------------------------------- */
     @Test
     void accept_withoutPendingOffer_throwsIllegalState() {
@@ -77,13 +80,13 @@ class AuctionTest {
 
     @Test
     void accept_bySameParty_throwsIllegalArgument() {
-        auction.offer(buyer, 120.0);
+        auction.offer(buyer, 90.0);
         assertThrows(IllegalArgumentException.class,
-                () -> auction.accept(buyer));       // same as lastParty
+                () -> auction.accept(buyer));             // same as lastParty
     }
 
     /* -------------------------------------------------------------
-                   markAwaitingPayment sets winner & price
+              markAwaitingPayment sets winner & price
        ------------------------------------------------------------- */
     @Test
     void markAwaitingPayment_setsWinnerAndPrice() {

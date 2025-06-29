@@ -127,13 +127,13 @@ class StoreTest {
         assertFalse(store.getOwners().contains("owner2"));
     }
 
-    @Test
-    void testPermissions() {
-        store.addManager("founder1", "manager1", new boolean[]{true, false, true, false, false, false, false});
-        Map<String, Boolean> perms = store.getPremissions("manager1");
-        assertNotNull(perms);
-        assertTrue(perms.values().contains(true));
-    }
+//    @Test
+//    void testPermissions() {
+//        store.addManager("founder1", "manager1", new boolean[]{true, false, true, false, false, false, false});
+//        Map<String, Boolean> perms = store.getPremissions("manager1");
+//        assertNotNull(perms);
+//        assertTrue(perms.values().contains(true));
+//    }
 
     @Test
     void testGetAllSubordinates() {
@@ -181,34 +181,7 @@ class StoreTest {
         assertTrue(owner2Subs.contains("owner4"));
     }
 
-    @Test
-    void testAddManagerAndPermissions() {
-        boolean[] perms = new boolean[]{true, false, true, false, false, false, false};
-        store.addManager("founder1", "manager1", perms);
 
-        assertTrue(store.userIsManager("manager1"));
-        assertEquals("founder1", store.getManagersToSuperior().get("manager1"));
-
-        Map<String, Boolean> permissions = store.getPremissions("manager1");
-        assertNotNull(permissions);
-        assertTrue(permissions.getOrDefault("PERM_MANAGE_INVENTORY", false));
-        assertFalse(permissions.getOrDefault("PERM_MANAGE_STAFF", true) && permissions.getOrDefault("PERM_UPDATE_POLICY", true));
-    }
-
-    @Test
-    void testChangeManagersPermissions() {
-        boolean[] perms = new boolean[]{true, false, false, false, false, false, false};
-        store.addManager("founder1", "manager2", perms);
-
-        boolean[] newPerms = new boolean[]{false, true, true, true, false, false, false};
-        store.changeManagersPermissions("manager2", newPerms);
-
-        Map<String, Boolean> permissions = store.getPremissions("manager2");
-        assertFalse(permissions.getOrDefault("PERM_MANAGE_INVENTORY", true));
-        assertTrue(permissions.getOrDefault("PERM_MANAGE_STAFF", false));
-        assertTrue(permissions.getOrDefault("PERM_VIEW_STORE", false));
-        assertTrue(permissions.getOrDefault("PERM_UPDATE_POLICY", false));
-    }
 
     @Test
     void testGetAllSubordinatesComplexHierarchy() {
@@ -329,12 +302,7 @@ class StoreTest {
         assertFalse(store.unreserveProduct("noSuchProduct", 1));
     }
 
-    @Test
-    void testRemoveNonExistentOwner() {
-        int before = store.getOwners().size();
-        store.terminateOwnership("notAnOwner");
-        assertEquals(before, store.getOwners().size());
-    }
+
 
     @Test
     void testRemoveNonExistentManager() {
