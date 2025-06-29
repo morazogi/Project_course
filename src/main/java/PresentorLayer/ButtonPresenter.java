@@ -20,7 +20,7 @@ public class ButtonPresenter {
         Button signOut = new Button("Sign out", e -> {
             try {
                 UI.getCurrent().getSession().setAttribute("token", registeredService.logoutRegistered(token));
-                UI.getCurrent().navigate("");
+                UI.getCurrent().navigate("/guesthomepage");
             } catch (Exception exception) {
                 Notification.show(exception.getMessage());
             }
