@@ -35,7 +35,7 @@ public class SignUpUI extends VerticalLayout {
         Button login = new Button("sign up", e -> {
             try {
                 userConnectivityPresenter.signUp(username.getValue(), password.getValue());
-                UI.getCurrent().navigate("");
+                UI.getCurrent().navigate("/guesthomepage");
             } catch (Exception exception) {
                 error.setText(exception.getMessage());
             }

@@ -33,6 +33,8 @@ public class RolesUI extends VerticalLayout {
                    UserRepository userRepository) {
 
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
+
         String userId = token != null ? userRepository.getById(tokenSvc.extractUsername(token)).getShoppingCart().getUserId() : "unknown";
         //String username = token != null ? tokenSvc.extractUsername(token) : "unknown";
 
@@ -133,5 +135,20 @@ public class RolesUI extends VerticalLayout {
 
         setPadding(true);
         setAlignItems(Alignment.CENTER);
+    }
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r -> r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

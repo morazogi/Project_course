@@ -597,3 +597,123 @@
 [2025-06-29 00:54:39] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-29 00:54:39] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b7ce7223-0ac9-4dd4-8f0d-ea59ca3ef0b7 FOUND
 [2025-06-29 00:54:40] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=b7ce7223-0ac9-4dd4-8f0d-ea59ca3ef0b7 FOUND
+[2025-06-29 16:18:27] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 16:18:37] User: a | Event: Event | Description: LOGIN
+[2025-06-29 16:18:37] User: a | Event: Event | Description: TokenService
+[2025-06-29 16:18:37] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 16:18:50] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-29 16:18:50] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-29 16:18:50] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-29 16:18:50] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-29 16:18:50] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:18:50] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:18:50] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-29 16:18:52] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:18:52] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:18:52] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:18:52] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:18:52] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:18:52] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:19:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:15] User: a | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-29 16:19:15] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-29 16:19:17] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:20] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:37] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-29 16:19:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:38] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:19:38] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:19:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:19:38] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:20:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:20:12] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:20:12] User: a | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-29 16:20:12] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-29 16:20:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:20:19] User: SEARCH_BY_STORE | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 Matches=0
+[2025-06-29 16:27:09] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 16:27:09] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 16:27:12] User: a | Event: Event | Description: LOGIN
+[2025-06-29 16:27:12] User: a | Event: Event | Description: TokenService
+[2025-06-29 16:27:12] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 16:27:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:13] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:14] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:27:14] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:27:35] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:35] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:35] User: a | Event: Event | Description: ADD_PRODUCT_START
+[2025-06-29 16:27:35] User: a | Event: Event | Description: ADD_PRODUCT_SUCCESS
+[2025-06-29 16:27:36] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:27:46] User: a | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_START
+[2025-06-29 16:27:46] User: a | Event: Event | Description: UPDATE_PRODUCT_QUANTITY_SUCCESS
+[2025-06-29 16:27:48] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:28:35] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 16:28:39] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 16:28:39] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 16:28:42] User: a | Event: Event | Description: LOGIN
+[2025-06-29 16:28:42] User: a | Event: Event | Description: TokenService
+[2025-06-29 16:28:42] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 16:28:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:28:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:28:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:28:57] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:28:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:28:57] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:29:02] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-29 16:29:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:29:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:29:03] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:29:03] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:29:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:29:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:29:05] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:29:07] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:29:07] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:29:29] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-29 16:29:29] User: a | Event: Event | Description: APPOINT_OWNER for store 5c4154db-7954-4910-8df4-793f574fc656
+[2025-06-29 16:29:35] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-29 16:31:48] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 16:31:48] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 16:31:51] User: b | Event: Event | Description: LOGIN
+[2025-06-29 16:31:51] User: b | Event: Event | Description: TokenService
+[2025-06-29 16:31:51] User: b | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 16:31:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:31:53] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:31:53] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:31:53] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:31:59] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-29 16:32:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:32:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:32:00] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 16:32:00] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 16:32:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:32:00] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:32:04] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=5c4154db-7954-4910-8df4-793f574fc656 FOUND
+[2025-06-29 16:32:05] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:32:05] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:32:05] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:32:05] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:32:06] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:32:06] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:32:07] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:32:07] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:32:07] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:32:07] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:32:08] User: b | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-29 16:32:08] User: b | Event: Event | Description: ADD_TO_CART
+[2025-06-29 16:32:41] User: b | Event: Event | Description: Shipping successful
+[2025-06-29 16:32:41] User: b | Event: Event | Description: Successfully payed for cart
+[2025-06-29 16:33:03] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 16:33:03] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 16:33:05] User: a | Event: Event | Description: LOGIN
+[2025-06-29 16:33:05] User: a | Event: Event | Description: TokenService
+[2025-06-29 16:33:05] User: a | Event: Event | Description: LOGIN_SUCCESS

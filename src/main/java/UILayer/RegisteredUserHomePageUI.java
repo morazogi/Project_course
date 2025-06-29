@@ -73,6 +73,7 @@ public class RegisteredUserHomePageUI extends VerticalLayout {
                 new Button("Store dashboard", e -> UI.getCurrent().navigate("/userhomepage")),
                 new Button("Shopping cart",   e -> UI.getCurrent().navigate("/purchasecartfinal")),
                 new Button("Rate my purchases", e -> UI.getCurrent().navigate("/rate")),
+                new Button("notifications", e -> UI.getCurrent().navigate("/notfication")),
 
                 /* ★ NEW buttons ↓↓↓ */
                 new Button("Bid board",      e -> UI.getCurrent().navigate("/Bid")),
