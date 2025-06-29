@@ -812,26 +812,26 @@ public class Store {
         if (userId == null || visited.contains(userId)) return;
         visited.add(userId);
 
-        sb.append(indent).append("- ").append(userId).append(" (Owner)").append("\n");
+        sb.append(indent).append("- ").append(userId).append(" (Owner)").append(System.lineSeparator());
 
-        // Recursively handle sub-owners
+        // Print managers first
+        for (Map.Entry<String, String> entry : managersToSuperior.entrySet()) {
+            if (userId.equals(entry.getValue())) {
+                String managerId = entry.getKey();
+                if (visited.add(managerId)) {
+                    sb.append(indent).append("  - ").append(managerId).append(" (Manager)").append(System.lineSeparator());
+                }
+            }
+        }
+
+        // Recurse into subordinate owners
         for (Map.Entry<String, String> entry : ownersToSuperior.entrySet()) {
             if (userId.equals(entry.getValue())) {
                 buildRoleTree(sb, entry.getKey(), indent + "  ", visited);
             }
         }
-
-        // Now handle managers who haven't already been printed
-        for (Map.Entry<String, String> entry : managersToSuperior.entrySet()) {
-            if (userId.equals(entry.getValue())) {
-                String managerId = entry.getKey();
-                if (!visited.contains(managerId)) {
-                    visited.add(managerId);
-                    sb.append(indent).append("  - ").append(managerId).append(" (Manager)").append("\n");
-                }
-            }
-        }
     }
+
 
     public boolean closeByAdmin() {
         openNow = false;

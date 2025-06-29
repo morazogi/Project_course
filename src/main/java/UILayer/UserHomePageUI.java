@@ -114,7 +114,7 @@ public class UserHomePageUI extends VerticalLayout {
         HorizontalLayout searches = new HorizontalLayout(
                 new Button("Search store",   ev -> UI.getCurrent().navigate("/searchstore")),
                 new Button("Search product", ev -> UI.getCurrent().navigate("/searchproduct")),
-                new Button("Edit store",     ev -> UI.getCurrent().navigate("/edit-store")),
+            //  new Button("Edit store",     ev -> UI.getCurrent().navigate("/edit-store")),
                 new Button("Shopping cart",  ev -> UI.getCurrent().navigate("/shoppingcart"))
         );
 

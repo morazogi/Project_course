@@ -101,10 +101,10 @@ public class RolesUI extends VerticalLayout {
 
         // ─── View Roles ─────────────────────────
         Button viewRoles = new Button("View Store Roles", e -> {
-            String msg = presenter.viewStoreRoles(storeField.getValue());
-            Notification.show(msg); status.setText(msg);
+            String tree = presenter.viewStoreRoles(storeField.getValue());
+            String html = "<pre>" + tree + "</pre>";
+            status.getElement().setProperty("innerHTML", html);
         });
-
         // ─── Relinquish Roles ───────────────────
         Button giveUpOwner = new Button("Relinquish Ownership", e -> {
             String msg = presenter.relinquishOwnership(storeField.getValue());

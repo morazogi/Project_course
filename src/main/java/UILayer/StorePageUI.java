@@ -58,7 +58,7 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
         if (map1 != null) {
            Store store = userConnectivityPresenter.getStore(token, (String) UI.getCurrent().getSession().getAttribute("storeId"));
             boolean canManageInventory =
-                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || map1.get("PERM_MANAGE_INVENTORY"));
+                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || ( map1.get("PERM_MANAGE_INVENTORY") != null && map1.get("PERM_MANAGE_INVENTORY")));
 
             /* force-disable MANAGE_STAFF, VIEW_STORE, UPDATE_POLICY */
             boolean[] permsArray = {
@@ -66,11 +66,11 @@ public class StorePageUI extends VerticalLayout implements BeforeEnterObserver {
                     false,                // MANAGE_STAFF  ❌
                     false,                // VIEW_STORE    ❌
                     false,                // UPDATE_POLICY ❌
-                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || map1.get("PERM_ADD_PRODUCT")),
-                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || map1.get("PERM_REMOVE_PRODUCT")),
-                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || map1.get("PERM_UPDATE_PRODUCT")),
-                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || map1.get("PERM_OPEN_STORE")),
-                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || map1.get("PERM_CLOSE_STORE")),
+                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || ( map1.get("PERM_ADD_PRODUCT") != null && map1.get("PERM_ADD_PRODUCT"))),
+                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || (map1.get("PERM_REMOVE_PRODUCT") != null && map1.get("PERM_REMOVE_PRODUCT"))),
+                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || ( map1.get("PERM_UPDATE_PRODUCT") != null && map1.get("PERM_UPDATE_PRODUCT") )),
+                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || (map1.get("PERM_OPEN_STORE")!= null && map1.get("PERM_OPEN_STORE"))),
+                    Boolean.TRUE.equals(store.userIsOwner(userConnectivityPresenter.getUserId(token)) || (map1.get("PERM_CLOSE_STORE")!= null && map1.get("PERM_CLOSE_STORE"))),
             };
 
 

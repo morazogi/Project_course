@@ -97,9 +97,9 @@ public class PermissionButtonsUI extends VerticalLayout {
 
 
 
-        if (!hasAnyPermission) {
-            add(new Paragraph("⚠️ You currently don’t have permissions for any store management actions. Contact the store owner to update your role."));
-        };
+       // if (!hasAnyPermission) {
+       //     add(new Paragraph("⚠️ You currently don’t have permissions for any store management actions. Contact the store owner to update your role."));
+      //  };
 
         add(buttonLayout1, buttonLayout2);
 
