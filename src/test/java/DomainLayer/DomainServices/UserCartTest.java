@@ -1,3 +1,6 @@
+/* ────────────────────────────────────────────────────────────────
+   src/test/java/DomainLayer/DomainServices/UserCartTest.java
+   ──────────────────────────────────────────────────────────────── */
 package DomainLayer.DomainServices;
 
 import DomainLayer.IToken;
@@ -18,14 +21,10 @@ import org.mockito.quality.Strictness;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * Unit tests for {@link UserCart}.
- */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class UserCartTest {
 
-    /* ---------- mocked collaborators ---------- */
     @Mock IToken            tokener;
     @Mock UserRepository    userRepo;
     @Mock GuestRepository   guestRepo;
@@ -35,11 +34,8 @@ class UserCartTest {
 
     private UserCart cartSvc;
 
-    /* shared fixtures */
     private final String storeId = "s1";
     private final String prodId  = "p1";
-
-    /* reusable mocked store */
     private Store stubStore;
 
     @BeforeEach
@@ -47,23 +43,20 @@ class UserCartTest {
         cartSvc = new UserCart(tokener, userRepo, storeRepo,
                 productRepo, orderRepo, guestRepo, null);
 
-        /* ---- stub store ---- */
         stubStore = mock(Store.class);
         when(stubStore.getId()).thenReturn(storeId);
-        when(stubStore.getProductQuantity(anyString())).thenReturn(10);   // default stock
+        when(stubStore.getProductQuantity(anyString())).thenReturn(10);
         when(storeRepo.getById(storeId)).thenReturn(stubStore);
     }
 
-    /* ===============================================================
-                           addToCart – registered
-       =============================================================== */
+    /* ───────────────────────── existing tests ──────────────────── */
+
     @Test
     void addToCart_registeredUser_success_updatesRepo() throws Exception {
-        String token = "tok";
-        when(tokener.extractUsername(token)).thenReturn("alice");
-        doNothing().when(tokener).validateToken(token);
+        when(tokener.extractUsername("tok")).thenReturn("alice");
+        doNothing().when(tokener).validateToken("tok");
 
-        Product apple = new Product(storeId, "Apple", "", 1.0f, 10, 0d, "Food");
+        Product apple = new Product(storeId,"Apple","",1f,10,0d,"F");
         apple.setId(prodId);
         when(productRepo.getById(prodId)).thenReturn(apple);
 
@@ -71,7 +64,7 @@ class UserCartTest {
         when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
         when(userRepo.getById("alice")).thenReturn(alice);
 
-        cartSvc.addToCart(token, storeId, prodId, 3);
+        cartSvc.addToCart("tok", storeId, prodId, 3);
 
         verify(alice).addProduct(storeId, prodId, 3);
         verify(userRepo).update(alice);
@@ -82,10 +75,10 @@ class UserCartTest {
         when(tokener.extractUsername("tok")).thenReturn("alice");
         doNothing().when(tokener).validateToken("tok");
 
-        Product scarce = new Product(storeId, "Rare", "", 5f, 1, 0d, "Misc");
+        Product scarce = new Product(storeId,"Rare","",5f,1,0d,"M");
         scarce.setId(prodId);
         when(productRepo.getById(prodId)).thenReturn(scarce);
-        when(stubStore.getProductQuantity(prodId)).thenReturn(1);  // only 1 left
+        when(stubStore.getProductQuantity(prodId)).thenReturn(1);
 
         RegisteredUser alice = mock(RegisteredUser.class, RETURNS_DEEP_STUBS);
         when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
@@ -96,9 +89,6 @@ class UserCartTest {
         verify(userRepo, never()).update(any());
     }
 
-    /* ===============================================================
-                           removeFromCart – guest
-       =============================================================== */
     @Test
     void removeFromCart_guest_success_callsUpdate() throws Exception {
         when(tokener.extractUsername("tok")).thenReturn("Guest-1");
@@ -106,7 +96,7 @@ class UserCartTest {
 
         Guest guest = mock(Guest.class);
         when(guest.getUsername()).thenReturn("Guest-1");
-        when(guest.getShoppingCart()).thenReturn(new ShoppingCart("Guest-1")); // avoids “healing” update
+        when(guest.getShoppingCart()).thenReturn(new ShoppingCart("Guest-1"));
         when(guestRepo.getById("Guest-1")).thenReturn(guest);
 
         cartSvc.removeFromCart("tok", storeId, prodId, 1);
@@ -121,4 +111,63 @@ class UserCartTest {
         assertThrows(IllegalArgumentException.class,
                 () -> cartSvc.removeFromCart("tok", storeId, prodId, 0));
     }
+
+    /* ───────────────────────────── NEW tests ───────────────────── */
+
+    /** bad store id triggers “Store not found” branch */
+    @Test
+    void addToCart_unknownStore_throws() {
+        when(tokener.extractUsername("tok")).thenReturn("alice");
+        doNothing().when(tokener).validateToken("tok");
+        when(storeRepo.getById("bad")).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.addToCart("tok", "bad", prodId, 1));
+    }
+
+    /** null token → validation short-circuit */
+    @Test
+    void addToCart_nullToken_throws() {
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.addToCart(null, storeId, prodId, 1));
+    }
+
+    /** reserveCart early-null check */
+    @Test
+    void reserveCart_nullToken_throws() {
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.reserveCart(null));
+    }
+
+    @Test   // 🔹 NEW
+    void addToCartt_unknownStore_throws() {
+        when(tokener.extractUsername("tok")).thenReturn("alice");
+        doNothing().when(tokener).validateToken("tok");
+        when(storeRepo.getById("bad")).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.addToCart("tok", "bad", prodId, 1));
+    }
+
+    @Test   // 🔹 NEW
+    void addToCart_negativeQuantity_throws() {
+        assertThrows(IllegalArgumentException.class,
+                () -> cartSvc.addToCart("tok", storeId, prodId, -5));
+    }
+
+    @Test   // 🔹 NEW
+    void removeFromCart_registeredUser_updatesRepo() throws Exception {
+        when(tokener.extractUsername("tok")).thenReturn("alice");
+        doNothing().when(tokener).validateToken("tok");
+
+        RegisteredUser alice = mock(RegisteredUser.class);
+        when(alice.getShoppingCart()).thenReturn(new ShoppingCart("alice"));
+        when(userRepo.getById("alice")).thenReturn(alice);
+
+        cartSvc.removeFromCart("tok", storeId, prodId, 1);
+
+        verify(alice).removeProduct(storeId, prodId, 1);
+        verify(userRepo).update(alice);
+    }
+
 }
