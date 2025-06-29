@@ -6,6 +6,7 @@ public class Auction {
     private final String id = UUID.randomUUID().toString();
     private final String storeId;
     private final String productId;
+    private final String originalManagerId;
     private double currentPrice;
     private String lastParty;
     private boolean waitingConsent;
@@ -18,6 +19,7 @@ public class Auction {
     public Auction(String storeId, String productId, String managerId, double startPrice) {
         this.storeId     = storeId;
         this.productId   = productId;
+        this.originalManagerId = managerId;
         this.currentPrice = startPrice;
         this.lastParty    = managerId;
         this.waitingConsent = false;
@@ -40,8 +42,9 @@ public class Auction {
         if (price <= currentPrice)         throw new IllegalArgumentException("price too low");
         currentPrice  = price;
         lastParty     = party;
-        waitingConsent = true;
+        waitingConsent = !party.equals(originalManagerId);
     }
+    
     public void accept(String party) {
         if (!waitingConsent)               throw new IllegalStateException("nothing to accept");
         if (party.equals(lastParty))       throw new IllegalArgumentException("same party");
