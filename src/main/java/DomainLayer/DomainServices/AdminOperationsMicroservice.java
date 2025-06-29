@@ -81,6 +81,7 @@ public class AdminOperationsMicroservice {
                     user.getOwnedStores().remove(storeId);
                 }
                 store.terminateOwnership(founderID);
+                storeRepository.update(store);
                 return true;
             }
             return false;

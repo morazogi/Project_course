@@ -664,34 +664,36 @@ public class Store {
         return false;
     }
 
-    /**
-     * Retrieves a list of all subordinates associated with the specified owner.
-     * This includes direct subordinates as well as their subordinates recursively
-     * within the management hierarchy.
-     *
-     * @param ownerId the unique identifier of the owner whose subordinates are to be retrieved
-     * @return a LinkedList containing the unique identifiers of all subordinates
-     */
     public LinkedList<String> getAllSubordinates(String ownerId) {
+        return getAllSubordinates(ownerId, new HashSet<>());
+    }
+
+    private LinkedList<String> getAllSubordinates(String ownerId, Set<String> visited) {
         LinkedList<String> subordinates = new LinkedList<>();
 
-        // Check if the owner exists and has subordinates
-        List<String> directSubordinates = ownerToSubordinates.get(ownerId).getSubordinates();
+        // Avoid revisiting nodes to prevent infinite recursion
+        if (!visited.add(ownerId)) {
+            return subordinates;
+        }
+
+        OwnerSubordinateEntry entry = ownerToSubordinates.get(ownerId);
+        if (entry == null) {
+            return subordinates;
+        }
+
+        List<String> directSubordinates = entry.getSubordinates();
         if (directSubordinates == null) {
             return subordinates;
         }
 
-        // Add direct subordinates
         subordinates.addAll(directSubordinates);
 
-        // Recursively add subordinates of subordinates
         for (String subordinate : directSubordinates) {
-            subordinates.addAll(getAllSubordinates(subordinate));
+            subordinates.addAll(getAllSubordinates(subordinate, visited));
         }
 
         return subordinates;
     }
-
 
 
     public boolean removeDiscount(String id) {
@@ -832,8 +834,8 @@ public class Store {
     }
 
     public boolean closeByAdmin() {
-        //todo: implement
-        return false;
+        openNow = false;
+        return true;
     }
 
     public Map<String, ManagerPermissions> getManagers() {

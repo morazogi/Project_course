@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +57,18 @@ public class AdminConsoleUI extends VerticalLayout {
             boolean ok = u != null && presenter.unSuspend(u);
             Notification.show(ok ? "User restored" : "Failed");
         });
+        TextField storeName = new TextField("Store name");
+        Span message = new Span(" ");
+        Button closeStore = new Button("Close store", e -> {
+            message.setText(presenter.closeStore(storeName.getValue()));
+        });
 
         add(
                 new H2("System-admin console"),
                 new HorizontalLayout(users, suspend, unsuspend),
+                storeName,
+                message,
+                closeStore,
                 status
         );
         setPadding(true);

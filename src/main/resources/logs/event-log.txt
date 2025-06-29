@@ -1064,3 +1064,68 @@
 [2025-06-29 17:34:22] User: b | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-29 17:34:27] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
 [2025-06-29 17:34:27] User: b | Event: Event | Description: RELINQUISH_MANAGEMENT for store ff1002d6-9bff-42e1-820a-a9d9b9ac43ea
+[2025-06-29 18:01:00] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 18:01:00] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 18:01:02] User: a | Event: Event | Description: LOGIN
+[2025-06-29 18:01:02] User: a | Event: Event | Description: TokenService
+[2025-06-29 18:01:02] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 18:01:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=ff1002d6-9bff-42e1-820a-a9d9b9ac43ea FOUND
+[2025-06-29 18:01:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=ff1002d6-9bff-42e1-820a-a9d9b9ac43ea FOUND
+[2025-06-29 18:01:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=ff1002d6-9bff-42e1-820a-a9d9b9ac43ea FOUND
+[2025-06-29 18:01:03] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=ff1002d6-9bff-42e1-820a-a9d9b9ac43ea FOUND
+[2025-06-29 18:01:03] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 18:01:03] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 18:01:06] User: a | Event: Event | Description: LOGOUT_SUCCESS
+[2025-06-29 18:01:06] User: a | Event: Event | Description: LOGOUT
+[2025-06-29 18:01:06] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:01:06] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:01:07] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 18:01:07] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 18:01:13] User: 1 | Event: Event | Description: LOGIN
+[2025-06-29 18:01:13] User: 1 | Event: Event | Description: TokenService
+[2025-06-29 18:01:13] User: 1 | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 18:02:22] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:02:23] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:02:25] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 18:02:25] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 18:02:31] User: 1 | Event: Event | Description: LOGIN
+[2025-06-29 18:02:31] User: 1 | Event: Event | Description: TokenService
+[2025-06-29 18:02:31] User: 1 | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 18:02:38] User: 1 | Event: Event | Description: ADMIN_CLOSE_STORE_START
+[2025-06-29 18:05:15] User: a | Event: Event | Description: LOGIN
+[2025-06-29 18:05:15] User: a | Event: Event | Description: TokenService
+[2025-06-29 18:05:15] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 18:05:20] User: a | Event: Event | Description: OPEN_STORE
+[2025-06-29 18:05:20] User: a | Event: Event | Description: APPOINT_STORE_OWNER_START
+[2025-06-29 18:05:20] User: a | Event: Event | Description: APPOINT_STORE_OWNER_SUCCESS
+[2025-06-29 18:05:20] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_START
+[2025-06-29 18:05:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 18:05:20] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 18:05:20] User: a | Event: Event | Description: APPOINT_STORE_MANAGER_SUCCESS
+[2025-06-29 18:05:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=4b87c69f-9bce-4a93-9242-ddff52283ee3 FOUND
+[2025-06-29 18:05:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=4b87c69f-9bce-4a93-9242-ddff52283ee3 FOUND
+[2025-06-29 18:05:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=4b87c69f-9bce-4a93-9242-ddff52283ee3 FOUND
+[2025-06-29 18:05:21] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=4b87c69f-9bce-4a93-9242-ddff52283ee3 FOUND
+[2025-06-29 18:05:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_START
+[2025-06-29 18:05:21] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
+[2025-06-29 18:05:23] User: a | Event: Event | Description: LOGOUT_SUCCESS
+[2025-06-29 18:05:23] User: a | Event: Event | Description: LOGOUT
+[2025-06-29 18:05:23] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:05:23] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:05:25] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 18:05:25] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 18:05:30] User: 1 | Event: Event | Description: LOGIN
+[2025-06-29 18:05:30] User: 1 | Event: Event | Description: TokenService
+[2025-06-29 18:05:30] User: 1 | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-29 18:05:43] User: 1 | Event: Event | Description: ADMIN_CLOSE_STORE_START
+[2025-06-29 18:05:43] User: 1 | Event: Event | Description: ADMIN_CLOSE_STORE_SUCCESS
+[2025-06-29 18:06:02] User: SEARCH_STORE_BY_NAME | Event: Event | Description: Query=store Matches=1
+[2025-06-29 18:06:04] User: 1 | Event: Event | Description: LOGOUT_SUCCESS
+[2025-06-29 18:06:04] User: 1 | Event: Event | Description: LOGOUT
+[2025-06-29 18:06:04] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:06:04] User: Guest | Event: Event | Description: TokenService
+[2025-06-29 18:06:05] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-29 18:06:05] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-29 18:06:07] User: a | Event: Event | Description: LOGIN
+[2025-06-29 18:06:08] User: a | Event: Event | Description: TokenService
+[2025-06-29 18:06:08] User: a | Event: Event | Description: LOGIN_SUCCESS

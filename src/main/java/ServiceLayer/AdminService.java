@@ -11,11 +11,9 @@ import jakarta.transaction.Transactional;
 public class AdminService {
     // Add new microservice
     private final AdminOperationsMicroservice adminService;
-    private final QueryMicroservice notificationService;
     private final TokenService tokenService;
 
-    public AdminService(UserRepository userRepository, StoreRepository storeRepository, QueryMicroservice notificationService, TokenService tokenService) {
-        this.notificationService = notificationService;
+    public AdminService(UserRepository userRepository, StoreRepository storeRepository, TokenService tokenService) {
         this.tokenService = tokenService;
         // Initialize new admin microservice
         this.adminService = new AdminOperationsMicroservice(userRepository, storeRepository);
