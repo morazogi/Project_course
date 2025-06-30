@@ -88,6 +88,7 @@ public class SystemInitialiser {
                 System.out.println("🔧 SystemInitialiser: Executing line " + lineNumber + ": " + line);
                 
                 // Parse and execute the command
+
                 if (!executeCommand(line, lineNumber)) {
                     System.err.println("❌ SystemInitialiser: Initialization failed at line " + lineNumber + ": " + line);
                     reader.close();
