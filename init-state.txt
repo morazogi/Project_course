@@ -1,0 +1,49 @@
+# System Initialization Commands
+# This file contains the sequence of operations to initialize the system
+# Each line represents a command to be executed in order
+
+# Step 1: Register users
+guest-registration(moshe, moshePass)
+guest-registration(rina, rinaPass)
+guest-registration(river, riverPass)
+guest-registration(mor, morPass)
+guest-registration(hadar, hadarPass)
+guest-registration(daniel, danielPass)
+guest-registration(yuval, yuvalPass)
+guest-registration(shoham, shohamPass)
+
+# Step 2: Login as rina
+login(rina, rinaPass)
+login(river, riverPass)
+login(mor, morPass)
+login(hadar, hadarPass)
+login(daniel, danielPass)
+login(yuval, yuvalPass)
+login(shoham, shohamPass)
+
+# Step 3: Open store as rina
+open-store(rina, shoes, Fashion Shoes Store)
+open-store(river, techStore, tech Store)
+open-store(mor, morStore, grocery Store)
+open-store(hadar, hadarStore, clothingStore)
+
+# Step 4: Appoint moshe as manager
+appoint-manager(rina, shoes, moshe)
+appoint-manager(mor, morStore, daniel)
+appoint-manager(river, techStore, shoham)
+appoint-manager(hadar, hadarStore, yuval)
+
+# Step 5: Add some products to the store
+add-product(rina, shoes, Running Shoes, Comfortable running shoes, 89.99, 50, Shoes)
+add-product(rina, shoes, Dress Shoes, Elegant dress shoes, 129.99, 30, Shoes)
+
+add-product(mor, morStore, apple, green apple, 2.99, 100, Fruits)
+add-product(mor, morStore, mango, green mango, 5.99, 50, Fruits)
+
+add-product(river, techStore, mac, apple computer, 12999.99, 20, Tech)
+add-product(river, techStore, iphone, apple iphone, 1299.99, 30, Tech)
+
+add-product(hadar, hadarStore, tshirt, blue shirt, 18.99, 200, Clothing)
+add-product(hadar, hadarStore, jeans, black shirt, 28.99, 200, Clothing)
+
+# System initialization complete - all operations should succeed

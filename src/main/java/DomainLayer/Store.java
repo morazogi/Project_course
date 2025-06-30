@@ -91,20 +91,6 @@ public class Store {
     @Column(name = "superior_id")
     private Map<String, String> managersToSuperior = new HashMap<>();
 
-//    /**
-//     * Maps store owners to their subordinates using a more normalized approach
-//     * with proper JPA collection handling.
-//     */
-//    @ElementCollection
-//    @CollectionTable(
-//            name = "owner_subordinates",
-//            joinColumns = @JoinColumn(name = "store_id")
-//    )
-//    @MapKeyColumn(name = "owner_id")
-//    @OrderColumn(name = "subordinate_index") // Preserves list order
-//    @Column(name = "subordinate_id")
-//    private Map<String, List<String>> ownerToSubordinates = new HashMap<>();
-
     /**
      * Maps store owners to their subordinates using a wrapper embeddable
      */
@@ -195,7 +181,11 @@ public class Store {
     public Store(String founderID , String name) {
         this.name = name;
         founder = founderID;
+        owners.add(founderID);
+        ownersToSuperior.put(founderID, null); // Founder has no superior
+        ownerToSubordinates.put(founderID, new OwnerSubordinateEntry(this.id, founderID, this, new ArrayList<>()));
         openNow = true;
+
     }
     public Store() {
     }
@@ -605,6 +595,18 @@ public class Store {
        // ManagerPermissions mmpjk = new ManagerPermissions(mp, userId, id);
        // managers.put(userId, mmpjk); // This will now correctly persist a composite key (managerId, storeId)
     }
+    public void addManager(String appointerId, String userId, boolean[] permissions) {
+        // 1. Add the new manager to the managers map with their permissions
+        ManagerPermissions mp = new ManagerPermissions(permissions, userId, this.id);
+        managers.put(userId, mp);
+
+        // 2. Map the new manager to their direct superior
+        managersToSuperior.put(userId, appointerId);
+
+        // 3. Add the new manager as a subordinate to their appointer
+        ownerToSubordinates.computeIfAbsent(appointerId, k -> new OwnerSubordinateEntry(this.id, k, this, new ArrayList<>()))
+                .addSubordinate(userId);
+    }
 
     public boolean userIsOwner(String userId) {
         return owners.contains(userId);
@@ -749,11 +751,7 @@ public class Store {
         }
     }
 
-    public void addManager(String appointerId, String userId, boolean[] permissions) {
-        ManagerPermissions mp = new ManagerPermissions(permissions, userId, this.id);
-        managers.put(userId, mp);
-        managersToSuperior.put(userId, appointerId);
-    }
+
 
     public void changeManagersPermissions(String managerId, boolean[] permissions) {
         ManagerPermissions mp = managers.get(managerId);

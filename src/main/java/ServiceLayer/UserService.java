@@ -74,6 +74,7 @@ public class UserService {
 
     @Transactional
     public void signUp(String username, String password) throws Exception {
+        System.out.println("signUp test ");
         try {
             userConnectivity.signUp(username, password);
         } catch (IllegalArgumentException e) {
