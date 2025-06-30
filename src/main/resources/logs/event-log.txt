@@ -114,3 +114,22 @@
 [2025-06-30 16:25:15] User: a | Event: Event | Description: GET_MANAGER_PERMISSIONS_SUCCESS
 [2025-06-30 16:25:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=de47c121-4163-4538-8113-be835e4bc946 FOUND
 [2025-06-30 16:25:15] User: SEARCH_STORE_BY_ID | Event: Event | Description: Store=de47c121-4163-4538-8113-be835e4bc946 FOUND
+[2025-06-30 16:46:19] User: a | Event: Event | Description: SIGNUP_FAILED - USER_EXIST
+[2025-06-30 16:46:19] User: a | Event: Event | Description: SIGNUP_FAILED
+[2025-06-30 16:46:22] User: a | Event: Event | Description: LOGIN
+[2025-06-30 16:46:22] User: a | Event: Event | Description: TokenService
+[2025-06-30 16:46:22] User: a | Event: Event | Description: LOGIN_SUCCESS
+[2025-06-30 16:46:24] User: a | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-30 16:46:24] User: a | Event: Event | Description: ADD_TO_CART
+[2025-06-30 16:47:04] User: a | Event: Event | Description: Shipping successful
+[2025-06-30 16:47:04] User: a | Event: Event | Description: Successfully payed for cart
+[2025-06-30 16:47:12] User: a | Event: Event | Description: LOGOUT_SUCCESS
+[2025-06-30 16:47:12] User: a | Event: Event | Description: LOGOUT
+[2025-06-30 16:47:12] User: Guest | Event: Event | Description: TokenService
+[2025-06-30 16:47:12] User: Guest | Event: Event | Description: TokenService
+[2025-06-30 16:47:16] User: Guest | Event: Event | Description: ADD_TO_CART_SUCCESS
+[2025-06-30 16:47:16] User: Guest | Event: Event | Description: ADD_TO_CART
+[2025-06-30 16:47:20] User: removeProduct | Event: Event | Description: Shopping bag removed from cart
+[2025-06-30 16:47:20] User: removeProduct | Event: Event | Description: Product removed from cart
+[2025-06-30 16:47:20] User: Guest | Event: Event | Description: REMOVE_FROM_CART
+[2025-06-30 16:47:21] User: Guest | Event: Event | Description: TokenService

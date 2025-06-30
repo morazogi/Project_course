@@ -21,7 +21,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("/bidmanager")
-public class BidManagerUI extends VerticalLayout {
+public class  BidManagerUI extends VerticalLayout {
 
     private final BidManagerPresenter presenter;
     private final Span status = new Span();
