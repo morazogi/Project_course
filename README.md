@@ -145,3 +145,48 @@ The system integrates with external services:
 - **Shipping Service**: Delivery management
 - **Notification Service**: Real-time notifications via WebSocket
 
+🏬 Stores and Owners
+🛍️ rina
+Store: shoes – Fashion Shoes Store
+
+Manager: moshe
+
+Products:
+
+Running Shoes – Comfortable running shoes – $89.99 – Qty: 50 – Category: Shoes
+
+Dress Shoes – Elegant dress shoes – $129.99 – Qty: 30 – Category: Shoes
+
+💻 river
+Store: techStore – Tech Store
+
+Manager: shoham
+
+Products:
+
+mac – Apple computer – $12,999.99 – Qty: 20 – Category: Tech
+
+iphone – Apple iPhone – $1,299.99 – Qty: 30 – Category: Tech
+
+🛒 mor
+Store: morStore – Grocery Store
+
+Manager: daniel
+
+Products:
+
+apple – Green apple – $2.99 – Qty: 100 – Category: Fruits
+
+mango – Green mango – $5.99 – Qty: 50 – Category: Fruits
+
+👗 hadar
+Store: hadarStore – Clothing Store
+
+Manager: yuval
+
+Products:
+
+tshirt – Blue shirt – $18.99 – Qty: 200 – Category: Clothing
+
+jeans – Black shirt – $28.99 – Qty: 200 – Category: Clothing
+

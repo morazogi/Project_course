@@ -1,70 +1,91 @@
 package DomainLayer;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link BidSale}.
+ */
 class BidTest {
 
+    private BidSale bid;
+    private final LocalDateTime endsAt = LocalDateTime.now().plusHours(2);
 
+    @BeforeEach
+    void init() {
+        bid = new BidSale(
+                "store-1",
+                "product-1",
+                100.0,     // start price
+                10.0,      // minimum increase
+                endsAt);
+    }
+
+    /* -------------------------------------------------------------
+                          initial state
+       ------------------------------------------------------------- */
     @Test
-    void constructor_rejectsPastTime() {
-        LocalDateTime past = LocalDateTime.now().minusSeconds(1);
+    void initialState_matchesCtorArgs() {
+        assertEquals("store-1",  bid.getStoreId());
+        assertEquals("product-1",bid.getProductId());
+        assertEquals(100.0,      bid.getCurrentPrice());
+        assertNull(bid.getCurrentBidder());
+        assertFalse(bid.isAwaitingPayment());
+    }
+
+    /* -------------------------------------------------------------
+                           successful bid
+       ------------------------------------------------------------- */
+    @Test
+    void bid_validAmount_updatesPriceAndBidder() {
+        bid.bid("alice", 110.0,
+                LocalDateTime.now().plusMinutes(1));
+
+        assertEquals(110.0, bid.getCurrentPrice());
+        assertEquals("alice", bid.getCurrentBidder());
+    }
+
+    /* -------------------------------------------------------------
+                       too-low bid validation
+       ------------------------------------------------------------- */
+    @Test
+    void bid_tooLow_throwsIllegalArgument() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Bid(past, new BigDecimal("100"), new BigDecimal("10")));
+                () -> bid.bid("bob", 105.0, LocalDateTime.now()));
+    }
+
+    /* -------------------------------------------------------------
+                        bidding after end time
+       ------------------------------------------------------------- */
+    @Test
+    void bid_afterEnd_throwsIllegalState() {
+        LocalDateTime afterEnd = endsAt.plusSeconds(1);
+        assertThrows(IllegalStateException.class,
+                () -> bid.bid("late", 120.0, afterEnd));
+    }
+
+    /* -------------------------------------------------------------
+                        winner & payment flow
+       ------------------------------------------------------------- */
+    @Test
+    void markAwaitingPayment_setsWinnerAndPrice() {
+        bid.bid("alice", 130.0, LocalDateTime.now());
+        bid.markAwaitingPayment();
+
+        assertTrue(bid.isAwaitingPayment());
+        assertEquals("alice", bid.getWinner());
+        assertEquals(130.0,   bid.getPriceToPay());
     }
 
     @Test
-    void constructor_rejectsNonPositiveMinPrice() {
-        LocalDateTime future = LocalDateTime.now().plusDays(1);
-        assertThrows(IllegalArgumentException.class,
-                () -> new Bid(future, BigDecimal.ZERO, new BigDecimal("10")));
-    }
+    void markAwaitingPayment_withoutAnyBid_doesNothing() {
+        bid.markAwaitingPayment();
 
-    @Test
-    void constructor_rejectsNonPositiveIncrement() {
-        LocalDateTime future = LocalDateTime.now().plusDays(1);
-        assertThrows(IllegalArgumentException.class,
-                () -> new Bid(future, new BigDecimal("100"), BigDecimal.ZERO));
-    }
-
-
-    @Test
-    void placeBid_firstLegalBidIsAccepted() {
-        LocalDateTime future = LocalDateTime.now().plusDays(1);
-        Bid bid = new Bid(future,
-                new BigDecimal("100"),   // min price
-                new BigDecimal("10"));   // increment
-
-        bid.placeBid(new BigDecimal("110"), "alice");
-
-        assertEquals(new BigDecimal("110"), bid.getLastBid());
-        assertEquals("alice",               bid.getHighestBidder());
-    }
-
-
-    @Test
-    void placeBid_rejectsAmountBelowOrEqualCurrent() {
-        LocalDateTime future = LocalDateTime.now().plusDays(1);
-        Bid bid = new Bid(future, new BigDecimal("100"), new BigDecimal("10"));
-        bid.placeBid(new BigDecimal("110"), "alice");      // current highest = 110
-
-        assertThrows(IllegalArgumentException.class,
-                () -> bid.placeBid(new BigDecimal("110"), "bob"));   // equal
-        assertThrows(IllegalArgumentException.class,
-                () -> bid.placeBid(new BigDecimal("105"), "bob"));   // lower
-    }
-
-    @Test
-    void placeBid_rejectsWrongIncrement() {
-        LocalDateTime future = LocalDateTime.now().plusDays(1);
-        Bid bid = new Bid(future, new BigDecimal("100"), new BigDecimal("10"));
-
-        // 109 is > 100 but not a multiple of increment 10
-        assertThrows(IllegalArgumentException.class,
-                () -> bid.placeBid(new BigDecimal("109"), "alice"));
+        assertFalse(bid.isAwaitingPayment());
+        assertNull(bid.getWinner());
     }
 }

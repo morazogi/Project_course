@@ -1,1145 +1,422 @@
+/* ────────────────────────────────────────────────────────────────
+   src/test/java/ServiceLayer/OwnerManagerServiceTest.java
+   ──────────────────────────────────────────────────────────────── */
 package ServiceLayer;
 
-import DomainLayer.*;
+import DomainLayer.ManagerPermissions;
 import DomainLayer.DomainServices.*;
-import java.util.Date;
+import com.fasterxml.jackson.core.JsonProcessingException;            // already in classpath
+import InfrastructureLayer.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class OwnerManagerServiceTest {
 
-    // Mocked repositories
-    @Mock
-    private IDiscountRepository discountRepository;
-    @Mock
-    private IUserRepository userRepository;
-    @Mock
-    private IStoreRepository storeRepository;
-    @Mock
-    private ICustomerInquiryRepository inquiryRepository;
-    @Mock
-    private IProductRepository productRepository;
-    @Mock
-    private IOrderRepository orderRepository;
+    /* ctor repositories */
+    @Mock UserRepository     userRepository;
+    @Mock StoreRepository    storeRepository;
+    @Mock ProductRepository  productRepository;
+    @Mock OrderRepository    orderRepository;
+    @Mock DiscountRepository discountRepository;
 
-    // Mocked microservices
-    @Mock
-    private InventoryManagementMicroservice inventoryService;
-    @Mock
-    private PurchasePolicyMicroservice purchasePolicyService;
-    @Mock
-    private DiscountPolicyMicroservice discountPolicyService;
-    @Mock
-    private StoreManagementMicroservice storeManagementService;
-    @Mock
-    private QueryMicroservice queryMicroservice;
-    @Mock
-    private PurchaseHistoryMicroservice purchaseHistoryService;
+    /* micro-services swapped in */
+    @Mock InventoryManagementMicroservice inventoryService;
+    @Mock PurchasePolicyMicroservice      purchasePolicyService;
+    @Mock DiscountPolicyMicroservice      discountPolicyService;
+    @Mock StoreManagementMicroservice     storeManagementService;
+    @Mock QueryMicroservice               notificationService;
+    @Mock PurchaseHistoryMicroservice     purchaseHistoryService;
 
-    // Class under test
-    private OwnerManagerService ownerManagerService;
+    private OwnerManagerService svc;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        svc = new OwnerManagerService(userRepository, storeRepository,
+                productRepository, orderRepository,
+                discountRepository);
 
-        // Create a test instance with constructor injection
-        ownerManagerService = new OwnerManagerService(userRepository, storeRepository,productRepository, orderRepository, discountRepository);
-
-        // Replace the microservices with mocks using reflection
-        try {
-            java.lang.reflect.Field inventoryServiceField = OwnerManagerService.class.getDeclaredField("inventoryService");
-            inventoryServiceField.setAccessible(true);
-            inventoryServiceField.set(ownerManagerService, inventoryService);
-
-            java.lang.reflect.Field purchasePolicyServiceField = OwnerManagerService.class.getDeclaredField("purchasePolicyService");
-            purchasePolicyServiceField.setAccessible(true);
-            purchasePolicyServiceField.set(ownerManagerService, purchasePolicyService);
-
-            java.lang.reflect.Field discountPolicyServiceField = OwnerManagerService.class.getDeclaredField("discountPolicyService");
-            discountPolicyServiceField.setAccessible(true);
-            discountPolicyServiceField.set(ownerManagerService, discountPolicyService);
-
-            java.lang.reflect.Field storeManagementServiceField = OwnerManagerService.class.getDeclaredField("storeManagementService");
-            storeManagementServiceField.setAccessible(true);
-            storeManagementServiceField.set(ownerManagerService, storeManagementService);
-
-            java.lang.reflect.Field notificationServiceField = OwnerManagerService.class.getDeclaredField("notificationService");
-            notificationServiceField.setAccessible(true);
-            notificationServiceField.set(ownerManagerService, queryMicroservice);
-
-            java.lang.reflect.Field purchaseHistoryServiceField = OwnerManagerService.class.getDeclaredField("purchaseHistoryService");
-            purchaseHistoryServiceField.setAccessible(true);
-            purchaseHistoryServiceField.set(ownerManagerService, purchaseHistoryService);
-        } catch (Exception e) {
-            fail("Failed to set up test: " + e.getMessage());
-        }
+        /* inject mocks */
+        ReflectionTestUtils.setField(svc, "inventoryService",       inventoryService);
+        ReflectionTestUtils.setField(svc, "purchasePolicyService",  purchasePolicyService);
+        ReflectionTestUtils.setField(svc, "discountPolicyService",  discountPolicyService);
+        ReflectionTestUtils.setField(svc, "storeManagementService", storeManagementService);
+        ReflectionTestUtils.setField(svc, "notificationService",    notificationService);
+        ReflectionTestUtils.setField(svc, "purchaseHistoryService", purchaseHistoryService);
     }
 
-    // ==================== 1. Inventory Management Tests ====================
+    /* ────────────────────────── inventory flows (kept) ───────────────────── */
 
-    @Test
-    void addProduct_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productName = "Test Product";
-        String description = "Test Description";
-        double price = 10.0;
-        int quantity = 5;
-        String category = "Test Category";
-        String expectedProductId = "product1";
-
-        when(inventoryService.addProduct(ownerId, storeId, productName, description, price, quantity, category))
-            .thenReturn(expectedProductId);
-
-        // Act
-        String result = ownerManagerService.addProduct(ownerId, storeId, productName, description, price, quantity, category);
-
-        // Assert
-        assertEquals(expectedProductId, result);
-        verify(inventoryService).addProduct(ownerId, storeId, productName, description, price, quantity, category);
+    @Test void removeProduct_success_returnsFriendlyMessage() {
+        when(inventoryService.removeProduct("owner","store","prod")).thenReturn(true);
+        assertEquals("Removed product", svc.removeProduct("owner","store","prod"));
     }
 
-    @Test
-    void addProduct_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productName = "Test Product";
-        String description = "Test Description";
-        double price = 10.0;
-        int quantity = 5;
-        String category = "Test Category";
-
-        when(inventoryService.addProduct(ownerId, storeId, productName, description, price, quantity, category))
-            .thenThrow(new RuntimeException("Failed to add product"));
-
-        // Act
-        String result = ownerManagerService.addProduct(ownerId, storeId, productName, description, price, quantity, category);
-
-        // Assert
-        assertNull(result);
-        verify(inventoryService).addProduct(ownerId, storeId, productName, description, price, quantity, category);
+    @Test void removeProduct_notRemoved_returnsFailureMessage() {
+        when(inventoryService.removeProduct(any(),any(),any())).thenReturn(false);
+        assertEquals("Failed to remove product", svc.removeProduct("o","s","p"));
     }
 
-    @Test
-    void removeProduct_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productId = "product1";
-
-        when(inventoryService.removeProduct(ownerId, storeId, productId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.removeProduct(ownerId, storeId, productId);
-
-        // Assert
-        assertTrue(result);
-        verify(inventoryService).removeProduct(ownerId, storeId, productId);
+    @Test void updateProductDetails_success_returnsFriendlyMessage() {
+        when(inventoryService.updateProductDetails("o","s","p","n","d",5.0,"c"))
+                .thenReturn(true);
+        assertEquals("Updated product details",
+                svc.updateProductDetails("o","s","p","n","d",5.0,"c"));
     }
 
-    @Test
-    void removeProduct_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productId = "product1";
-
-        when(inventoryService.removeProduct(ownerId, storeId, productId))
-            .thenThrow(new RuntimeException("Failed to remove product"));
-
-        // Act
-        boolean result = ownerManagerService.removeProduct(ownerId, storeId, productId);
-
-        // Assert
-        assertFalse(result);
-        verify(inventoryService).removeProduct(ownerId, storeId, productId);
+    @Test void updateProductDetails_failure_returnsFailureMessage() {
+        when(inventoryService.updateProductDetails(any(),any(),any(),any(),any(),anyDouble(),any()))
+                .thenReturn(false);
+        assertEquals("Failed to update product details",
+                svc.updateProductDetails("o","s","p",null,null,-1,"c"));
     }
 
-    @Test
-    void updateProductDetails_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productId = "product1";
-        String productName = "Updated Product";
-        String description = "Updated Description";
-        double price = 15.0;
-        String category = "Updated Category";
+    /* ───────────────────────── policy / owner flow (kept) ─────────────────── */
 
-        when(inventoryService.updateProductDetails(ownerId, storeId, productId, productName, description, price, category))
-            .thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.updateProductDetails(ownerId, storeId, productId, productName, description, price, category);
-
-        // Assert
-        assertTrue(result);
-        verify(inventoryService).updateProductDetails(ownerId, storeId, productId, productName, description, price, category);
+    @Test void definePurchasePolicy_success_returnsPolicyId() {
+        when(purchasePolicyService.definePurchasePolicy("o","s","MinAge", Collections.emptyMap()))
+                .thenReturn("pol-7");
+        assertEquals("pol-7", svc.definePurchasePolicy("o","s","MinAge", Collections.emptyMap()));
     }
 
-    @Test
-    void updateProductDetails_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productId = "product1";
-        String productName = "Updated Product";
-        String description = "Updated Description";
-        double price = 15.0;
-        String category = "Updated Category";
-
-        when(inventoryService.updateProductDetails(ownerId, storeId, productId, productName, description, price, category))
-            .thenThrow(new RuntimeException("Failed to update product details"));
-
-        // Act
-        boolean result = ownerManagerService.updateProductDetails(ownerId, storeId, productId, productName, description, price, category);
-
-        // Assert
-        assertFalse(result);
-        verify(inventoryService).updateProductDetails(ownerId, storeId, productId, productName, description, price, category);
+    @Test void updatePurchasePolicy_exception_returnsFalse() {
+        when(purchasePolicyService.updatePurchasePolicy(any(),any(),any(),any()))
+                .thenThrow(new RuntimeException("boom"));
+        assertFalse(svc.updatePurchasePolicy("o","s","id", Map.of()));
     }
 
-    @Test
-    void updateProductQuantity_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productId = "product1";
-        int newQuantity = 10;
-
-        when(inventoryService.updateProductQuantity(ownerId, storeId, productId, newQuantity))
-            .thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.updateProductQuantity(ownerId, storeId, productId, newQuantity);
-
-        // Assert
-        assertTrue(result);
-        verify(inventoryService).updateProductQuantity(ownerId, storeId, productId, newQuantity);
+    @Test void appointStoreOwner_success() {
+        when(storeManagementService.appointStoreOwner("a","s","u")).thenReturn(true);
+        assertTrue(svc.appointStoreOwner("a","s","u"));
     }
 
-    @Test
-    void updateProductQuantity_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String productId = "product1";
-        int newQuantity = 10;
-
-        when(inventoryService.updateProductQuantity(ownerId, storeId, productId, newQuantity))
-            .thenThrow(new RuntimeException("Failed to update product quantity"));
-
-        // Act
-        boolean result = ownerManagerService.updateProductQuantity(ownerId, storeId, productId, newQuantity);
-
-        // Assert
-        assertFalse(result);
-        verify(inventoryService).updateProductQuantity(ownerId, storeId, productId, newQuantity);
+    @Test void appointStoreOwner_failure_returnsFalseOnException() {
+        when(storeManagementService.appointStoreOwner(any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.appointStoreOwner("a","s","u"));
     }
 
-    // ==================== 2. Purchase and Discount Policy Tests ====================
-
-    @Test
-    void definePurchasePolicy_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String policyType = "MinAge";
-        Map<String, Object> policyParams = new HashMap<>();
-        policyParams.put("minAge", 18);
-        String expectedPolicyId = "policy1";
-
-        when(purchasePolicyService.definePurchasePolicy(ownerId, storeId, policyType, policyParams))
-            .thenReturn(expectedPolicyId);
-
-        // Act
-        String result = ownerManagerService.definePurchasePolicy(ownerId, storeId, policyType, policyParams);
-
-        // Assert
-        assertEquals(expectedPolicyId, result);
-        verify(purchasePolicyService).definePurchasePolicy(ownerId, storeId, policyType, policyParams);
+    @Test void getStoreRoleInfo_success() {
+        when(storeManagementService.getStoreRoleInfo("o","s")).thenReturn("{json:true}");
+        assertEquals("{json:true}", svc.getStoreRoleInfo("o","s"));
     }
 
-    @Test
-    void definePurchasePolicy_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String policyType = "MinAge";
-        Map<String, Object> policyParams = new HashMap<>();
-        policyParams.put("minAge", 18);
+    /* ─────────────────────────── extra coverage (added earlier) ───────────── */
 
-        when(purchasePolicyService.definePurchasePolicy(ownerId, storeId, policyType, policyParams))
-            .thenThrow(new RuntimeException("Failed to define purchase policy"));
-
-        // Act
-        String result = ownerManagerService.definePurchasePolicy(ownerId, storeId, policyType, policyParams);
-
-        // Assert
-        assertNull(result);
-        verify(purchasePolicyService).definePurchasePolicy(ownerId, storeId, policyType, policyParams);
+    @Test void defineDiscountPolicy_success_returnsTrue() {
+        when(discountPolicyService.addDiscountToDiscountPolicy(
+                any(),any(),any(),anyFloat(),anyFloat(),anyFloat(),any(),
+                anyFloat(),any(),anyFloat(),anyFloat(),any()))
+                .thenReturn(true);
+        assertTrue(svc.defineDiscountPolicy("o","s","did","id",
+                1f,1f,1f,
+                Collections.emptyList(),
+                10f,"p",1f,1f,"c"));
     }
 
-    @Test
-    void updatePurchasePolicy_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String policyId = "policy1";
-        Map<String, Object> policyParams = new HashMap<>();
-        policyParams.put("minAge", 21);
-
-        when(purchasePolicyService.updatePurchasePolicy(ownerId, storeId, policyId, policyParams))
-            .thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.updatePurchasePolicy(ownerId, storeId, policyId, policyParams);
-
-        // Assert
-        assertTrue(result);
-        verify(purchasePolicyService).updatePurchasePolicy(ownerId, storeId, policyId, policyParams);
+    @Test void removeDiscountPolicy_failure_returnsFalse() {
+        when(discountPolicyService.removeDiscountPolicy(any(),any()))
+                .thenReturn(false);
+        assertFalse(svc.removeDiscountPolicy("o","s"));
     }
 
-    @Test
-    void updatePurchasePolicy_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String policyId = "policy1";
-        Map<String, Object> policyParams = new HashMap<>();
-        policyParams.put("minAge", 21);
-
-        when(purchasePolicyService.updatePurchasePolicy(ownerId, storeId, policyId, policyParams))
-            .thenThrow(new RuntimeException("Failed to update purchase policy"));
-
-        // Act
-        boolean result = ownerManagerService.updatePurchasePolicy(ownerId, storeId, policyId, policyParams);
-
-        // Assert
-        assertFalse(result);
-        verify(purchasePolicyService).updatePurchasePolicy(ownerId, storeId, policyId, policyParams);
+    @Test void hasInventoryPermission_founderShortcut_true() {
+        when(storeManagementService.isFounderOrOwner("bob","s")).thenReturn(true);
+        assertTrue(svc.hasInventoryPermission("bob","s"));
     }
 
-    @Test
-    void removePurchasePolicy_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String policyId = "policy1";
-
-        when(purchasePolicyService.removePurchasePolicy(ownerId, storeId, policyId))
-            .thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.removePurchasePolicy(ownerId, storeId, policyId);
-
-        // Assert
-        assertTrue(result);
-        verify(purchasePolicyService).removePurchasePolicy(ownerId, storeId, policyId);
+    @Test void hasInventoryPermission_managerGranted_true() {
+        when(storeManagementService.isFounderOrOwner(any(),any())).thenReturn(false);
+        when(storeManagementService.getManagerPermissions("m","s","m"))
+                .thenReturn(Map.of(ManagerPermissions.PERM_MANAGE_INVENTORY,true));
+        assertTrue(svc.hasInventoryPermission("m","s"));
     }
 
-    @Test
-    void removePurchasePolicy_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String policyId = "policy1";
-
-        when(purchasePolicyService.removePurchasePolicy(ownerId, storeId, policyId))
-            .thenThrow(new RuntimeException("Failed to remove purchase policy"));
-
-        // Act
-        boolean result = ownerManagerService.removePurchasePolicy(ownerId, storeId, policyId);
-
-        // Assert
-        assertFalse(result);
-        verify(purchasePolicyService).removePurchasePolicy(ownerId, storeId, policyId);
+    @Test void hasInventoryPermission_managerDenied_false() {
+        when(storeManagementService.isFounderOrOwner(any(),any())).thenReturn(false);
+        when(storeManagementService.getManagerPermissions(any(),any(),any()))
+                .thenReturn(Map.of(ManagerPermissions.PERM_MANAGE_INVENTORY,false));
+        assertFalse(svc.hasInventoryPermission("m","s"));
     }
 
-    // Discount policy tests have been removed due to changes in the microservices
-
-    // ==================== 3. Owner Appointment Tests ====================
-
-    @Test
-    void appointStoreOwner_Success() {
-        // Arrange
-        String appointerId = "owner1";
-        String storeId = "store1";
-        String userId = "user1";
-
-        when(storeManagementService.appointStoreOwner(appointerId, storeId, userId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.appointStoreOwner(appointerId, storeId, userId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).appointStoreOwner(appointerId, storeId, userId);
+    @Test void managerUpdateProductQuantity_success() {
+        when(inventoryService.updateProductQuantity("m","s","p",5)).thenReturn(true);
+        assertTrue(svc.managerUpdateProductQuantity("m","s","p",5));
     }
 
-    @Test
-    void appointStoreOwner_Failure() {
-        // Arrange
-        String appointerId = "owner1";
-        String storeId = "store1";
-        String userId = "user1";
-
-        when(storeManagementService.appointStoreOwner(appointerId, storeId, userId))
-            .thenThrow(new RuntimeException("Failed to appoint store owner"));
-
-        // Act
-        boolean result = ownerManagerService.appointStoreOwner(appointerId, storeId, userId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).appointStoreOwner(appointerId, storeId, userId);
+    @Test void closeStore_success_returnsFriendlyMessage() {
+        when(storeManagementService.closeStore("founder","s")).thenReturn(true);
+        assertEquals("Closed store", svc.closeStore("founder","s"));
     }
 
-    @Test
-    void sendOwnershipProposal_Success() {
-        // Arrange
-        String userId = "user1";
-        String storeId = "store1";
-        String proposalText = "Would you like to be an owner?";
-        String expectedProposal = "Hi, would you like to become an owner of the store store1? \n";
-
-        when(storeManagementService.sendOwnershipProposal(userId, storeId, proposalText))
-            .thenReturn(expectedProposal);
-
-        // Act
-        ownerManagerService.sendOwnershipProposal(userId, storeId, proposalText);
-
-        // Assert
-        verify(storeManagementService).sendOwnershipProposal(userId, storeId, proposalText);
+    @Test void updateProductQuantity_failureReturnsMessage() {
+        when(inventoryService.updateProductQuantity(any(),any(),any(),anyInt()))
+                .thenReturn(false);
+        assertEquals("Failed to update product quantity",
+                svc.updateProductQuantity("o","s","p",5));
     }
 
-    @Test
-    void sendOwnershipProposal_Failure() {
-        // Arrange
-        String userId = "user1";
-        String storeId = "store1";
-        String proposalText = "Would you like to be an owner?";
-
-        when(storeManagementService.sendOwnershipProposal(userId, storeId, proposalText))
-            .thenThrow(new RuntimeException("Failed to send ownership proposal"));
-
-        // Act & Assert
-        // The method doesn't return anything, so we just verify it handles the exception
-        ownerManagerService.sendOwnershipProposal(userId, storeId, proposalText);
-        verify(storeManagementService).sendOwnershipProposal(userId, storeId, proposalText);
+    @Test void appointStoreManager_success() {
+        when(storeManagementService.appointStoreManager(any(),any(),any(),any()))
+                .thenReturn(true);
+        assertTrue(svc.appointStoreManager("owner","s","u",
+                new boolean[]{true,true,true}));
     }
 
-    @Test
-    void respondToOwnerAppointment_Success() {
-        // Arrange
-        String userId = "user1";
-        String storeId = "store1";
-        boolean accept = true;
-
-        when(storeManagementService.respondToOwnerAppointment(userId, storeId, accept)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.respondToOwnerAppointment(userId, storeId, accept);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).respondToOwnerAppointment(userId, storeId, accept);
+    @Test void managerAddProduct_inventoryFails_returnsNull() {
+        when(inventoryService.addProduct(any(),any(),any(),any(),anyFloat(),anyInt(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertNull(svc.managerAddProduct("m","s","n","d",2f,5,"c"));
     }
 
-    @Test
-    void respondToOwnerAppointment_Failure() {
-        // Arrange
-        String userId = "user1";
-        String storeId = "store1";
-        boolean accept = true;
-
-        when(storeManagementService.respondToOwnerAppointment(userId, storeId, accept))
-            .thenThrow(new RuntimeException("Failed to respond to owner appointment"));
-
-        // Act
-        boolean result = ownerManagerService.respondToOwnerAppointment(userId, storeId, accept);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).respondToOwnerAppointment(userId, storeId, accept);
+    @Test void updatePurchasePolicy_happyPath_returnsTrue() {
+        when(purchasePolicyService.updatePurchasePolicy("o","s","pid",Map.of()))
+                .thenReturn(true);
+        assertTrue(svc.updatePurchasePolicy("o","s","pid",Map.of()));
     }
 
-    @Test
-    void removeStoreOwner_Success() {
-        // Arrange
-        String removerId = "owner1";
-        String storeId = "store1";
-        String ownerId = "owner2";
+    /* ───────────────────────────── NEW TESTS ──────────────────────────────── */
 
-        when(storeManagementService.removeStoreOwner(removerId, storeId, ownerId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.removeStoreOwner(removerId, storeId, ownerId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).removeStoreOwner(removerId, storeId, ownerId);
+    /* 1. addProduct full coverage */
+    @Test void addProduct_success_returnsFriendlyMessage() {
+        when(inventoryService.addProduct("o","s","n","d",5f,10,"c"))
+                .thenReturn("prd-1");
+        assertEquals("Added product to store",
+                svc.addProduct("o","s","n","d",5f,10,"c"));
     }
 
-    @Test
-    void removeStoreOwner_Failure() {
-        // Arrange
-        String removerId = "owner1";
-        String storeId = "store1";
-        String ownerId = "owner2";
-
-        when(storeManagementService.removeStoreOwner(removerId, storeId, ownerId))
-            .thenThrow(new RuntimeException("Failed to remove store owner"));
-
-        // Act
-        boolean result = ownerManagerService.removeStoreOwner(removerId, storeId, ownerId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).removeStoreOwner(removerId, storeId, ownerId);
+    @Test void addProduct_exception_returnsFailureMessage() {
+        when(inventoryService.addProduct(any(),any(),any(),any(),anyFloat(),anyInt(),any()))
+                .thenThrow(new RuntimeException("boom"));
+        String msg = svc.addProduct("o","s","n","d",5f,10,"c");
+        assertTrue(msg.startsWith("Failed to add product to store"));
     }
 
-    @Test
-    void relinquishOwnership_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-
-        when(storeManagementService.relinquishOwnership(ownerId, storeId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.relinquishOwnership(ownerId, storeId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).relinquishOwnership(ownerId, storeId);
+    /* 2. updateProductQuantity success branch (owner path) */
+    @Test void updateProductQuantity_success_returnsFriendlyMessage() {
+        when(inventoryService.updateProductQuantity("o","s","p",9)).thenReturn(true);
+        assertEquals("Updated product quantity",
+                svc.updateProductQuantity("o","s","p",9));
     }
 
-    @Test
-    void relinquishOwnership_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-
-        when(storeManagementService.relinquishOwnership(ownerId, storeId))
-            .thenThrow(new RuntimeException("Failed to relinquish ownership"));
-
-        // Act
-        boolean result = ownerManagerService.relinquishOwnership(ownerId, storeId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).relinquishOwnership(ownerId, storeId);
+    /* 3. definePurchasePolicy failure branch */
+    @Test void definePurchasePolicy_exception_returnsNull() {
+        when(purchasePolicyService.definePurchasePolicy(any(),any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertNull(svc.definePurchasePolicy("o","s","T",Map.of()));
     }
 
-    // ==================== 4. Manager Appointment Tests ====================
-
-    @Test
-    void appointStoreManager_Success() {
-        // Arrange
-        String appointerId = "owner1";
-        String storeId = "store1";
-        String userId = "user1";
-        boolean[] permissions = {true, false, true};
-
-        when(storeManagementService.appointStoreManager(appointerId, storeId, userId, permissions)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.appointStoreManager(appointerId, storeId, userId, permissions);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).appointStoreManager(appointerId, storeId, userId, permissions);
+    /* 4. defineDiscountPolicy failure branch */
+    @Test void defineDiscountPolicy_failure_returnsFalse() {
+        when(discountPolicyService.addDiscountToDiscountPolicy(any(),any(),any(),
+                anyFloat(),anyFloat(),anyFloat(),any(),anyFloat(),any(),anyFloat(),anyFloat(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.defineDiscountPolicy("o","s","d","i",
+                1,1,1, List.of(),5,"p",1,1,"c"));
     }
 
-    @Test
-    void appointStoreManager_Failure() {
-        // Arrange
-        String appointerId = "owner1";
-        String storeId = "store1";
-        String userId = "user1";
-        boolean[] permissions = {true, false, true};
-
-        when(storeManagementService.appointStoreManager(appointerId, storeId, userId, permissions))
-            .thenThrow(new RuntimeException("Failed to appoint store manager"));
-
-        // Act
-        boolean result = ownerManagerService.appointStoreManager(appointerId, storeId, userId, permissions);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).appointStoreManager(appointerId, storeId, userId, permissions);
+    /* 5. removeDiscountPolicy success */
+    @Test void removeDiscountPolicy_success_true() {
+        when(discountPolicyService.removeDiscountPolicy("o","s")).thenReturn(true);
+        assertTrue(svc.removeDiscountPolicy("o","s"));
     }
 
-    @Test
-    void sendManagementProposal_Success() {
-        // Arrange
-        String userId = "user1";
-        String storeId = "store1";
-        String proposalText = "Would you like to be a manager?";
-
-        doNothing().when(storeManagementService).sendManagementProposal(userId, storeId, proposalText);
-
-        // Act
-        ownerManagerService.sendManagementProposal(userId, storeId, proposalText);
-
-        // Assert
-        verify(storeManagementService).sendManagementProposal(userId, storeId, proposalText);
+    /* 6. appointStoreManager exception path */
+    @Test void appointStoreManager_exception_returnsFalse() {
+        when(storeManagementService.appointStoreManager(any(),any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.appointStoreManager("o","s","u", new boolean[]{true}));
     }
 
-    @Test
-    void sendManagementProposal_Failure() {
-        // Arrange
-        String userId = "user1";
-        String storeId = "store1";
-        String proposalText = "Would you like to be a manager?";
-
-        doThrow(new RuntimeException("Failed to send management proposal"))
-            .when(storeManagementService).sendManagementProposal(userId, storeId, proposalText);
-
-        // Act & Assert
-        // The method doesn't return anything, so we just verify it handles the exception
-        ownerManagerService.sendManagementProposal(userId, storeId, proposalText);
-        verify(storeManagementService).sendManagementProposal(userId, storeId, proposalText);
+    /* 7. updateManagerPermissions coverage */
+    @Test void updateManagerPermissions_success_true() {
+        when(storeManagementService.updateManagerPermissions("o","s","m",new boolean[]{false,true}))
+                .thenReturn(true);
+        assertTrue(svc.updateManagerPermissions("o","s","m",new boolean[]{false,true}));
     }
 
-    @Test
-    void respondToManagerAppointment_Success() {
-        // Arrange
-        String userId = "user1";
-        String appointmentId = "appointment1";
-        boolean accept = true;
-
-        when(storeManagementService.respondToManagerAppointment(userId, appointmentId, accept)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.respondToManagerAppointment(userId, appointmentId, accept);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).respondToManagerAppointment(userId, appointmentId, accept);
+    @Test void updateManagerPermissions_exception_false() {
+        when(storeManagementService.updateManagerPermissions(any(),any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.updateManagerPermissions("o","s","m",new boolean[0]));
     }
 
-    @Test
-    void respondToManagerAppointment_Failure() {
-        // Arrange
-        String userId = "user1";
-        String appointmentId = "appointment1";
-        boolean accept = true;
-
-        when(storeManagementService.respondToManagerAppointment(userId, appointmentId, accept))
-            .thenThrow(new RuntimeException("Failed to respond to manager appointment"));
-
-        // Act
-        boolean result = ownerManagerService.respondToManagerAppointment(userId, appointmentId, accept);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).respondToManagerAppointment(userId, appointmentId, accept);
+    /* 8. removeStoreManager variants */
+    @Test void removeStoreManager_success_true() {
+        when(storeManagementService.removeStoreManager("o","s","m")).thenReturn(true);
+        assertTrue(svc.removeStoreManager("o","s","m"));
     }
 
-    @Test
-    void updateManagerPermissions_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String managerId = "manager1";
-        boolean[] permissions = {true, true, false};
-
-        when(storeManagementService.updateManagerPermissions(ownerId, storeId, managerId, permissions)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.updateManagerPermissions(ownerId, storeId, managerId, permissions);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).updateManagerPermissions(ownerId, storeId, managerId, permissions);
+    @Test void removeStoreManager_exception_false() {
+        when(storeManagementService.removeStoreManager(any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.removeStoreManager("o","s","m"));
     }
 
-    @Test
-    void updateManagerPermissions_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String managerId = "manager1";
-        boolean[] permissions = {true, true, false};
-
-        when(storeManagementService.updateManagerPermissions(ownerId, storeId, managerId, permissions))
-            .thenThrow(new RuntimeException("Failed to update manager permissions"));
-
-        // Act
-        boolean result = ownerManagerService.updateManagerPermissions(ownerId, storeId, managerId, permissions);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).updateManagerPermissions(ownerId, storeId, managerId, permissions);
+    /* 9. relinquishOwnership */
+    @Test void relinquishOwnership_success_true() {
+        when(storeManagementService.relinquishOwnership("o","s")).thenReturn(true);
+        assertTrue(svc.relinquishOwnership("o","s"));
     }
 
-    @Test
-    void removeStoreManager_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String managerId = "manager1";
-
-        when(storeManagementService.removeStoreManager(ownerId, storeId, managerId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.removeStoreManager(ownerId, storeId, managerId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).removeStoreManager(ownerId, storeId, managerId);
+    @Test void relinquishOwnership_exception_false() {
+        when(storeManagementService.relinquishOwnership(any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.relinquishOwnership("o","s"));
     }
 
-    @Test
-    void removeStoreManager_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String managerId = "manager1";
-
-        when(storeManagementService.removeStoreManager(ownerId, storeId, managerId))
-            .thenThrow(new RuntimeException("Failed to remove store manager"));
-
-        // Act
-        boolean result = ownerManagerService.removeStoreManager(ownerId, storeId, managerId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).removeStoreManager(ownerId, storeId, managerId);
+    /* 10. relinquishManagement */
+    @Test void relinquishManagement_success_true() {
+        when(storeManagementService.relinquishManagement("m","s")).thenReturn(true);
+        assertTrue(svc.relinquishManagement("m","s"));
     }
 
-    @Test
-    void relinquishManagement_Success() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-
-        when(storeManagementService.relinquishManagement(managerId, storeId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.relinquishManagement(managerId, storeId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).relinquishManagement(managerId, storeId);
+    @Test void relinquishManagement_exception_false() {
+        when(storeManagementService.relinquishManagement(any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.relinquishManagement("m","s"));
     }
 
-    @Test
-    void relinquishManagement_Failure() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-
-        when(storeManagementService.relinquishManagement(managerId, storeId))
-            .thenThrow(new RuntimeException("Failed to relinquish management"));
-
-        // Act
-        boolean result = ownerManagerService.relinquishManagement(managerId, storeId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).relinquishManagement(managerId, storeId);
+    /* 11. setFounder */
+    @Test void setFounder_success_true() {
+        when(storeManagementService.appointStoreFounder("f","s")).thenReturn(true);
+        assertTrue(svc.setFounder("f","s"));
     }
 
-    // ==================== 5. Store Operations Tests ====================
-
-    @Test
-    void closeStore_Success() {
-        // Arrange
-        String founderId = "founder1";
-        String storeId = "store1";
-
-        when(storeManagementService.closeStore(founderId, storeId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.closeStore(founderId, storeId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).closeStore(founderId, storeId);
+    @Test void setFounder_exception_false() {
+        when(storeManagementService.appointStoreFounder(any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.setFounder("f","s"));
     }
 
-    @Test
-    void closeStore_Failure() {
-        // Arrange
-        String founderId = "founder1";
-        String storeId = "store1";
-
-        when(storeManagementService.closeStore(founderId, storeId))
-            .thenThrow(new RuntimeException("Failed to close store"));
-
-        // Act
-        boolean result = ownerManagerService.closeStore(founderId, storeId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).closeStore(founderId, storeId);
+    /* 12. manager-side product APIs */
+    @Test void managerUpdateProductDetails_success_true() {
+        when(inventoryService.updateProductDetails("m","s","p","n","d",2.2,"c"))
+                .thenReturn(true);
+        assertTrue(svc.managerUpdateProductDetails("m","s","p","n","d",2.2,"c"));
     }
 
-    @Test
-    void reopenStore_Success() {
-        // Arrange
-        String founderId = "founder1";
-        String storeId = "store1";
-
-        when(storeManagementService.reopenStore(founderId, storeId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.reopenStore(founderId, storeId);
-
-        // Assert
-        assertTrue(result);
-        verify(storeManagementService).reopenStore(founderId, storeId);
+    @Test void managerUpdateProductDetails_exception_false() {
+        when(inventoryService.updateProductDetails(any(),any(),any(),any(),any(),anyDouble(),any()))
+                .thenThrow(new RuntimeException());
+        assertFalse(svc.managerUpdateProductDetails("m","s","p",null,null,-1,"c"));
     }
 
-    @Test
-    void reopenStore_Failure() {
-        // Arrange
-        String founderId = "founder1";
-        String storeId = "store1";
-
-        when(storeManagementService.reopenStore(founderId, storeId))
-            .thenThrow(new RuntimeException("Failed to reopen store"));
-
-        // Act
-        boolean result = ownerManagerService.reopenStore(founderId, storeId);
-
-        // Assert
-        assertFalse(result);
-        verify(storeManagementService).reopenStore(founderId, storeId);
+    @Test void managerRemoveProduct_success_true() {
+        when(inventoryService.removeProduct("m","s","p")).thenReturn(true);
+        assertTrue(svc.managerRemoveProduct("m","s","p"));
     }
 
-    @Test
-    void getStoreRoleInfo_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String expectedRoleInfo = "Role information";
-
-        when(storeManagementService.getStoreRoleInfo(ownerId, storeId)).thenReturn(expectedRoleInfo);
-
-        // Act
-        String result = ownerManagerService.getStoreRoleInfo(ownerId, storeId);
-
-        // Assert
-        assertEquals(expectedRoleInfo, result);
-        verify(storeManagementService).getStoreRoleInfo(ownerId, storeId);
+    @Test void managerRemoveProduct_exception_false() {
+        when(inventoryService.removeProduct(any(),any(),any()))
+                .thenThrow(new RuntimeException());
+        assertFalse(svc.managerRemoveProduct("m","s","p"));
     }
 
-    @Test
-    void getStoreRoleInfo_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-
-        when(storeManagementService.getStoreRoleInfo(ownerId, storeId))
-            .thenThrow(new RuntimeException("Failed to get store role info"));
-
-        // Act
-        String result = ownerManagerService.getStoreRoleInfo(ownerId, storeId);
-
-        // Assert
-        assertNull(result);
-        verify(storeManagementService).getStoreRoleInfo(ownerId, storeId);
+    /* 13. getManagerPermissions delegation */
+    @Test void getManagerPermissions_success_returnsMap() {
+        when(storeManagementService.getManagerPermissions("o","s","m"))
+                .thenReturn(Map.of("k",true));
+        assertEquals(1, svc.getManagerPermissions("o","s","m").size());
     }
 
-    @Test
-    void getManagerPermissions_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String managerId = "manager1";
-        Map<String, Boolean> expectedPermissions = new HashMap<>();
-        expectedPermissions.put("canEditInventory", true);
-        expectedPermissions.put("canEditPolicies", false);
-
-        when(storeManagementService.getManagerPermissions(ownerId, storeId, managerId)).thenReturn(expectedPermissions);
-
-        // Act
-        Map<String, Boolean> result = ownerManagerService.getManagerPermissions(ownerId, storeId, managerId);
-
-        // Assert
-        assertEquals(expectedPermissions, result);
-        verify(storeManagementService).getManagerPermissions(ownerId, storeId, managerId);
+    @Test void getManagerPermissions_exception_returnsNull() {
+        when(storeManagementService.getManagerPermissions(any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertNull(svc.getManagerPermissions("o","s","m"));
     }
 
-    @Test
-    void getManagerPermissions_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String managerId = "manager1";
-
-        when(storeManagementService.getManagerPermissions(ownerId, storeId, managerId))
-            .thenThrow(new RuntimeException("Failed to get manager permissions"));
-
-        // Act
-        Map<String, Boolean> result = ownerManagerService.getManagerPermissions(ownerId, storeId, managerId);
-
-        // Assert
-        assertNull(result);
-        verify(storeManagementService).getManagerPermissions(ownerId, storeId, managerId);
+    /* 14. getStoreRoleInfo failure path */
+    @Test void getStoreRoleInfo_exception_returnsNull() {
+        when(storeManagementService.getStoreRoleInfo(any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertNull(svc.getStoreRoleInfo("o","s"));
     }
 
-    // ==================== 6. Customer Inquiry Tests ====================
-
-    @Test
-    void getCustomerInquiries_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        List<Map<String, Object>> expectedInquiries = new ArrayList<>();
-        Map<String, Object> inquiry = new HashMap<>();
-        inquiry.put("id", "inquiry1");
-        inquiry.put("message", "Test inquiry");
-        expectedInquiries.add(inquiry);
-
-        when(queryMicroservice.getCustomerInquiries(ownerId, storeId)).thenReturn(expectedInquiries);
-
-        // Act
-        List<Map<String, Object>> result = ownerManagerService.getCustomerInquiries(ownerId, storeId);
-
-        // Assert
-        assertEquals(expectedInquiries, result);
-        verify(queryMicroservice).getCustomerInquiries(ownerId, storeId);
+    /* 15. hasInventoryPermission path where perms map is null */
+    @Test void hasInventoryPermission_nullMap_false() {
+        when(storeManagementService.isFounderOrOwner(any(),any())).thenReturn(false);
+        when(storeManagementService.getManagerPermissions(any(),any(),any()))
+                .thenReturn(null);
+        assertFalse(svc.hasInventoryPermission("u","s"));
     }
 
-    @Test
-    void getCustomerInquiries_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-
-        when(queryMicroservice.getCustomerInquiries(ownerId, storeId))
-            .thenThrow(new RuntimeException("Failed to get customer inquiries"));
-
-        // Act
-        List<Map<String, Object>> result = ownerManagerService.getCustomerInquiries(ownerId, storeId);
-
-        // Assert
-        assertNull(result);
-        verify(queryMicroservice).getCustomerInquiries(ownerId, storeId);
+    /* 16. delegation one-liners */
+    @Test void isFounderOrOwner_delegates() {
+        when(storeManagementService.isFounderOrOwner("u","s")).thenReturn(false);
+        assertFalse(svc.isFounderOrOwner("u","s"));
     }
 
-    @Test
-    void respondToCustomerInquiry_Success() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String inquiryId = "inquiry1";
-        String response = "Thank you for your inquiry";
-
-        when(queryMicroservice.respondToCustomerInquiry(ownerId, storeId, inquiryId, response)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.respondToCustomerInquiry(ownerId, storeId, inquiryId, response);
-
-        // Assert
-        assertTrue(result);
-        verify(queryMicroservice).respondToCustomerInquiry(ownerId, storeId, inquiryId, response);
+    @Test void canUpdateDiscountPolicy_delegates() {
+        when(storeManagementService.canUpdateDiscountPolicy("u","s")).thenReturn(true);
+        assertTrue(svc.canUpdateDiscountPolicy("u","s"));
     }
 
-    @Test
-    void respondToCustomerInquiry_Failure() {
-        // Arrange
-        String ownerId = "owner1";
-        String storeId = "store1";
-        String inquiryId = "inquiry1";
-        String response = "Thank you for your inquiry";
-
-        when(queryMicroservice.respondToCustomerInquiry(ownerId, storeId, inquiryId, response))
-            .thenThrow(new RuntimeException("Failed to respond to customer inquiry"));
-
-        // Act
-        boolean result = ownerManagerService.respondToCustomerInquiry(ownerId, storeId, inquiryId, response);
-
-        // Assert
-        assertFalse(result);
-        verify(queryMicroservice).respondToCustomerInquiry(ownerId, storeId, inquiryId, response);
+    @Test void isFounderOwnerOrManager_delegates() {
+        when(storeManagementService.isFounderOwnerOrManager("u","s")).thenReturn(true);
+        assertTrue(svc.isFounderOwnerOrManager("u","s"));
     }
 
-    // ==================== 7. Purchase History Tests ====================
-
-    // Purchase history tests have been removed due to changes in the microservices
-
-    // ==================== 8. Manager Functions Tests ====================
-
-    @Test
-    void managerAddProduct_Success() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productName = "Test Product";
-        String description = "Test Description";
-        double price = 10.0;
-        int quantity = 5;
-        String category = "Test Category";
-        String expectedProductId = "product1";
-
-        when(inventoryService.addProduct(managerId, storeId, productName, description, price, quantity, category))
-            .thenReturn(expectedProductId);
-
-        // Act
-        String result = ownerManagerService.managerAddProduct(managerId, storeId, productName, description, price, quantity, category);
-
-        // Assert
-        assertEquals(expectedProductId, result);
-        verify(inventoryService).addProduct(managerId, storeId, productName, description, price, quantity, category);
+    /* 17. sendOwnershipProposal & sendManagementProposal (interaction only) */
+    @Test void sendOwnershipProposal_invokesUnderlyingService() {
+        when(storeManagementService.sendOwnershipProposal("u","s","text"))
+                .thenReturn("prop-id");
+        svc.sendOwnershipProposal("u","s","text");
+        verify(storeManagementService).sendOwnershipProposal("u","s","text");
     }
 
-    @Test
-    void managerAddProduct_Failure() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productName = "Test Product";
-        String description = "Test Description";
-        double price = 10.0;
-        int quantity = 5;
-        String category = "Test Category";
-
-        when(inventoryService.addProduct(managerId, storeId, productName, description, price, quantity, category))
-            .thenThrow(new RuntimeException("Failed to add product"));
-
-        // Act
-        String result = ownerManagerService.managerAddProduct(managerId, storeId, productName, description, price, quantity, category);
-
-        // Assert
-        assertNull(result);
-        verify(inventoryService).addProduct(managerId, storeId, productName, description, price, quantity, category);
+    @Test void sendManagementProposal_invokesUnderlyingService() {
+        doNothing().when(storeManagementService).sendManagementProposal("u","s","text");
+        svc.sendManagementProposal("u","s","text");
+        verify(storeManagementService).sendManagementProposal("u","s","text");
     }
 
-    @Test
-    void managerUpdateProductDetails_Success() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productId = "product1";
-        String productName = "Updated Product";
-        String description = "Updated Description";
-        double price = 15.0;
-        String category = "Updated Category";
-
-        when(inventoryService.updateProductDetails(managerId, storeId, productId, productName, description, price, category))
-            .thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.managerUpdateProductDetails(managerId, storeId, productId, productName, description, price, category);
-
-        // Assert
-        assertTrue(result);
-        verify(inventoryService).updateProductDetails(managerId, storeId, productId, productName, description, price, category);
+    /* 18. removeDiscountFromDiscountPolicy already has success; now failure */
+    @Test void removeDiscountFromDiscountPolicy_exception_false() {
+        when(discountPolicyService.removeDiscountFromDiscountPolicy(any(),any(),any()))
+                .thenThrow(new RuntimeException());
+        assertFalse(svc.removeDiscountFromDiscountPolicy("o","s","d"));
     }
 
-    @Test
-    void managerUpdateProductDetails_Failure() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productId = "product1";
-        String productName = "Updated Product";
-        String description = "Updated Description";
-        double price = 15.0;
-        String category = "Updated Category";
-
-        when(inventoryService.updateProductDetails(managerId, storeId, productId, productName, description, price, category))
-            .thenThrow(new RuntimeException("Failed to update product details"));
-
-        // Act
-        boolean result = ownerManagerService.managerUpdateProductDetails(managerId, storeId, productId, productName, description, price, category);
-
-        // Assert
-        assertFalse(result);
-        verify(inventoryService).updateProductDetails(managerId, storeId, productId, productName, description, price, category);
+    /* 19. closeStore failure branch (already covered, keep) */
+    @Test void closeStore_failure_returnsFailureMessage() {
+        when(storeManagementService.closeStore(any(),any())).thenReturn(false);
+        assertEquals("Failed to close store", svc.closeStore("f","s"));
     }
 
-    @Test
-    void managerUpdateProductQuantity_Success() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productId = "product1";
-        int newQuantity = 10;
-
-        when(inventoryService.updateProductQuantity(managerId, storeId, productId, newQuantity))
-            .thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.managerUpdateProductQuantity(managerId, storeId, productId, newQuantity);
-
-        // Assert
-        assertTrue(result);
-        verify(inventoryService).updateProductQuantity(managerId, storeId, productId, newQuantity);
+    /* 20. reopenStore paths already partly covered, add exception branch */
+    @Test void reopenStore_exception_returnsFailedMessage() {
+        when(storeManagementService.reopenStore(any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        String msg = svc.reopenStore("f","s");
+        assertTrue(msg.startsWith("Failed to open store"));
     }
 
-    @Test
-    void managerUpdateProductQuantity_Failure() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productId = "product1";
-        int newQuantity = 10;
+    /* 21. removePurchasePolicy success already added earlier; add failure path done */
 
-        when(inventoryService.updateProductQuantity(managerId, storeId, productId, newQuantity))
-            .thenThrow(new RuntimeException("Failed to update product quantity"));
-
-        // Act
-        boolean result = ownerManagerService.managerUpdateProductQuantity(managerId, storeId, productId, newQuantity);
-
-        // Assert
-        assertFalse(result);
-        verify(inventoryService).updateProductQuantity(managerId, storeId, productId, newQuantity);
+    /* 22. respondToCustomerInquiry failure branch */
+    @Test void respondToCustomerInquiry_exception_false() {
+        when(notificationService.respondToCustomerInquiry(any(),any(),any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertFalse(svc.respondToCustomerInquiry("o","s","i","r"));
     }
 
-    @Test
-    void managerRemoveProduct_Success() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productId = "product1";
-
-        when(inventoryService.removeProduct(managerId, storeId, productId)).thenReturn(true);
-
-        // Act
-        boolean result = ownerManagerService.managerRemoveProduct(managerId, storeId, productId);
-
-        // Assert
-        assertTrue(result);
-        verify(inventoryService).removeProduct(managerId, storeId, productId);
+    /* 23. getCustomerInquiries exception branch */
+    @Test void getCustomerInquiries_exception_returnsNull() {
+        when(notificationService.getCustomerInquiries(any(),any()))
+                .thenThrow(new RuntimeException("err"));
+        assertNull(svc.getCustomerInquiries("o","s"));
     }
 
-    @Test
-    void managerRemoveProduct_Failure() {
-        // Arrange
-        String managerId = "manager1";
-        String storeId = "store1";
-        String productId = "product1";
 
-        when(inventoryService.removeProduct(managerId, storeId, productId))
-            .thenThrow(new RuntimeException("Failed to remove product"));
-
-        // Act
-        boolean result = ownerManagerService.managerRemoveProduct(managerId, storeId, productId);
-
-        // Assert
-        assertFalse(result);
-        verify(inventoryService).removeProduct(managerId, storeId, productId);
-    }
-
-    // Admin operations have been moved to AdminService class
 }

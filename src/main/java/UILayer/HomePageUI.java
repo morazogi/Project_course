@@ -18,6 +18,7 @@ public class HomePageUI extends VerticalLayout {
     public HomePageUI(IToken tokenService) {
         this.tokenService = tokenService;
         UI.getCurrent().getSession().setAttribute("token", tokenService.generateToken("Guest"));
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
         setAlignItems(Alignment.CENTER);
         setSpacing(true);
         setPadding(true);
@@ -42,11 +43,13 @@ public class HomePageUI extends VerticalLayout {
         // Buttons
         HorizontalLayout buttons = new HorizontalLayout();
         Button loginButton = new Button("🔐 Login", e -> UI.getCurrent().navigate("/login"));
-        Button registerButton = new Button("📝 Register", e -> UI.getCurrent().navigate("/register"));
+        Button registerButton = new Button("📝 Register", e -> UI.getCurrent().navigate("/signup"));
+        Button searchStoreButton = new Button("Search store", e -> UI.getCurrent().navigate("/searchstore"));
+        Button searchProductButton = new Button("Search product", e -> UI.getCurrent().navigate("/searchproduct"));
         buttons.add(loginButton, registerButton);
 
         // Roles section
-        Span rolesTitle = new Span("👥 Who can use MarketX?");
+        //Span rolesTitle = new Span("👥 Who can use MarketX?");
         VerticalLayout roles = new VerticalLayout(
                 new Span("• 👤 User – Browse and buy products"),
                 new Span("• 🧑💼 Store Manager – Manage store catalog, discounts & sales"),
@@ -58,9 +61,28 @@ public class HomePageUI extends VerticalLayout {
         roles.setAlignItems(Alignment.START);
 
         // Footer
-        Span footer = new Span("© 2025 MarketX Project");
+        //Span footer = new Span("© 2025 MarketX Project");
 
         // Add everything to layout
-        add(title, subtitle, features, buttons, rolesTitle, roles, footer);
+        connectToWebSocket(token);
+
+        //add(title, subtitle, features, buttons, rolesTitle, roles, footer);
+        add(title, subtitle, features, buttons, new HorizontalLayout(searchStoreButton, searchProductButton), roles);
+    }
+
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }
