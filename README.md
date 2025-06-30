@@ -1,4 +1,4 @@
-E-Commerce Management System
+# E-Commerce Management System
 A comprehensive e-commerce platform built with Spring Boot, Vaadin UI, and microservices architecture. This system provides store management, user authentication, product management, discount policies, auctions, and more.
 
 🚀 Quick Start
