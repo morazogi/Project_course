@@ -5,6 +5,7 @@ import InfrastructureLayer.UserRepository;
 import PresentorLayer.DiscountPolicyPresenter;
 import PresentorLayer.PermissionsPresenter;
 import PresentorLayer.UserConnectivityPresenter;
+import PresentorLayer.ButtonPresenter;            // ← added
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
@@ -31,6 +32,7 @@ public class DiscountManagementUI extends VerticalLayout {
 
     private final DiscountPolicyPresenter presenter;
     private final String token;
+    private final ButtonPresenter btns;          // ← added
 
     private final ComboBox<Store>   storeBox     = new ComboBox<>("Store");
     private final ComboBox<String>  existingBox  = new ComboBox<>("Existing discounts");
@@ -65,6 +67,7 @@ public class DiscountManagementUI extends VerticalLayout {
         presenter = new DiscountPolicyPresenter(userConn, ownerMgrService, perms);
 
         token = (String) UI.getCurrent().getSession().getAttribute("token");
+        btns  = new ButtonPresenter(registeredService, tokenService);   // ← added
 
         /* ----------------------- UI wiring -------------------------------- */
         List<Store> stores = presenter.updatableStores(token);
@@ -89,7 +92,8 @@ public class DiscountManagementUI extends VerticalLayout {
         Button removeBtn  = new Button("Remove",  e -> removeDiscount());
 
         add(
-                new H2("Discount Management"),
+                new HorizontalLayout(new H2("Discount Management"),  // ← wrapped title & button
+                        btns.homePageButton(token)),
                 storeBox,
                 existingBox,
                 scopeBox,
@@ -160,7 +164,6 @@ public class DiscountManagementUI extends VerticalLayout {
     }
 
     /* -------------------------- combine ---------------------------------- */
-    /* -------------------------- combine ---------------------------------- */
     private void combineDiscounts() {
         Store store = storeBox.getValue();
         if (store == null) { Notification.show("Pick a store first"); return; }
@@ -188,13 +191,9 @@ public class DiscountManagementUI extends VerticalLayout {
                 List.copyOf(children)
         );
 
-        /* ---------- new: prune children from top level ---------- */
-
-
         Notification.show(msg);
         refreshDiscountList();
     }
-
 
     /* -------------------------- remove ----------------------------------- */
     private void removeDiscount() {

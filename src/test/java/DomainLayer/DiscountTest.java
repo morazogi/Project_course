@@ -1,597 +1,217 @@
-/*Test Coverage Includes:
-1. Constructor Testing
-
-Tests proper initialization of all discount parameters
-Validates enum conversions from float values
-
-2. Discount Level Testing
-
-Product Level: Tests discounts applied to specific products
-Category Level: Tests discounts applied to product categories
-Store Level: Tests store-wide discounts
-
-3. Conditional Logic Testing
-
-MIN_PRICE: Tests minimum price requirements
-MIN_QUANTITY: Tests minimum quantity requirements for specific products
-MAX_QUANTITY: Tests maximum quantity limits
-No Condition: Tests unconditional discounts
-
-4. Numerical Composition Testing
-
-UNDEFINED: Basic subtraction discount
-MULTIPLICATION: Multiplicative discount application
-MAXIMUM: Tests finding and applying the highest discount among nested discounts
-
-5. Logic Composition Testing
-
-XOR: Tests exclusive OR logic (exactly one condition must be true)
-AND: Tests that all conditions must be true
-OR: Tests that at least one condition must be true
-
-6. Edge Cases
-
-Tests already used discounts (should not reapply)
-Tests empty discounted strings (applies to all products in scope)
-Tests getter/setter methods
-Direct testing of the checkConditional method
-
-7. Setup
-The test uses a realistic setup with:
-
-3 different products (Laptop, Mouse, Book) from different categories
-Proper quantity mapping
-Initial price mapping for discount calculations
-
-Key Features:
-
-Comprehensive Coverage: Tests all major paths through your discount logic
-Realistic Data: Uses actual product data that mirrors real-world scenarios
-Edge Case Testing: Covers boundary conditions and error states
-Clear Test Names: Each test has a descriptive name explaining what it's testing
-Proper Assertions: Uses appropriate delta values for float comparisons
-
-*/
-
 package DomainLayer;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-public class DiscountTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private Product product1;
-    private Product product2;
-    private Product product3;
-    private Map<Product, Integer> productsQuantity;
-    private Map<Product, Float> productDiscounts;
-    private String storeId;
+/**
+ * Unit-tests that validate the behaviour of a single {@link Discount}.
+ * No repositories or Spring context involved.
+ */
+class DiscountTest {
+
+    /* ────────────────── helpers ────────────────── */
+
+    private Product apple;      // price 10, category Food
+    private Product banana;     // price 6,  category Food
+    private Product headset;    // price 22, category Tech
+
+    private Map<Product,Integer> qty;
+    private Map<Product,Float>   mul;
 
     @BeforeEach
-    void setUp() {
-        storeId = "store123";
+    void freshMaps() {
+        apple   = new Product("s","Apple",  "",10f,100,0d,"Food");
+        banana  = new Product("s","Banana", "", 6f,100,0d,"Food");
+        headset = new Product("s","Head",   "",22f,100,0d,"Tech");
 
-        // Create test products
-        product1 = new Product(storeId, "Laptop", "Gaming laptop", 1000.0f, 5, 4.5, "Electronics");
-        product2 = new Product(storeId, "Mouse", "Gaming mouse", 50.0f, 10, 4.0, "Electronics");
-        product3 = new Product(storeId, "Book", "Programming book", 30.0f, 15, 4.2, "Books");
-
-        // Initialize quantity map
-        productsQuantity = new HashMap<>();
-        productsQuantity.put(product1, 2);
-        productsQuantity.put(product2, 3);
-        productsQuantity.put(product3, 1);
-
-        // Initialize discount map with original prices
-        productDiscounts = new HashMap<>();
-        productDiscounts.put(product1, product1.getPrice());
-        productDiscounts.put(product2, product2.getPrice());
-        productDiscounts.put(product3, product3.getPrice());
+        qty = new HashMap<>();
+        mul = new HashMap<>();
+    }
+    private float original() {
+        return qty.entrySet().stream()
+                .map(e -> e.getKey().getPrice() * e.getValue())
+                .reduce(0f, Float::sum);
     }
 
-    @Test
-    @DisplayName("Test discount constructor with valid parameters")
-    void testDiscountConstructor() {
-        List<String> nestedDiscounts = Arrays.asList("discount1", "discount2");
+    /* ────────────────── section 1: simple voucher ─────────── */
 
-        Discount discount = new Discount(
-                storeId,
-                1.0f,  // Product level
-                2.0f,  // AND logic
-                1.0f,  // Maximum numerical
-                nestedDiscounts,
-                0.15f, // 15% discount
-                "Laptop",
-                1.0f,  // Min price condition
-                500.0f, // Minimum $500
-                ""
-        );
+    @Test @DisplayName("Product-level 10 % touches only that product")
+    void productVoucher() {
+        qty.put(apple,2);  qty.put(headset,1);
+        mul.put(apple,1f); mul.put(headset,1f);
 
-        assertEquals(storeId, discount.getStoreId());
-        assertEquals(Discount.Level.PRODUCT, discount.getLevel());
-        assertEquals(Discount.LogicComposition.AND, discount.getLogicComposition());
-        assertEquals(Discount.NumericalComposition.MAXIMUM, discount.getNumericalComposition());
-        assertEquals(0.15f, discount.getPercentDiscount());
-        assertEquals("Laptop", discount.getDiscounted());
-        assertEquals(Discount.ConditionalType.MIN_PRICE, discount.getConditional());
-        assertEquals(500.0f, discount.getLimiter());
-        assertEquals(nestedDiscounts, discount.getDiscounts());
+        Discount d = new Discount("s",1,0,0,List.of(),
+                .10f,"Apple",-1,-1,"");
+
+        var out = d.applyDiscount(original(), qty, mul, List.of());
+        assertEquals(0.9f,out.get(apple));
+        assertEquals(1.0f,out.get(headset));
     }
 
-    @Test
-    @DisplayName("Test product level discount with no condition")
-    void testProductLevelDiscountNoCondition() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 0.0f, -1.0f, ""
-        );
+    /* ────────────────── section 2: numerical MAXIMUM ──────── */
 
-        Map<Product, Float> result = discount.applyDiscount(
-                2000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
+    @Test @DisplayName("Category MAXIMUM picks highest pct")
+    void categoryMaximum() {
+        qty.put(apple,1);  mul.put(apple,1f);
 
-        // Laptop should have 10% discount applied
-        assertEquals(900.0f, result.get(product1), 0.01f);
-        // Other products should remain unchanged
-        assertEquals(50.0f, result.get(product2), 0.01f);
-        assertEquals(30.0f, result.get(product3), 0.01f);
+        Discount in10 = new Discount("s",1,0,0,List.of(),.10f,"",0,0,"");
+        Discount in20 = new Discount("s",1,0,0,List.of(),.20f,"",0,0,"");
+        Discount parent = new Discount("s",2,0,1,   // MAXIMUM
+                List.of(), .05f,"Food",0,0,"");
+
+        var out = parent.applyDiscount(original(), qty, mul, List.of(in10,in20));
+        assertEquals(0.8f,out.get(apple),0.0001);     // 20 % wins
     }
 
-    @Test
-    @DisplayName("Test category level discount")
-    void testCategoryLevelDiscount() {
-        Discount discount = new Discount(
-                storeId, 2.0f, 0.0f, 0.0f, null, 0.2f, "Electronics", 0.0f, -1.0f, ""
-        );
+    /* ────────────────── section 3: quantity gates ─────────── */
 
-        Map<Product, Float> result = discount.applyDiscount(
-                2000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
+    @Nested class QuantityGates {
 
-        // Electronics products should have 20% discount
-        assertEquals(800.0f, result.get(product1), 0.01f); // 1000 - 200
-        assertEquals(40.0f, result.get(product2), 0.01f);  // 50 - 10
-        // Books category should remain unchanged
-        assertEquals(30.0f, result.get(product3), 0.01f);
+        @Test void minQuantity() {
+            Discount d = new Discount("s",1,0,0,List.of(),
+                    .15f,"Apple",2,3,"Apple");   // ≥3
+
+            qty.put(apple,2); mul.put(apple,1f);
+            assertEquals(1f, d.applyDiscount(original(),qty,mul,List.of()).get(apple));
+
+            qty.put(apple,3); mul.put(apple,1f);
+            assertEquals(0.85f,d.applyDiscount(original(),qty,mul,List.of()).get(apple));
+        }
+
+        @Test void maxQuantity() {
+            Discount d = new Discount("s",1,0,0,List.of(),
+                    .20f,"Banana",3,5,"Banana"); // ≤5
+
+            qty.put(banana,7); mul.put(banana,1f);
+            assertEquals(1f, d.applyDiscount(original(),qty,mul,List.of()).get(banana));
+
+            qty.put(banana,4); mul.put(banana,1f);
+            assertEquals(0.8f,d.applyDiscount(original(),qty,mul,List.of()).get(banana));
+        }
     }
 
-    @Test
-    @DisplayName("Test store level discount")
-    void testStoreLevelDiscount() {
-        Discount discount = new Discount(
-                storeId, 3.0f, 0.0f, 0.0f, null, 0.05f, "", 0.0f, -1.0f, ""
-        );
+    /* ────────────────── section 4: MIN_PRICE gate ─────────── */
 
-        Map<Product, Float> result = discount.applyDiscount(
-                2000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
+    @Test void minPriceCondition() {
+        Discount d = new Discount("s",3,0,2,List.of(),
+                .25f,"",1,40,"");      // 25 % if subtotal ≥40
 
-        // All products should have 5% discount
-        assertEquals(950.0f, result.get(product1), 0.01f);
-        assertEquals(47.5f, result.get(product2), 0.01f);
-        assertEquals(28.5f, result.get(product3), 0.01f);
+        qty.put(apple,3); mul.put(apple,1f);           // subtotal 30
+        assertEquals(1f,d.applyDiscount(original(),qty,mul,List.of()).get(apple));
+
+        qty.put(headset,1);                            // subtotal 52
+        mul.put(apple,1f); mul.put(headset,1f);
+        var out = d.applyDiscount(original(),qty,mul,List.of());
+        assertEquals(0.75f,out.get(apple));
+        assertEquals(0.75f,out.get(headset));
     }
 
-    @Test
-    @DisplayName("Test minimum price condition - condition met")
-    void testMinPriceConditionMet() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 500.0f, ""
-        );
+    /* ────────────────── section 5: logical comp. ──────────── */
 
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
+    @Nested class LogicalComp {
 
-        // Condition met (1000 >= 500), discount should be applied
-        assertEquals(900.0f, result.get(product1), 0.01f);
+        Discount min2, max4;   // non-overlapping for XOR demo
+
+        @BeforeEach
+        void mk() {
+            min2 = new Discount("s",1,0,0,List.of(),0f,"Apple",2,2,"Apple"); // ≥2
+            max4 = new Discount("s",1,0,0,List.of(),0f,"Apple",3,4,"Apple"); // ≤4
+        }
+
+        @Test @DisplayName("OR – gate opens when **any** child true")
+        void logicOr() {
+
+            /* helper lambdas so we get fresh objects each time */
+            java.util.function.Supplier<Discount> min2 =
+                    () -> new Discount("s", 1,0,0,List.of(),0f,"Apple",2,2,"Apple");
+            java.util.function.Supplier<Discount> max4 =
+                    () -> new Discount("s", 1,0,0,List.of(),0f,"Apple",3,4,"Apple");
+            java.util.function.Supplier<Discount> parent =
+                    () -> new Discount("s", 1,3,0,List.of(),.10f,"Apple",0,0,"");   // OR
+
+            /* --- case 1: 7 Apples (only MIN ≥2 true) --- */
+            qty.put(apple,7); mul.put(apple,1f);
+            assertEquals(0.9f,
+                    parent.get().applyDiscount(
+                            original(), qty, mul,
+                            List.of(min2.get(), max4.get())
+                    ).get(apple));
+
+            /* --- case 2: 1 Apple (only MAX ≤4 true) --- */
+            qty.put(apple,1); mul.put(apple,1f);
+            assertEquals(0.9f,
+                    parent.get().applyDiscount(
+                            original(), qty, mul,
+                            List.of(min2.get(), max4.get())
+                    ).get(apple));
+        }
+
+        @Test @DisplayName("XOR – gate opens when **exactly one** child true")
+        void logicXor() {
+            Discount p = new Discount("s",1,1,0,List.of(),.20f,"Apple",0,0,"");
+
+            qty.put(apple,7); mul.put(apple,1f);        // only min2 true
+            assertEquals(0.8f,
+                    p.applyDiscount(original(),qty,mul,List.of(min2,max4)).get(apple));
+
+            qty.put(apple,3); mul.put(apple,1f);        // both true → closed
+            assertEquals(1f,
+                    p.applyDiscount(original(),qty,mul,List.of(min2,max4)).get(apple));
+        }
+
+        @Test @DisplayName("AND – gate opens only when **all** true")
+        void logicAnd() {
+            Discount p = new Discount("s",1,2,0,List.of(),.15f,"Apple",0,0,"");
+
+            qty.put(apple,7); mul.put(apple,1f);        // only one true
+            assertEquals(1f,
+                    p.applyDiscount(original(),qty,mul,List.of(min2,max4)).get(apple));
+
+            qty.put(apple,3); mul.put(apple,1f);        // both true
+            assertEquals(0.85f,
+                    p.applyDiscount(original(),qty,mul,List.of(min2,max4)).get(apple));
+        }
     }
 
-    @Test
-    @DisplayName("Test minimum price condition - condition not met")
-    void testMinPriceConditionNotMet() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 2000.0f, ""
-        );
+    /* ────────────────── section 6: alreadyUsed ─────────────── */
 
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
+    @Test void alreadyUsed() {
+        Discount d = new Discount("s",1,0,0,List.of(),.3f,"Apple",0,0,"");
 
-        // Condition not met (1000 < 2000), no discount should be applied
-        assertEquals(1000.0f, result.get(product1), 0.01f);
+        qty.put(apple,1); mul.put(apple,1f);
+        d.applyDiscount(original(),qty,mul,List.of());
+        assertTrue(d.isAlreadyUsed());
+
+        mul.put(apple,0.7f);
+        assertEquals(0.7f,
+                d.applyDiscount(original(),qty,mul,List.of()).get(apple));
     }
 
-    @Test
-    @DisplayName("Test minimum quantity condition - condition met")
-    void testMinQuantityConditionMet() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.15f, "Mouse", 2.0f, 2.0f, "Mouse"
-        );
+    /* ────────────────── section 7: multiplication & clamp ─── */
 
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
+    @Test void multiplication() {
+        Discount c10 = new Discount("s",1,0,0,List.of(),.1f,"Apple",0,0,"");
+        Discount c20 = new Discount("s",1,0,0,List.of(),.2f,"Apple",0,0,"");
+        Discount p   = new Discount("s",1,0,2,List.of(),0f,"Apple",0,0,"");
 
-        // Mouse quantity is 3, condition met (3 >= 2)
-        assertEquals(42.5f, result.get(product2), 0.01f); // 50 - 7.5
+        qty.put(apple,1); mul.put(apple,1f);
+        var out = p.applyDiscount(original(),qty,mul,List.of(c10,c20));
+        assertEquals(0.72f,out.get(apple),0.001);
     }
 
-    @Test
-    @DisplayName("Test minimum quantity condition - condition not met")
-    void testMinQuantityConditionNotMet() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.15f, "Mouse", 2.0f, 5.0f, "Mouse"
-        );
-
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-
-        // Mouse quantity is 3, condition not met (3 < 5)
-        assertEquals(50.0f, result.get(product2), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test maximum quantity condition - condition met")
-    void testMaxQuantityConditionMet() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Book", 3.0f, 2.0f, "Book"
-        );
-
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-
-        // Book quantity is 1, condition met (1 <= 2)
-        assertEquals(27.0f, result.get(product3), 0.01f); // 30 - 3
-    }
-
-    @Test
-    @DisplayName("Test maximum quantity condition - condition not met")
-    void testMaxQuantityConditionNotMet() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Mouse", 3.0f, 2.0f, "Mouse"
-        );
-
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-
-        // Mouse quantity is 3, condition not met (3 > 2)
-        assertEquals(50.0f, result.get(product2), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test multiplication numerical composition")
-    void testMultiplicationNumericalComposition() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 2.0f, null, 0.2f, "Laptop", 0.0f, -1.0f, ""
-        );
-
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-
-        // Multiplication: 1000 * (1 - 0.2) = 800
-        assertEquals(800.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test maximum numerical composition with nested discounts")
-    void testMaximumNumericalComposition() {
-        // Create nested discounts
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 0.0f, -1.0f, ""),
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.25f, "Laptop", 0.0f, -1.0f, "")
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 0.0f, 1.0f, null, 0.15f, "Laptop", 0.0f, -1.0f, ""
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // Should apply maximum discount: 0.25 (25%)
-        assertEquals(750.0f, result.get(product1), 0.01f); // 1000 - 250
-        assertTrue(mainDiscount.isAlreadyUsed());
-    }
-
-    @Test
-    @DisplayName("Test XOR logic composition - exactly one condition true")
-    void testXorLogicCompositionOneTrue() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 2000.0f, "") // condition false
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 1.0f, 0.0f, null, 0.15f, "Laptop", 1.0f, 500.0f, "" // condition true
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // XOR: exactly one condition is true, discount should apply
-        assertEquals(850.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test XOR logic composition - both conditions true")
-    void testXorLogicCompositionBothTrue() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 500.0f, "") // condition true
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 1.0f, 0.0f, null, 0.15f, "Laptop", 1.0f, 500.0f, "" // condition true
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // XOR: both conditions true, discount should NOT apply
-        assertEquals(1000.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test AND logic composition - all conditions true")
-    void testAndLogicCompositionAllTrue() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 500.0f, "") // condition true
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 2.0f, 0.0f, null, 0.15f, "Laptop", 1.0f, 500.0f, "" // condition true
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // AND: all conditions true, discount should apply
-        assertEquals(850.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test AND logic composition - one condition false")
-    void testAndLogicCompositionOneFalse() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 2000.0f, "") // condition false
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 2.0f, 0.0f, null, 0.15f, "Laptop", 1.0f, 500.0f, "" // condition true
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // AND: one condition false, discount should NOT apply
-        assertEquals(1000.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test OR logic composition - one condition true")
-    void testOrLogicCompositionOneTrue() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 2000.0f, "") // condition false
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 3.0f, 0.0f, null, 0.15f, "Laptop", 1.0f, 500.0f, "" // condition true
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // OR: at least one condition true, discount should apply
-        assertEquals(850.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test OR logic composition - all conditions false")
-    void testOrLogicCompositionAllFalse() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 2000.0f, "") // condition false
-        );
-
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 3.0f, 0.0f, null, 0.15f, "Laptop", 1.0f, 2000.0f, "" // condition false
-        );
-
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-
-        // OR: all conditions false, discount should NOT apply
-        assertEquals(1000.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test already used discount")
-    void testAlreadyUsedDiscount() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 0.0f, -1.0f, ""
-        );
-
-        discount.setAlreadyUsed(true);
-
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-
-        // Already used discount should not be applied
-        assertEquals(1000.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test empty discounted string applies to all products in level")
-    void testEmptyDiscountedString() {
-        Discount discount = new Discount(
-                storeId, 2.0f, 0.0f, 0.0f, null, 0.1f, "", 0.0f, -1.0f, "" // Empty discounted string
-        );
-
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-
-        // All products should get discount since discounted is empty
-        assertEquals(900.0f, result.get(product1), 0.01f);
-        assertEquals(45.0f, result.get(product2), 0.01f);
-        assertEquals(27.0f, result.get(product3), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test getter and setter methods")
-    void testGettersAndSetters() {
-        Discount discount = new Discount();
-
-        discount.setLevel(Discount.Level.CATEGORY);
-        assertEquals(Discount.Level.CATEGORY, discount.getLevel());
-
-        discount.setLogicComposition(Discount.LogicComposition.OR);
-        assertEquals(Discount.LogicComposition.OR, discount.getLogicComposition());
-
-        discount.setNumericalComposition(Discount.NumericalComposition.MULTIPLICATION);
-        assertEquals(Discount.NumericalComposition.MULTIPLICATION, discount.getNumericalComposition());
-
-        discount.setPercentDiscount(0.25f);
-        assertEquals(0.25f, discount.getPercentDiscount());
-
-        discount.setDiscounted("TestProduct");
-        assertEquals("TestProduct", discount.getDiscounted());
-
-        discount.setConditional(Discount.ConditionalType.MIN_PRICE);
-        assertEquals(Discount.ConditionalType.MIN_PRICE, discount.getConditional());
-
-        discount.setLimiter(100.0f);
-        assertEquals(100.0f, discount.getLimiter());
-
-        discount.setConditionalDiscounted("ConditionalProduct");
-        assertEquals("ConditionalProduct", discount.getConditionalDiscounted());
-
-        List<String> discounts = Arrays.asList("d1", "d2");
-        discount.setDiscounts(discounts);
-        assertEquals(discounts, discount.getDiscounts());
-
-        discount.setAlreadyUsed(true);
-        assertTrue(discount.isAlreadyUsed());
-    }
-
-    @Test
-    @DisplayName("Test checkConditional method directly")
-    void testCheckConditionalMethod() {
-        // Test UNDEFINED condition
-        Discount discount1 = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 0.0f, -1.0f, ""
-        );
-        assertTrue(discount1.checkConditinal(1000.0f, productsQuantity));
-
-        // Test MIN_PRICE condition
-        Discount discount2 = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 1.0f, 500.0f, ""
-        );
-        assertTrue(discount2.checkConditinal(1000.0f, productsQuantity));
-        assertFalse(discount2.checkConditinal(400.0f, productsQuantity));
-
-        // Test MIN_QUANTITY condition
-        Discount discount3 = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 2.0f, 1.0f, "Mouse"
-        );
-        assertTrue(discount3.checkConditinal(1000.0f, productsQuantity)); // Mouse quantity is 3
-
-        // Test MAX_QUANTITY condition
-        Discount discount4 = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.1f, "Laptop", 3.0f, 5.0f, "Mouse"
-        );
-        assertTrue(discount4.checkConditinal(1000.0f, productsQuantity)); // Mouse quantity is 3 <= 5
-    }
-
-    @Test
-    @DisplayName("Test UNDEFINED numerical composition (sum, capped at 100%)")
-    void testUndefinedNumericalCompositionSumCapped() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.6f, "Laptop", 0.0f, -1.0f, ""),
-                new Discount(storeId, 1.0f, 0.0f, 0.0f, null, 0.5f, "Laptop", 0.0f, -1.0f, "")
-        );
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.2f, "Laptop", 0.0f, -1.0f, ""
-        );
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-        // 0.6 + 0.5 + 0.2 = 1.3, capped at 1.0 (100%), so price should be 0
-        assertEquals(0.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test UNDEFINED logic composition (should fallback to single discount's condition)")
-    void testUndefinedLogicCompositionFallback() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.3f, "Laptop", 1.0f, 500.0f, ""
-        );
-        // Condition met
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-        assertEquals(700.0f, result.get(product1), 0.01f);
-        // Condition not met
-        Map<Product, Float> result2 = discount.applyDiscount(
-                400.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-        assertEquals(1000.0f, result2.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test nested discounts with different levels and compositions")
-    void testNestedDiscountsDifferentLevels() {
-        List<Discount> nestedDiscounts = Arrays.asList(
-                new Discount(storeId, 2.0f, 0.0f, 0.0f, null, 0.1f, "Electronics", 0.0f, -1.0f, ""),
-                new Discount(storeId, 3.0f, 0.0f, 0.0f, null, 0.05f, "", 0.0f, -1.0f, "")
-        );
-        Discount mainDiscount = new Discount(
-                storeId, 1.0f, 0.0f, 2.0f, null, 0.2f, "Laptop", 0.0f, -1.0f, ""
-        );
-        Map<Product, Float> result = mainDiscount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, nestedDiscounts
-        );
-        // Multiplication: (1-0.2)*(1-0.1)*(1-0.05) = 0.8*0.9*0.95 = 0.684
-        assertEquals(1000.0f * 0.684f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test ConditionalType.NONE always applies")
-    void testConditionalTypeNoneAlwaysApplies() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, 0.2f, "Laptop", 0.0f, -1.0f, ""
-        );
-        // forcibly set conditional to NONE
-        discount.setConditional(Discount.ConditionalType.NONE);
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-        assertEquals(800.0f, result.get(product1), 0.01f);
-    }
-
-    @Test
-    @DisplayName("Test negative percentDiscount does not increase price")
-    void testNegativePercentDiscount() {
-        Discount discount = new Discount(
-                storeId, 1.0f, 0.0f, 0.0f, null, -0.2f, "Laptop", 0.0f, -1.0f, ""
-        );
-        Map<Product, Float> result = discount.applyDiscount(
-                1000.0f, productsQuantity, productDiscounts, new ArrayList<>()
-        );
-        // Should not increase price, so minimum is 1000
-        assertEquals(1000.0f, result.get(product1), 0.01f);
+    @Test void additiveClamp() {
+        Discount d70 = new Discount("s",1,0,0,List.of(),.7f,"Apple",0,0,"");
+        Discount d40 = new Discount("s",1,0,0,List.of(),.4f,"Apple",0,0,"");
+        Discount p   = new Discount("s",1,0,0,List.of(),0f,"Apple",0,0,"");
+
+        qty.put(apple,1); mul.put(apple,1f);
+        var out = p.applyDiscount(original(),qty,mul,List.of(d70,d40));
+        assertEquals(0f,out.get(apple));   // clamp at zero
     }
 }

@@ -21,29 +21,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("/auctionManagerUI")
 public class AuctionManagerUI extends VerticalLayout {
 
+    /* selections */
+    private String selectedOfferId   = null;  // waiting-consent offer
+    private String selectedAuctionId = null;  // any auction for remove
+
     private final AuctionManagerPresenter presenter;
     private final ButtonPresenter         buttonPresenter;
 
-    /* UI state */
-    private final Span            statusMessage     = new Span();
-    private final VerticalLayout  offerDisplayArea  = new VerticalLayout();
+    /* UI state areas */
+    private final Span           statusMessage      = new Span();
+    private final VerticalLayout offerDisplayArea   = new VerticalLayout();
+    private final VerticalLayout auctionsDisplayAll = new VerticalLayout();
 
-    /* ------------------------------------------------------------ */
-
+    /* ----------------------------------------------------------- */
     @Autowired
     public AuctionManagerUI(IToken tokenSvc,
                             AuctionService auctionSvc,
                             UserService userSvc,
                             RegisteredService regSvc) {
 
-        String token    = (String) UI.getCurrent().getSession().getAttribute("token");
-        String manager  = token != null ? tokenSvc.extractUsername(token)
-                : "unknown";
+        String token   = (String) UI.getCurrent().getSession().getAttribute("token");
+        String manager = token != null ? tokenSvc.extractUsername(token) : "unknown";
 
         this.presenter       = new AuctionManagerPresenter(manager, token, auctionSvc, userSvc);
         this.buttonPresenter = new ButtonPresenter(regSvc, tokenSvc);
 
-        /* ── Create-auction form ───────────────────────────────── */
+        /* ── Create-auction form (unchanged) ───────────────────── */
         TextField storeField   = new TextField("Store name");
         TextField productField = new TextField("Product name");
         TextField priceField   = new TextField("Starting price");
@@ -56,79 +59,113 @@ public class AuctionManagerUI extends VerticalLayout {
                         priceField.getValue(), descField.getValue());
                 Notification.show("Auction created.");
                 statusMessage.setText("");
-            } catch (Exception ex) {
-                statusMessage.setText("Error: " + ex.getMessage());
-            }
+            } catch (Exception ex) { statusMessage.setText("Error: " + ex.getMessage()); }
         });
 
-        /* ── Customer-offer controls ───────────────────────────── */
+        /* ── Controls for waiting-consent offers ───────────────── */
         TextField counterField = new TextField("Counter-offer ($)");
-        Button refreshBtn = new Button("Refresh", ev -> renderOffers());
+        Button refreshBtn = new Button("Refresh", ev -> renderLists());
 
         Button acceptBtn  = new Button("Accept",  ev -> {
-            statusMessage.setText(presenter.respondToOffer(token, "accept",  null));
-            renderOffers();
+            statusMessage.setText(
+                    presenter.respondToOffer(token, "accept", null, selectedOfferId));
+            renderLists();
         });
         Button declineBtn = new Button("Decline", ev -> {
-            statusMessage.setText(presenter.respondToOffer(token, "decline", null));
-            renderOffers();
+            statusMessage.setText(
+                    presenter.respondToOffer(token, "decline", null, selectedOfferId));
+            renderLists();
         });
         Button counterBtn = new Button("Counter", ev -> {
-            statusMessage.setText(presenter.respondToOffer(token, "counter",
-                    counterField.getValue()));
-            renderOffers();
+            statusMessage.setText(
+                    presenter.respondToOffer(token, "counter",
+                            counterField.getValue(), selectedOfferId));
+            renderLists();
         });
 
-        /* ── Layout ────────────────────────────────────────────── */
+        /* ── Remove-auction button ─────────────────────────────── */
+        Button removeBtn = new Button("Remove auction", ev -> {
+            statusMessage.setText(presenter.removeAuction(selectedAuctionId));
+            selectedAuctionId = null;
+            renderLists();
+        });
+
+        /* ── Layout ───────────────────────────────────────────── */
         add(
-                new HorizontalLayout(
-                        new H1("Auction Manager"),
+                new HorizontalLayout(new H1("Auction Manager"),
                         buttonPresenter.homePageButton(token)),
 
-                /* create auction section */
+                /* create section */
                 new H1("Create new auction"),
                 new HorizontalLayout(storeField, productField),
                 new HorizontalLayout(priceField, descField),
                 createBtn, statusMessage,
 
-                /* offers section */
-                new H1("Customer offers"),
+                /* waiting-consent section */
+                new H1("Pending offers (select one)"),
                 refreshBtn,
                 offerDisplayArea,
                 counterField,
-                new HorizontalLayout(acceptBtn, declineBtn, counterBtn)
+                new HorizontalLayout(acceptBtn, declineBtn, counterBtn),
+
+                /* all auctions section */
+                new H1("All active auctions (select to remove)"),
+                auctionsDisplayAll,
+                removeBtn
         );
+
         connectToWebSocket(token);
-        renderOffers();
+        renderLists();
         setPadding(true);
         setAlignItems(Alignment.CENTER);
     }
 
-    /* ------------------------------------------------------------------ */
-    /** Rebuild the offers list with readable “store / product” strings. */
-    private void renderOffers() {
+    /* ---------------------------------------------------------------- */
+    private void renderLists() {
+
+        /* 1. pending offers -------------------------------------- */
         offerDisplayArea.removeAll();
-        var offers = presenter.getOffers();
-        if (offers.isEmpty()) {
-            offerDisplayArea.add(new Span("No offers yet."));
-            return;
+        for (Offer o : presenter.getOffers()) {
+            Span row = new Span(o.toString());
+            row.getStyle().set("cursor","pointer");
+            row.addClickListener(ev -> {
+                selectedOfferId = o.getAuctionId();
+                statusMessage.setText("Offer selected ➜ " + o);
+            });
+            offerDisplayArea.add(row);
         }
-        for (Offer o : offers)
-            offerDisplayArea.add(new Span(o.toString()));
+        if (offerDisplayArea.getComponentCount()==0)
+            offerDisplayArea.add(new Span("No pending offers."));
+
+        /* 2. all auctions ---------------------------------------- */
+        auctionsDisplayAll.removeAll();
+        for (Offer o : presenter.listAllAuctions()) {
+            Span row = new Span(o.toString());
+            row.getStyle().set("cursor","pointer");
+            row.addClickListener(ev -> {
+                selectedAuctionId = o.getAuctionId();
+                statusMessage.setText("Auction selected ➜ " + o);
+            });
+            auctionsDisplayAll.add(row);
+        }
+        if (auctionsDisplayAll.getComponentCount()==0)
+            auctionsDisplayAll.add(new Span("No active auctions."));
     }
-    public void connectToWebSocket(String token) {
+
+    /* ---------------------------------------------------------------- */
+    private void connectToWebSocket(String token) {
         UI.getCurrent().getPage().executeJs("""
-                window._shopWs?.close();
-                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
-                window._shopWs.onmessage = ev => {
-                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
-                  const n = document.createElement('vaadin-notification');
-                  n.renderer = r => r.textContent = txt;
-                  n.duration = 5000;
-                  n.position = 'top-center';
-                  document.body.appendChild(n);
-                  n.opened = true;
-                };
-                """, token);
+            window._shopWs?.close();
+            window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+            window._shopWs.onmessage = ev => {
+              const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+              const n = document.createElement('vaadin-notification');
+              n.renderer = r => r.textContent = txt;
+              n.duration = 5000;
+              n.position = 'top-center';
+              document.body.appendChild(n);
+              n.opened = true;
+            };
+            """, token);
     }
 }

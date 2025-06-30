@@ -73,16 +73,25 @@ public class AuctionService {
 
     /*────────────────────────── manager actions ────────────────────*/
 
-    public void accept(String auctionId, String managerId) {
+    public void accept(String auctionId, String partyId) {
+
         Auction a = auctions.get(auctionId);
-        a.accept(managerId);                                    // clears waitingConsent
-        a.markAwaitingPayment(a.getLastParty(), a.getCurrentPrice());
+        a.accept(partyId);                    // clears waitingConsent flag
+
+    /* decide who pays:
+       – if the manager accepted, winner = lastParty   (the buyer)
+       – if the buyer accepted,   winner = partyId     (the buyer)            */
+        String buyer = partyId.equals(a.getManagerId())
+                ? a.getLastParty()     // manager accepted
+                : partyId;             // buyer accepted
+
+        a.markAwaitingPayment(buyer, a.getCurrentPrice());
     }
 
-    public void decline(String auctionId, String managerId) {
-        auctions.remove(auctionId);
-    }
 
+    public void decline(String auctionId, String partyId) {
+        auctions.get(auctionId).decline(partyId);   // just reset dialogue
+    }
     /*────────────────────────── buyer payment ──────────────────────*/
     @Transactional
     public void pay(String auctionId,
@@ -161,6 +170,14 @@ public class AuctionService {
                     ? "Failed to pay for auction" : ex.getMessage();
             throw new RuntimeException(msg);
         }
+    }
+
+    public void cancel(String auctionId, String managerId) {
+        Auction a = auctions.get(auctionId);
+        if (a == null) return;
+        if (!managerId.equals(a.getManagerId()))
+            throw new RuntimeException("Only the auction manager may remove it");
+        auctions.remove(auctionId);
     }
 
 }

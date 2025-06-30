@@ -481,6 +481,10 @@ public class UserConnectivityPresenter {
     }
 
     public String getUserId(String token) {
+        if (tokenService.getToken("Guest").equals(token)) {
+            System.out.println(true);
+            return "";
+        }
         return userRepository.getById(tokenService.extractUsername(token)).getShoppingCart().getUserId();
     }
 

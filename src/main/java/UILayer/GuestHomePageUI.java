@@ -54,6 +54,7 @@ public class GuestHomePageUI extends VerticalLayout {
         add(new HorizontalLayout(
                 buttons.loginButton(),
                 new Button("Sign up", e -> UI.getCurrent().navigate("/signup")),
+                new Button("search store", e -> UI.getCurrent().navigate("/searchstore") ),
                 new Button("Shopping cart", e -> UI.getCurrent().navigate("/purchasecartfinal"))
         ));
 

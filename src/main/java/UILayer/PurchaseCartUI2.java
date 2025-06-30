@@ -5,6 +5,7 @@ import DomainLayer.ShoppingBag;
 import InfrastructureLayer.ProductRepository;
 import InfrastructureLayer.UserRepository;
 import PresentorLayer.UserConnectivityPresenter;
+import PresentorLayer.ButtonPresenter;                // ← added
 import ServiceLayer.*;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -18,7 +19,6 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Route("/purchasecartfinal")
 public class PurchaseCartUI2 extends VerticalLayout {
@@ -26,7 +26,7 @@ public class PurchaseCartUI2 extends VerticalLayout {
     private final UserConnectivityPresenter userConn;
     private final IToken tokenService;
     private final ProductRepository productRepo;
-
+    private final ButtonPresenter btns;              // ← added
     private String token;
 
     private final VerticalLayout productList = new VerticalLayout();
@@ -45,6 +45,7 @@ public class PurchaseCartUI2 extends VerticalLayout {
         this.tokenService = tokenService;
         this.productRepo = productRepo;
         this.token = ensureGuestToken();
+        this.btns  = new ButtonPresenter(registeredService, tokenService); // ← added
         connectToWebSocket(token);
 
         TextField name = new TextField("name");
@@ -74,7 +75,8 @@ public class PurchaseCartUI2 extends VerticalLayout {
             }
         });
 
-        add(new H1("your shopping cart"),
+        add(new HorizontalLayout(new H1("your shopping cart"),          // ← wrapped title & button
+                        btns.homePageButton(token)),
                 refresh,
                 productList,
                 priceSpan,
@@ -130,8 +132,7 @@ public class PurchaseCartUI2 extends VerticalLayout {
     }
 
     private String ensureGuestToken() {
-        String t = (String) UI.getCurrent().getSession().getAttribute("token");
-        return t;
+        return (String) UI.getCurrent().getSession().getAttribute("token");
     }
 
     private void connectToWebSocket(String token) {

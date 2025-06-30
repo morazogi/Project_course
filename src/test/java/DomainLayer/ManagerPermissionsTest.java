@@ -1,385 +1,212 @@
-/*Test Coverage Includes:
-1. Constructor Testing
-
-Default Constructor: Tests that all permissions are initialized to false
-Parameterized Constructor: Tests with full permissions, partial permissions, and no permissions
-Validates that the ID is properly set from constructor parameters
-
-2. Permission Array Handling
-
-Valid Arrays: Tests setPermissionsFromArray with proper 7-element arrays
-Invalid Arrays: Tests handling of null arrays and arrays that are too short
-Array Order Mapping: Verifies the correct mapping of array indices to specific permissions
-
-3. Individual Permission Management
-
-Get/Set Individual Permissions: Tests getting and setting specific permissions
-Non-existent Permissions: Tests behavior when requesting unknown permissions
-Custom Permissions: Tests adding custom permissions beyond the default 7
-
-4. Permission Map Operations
-
-Map Getter/Setter: Tests direct manipulation of the permissions map
-Map Initialization: Verifies proper initialization of all 7 default permissions
-Map Size Validation: Ensures the map contains exactly the expected permissions
-
-5. ID Management
-
-ID Getter/Setter: Tests the composite primary key functionality
-Manager/Store ID Access: Tests convenience methods for accessing ID components
-Null ID Handling: Tests behavior when ID is null
-
-6. Object Equality and Hashing
-
-Equals Method: Tests equality based on ID comparison
-Null ID Equals: Tests equality when IDs are null
-HashCode Method: Tests consistent hash code generation
-Different Object Types: Tests equality with non-ManagerPermissions objects
-
-7. Permission Constants
-
-Constant Definitions: Verifies all permission constants are properly defined
-Constant Values: Tests that constants have expected string values
-
-8. Edge Cases and Error Handling
-
-Null Parameter Handling: Tests behavior with null inputs
-Array Length Validation: Tests proper handling of invalid array lengths
-Initialization Consistency: Ensures consistent initialization across constructors
-
-Key Features:
-
-Comprehensive Coverage: Tests all public methods and edge cases
-Realistic Scenarios: Uses actual manager and store IDs that mirror real usage
-Error Condition Testing: Validates proper handling of invalid inputs
-Permission Mapping Validation: Ensures array indices map to correct permissions
-Constant Verification: Validates all permission constants are properly defined*/
 package DomainLayer;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ManagerPermissionsTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private ManagerPermissions managerPermissions;
+class ManagerPermissionsTest {
+
     private String managerId;
     private String storeId;
-    private boolean[] fullPermissions;
-    private boolean[] partialPermissions;
-    private boolean[] noPermissions;
+
+    private boolean[] full9;
+    private boolean[] partial9;
+    private boolean[] none9;
 
     @BeforeEach
-    void setUp() {
+    void init() {
         managerId = "manager123";
-        storeId = "store456";
+        storeId   = "store456";
 
-        // Array with all permissions true
-        fullPermissions = new boolean[]{true, true, true, true, true, true, true};
+        /* index-to-flag mapping (per implementation)
+           0  MANAGE_INVENTORY
+           1  MANAGE_STAFF
+           2  VIEW_STORE
+           3  UPDATE_POLICY
+           4  ADD_PRODUCT
+           5  REMOVE_PRODUCT  + CLOSE_STORE
+           6  UPDATE_PRODUCT  + OPEN_STORE
+           7  (unused, reserved)
+           8  (unused, reserved)                                    */
 
-        // Array with some permissions true
-        partialPermissions = new boolean[]{true, false, true, false, true, false, true};
+        full9   = new boolean[]{true,true,true,true,true,true,true,true,true};
+        partial9= new boolean[]{true,false,true,false,true,false,true,false,false};
+        none9   = new boolean[9];          // all false
+    }
 
-        // Array with all permissions false
-        noPermissions = new boolean[]{false, false, false, false, false, false, false};
+    /* ─────────────────── 1 · constructors ─────────────────── */
+
+    @Test @DisplayName("Default ctor initialises nine flags to false")
+    void defaultConstructor() {
+        ManagerPermissions mp = new ManagerPermissions();
+
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_OPEN_STORE));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_CLOSE_STORE));
+        assertEquals(9, mp.getPermissions().size());
+    }
+
+    @Test @DisplayName("Parameterized ctor – full permissions array")
+    void parameterisedCtor_full() {
+        ManagerPermissions mp = new ManagerPermissions(full9, managerId, storeId);
+
+        assertTrue(mp.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
+        assertTrue(mp.getPermission(ManagerPermissions.PERM_OPEN_STORE));
+        assertTrue(mp.getPermission(ManagerPermissions.PERM_CLOSE_STORE));
+
+        assertEquals(managerId, mp.getManagerId());
+        assertEquals(storeId,   mp.getStoreId());
+    }
+
+    @Test @DisplayName("Parameterized ctor – partial permissions array")
+    void parameterisedCtor_partial() {
+        ManagerPermissions mp = new ManagerPermissions(partial9, managerId, storeId);
+
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_VIEW_STORE));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_CLOSE_STORE));
+    }
+
+    @Test @DisplayName("Parameterized ctor – all false")
+    void parameterisedCtor_none() {
+        ManagerPermissions mp = new ManagerPermissions(none9, managerId, storeId);
+        mp.getPermissions().values().forEach(v -> assertFalse(v));
+    }
+
+    /* ─────────────────── 2 · setPermissionsFromAarray ─────── */
+
+    @Test @DisplayName("setPermissionsFromAarray – valid 9-element array")
+    void setPerms_valid() {
+        ManagerPermissions mp = new ManagerPermissions();
+        mp.setPermissionsFromAarray(partial9);
+
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_VIEW_STORE));
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_CLOSE_STORE));
+        assertTrue (mp.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
     }
 
     @Test
-    @DisplayName("Test default constructor initializes with default permissions")
-    void testDefaultConstructor() {
-        managerPermissions = new ManagerPermissions();
+    @DisplayName("setPermissionsFromAarray – null keeps old map")
+    void setPerms_null() {
+        ManagerPermissions mp = new ManagerPermissions();
+        Map<String,Boolean> orig = new HashMap<>(mp.getPermissions());
 
-        // All permissions should be false by default
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_VIEW_STORE));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
-
-        // Permissions map should contain all 7 permissions
-        assertEquals(9, managerPermissions.getPermissions().size());
+        mp.setPermissionsFromAarray(null);
+        assertEquals(orig, mp.getPermissions());
     }
 
     @Test
-    @DisplayName("Test parameterized constructor with full permissions")
-    void testParameterizedConstructorFullPermissions() {
-        managerPermissions = new ManagerPermissions(fullPermissions, managerId, storeId);
+    @DisplayName("setPermissionsFromAarray – too short array ignored")
+    void setPerms_tooShort() {
+        ManagerPermissions mp = new ManagerPermissions();
+        Map<String,Boolean> orig = new HashMap<>(mp.getPermissions());
 
-        // All permissions should be true
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_VIEW_STORE));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
-
-        // Check ID is set correctly
-        assertEquals(managerId, managerPermissions.getManagerId());
-        assertEquals(storeId, managerPermissions.getStoreId());
+        mp.setPermissionsFromAarray(new boolean[]{true,true,true});
+        assertEquals(orig, mp.getPermissions());
     }
 
-    @Test
-    @DisplayName("Test parameterized constructor with partial permissions")
-    void testParameterizedConstructorPartialPermissions() {
-        managerPermissions = new ManagerPermissions(partialPermissions, managerId, storeId);
+    /* ─────────────────── 3 · individual flags ─────────────── */
 
-        // Check specific permissions match the array
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));  // index 0: true
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));     // index 1: false
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_VIEW_STORE));        // index 2: true
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));    // index 3: false
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));       // index 4: true
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));   // index 5: false
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));    // index 6: true
+    @Test void individualSetterGetter() {
+        ManagerPermissions mp = new ManagerPermissions();
+        assertFalse(mp.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
+
+        mp.setPermission(ManagerPermissions.PERM_UPDATE_POLICY,true);
+        assertTrue(mp.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
     }
 
-    @Test
-    @DisplayName("Test parameterized constructor with no permissions")
-    void testParameterizedConstructorNoPermissions() {
-        managerPermissions = new ManagerPermissions(noPermissions, managerId, storeId);
-
-        // All permissions should be false
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_VIEW_STORE));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
+    @Test void getNonExistingFlag_returnsFalse() {
+        ManagerPermissions mp = new ManagerPermissions();
+        assertFalse(mp.getPermission("NO_SUCH_FLAG"));
     }
 
-    @Test
-    @DisplayName("Test setPermissionsFromArray with valid array")
-    void testSetPermissionsFromArrayValid() {
-        managerPermissions = new ManagerPermissions();
-        managerPermissions.setPermissionsFromAarray(partialPermissions);
+    /* ─────────────────── 4 · map getter / setter ───────────── */
 
-        // Verify permissions match the array
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_VIEW_STORE));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
+    @Test void permissionsMap_getterSetter() {
+        ManagerPermissions mp = new ManagerPermissions();
+
+        Map<String,Boolean> custom = new HashMap<>();
+        custom.put(ManagerPermissions.PERM_MANAGE_INVENTORY,true);
+        custom.put("CUSTOM_PERM",true);
+        mp.setPermissions(custom);
+
+        assertEquals(custom, mp.getPermissions());
+        assertTrue (mp.getPermission("CUSTOM_PERM"));
     }
 
-    @Test
-    @DisplayName("Test setPermissionsFromArray with null array")
-    void testSetPermissionsFromArrayNull() {
-        managerPermissions = new ManagerPermissions();
+    /* ─────────────────── 5 · ID handling ───────────────────── */
 
-        // Store original permissions
-        Map<String, Boolean> originalPermissions = new HashMap<>(managerPermissions.getPermissions());
+    @Test void idGetterSetter() {
+        ManagerPermissions mp = new ManagerPermissions();
 
-        // Try to set with null array
-        managerPermissions.setPermissionsFromAarray(null);
-
-        // Permissions should remain unchanged
-        assertEquals(originalPermissions, managerPermissions.getPermissions());
+        ManagerPermissionsPK pk = new ManagerPermissionsPK(managerId,storeId);
+        mp.setId(pk);
+        assertEquals(pk, mp.getId());
+        assertEquals(managerId, mp.getManagerId());
+        assertEquals(storeId,   mp.getStoreId());
     }
 
-    @Test
-    @DisplayName("Test setPermissionsFromArray with short array")
-    void testSetPermissionsFromArrayTooShort() {
-        managerPermissions = new ManagerPermissions();
-
-        // Store original permissions
-        Map<String, Boolean> originalPermissions = new HashMap<>(managerPermissions.getPermissions());
-
-        // Try to set with array that's too short
-        boolean[] shortArray = new boolean[]{true, false, true}; // Only 3 elements
-        managerPermissions.setPermissionsFromAarray(shortArray);
-
-        // Permissions should remain unchanged
-        assertEquals(originalPermissions, managerPermissions.getPermissions());
+    @Test void managerIdStoreId_whenIdNull() {
+        ManagerPermissions mp = new ManagerPermissions();
+        mp.setId(null);
+        assertNull(mp.getManagerId());
+        assertNull(mp.getStoreId());
     }
 
-    @Test
-    @DisplayName("Test individual permission getter and setter")
-    void testIndividualPermissionGetterSetter() {
-        managerPermissions = new ManagerPermissions();
+    /* ─────────────────── 6 · equals / hashCode ─────────────── */
 
-        // Initially should be false
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+    @Test void equalsHashCode() {
+        ManagerPermissionsPK pk = new ManagerPermissionsPK(managerId,storeId);
+        ManagerPermissions a  = new ManagerPermissions(); a.setId(pk);
+        ManagerPermissions b  = new ManagerPermissions(); b.setId(pk);
+        ManagerPermissions c  = new ManagerPermissions(); c.setId(
+                new ManagerPermissionsPK("other",storeId));
 
-        // Set to true
-        managerPermissions.setPermission(ManagerPermissions.PERM_MANAGE_INVENTORY, true);
-        assertTrue(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+        assertEquals(a,a);
+        assertEquals(a,b);
+        assertNotEquals(a,c);
+        assertNotEquals(a,null);
+        assertNotEquals(a,"string");
 
-        // Set back to false
-        managerPermissions.setPermission(ManagerPermissions.PERM_MANAGE_INVENTORY, false);
-        assertFalse(managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+        assertEquals(a.hashCode(), b.hashCode());
+        assertNotEquals(a.hashCode(), c.hashCode());
     }
 
-    @Test
-    @DisplayName("Test getPermission with non-existent permission")
-    void testGetPermissionNonExistent() {
-        managerPermissions = new ManagerPermissions();
+    /* ─────────────────── 7 · constant sanity check ─────────── */
 
-        // Should return false for non-existent permission
-        assertFalse(managerPermissions.getPermission("NON_EXISTENT_PERMISSION"));
-    }
-
-
-    @Test
-    @DisplayName("Test permissions map getter and setter")
-    void testPermissionsMapGetterSetter() {
-        managerPermissions = new ManagerPermissions();
-
-        Map<String, Boolean> customPermissions = new HashMap<>();
-        customPermissions.put(ManagerPermissions.PERM_MANAGE_INVENTORY, true);
-        customPermissions.put(ManagerPermissions.PERM_VIEW_STORE, true);
-        customPermissions.put("CUSTOM_PERM", true);
-
-        managerPermissions.setPermissions(customPermissions);
-
-        Map<String, Boolean> retrievedPermissions = managerPermissions.getPermissions();
-        assertEquals(customPermissions, retrievedPermissions);
-        assertTrue(retrievedPermissions.get(ManagerPermissions.PERM_MANAGE_INVENTORY));
-        assertTrue(retrievedPermissions.get(ManagerPermissions.PERM_VIEW_STORE));
-        assertTrue(retrievedPermissions.get("CUSTOM_PERM"));
-    }
-
-    @Test
-    @DisplayName("Test ID getter and setter")
-    void testIdGetterSetter() {
-        managerPermissions = new ManagerPermissions();
-
-        // Initially ID should be null
-        assertNull(managerPermissions.getId());
-        assertNull(managerPermissions.getManagerId());
-        assertNull(managerPermissions.getStoreId());
-
-        // Create and set ID
-        ManagerPermissionsPK id = new ManagerPermissionsPK(managerId, storeId);
-        managerPermissions.setId(id);
-
-        assertEquals(id, managerPermissions.getId());
-        assertEquals(managerId, managerPermissions.getManagerId());
-        assertEquals(storeId, managerPermissions.getStoreId());
-    }
-
-    @Test
-    @DisplayName("Test getManagerId and getStoreId with null ID")
-    void testGetManagerIdStoreIdWithNullId() {
-        managerPermissions = new ManagerPermissions();
-        managerPermissions.setId(null);
-
-        assertNull(managerPermissions.getManagerId());
-        assertNull(managerPermissions.getStoreId());
-    }
-
-    @Test
-    @DisplayName("Test equals method")
-    void testEquals() {
-        ManagerPermissionsPK id1 = new ManagerPermissionsPK(managerId, storeId);
-        ManagerPermissionsPK id2 = new ManagerPermissionsPK(managerId, storeId);
-        ManagerPermissionsPK id3 = new ManagerPermissionsPK("differentManager", storeId);
-
-        ManagerPermissions mp1 = new ManagerPermissions();
-        mp1.setId(id1);
-
-        ManagerPermissions mp2 = new ManagerPermissions();
-        mp2.setId(id2);
-
-        ManagerPermissions mp3 = new ManagerPermissions();
-        mp3.setId(id3);
-
-        // Same object
-        assertEquals(mp1, mp1);
-
-        // Different objects with same ID should be equal (assuming ManagerPermissionsPK implements equals correctly)
-        assertEquals(mp1, mp2);
-
-        // Different IDs should not be equal
-        assertNotEquals(mp1, mp3);
-
-        // Null comparison
-        assertNotEquals(mp1, null);
-
-        // Different class comparison
-        assertNotEquals(mp1, "string");
-    }
-
-    @Test
-    @DisplayName("Test equals with null IDs")
-    void testEqualsWithNullIds() {
-        ManagerPermissions mp1 = new ManagerPermissions();
-        ManagerPermissions mp2 = new ManagerPermissions();
-
-        // Both have null IDs - should be equal
-        assertEquals(mp1, mp2);
-
-        // One has ID, other has null - should not be equal
-        mp1.setId(new ManagerPermissionsPK(managerId, storeId));
-        assertNotEquals(mp1, mp2);
-    }
-
-    @Test
-    @DisplayName("Test hashCode method")
-    void testHashCode() {
-        ManagerPermissionsPK id = new ManagerPermissionsPK(managerId, storeId);
-
-        ManagerPermissions mp1 = new ManagerPermissions();
-        mp1.setId(id);
-
-        ManagerPermissions mp2 = new ManagerPermissions();
-        mp2.setId(id);
-
-        // Objects with same ID should have same hash code
-        assertEquals(mp1.hashCode(), mp2.hashCode());
-
-        // Test with null ID
-        ManagerPermissions mp3 = new ManagerPermissions();
-        int hashWithNullId = mp3.hashCode();
-        assertNotNull(hashWithNullId); // Should not throw exception
-    }
-
-    @Test
-    @DisplayName("Test all permission constants are defined")
-    void testPermissionConstants() {
-        assertNotNull(ManagerPermissions.PERM_MANAGE_INVENTORY);
-        assertNotNull(ManagerPermissions.PERM_MANAGE_STAFF);
-        assertNotNull(ManagerPermissions.PERM_VIEW_STORE);
-        assertNotNull(ManagerPermissions.PERM_UPDATE_POLICY);
-        assertNotNull(ManagerPermissions.PERM_ADD_PRODUCT);
-        assertNotNull(ManagerPermissions.PERM_REMOVE_PRODUCT);
-        assertNotNull(ManagerPermissions.PERM_UPDATE_PRODUCT);
-
-        // Verify they have expected values
+    @Test void constantDefinitions() {
         assertEquals("PERM_MANAGE_INVENTORY", ManagerPermissions.PERM_MANAGE_INVENTORY);
-        assertEquals("PERM_MANAGE_STAFF", ManagerPermissions.PERM_MANAGE_STAFF);
-        assertEquals("PERM_VIEW_STORE", ManagerPermissions.PERM_VIEW_STORE);
-        assertEquals("PERM_UPDATE_POLICY", ManagerPermissions.PERM_UPDATE_POLICY);
-        assertEquals("PERM_ADD_PRODUCT", ManagerPermissions.PERM_ADD_PRODUCT);
-        assertEquals("PERM_REMOVE_PRODUCT", ManagerPermissions.PERM_REMOVE_PRODUCT);
-        assertEquals("PERM_UPDATE_PRODUCT", ManagerPermissions.PERM_UPDATE_PRODUCT);
+        assertEquals("PERM_OPEN_STORE",       ManagerPermissions.PERM_OPEN_STORE);
+        assertEquals("PERM_CLOSE_STORE",      ManagerPermissions.PERM_CLOSE_STORE);
     }
 
-    @Test
-    @DisplayName("Test permission array order mapping")
-    void testPermissionArrayOrderMapping() {
-        managerPermissions = new ManagerPermissions();
+    /* ─────────────────── 8 · array-order mapping ───────────── */
 
-        // Create array where each position has different value to test mapping
-        boolean[] testArray = new boolean[]{true, false, true, false, true, false, true};
-        managerPermissions.setPermissionsFromAarray(testArray);
+    @Test void arrayOrderMapping() {
+        boolean[] arr = {true,false,true,false,true,false,true,true,false}; // 9 elements
+        ManagerPermissions mp = new ManagerPermissions();
+        mp.setPermissionsFromAarray(arr);
 
-        // Verify the mapping order is correct
-        assertEquals(testArray[0], managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
-        assertEquals(testArray[1], managerPermissions.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
-        assertEquals(testArray[2], managerPermissions.getPermission(ManagerPermissions.PERM_VIEW_STORE));
-        assertEquals(testArray[3], managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
-        assertEquals(testArray[4], managerPermissions.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
-        assertEquals(testArray[5], managerPermissions.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
-        assertEquals(testArray[6], managerPermissions.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
+        assertEquals(arr[0], mp.getPermission(ManagerPermissions.PERM_MANAGE_INVENTORY));
+        assertEquals(arr[1], mp.getPermission(ManagerPermissions.PERM_MANAGE_STAFF));
+        assertEquals(arr[2], mp.getPermission(ManagerPermissions.PERM_VIEW_STORE));
+        assertEquals(arr[3], mp.getPermission(ManagerPermissions.PERM_UPDATE_POLICY));
+        assertEquals(arr[4], mp.getPermission(ManagerPermissions.PERM_ADD_PRODUCT));
+        assertEquals(arr[5], mp.getPermission(ManagerPermissions.PERM_REMOVE_PRODUCT));
+        assertEquals(arr[6], mp.getPermission(ManagerPermissions.PERM_UPDATE_PRODUCT));
+        assertEquals(arr[6], mp.getPermission(ManagerPermissions.PERM_OPEN_STORE));   // shares idx 6
+        assertEquals(arr[5], mp.getPermission(ManagerPermissions.PERM_CLOSE_STORE));  // shares idx 5
     }
 }

@@ -90,7 +90,7 @@ public class SystemConfiguration {
             StoreRepository             storeRepo,
             UserRepository              userRepo,
             TokenService                tokenSvc) {     // ← NEW
-        return new AdminConsolePresenter(adminOps, storeRepo, userRepo, tokenSvc);
+        return new AdminConsolePresenter(adminOps, storeRepo, userRepo, tokenSvc, AdminService());
     }
 
     @Bean
@@ -110,11 +110,14 @@ public class SystemConfiguration {
     }
 
     @Bean
+
     public SystemInitialiser SystemInitialiser(UserService userService,
                                              OwnerManagerService ownerManagerService,
                                              RegisteredService registeredService,
                                              StoreRepository storeRepository) {
         return new SystemInitialiser(userService, ownerManagerService, registeredService, storeRepository);
     }
+
+    public AdminService AdminService() {return new AdminService(UserRepository(), StoreRepository(), TokenService());}
 
 }

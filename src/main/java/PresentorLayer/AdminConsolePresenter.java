@@ -1,8 +1,10 @@
 package PresentorLayer;
 
 import DomainLayer.DomainServices.AdminOperationsMicroservice;
+import DomainLayer.Store;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
+import ServiceLayer.AdminService;
 import ServiceLayer.TokenService;          // ← NEW
 import org.springframework.stereotype.Component;
 
@@ -14,16 +16,19 @@ public class AdminConsolePresenter {
     private final AdminOperationsMicroservice adminOps;
     private final StoreRepository             storeRepo;
     private final UserRepository              userRepo;
-    private final TokenService                tokenSvc;      // ← NEW
+    private final TokenService                tokenSvc;
+    private final AdminService                adminService;
 
     public AdminConsolePresenter(AdminOperationsMicroservice adminOps,
                                  StoreRepository             storeRepo,
                                  UserRepository              userRepo,
-                                 TokenService                tokenSvc) {  // ← NEW
+                                 TokenService                tokenSvc,
+                                 AdminService adminService) {  // ← NEW
         this.adminOps  = adminOps;
         this.storeRepo = storeRepo;
         this.userRepo  = userRepo;
         this.tokenSvc  = tokenSvc;
+        this.adminService = adminService;
     }
 
     /* user-management only — store actions dropped */
@@ -44,5 +49,18 @@ public class AdminConsolePresenter {
                 .map(u -> u.getUsername())
                 .filter(u -> !u.equals("1"))
                 .toList();
+    }
+
+    public String closeStore(String storeName) {
+        List<Store> stores = storeRepo.getAll();
+        for (Store store : stores) {
+            if (store.getName().equals(storeName)) {
+            if (adminService.adminCloseStore("1", store.getId())) {
+                return "Closed store";
+            }
+                return "Failed to close store";
+            }
+        }
+        return "Could not find store with that name";
     }
 }

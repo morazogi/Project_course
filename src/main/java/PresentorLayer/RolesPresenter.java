@@ -113,8 +113,11 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.relinquishOwnership(username, storeId);
-            return "You relinquished your ownership.";
+            if (rolesService.relinquishOwnership(username, storeId)) {
+                return "You relinquished your ownership.";
+            } else {
+                return "You failed tyo relinquish your ownership";
+            }
         } catch (Exception e) {
             return "Failed to relinquish ownership: " + e.getMessage();
         }
@@ -126,8 +129,11 @@ public class RolesPresenter {
                     .stream().findFirst()
                     .orElseThrow(() -> new RuntimeException("Store not found")).getId();
 
-            rolesService.relinquishManagement(username, storeId);
-            return "You relinquished your management role.";
+            if (rolesService.relinquishManagement(username, storeId)) {
+                return "You relinquished your management role.";
+            } else {
+                return "You failed to relinquish your ownership";
+            }
         } catch (Exception e) {
             return "Failed to relinquish management: " + e.getMessage();
         }

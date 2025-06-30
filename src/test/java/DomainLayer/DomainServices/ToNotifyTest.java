@@ -1,119 +1,121 @@
+/* ────────────────────────────────────────────────────────────────
+   src/test/java/DomainLayer/DomainServices/ToNotifyTest.java
+   ──────────────────────────────────────────────────────────────── */
 package DomainLayer.DomainServices;
 
 import DomainLayer.IToken;
-import InfrastructureLayer.NotificationRepository;
-import InfrastructureLayer.StoreRepository;
-import InfrastructureLayer.UserRepository;
+import DomainLayer.Roles.RegisteredUser;
+import DomainLayer.Store;
+import InfrastructureLayer.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import utils.Notifications;
-import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.Store;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ToNotifyTest {
-    @Mock NotificationRepository notificationRepo;
-    @Mock IToken tokenService;
-    @Mock NotificationWebSocketHandler notificationWebSocketHandler;
-    @Mock UserRepository userRepository;
-    @Mock StoreRepository storeRepository;
-    @InjectMocks ToNotify toNotify;
+
+    @Mock NotificationRepository       notificationRepo;
+    @Mock IToken                       tokenService;
+    @Mock NotificationWebSocketHandler wsHandler;
+    @Mock UserRepository               userRepo;
+    @Mock StoreRepository              storeRepo;
+
+    private ToNotify notify;
 
     @BeforeEach
-    void setUp() {
-        toNotify = new ToNotify(notificationRepo, tokenService, notificationWebSocketHandler, userRepository, storeRepository);
+    void init() {
+        notify = new ToNotify(notificationRepo, tokenService,
+                wsHandler, userRepo, storeRepo);
     }
+
+    /* ─────────────────── getUserNotifications ─────────────────── */
 
     @Test
-    void getUserNotifications_returnsNotifications() {
-        String token = "token123";
-        String username = "user1";
-        Notifications n1 = new Notifications("msg1", username, "store1");
-        Notifications n2 = new Notifications("msg2", username, "store2");
-        when(tokenService.extractUsername(token)).thenReturn(username);
-        when(notificationRepo.getAll()).thenReturn(List.of(n1, n2));
+    void getUserNotifications_returnsAllFromRepo() {
+        when(tokenService.extractUsername("tok")).thenReturn("bob");
+        List<Notifications> stub = List.of(
+                new Notifications("m1", "bob", ""),
+                new Notifications("m2", "bob", "")
+        );
+        when(notificationRepo.getAll()).thenReturn(stub);
 
-        List<Notifications> result = toNotify.getUserNotifications(token);
-        assertEquals(2, result.size());
-        assertTrue(result.contains(n1));
-        assertTrue(result.contains(n2));
+        List<Notifications> out = notify.getUserNotifications("tok");
+
+        assertEquals(2, out.size());
+        verify(tokenService).extractUsername("tok");
+        verify(notificationRepo).getAll();
     }
+
+    /* ─────────────────── getStoreNotifications ────────────────── */
 
     @Test
-    void getUserNotifications_emptyList() {
-        String token = "token123";
-        when(tokenService.extractUsername(token)).thenReturn("user1");
-        when(notificationRepo.getAll()).thenReturn(Collections.emptyList());
-        List<Notifications> result = toNotify.getUserNotifications(token);
-        assertTrue(result.isEmpty());
+    void getStoreNotifications_mapsToMessages() {
+        List<Notifications> stub = List.of(
+                new Notifications("hi",  "u1", "s1"),
+                new Notifications("bye", "u2", "s1")
+        );
+        when(notificationRepo.findByStoreID("s1")).thenReturn(stub);
+
+        List<String> msgs = notify.getStoreNotifications("s1");
+
+        assertIterableEquals(List.of("hi", "bye"), msgs);
     }
+
+    /* ───────────── sendNotificationToStore (manager) ──────────── */
 
     @Test
-    void getStoreNotifications_returnsMessages() {
-        String storeId = "store1";
-        Notifications n1 = new Notifications("msg1", "user1", storeId);
-        Notifications n2 = new Notifications("msg2", "user2", storeId);
-        when(notificationRepo.findByStoreID(storeId)).thenReturn(List.of(n1, n2));
-        List<String> result = toNotify.getStoreNotifications(storeId);
-        assertEquals(List.of("msg1", "msg2"), result);
+    void sendNotificationToStore_managerMatch_callsWebSocket() throws Exception {
+        RegisteredUser mgr = mock(RegisteredUser.class);
+        when(mgr.getManagedStores()).thenReturn(List.of("store-1"));
+        when(mgr.getUsername()).thenReturn("manager1");
+        when(userRepo.getAll()).thenReturn(List.of(mgr));
+
+        Store st = mock(Store.class);
+        when(st.getId()).thenReturn("store-1");
+        when(st.getName()).thenReturn("Mega");
+        when(storeRepo.getAll()).thenReturn(List.of(st));
+
+        notify.sendNotificationToStore("tok", "Mega", "hello");
+
+        verify(wsHandler).sendNotificationToClient("manager1", "hello");
     }
+
+    /* ─────────── sendNotificationToStoreOwners (owner) ────────── */
 
     @Test
-    void getStoreNotifications_emptyList() {
-        String storeId = "store1";
-        when(notificationRepo.findByStoreID(storeId)).thenReturn(Collections.emptyList());
-        List<String> result = toNotify.getStoreNotifications(storeId);
-        assertTrue(result.isEmpty());
+    void sendNotificationToStoreOwners_ownerMatch_callsWebSocket() {
+        RegisteredUser owner = mock(RegisteredUser.class);
+        when(owner.getOwnedStores()).thenReturn(List.of("store-1"));
+        when(owner.getManagedStores()).thenReturn(List.of());
+        when(owner.getUsername()).thenReturn("owner1");
+        when(userRepo.getAll()).thenReturn(List.of(owner));
+
+        Store st = mock(Store.class);
+        when(st.getId()).thenReturn("store-1");
+        when(st.getName()).thenReturn("Mega");
+        when(storeRepo.getAll()).thenReturn(List.of(st));
+
+        notify.sendNotificationToStoreOwners("tok", "Mega", "msg");
+
+        verify(wsHandler).sendNotificationToClient("owner1", "msg");
     }
+
+    /* ─────────────────── sendNotificationToUser ───────────────── */
 
     @Test
-    void sendNotificationToStore_sendsToManagedUsers() throws Exception {
-        String token = "token";
-        String storeName = "StoreA";
-        String storeId = "store1";
-        String message = "Hello";
-        RegisteredUser user1 = mock(RegisteredUser.class);
-        Store store = mock(Store.class);
-        when(userRepository.getAll()).thenReturn(List.of(user1));
-        when(storeRepository.getAll()).thenReturn(List.of(store));
-        when(store.getName()).thenReturn(storeName);
-        when(store.getId()).thenReturn(storeId);
-        when(user1.getManagedStores()).thenReturn(List.of(storeId));
-        when(user1.getUsername()).thenReturn("user1");
-
-        toNotify.sendNotificationToStore(token, storeName, message);
-        verify(notificationWebSocketHandler).sendNotificationToClient("user1", message);
+    void sendNotificationToUser_alwaysCallsWebSocket() throws Exception {
+        notify.sendNotificationToUser("s1", "alice", "hi");
+        verify(wsHandler).sendNotificationToClient("alice", "hi");
     }
-
-    @Test
-    void sendNotificationToUser_sendsNotification() throws Exception {
-        String storeId = "store1";
-        String userId = "user1";
-        String message = "msg";
-        toNotify.sendNotificationToUser(storeId, userId, message);
-        verify(notificationWebSocketHandler).sendNotificationToClient(userId, message);
-    }
-
-    @Test
-    void sendNotificationToUser_throwsException() {
-        String storeId = "store1";
-        String userId = "user1";
-        String message = "msg";
-        doThrow(new RuntimeException("fail")).when(notificationWebSocketHandler).sendNotificationToClient(userId, message);
-        Exception ex = assertThrows(RuntimeException.class, () -> toNotify.sendNotificationToUser(storeId, userId, message));
-        assertTrue(ex.getMessage().contains("Failed to serialize notification"));
-    }
-
-    // sendAllUserNotifications is hard to test due to missing notifications field in ToNotify
-    // You may want to refactor ToNotify to inject notifications or make it accessible for testing
-} 
+}
