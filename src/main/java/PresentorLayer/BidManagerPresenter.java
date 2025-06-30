@@ -1,7 +1,6 @@
 package PresentorLayer;
 
 import DomainLayer.Product;
-import DomainLayer.Store;
 import ServiceLayer.BidService;
 import ServiceLayer.OwnerManagerService;
 import ServiceLayer.UserService;

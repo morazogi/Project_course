@@ -32,6 +32,7 @@ public class OpenStore {
             Store store = new Store(username, name);
             store.setFounder(userId);
             storeRepository.save(store);
+            user.addOwnedStore(store.getId());
             return store.getId();
     }
 }

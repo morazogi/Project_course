@@ -85,6 +85,8 @@ public class StoreManagementMicroservice {
         if(!checkPermission(appointerId,storeId, PERM_MANAGE_STAFF)) {
             if (!(getStoreById(storeId) != null && getStoreById(storeId).getFounder().equals(userId))) {
                 return false;
+            }else if (getStoreById(storeId).getOwners().contains(userId)) {
+                throw new IllegalArgumentException("User is already the founder of the store");
             }
         }
         Store store = getStoreById(storeId);

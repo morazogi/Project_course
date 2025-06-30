@@ -13,7 +13,6 @@ import utils.Notifications;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
 public class NotificationWebSocketHandler extends TextWebSocketHandler {
 
     // Stores userId -> WebSocketSession mapping
