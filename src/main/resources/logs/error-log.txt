@@ -5,3 +5,6 @@
 [2025-06-30 16:20:01] User: m | Error: MANAGER_ADD_PRODUCT_FAILED | Details: err
 [2025-06-30 16:20:01] User: o | Error: ADD_PRODUCT_FAILED | Details: boom
 [2025-06-30 16:20:01] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: err
+[2025-06-30 18:40:11] User: a | Error: Failed to pay  | Details: Invalid cvv
+[2025-06-30 18:40:19] User: a | Error: Failed to pay  | Details: For input string: "vfjdsikvfdl"
+[2025-06-30 18:42:28] User: a | Error: Failed to pay  | Details: Error: For input string: "grfgewver"

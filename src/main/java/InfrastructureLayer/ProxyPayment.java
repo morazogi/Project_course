@@ -2,6 +2,7 @@ package InfrastructureLayer;
 
 import DomainLayer.IPayment;
 import ServiceLayer.ErrorLogger;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Repository;
 
 import java.net.URI;
@@ -30,6 +31,14 @@ public class ProxyPayment implements IPayment {
                 String[] dateleft = expirationDate.split("\\\\");
                 String[] dateright = expirationDate.split("/");
                 String[] datemiddle = expirationDate.split("\\.");
+
+                if (backNumber.length() != 3) {
+                    throw new Exception("Invalid cvv");
+                }
+
+                Integer.valueOf(creditCardNumber);
+                Integer.valueOf(Id);
+                Integer.valueOf(backNumber);
 
                 if (dateleft.length == 2) {
                     json = "action_type=pay" +
@@ -81,7 +90,7 @@ public class ProxyPayment implements IPayment {
                 throw new Exception("could not connect to payment system");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 
@@ -107,7 +116,7 @@ public class ProxyPayment implements IPayment {
                 throw new Exception("could not connect to payment system");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 

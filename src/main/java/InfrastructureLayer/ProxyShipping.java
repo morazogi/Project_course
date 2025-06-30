@@ -23,6 +23,7 @@ public class ProxyShipping implements IShipping {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+            Integer.valueOf(zip);
             System.out.println(response);
             if (response.body().equals("OK")) {
                 client = HttpClient.newHttpClient();
@@ -48,7 +49,7 @@ public class ProxyShipping implements IShipping {
                 throw new Exception("could not connect to shipping system");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 
@@ -74,7 +75,7 @@ public class ProxyShipping implements IShipping {
                 throw new Exception("could not connect to shipping system");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 
