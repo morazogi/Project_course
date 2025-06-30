@@ -1,18 +1,7 @@
-[2025-06-28 04:28:17] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: boom
-[2025-06-28 04:28:17] User: o | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: broken
-[2025-06-28 04:28:17] User: alice | Error: Failed to cancel payment | Details: boom
-[2025-06-28 04:28:17] User: alice | Error: Failed to pay  | Details: gateway down
-[2025-06-28 04:28:17] User: john | Error: Failed to cancel shipping | Details: fail
-[2025-06-28 04:28:17] User: john | Error: Error in shipping | Details: svc down
-[2025-06-28 17:48:05] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@20fefaf8]
-[2025-06-28 17:48:09] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@53410521]
-[2025-06-28 17:49:12] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@a956c64f]
-[2025-06-28 17:53:48] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@9208be45]
-[2025-06-28 17:54:38] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@2bce2cb8]
-[2025-06-28 17:55:25] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@599c8ac2]
-[2025-06-28 17:56:59] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@53abe9f5]
-[2025-06-28 17:58:43] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@27e488aa]
-[2025-06-28 18:02:06] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@d8022512]
-[2025-06-28 18:13:04] User: a | Error: APPOINT_STORE_MANAGER_FAILED | Details: A different object with the same identifier value was already associated with the session : [DomainLayer.ManagerPermissions#DomainLayer.ManagerPermissionsPK@baa5b336]
-[2025-06-29 17:26:24] User: john | Error: Failed to cancel shipping | Details: fail
-[2025-06-29 17:26:24] User: john | Error: Error in shipping | Details: svc down
+[2025-06-30 16:20:00] User: alice | Error: Failed to cancel payment | Details: boom
+[2025-06-30 16:20:00] User: alice | Error: Failed to pay  | Details: gateway down
+[2025-06-30 16:20:01] User: o | Error: UPDATE_PURCHASE_POLICY_FAILED | Details: boom
+[2025-06-30 16:20:01] User: u | Error: RESPOND_TO_OWNER_APPOINTMENT_FAILED | Details: err
+[2025-06-30 16:20:01] User: m | Error: MANAGER_ADD_PRODUCT_FAILED | Details: err
+[2025-06-30 16:20:01] User: o | Error: ADD_PRODUCT_FAILED | Details: boom
+[2025-06-30 16:20:01] User: a | Error: APPOINT_STORE_OWNER_FAILED | Details: err

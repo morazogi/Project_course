@@ -3,8 +3,8 @@
    ──────────────────────────────────────────────────────────────── */
 package ServiceLayer;
 
-import DomainLayer.DomainServices.UserCart;
 import DomainLayer.DomainServices.IToNotify;
+import DomainLayer.DomainServices.UserCart;
 import DomainLayer.IToken;
 import DomainLayer.Product;
 import DomainLayer.ShoppingBag;
