@@ -58,5 +58,17 @@ public class StartingFile {
         };
     }
 
-
+    @Bean
+    public CommandLineRunner initializeSystem(ServiceLayer.SystemInitialiser systemInitialiser) {
+        return args -> {
+            System.out.println("🚀 StartingFile: Directly calling SystemInitialiser.initializeSystem()");
+            try {
+                systemInitialiser.initializeSystem();
+                System.out.println("✅ StartingFile: System initialization completed successfully!");
+            } catch (Exception e) {
+                System.err.println("❌ StartingFile: Error during system initialization: " + e.getMessage());
+                e.printStackTrace();
+            }
+        };
+    }
 }

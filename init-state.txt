@@ -1,0 +1,28 @@
+# System Initialization Commands
+# This file contains the sequence of operations to initialize the system
+# Each line represents a command to be executed in order
+
+# Step 1: Register users
+guest-registration(moshe, moshePassword123)
+guest-registration(rina, rinaPassword123)
+
+# Step 2: Login as rina
+login(rina, rinaPassword123)
+
+# Step 3: Open store as rina
+open-store(rina, shoes, Fashion Shoes Store)
+
+# Step 4: Appoint moshe as manager
+appoint-manager(rina, shoes, moshe)
+
+# Step 5: Add some products to the store
+add-product(rina, shoes, Running Shoes, Comfortable running shoes, 89.99, 50, shoes)
+add-product(rina, shoes, Dress Shoes, Elegant dress shoes, 129.99, 30, shoes)
+
+# Step 6: Register another user for testing
+guest-registration(david, davidPassword123)
+
+# Step 7: Login as david
+login(david, davidPassword123)
+
+# System initialization complete - all operations should succeed 

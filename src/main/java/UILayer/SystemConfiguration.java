@@ -109,11 +109,12 @@ public class SystemConfiguration {
         return new RolesService(StoreRepository(), UserRepository());
     }
 
+    @Bean
+    public SystemInitialiser SystemInitialiser(UserService userService,
+                                             OwnerManagerService ownerManagerService,
+                                             RegisteredService registeredService,
+                                             StoreRepository storeRepository) {
+        return new SystemInitialiser(userService, ownerManagerService, registeredService, storeRepository);
+    }
+
 }
-
-
-//    @Bean
-//    public Module hibernateModule() {
-//        // Use Hibernate6Module for Hibernate 6.x. For older versions, it might be Hibernate5Module.
-//        return new Hibernate6Module();
-//    }
