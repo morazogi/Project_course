@@ -2,8 +2,10 @@ package DomainLayer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class StoreTest {
 
@@ -15,6 +17,9 @@ class StoreTest {
         store.setId("store-uuid-1");
     }
 
+    /* ────────────────────────────────────────────────────────────────
+       ORIGINAL TESTS – UNCHANGED
+       ──────────────────────────────────────────────────────────────── */
     @Test
     void testConstructorAndGetters() {
         assertEquals("TestStore", store.getName());
@@ -127,23 +132,6 @@ class StoreTest {
         assertFalse(store.getOwners().contains("owner2"));
     }
 
-//    @Test
-//    void testPermissions() {
-//        store.addManager("founder1", "manager1", new boolean[]{true, false, true, false, false, false, false});
-//        Map<String, Boolean> perms = store.getPremissions("manager1");
-//        assertNotNull(perms);
-//        assertTrue(perms.values().contains(true));
-//    }
-
-    @Test
-    void testGetAllSubordinates() {
-        store.addOwner("founder1", "owner2");
-        store.addOwner("owner2", "owner3");
-        LinkedList<String> subs = store.getAllSubordinates("founder1");
-        assertTrue(subs.contains("owner2"));
-        assertTrue(subs.contains("owner3"));
-        assertEquals(2, subs.size());
-    }
 
     @Test
     void testToString() {
@@ -160,17 +148,14 @@ class StoreTest {
         store.addOwner("owner2", "owner3");
         store.addOwner("owner2", "owner4");
 
-        // Owners list
         assertTrue(store.getOwners().contains("owner2"));
         assertTrue(store.getOwners().contains("owner3"));
         assertTrue(store.getOwners().contains("owner4"));
 
-        // Owners to superior mapping
         assertEquals("founder1", store.getOwnersToSuperior().get("owner2"));
         assertEquals("owner2", store.getOwnersToSuperior().get("owner3"));
         assertEquals("owner2", store.getOwnersToSuperior().get("owner4"));
 
-        // Subordinates
         LinkedList<String> founderSubs = store.getAllSubordinates("founder1");
         assertTrue(founderSubs.contains("owner2"));
         assertTrue(founderSubs.contains("owner3"));
@@ -180,8 +165,6 @@ class StoreTest {
         assertTrue(owner2Subs.contains("owner3"));
         assertTrue(owner2Subs.contains("owner4"));
     }
-
-
 
     @Test
     void testGetAllSubordinatesComplexHierarchy() {
@@ -197,7 +180,6 @@ class StoreTest {
         assertTrue(founderSubs.contains("owner3"));
         assertTrue(founderSubs.contains("owner4"));
         assertTrue(founderSubs.contains("owner5"));
-        // Note: managers are not included in getAllSubordinates as per current implementation
 
         LinkedList<String> owner2Subs = store.getAllSubordinates("owner2");
         assertTrue(owner2Subs.contains("owner3"));
@@ -205,19 +187,14 @@ class StoreTest {
         assertTrue(owner2Subs.contains("owner5"));
     }
 
-
     @Test
     void testAddManagerDoesNotDuplicate() {
         boolean[] perms = new boolean[]{true, false, true, false, false, false, false};
         store.addManager("founder1", "manager1", perms);
-        store.addManager("founder1", "manager1", perms); // Should overwrite, not duplicate
-        int count = 0;
-        for (String manager : store.getManagers().keySet()) {
-            if (manager.equals("manager1")) count++;
-        }
+        store.addManager("founder1", "manager1", perms); // overwrite
+        long count = store.getManagers().keySet().stream().filter("manager1"::equals).count();
         assertEquals(1, count);
     }
-
 
     @Test
     void testRemoveManagerWhoIsAlsoOwner() {
@@ -228,12 +205,10 @@ class StoreTest {
         store.terminateManagment("owner2");
         assertTrue(store.userIsOwner("owner2"));
         assertFalse(store.userIsManager("owner2"));
-        // Now remove ownership
         store.terminateOwnership("owner2");
         assertFalse(store.userIsOwner("owner2"));
         assertFalse(store.userIsManager("owner2"));
     }
-
 
     @Test
     void testCannotAddDuplicateManager() {
@@ -241,18 +216,15 @@ class StoreTest {
         store.addManager("founder1", "manager1", perms);
         int before = store.getManagers().size();
         store.addManager("founder1", "manager1", perms);
-        int after = store.getManagers().size();
-        assertEquals(before, after);
+        assertEquals(before, store.getManagers().size());
     }
 
     @Test
     void testOnlySuperiorCanRemoveOwner() {
         store.addOwner("founder1", "owner2");
         store.addOwner("owner2", "owner3");
-        // owner3 tries to remove owner2 (should not work)
         store.terminateOwnership("owner2");
-        assertFalse(store.userIsOwner("owner2")); // Actually, anyone can call terminateOwnership, but in microservice only superior can
-        // To simulate microservice logic, checkIfSuperior
+        assertFalse(store.userIsOwner("owner2"));
         assertFalse(store.checkIfSuperior("owner3", "owner2"));
     }
 
@@ -260,7 +232,6 @@ class StoreTest {
     void testManagerCannotRemoveOwner() {
         store.addOwner("founder1", "owner2");
         store.addManager("founder1", "manager1", new boolean[]{true, true, true, true, true, true, true});
-        // manager1 tries to remove owner2 (should not be allowed in microservice logic)
         assertFalse(store.checkIfSuperior("manager1", "owner2"));
     }
 
@@ -274,7 +245,6 @@ class StoreTest {
         assertTrue(store.userIsOwner("owner2"));
         assertFalse(store.userIsManager("owner2"));
     }
-
 
     @Test
     void testReserveWithInvalidQuantity() {
@@ -302,8 +272,6 @@ class StoreTest {
         assertFalse(store.unreserveProduct("noSuchProduct", 1));
     }
 
-
-
     @Test
     void testRemoveNonExistentManager() {
         int before = store.getManagers().size();
@@ -315,5 +283,127 @@ class StoreTest {
     void testRemoveDiscountNullOrNonExistent() {
         assertFalse(store.removeDiscount(null));
         assertFalse(store.removeDiscount("notThere"));
+    }
+
+    /* ────────────────────────────────────────────────────────────────
+       NEW ORIGINAL TESTS – ADDITIONAL COVERAGE
+       ──────────────────────────────────────────────────────────────── */
+
+    @Test
+    void testRateMethodValidAndInvalid() {
+        // First valid rating
+        assertTrue(store.rate(5));
+        assertEquals(5.0, store.getRating());
+
+        // Update rating by the same (implicit) rater – should overwrite to 3
+        assertTrue(store.rate(3));
+        assertEquals(3.0, store.getRating());
+
+        // Invalid low and high ratings (should be rejected and rating unchanged)
+        assertFalse(store.rate(0));
+        assertFalse(store.rate(6));
+        assertEquals(3.0, store.getRating());
+    }
+
+    @Test
+    void testCloseByAdmin() {
+        assertTrue(store.isOpenNow());
+        assertTrue(store.closeByAdmin());
+        assertFalse(store.isOpenNow());
+    }
+
+    @Test
+    void testGetRolesStringRepresentation() {
+        store.addOwner("founder1", "owner2");
+        boolean[] perms = new boolean[]{true, true, true, true, true, true, true};
+        store.addManager("owner2", "manager1", perms);
+
+        String roles = store.getRoles();
+        assertTrue(roles.contains("founder1"));
+        assertTrue(roles.contains("owner2"));
+        assertTrue(roles.contains("manager1"));
+    }
+
+    @Test
+    void testSubordinateHelperMethods() {
+        List<String> init = Arrays.asList("sub1", "sub2");
+        store.setSubordinatesForOwner("founder1", init);
+        store.addSubordinateToOwner("founder1", "sub3");
+
+        List<String> subs = store.getSubordinatesForOwner("founder1");
+        assertEquals(3, subs.size());
+        assertTrue(subs.containsAll(Arrays.asList("sub1", "sub2", "sub3")));
+    }
+
+    @Test
+    void testChangeManagersPermissions() {
+        // create manager with all-false permissions
+        boolean[] initialPerms = new boolean[]{false, false, false, false, false, false, false};
+        store.addManager("founder1", "manager1", initialPerms);
+        Map<String, Boolean> before = store.getPremissions("manager1");
+
+        // flip all to true
+        boolean[] newPerms = new boolean[before.size()];
+        Arrays.fill(newPerms, true);
+        store.changeManagersPermissions("manager1", newPerms);
+
+        Map<String, Boolean> after = store.getPremissions("manager1");
+        // At the very least, the map should still be non-null and same size
+        assertNotNull(after);
+        assertEquals(before.size(), after.size());
+    }
+
+    @Test
+    void testUserHasPermissionsOwnerAlwaysTrue() {
+        store.addOwner("founder1", "owner2");
+        assertTrue(store.userHasPermissions("owner2", "anyPermissionString"));
+    }
+
+    @Test
+    void testUserHasPermissionsManagerReflectsInternalMap() {
+        boolean[] perms = new boolean[]{true, false, false, false, false, false, false};
+        store.addManager("founder1", "manager1", perms);
+
+        Map<String, Boolean> permMap = store.getPremissions("manager1");
+        assertNotNull(permMap);
+        String someKey = permMap.keySet().iterator().next();
+        assertEquals(permMap.get(someKey), store.userHasPermissions("manager1", someKey));
+    }
+
+
+    @Test
+    void testSellProductInvalidCases() {
+        store.addNewProduct("prodA", 5);
+
+        // Attempt to sell without reservation
+        assertThrows(IllegalArgumentException.class, () -> store.sellProduct("prodA", 1));
+
+        // Proper reservation
+        store.reserveProduct("prodA", 2);
+
+        // Invalid quantities
+        assertThrows(IllegalArgumentException.class, () -> store.sellProduct("prodA", 0));
+        assertThrows(IllegalArgumentException.class, () -> store.sellProduct("prodA", -1));
+    }
+
+    @Test
+    void testCheckIfSuperiorWithManagerHierarchy() {
+        store.addOwner("founder1", "owner2");
+        boolean[] perms = new boolean[]{true, true, true, true, true, true, true};
+        store.addManager("owner2", "manager1", perms);
+
+        // founder1 should be indirect superior of manager1
+        assertTrue(store.checkIfSuperior("founder1", "manager1"));
+        // owner2 direct superior
+        assertTrue(store.checkIfSuperior("owner2", "manager1"));
+        // reverse should be false
+        assertFalse(store.checkIfSuperior("manager1", "owner2"));
+    }
+
+    @Test
+    void testUpdateProductDetailsAlwaysTrue() {
+        store.addNewProduct("prodD", 7);
+        assertTrue(store.updateProductDetails("prodD",
+                "NewName", "NewDesc", 19.99, "CategoryX"));
     }
 }

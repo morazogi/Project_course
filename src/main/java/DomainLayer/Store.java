@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import org.hibernate.boot.jaxb.mapping.ManagedType;
 
 import java.util.*;
 
@@ -181,11 +180,8 @@ public class Store {
     public Store(String founderID , String name) {
         this.name = name;
         founder = founderID;
-        owners.add(founderID);
-        ownersToSuperior.put(founderID, null); // Founder has no superior
-        ownerToSubordinates.put(founderID, new OwnerSubordinateEntry(this.id, founderID, this, new ArrayList<>()));
+        addOwner(founderID, founderID);
         openNow = true;
-
     }
     public Store() {
     }

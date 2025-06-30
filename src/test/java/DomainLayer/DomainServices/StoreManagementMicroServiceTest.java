@@ -3,6 +3,8 @@
    ──────────────────────────────────────────────────────────────── */
 package DomainLayer.DomainServices;
 
+import static DomainLayer.ManagerPermissions.PERM_MANAGE_STAFF;   // ← ensure constant is imported
+
 import DomainLayer.Roles.RegisteredUser;
 import DomainLayer.Store;
 import InfrastructureLayer.StoreRepository;
@@ -21,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static DomainLayer.ManagerPermissions.PERM_UPDATE_POLICY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -319,5 +322,174 @@ class StoreManagementMicroserviceTest {
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> svc.appointStoreFounder("someone","store"));
         assertTrue(ex.getMessage().contains("store founder can't be appointed"));
+    }
+
+    /* ─────────────────────────── ADDITIONAL EDGE & UTILITY TESTS ─────────────────────────── */
+
+    @Test
+    void updateManagerPermissions_missingStoreRepository_returnsFalse() {
+        // Simulate a broken configuration where the store repository is unavailable
+        svc.setRepositories(null, userRepo);
+
+        boolean ok = svc.updateManagerPermissions("founder", "store", "manager", new boolean[3]);
+        assertFalse(ok);
+        verify(store, never()).changeManagersPermissions(anyString(), any());
+    }
+
+    @Test
+    void removeStoreOwner_notSuperior_returnsFalse() {
+        when(store.checkIfSuperior("intruder", "candidate")).thenReturn(false);
+
+        boolean ok = svc.removeStoreOwner("intruder", "store", "candidate");
+        assertFalse(ok);
+        verify(store, never()).terminateOwnership(anyString());
+    }
+
+    @Test
+    void relinquishManagement_asFounder_returnsFalse() {
+        when(store.isFounder("founder")).thenReturn(true);
+        when(store.userIsManager("founder")).thenReturn(true);
+
+        boolean ok = svc.relinquishManagement("founder", "store");
+        assertFalse(ok);
+        verify(store, never()).terminateManagment(anyString());
+    }
+
+    @Test
+    void removeStoreOwnerWithUserSync_happyPath_updatesAllUsers() {
+        when(store.checkIfSuperior("founder", "candidate")).thenReturn(true);
+        when(store.getAllSubordinates("candidate")).thenReturn(new LinkedList<>(List.of("sub1", "sub2")));
+
+        boolean ok = svc.removeStoreOwnerWithUserSync("founder", "store", "candidate");
+        assertTrue(ok);
+
+        verify(store).terminateOwnership("candidate");
+        verify(candidate).removeStore("store");
+        verify(sub1).removeStore("store");
+        verify(sub2).removeStore("store");
+    }
+
+    @Test
+    void respondToManagerAppointment_accept_invokesAppointFlow() {
+        StoreManagementMicroservice spySvc = Mockito.spy(svc);
+        doReturn(true).when(spySvc).appointStoreManager(anyString(), anyString(), anyString(), any());
+
+        boolean ok = spySvc.respondToManagerAppointment("candidate", "store", true);
+        assertTrue(ok);
+        verify(spySvc).appointStoreManager(eq("candidate"), eq("store"), eq("candidate"), any());
+    }
+
+    @Test
+    void respondToManagerAppointment_decline_returnsFalse() {
+        assertFalse(svc.respondToManagerAppointment("candidate", "store", false));
+    }
+
+    @Test
+    void canUpdateDiscountPolicy_managerWithFlag_returnsTrue() {
+        when(store.userIsManager("manager")).thenReturn(true);
+        when(store.userHasPermissions("manager", PERM_UPDATE_POLICY)).thenReturn(true);
+
+        assertTrue(svc.canUpdateDiscountPolicy("manager", "store"));
+    }
+
+    @Test
+    void canUpdateDiscountPolicy_managerWithoutFlag_returnsFalse() {
+        when(store.userIsManager("manager")).thenReturn(true);
+        when(store.userHasPermissions("manager", PERM_UPDATE_POLICY)).thenReturn(false);
+
+        assertFalse(svc.canUpdateDiscountPolicy("manager", "store"));
+    }
+
+    @Test
+    void appointStoreOwner_intruderReappointsFounder_throws() {
+        // Intruder has no manage‑staff permission
+        when(store.userHasPermissions(eq("intruder"), eq(PERM_MANAGE_STAFF))).thenReturn(false);
+        // Founder already appears in owner list
+        when(store.getOwners()).thenReturn(List.of("founder"));
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> svc.appointStoreOwner("intruder", "store", "founder"));
+        assertEquals("User is already the founder of the store", ex.getMessage());
+    }
+
+    @Test
+    void appointStoreOwner_permissionMissingButFounderStillAppointed() {
+        // founder NOT yet in owners list → should proceed
+        when(store.userHasPermissions(eq("intruder"), eq(PERM_MANAGE_STAFF))).thenReturn(false);
+        when(store.getOwners()).thenReturn(List.of());
+
+        boolean ok = svc.appointStoreOwner("intruder", "store", "founder");
+        assertTrue(ok);
+        verify(store).addOwner("intruder", "founder");
+        verify(userRepo).update(founder);
+    }
+
+    @Test
+    void updateManagerPermissions_managerWithoutStaffPerm_returnsFalse() {
+        // Manager tries to edit their own permissions without the flag
+        when(store.userIsManager("manager")).thenReturn(true);
+        when(manager.isManagerOf("store")).thenReturn(true);
+        when(store.userHasPermissions("manager", PERM_MANAGE_STAFF)).thenReturn(false);
+        // Superior check will still be true (self‑superior allowed by code path)
+        when(store.checkIfSuperior("manager", "manager")).thenReturn(true);
+
+        boolean ok = svc.updateManagerPermissions("manager", "store", "manager", new boolean[3]);
+        assertFalse(ok);
+        verify(store, never()).changeManagersPermissions(anyString(), any());
+    }
+
+    @Test
+    void isFounderOwnerOrManager_managerViaUserRepo_returnsTrue() {
+        // Store unaware of manager, but User object knows
+        when(store.userIsManager("manager")).thenReturn(false);
+        when(manager.isManagerOf("store")).thenReturn(true);
+        assertTrue(svc.isFounderOwnerOrManager("manager", "store"));
+    }
+
+    @Test
+    void canUpdateDiscountPolicy_ownerOnlyInUserRepo_returnsTrue() {
+        // Store unaware that candidate is owner, but User object flags ownership
+        when(store.userIsOwner("candidate")).thenReturn(false);
+        when(candidate.isOwnerOf("store")).thenReturn(true);
+        assertTrue(svc.canUpdateDiscountPolicy("candidate", "store"));
+    }
+
+    @Test
+    void canUpdateDiscountPolicy_managerViaUserRepoWithFlag_returnsTrue() {
+        when(store.userIsManager("manager")).thenReturn(false);   // store unaware
+        when(manager.isManagerOf("store")).thenReturn(true);
+        when(store.userHasPermissions("manager", PERM_UPDATE_POLICY)).thenReturn(true);
+        assertTrue(svc.canUpdateDiscountPolicy("manager", "store"));
+    }
+
+    @Test
+    void removeManagerWithUserSync_updatesRepository() {
+        when(store.checkIfSuperior("founder", "manager")).thenReturn(true);
+        boolean ok = svc.removeManagerWithUserSync("founder", "store", "manager");
+        assertTrue(ok);
+        verify(store).terminateManagment("manager");
+        verify(manager).removeStore("store");
+    }
+
+    @Test
+    void relinquishManagerWithUserSync_happyPath_updatesEntities() {
+        when(store.userIsManager("manager")).thenReturn(true);
+        when(store.isFounder("manager")).thenReturn(false);
+
+        boolean ok = svc.relinquishManagerWithUserSync("manager", "store");
+        assertTrue(ok);
+        verify(store).terminateManagment("manager");
+        verify(manager).removeStore("store");
+        verify(storeRepo).update(store);
+        verify(userRepo).update(manager);
+    }
+
+    @Test
+    void sendManagementProposal_userAlreadyManager_noException() {
+        when(store.userIsOwner("manager")).thenReturn(false);
+        when(store.userIsManager("manager")).thenReturn(true); // Already manager, should early‑return
+
+        assertDoesNotThrow(() -> svc.sendManagementProposal("manager", "store", "pls manage"));
+        // No side‑effects expected, but at least we cover the branch
     }
 }
