@@ -1,49 +1,44 @@
 package InfrastructureLayer;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
+import DomainLayer.INotificationRepository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-
+import DomainLayer.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import utils.Notifications;
 
 @Repository
-public class NotificationRepository implements DomainLayer.INotificationRepository {
-    private Map<String, List<Notifications>> notifications = new HashMap<>();
-    private ObjectMapper mapper = new ObjectMapper();
+public class NotificationRepository implements IRepo<Notifications> {
 
-    public void addNotification(String recieverId, String notification) throws JsonProcessingException {
-        notifications.computeIfAbsent(recieverId, k -> new ArrayList<>()).add(mapper.readValue(notification, Notifications.class));
+    @Autowired
+    INotificationRepository repo;
+
+    public Notifications save(Notifications notifications) {
+        return repo.save(notifications);
+    }
+    public Notifications update(Notifications notifications) {
+        return repo.saveAndFlush(notifications);
+    }
+    public Notifications getById(String id) {
+        return repo.getReferenceById(id);
+    }
+    public List<Notifications> getAll() {
+        System.out.println("Calling repo.findAll()...");
+        List<Notifications> list = repo.findAll();
+        System.out.println("Got " + list.size() + " notifications");
+        return list;
+    }
+    public void deleteById(String notificationsID) {
+        repo.deleteById(notificationsID);
+    }
+    public void delete(Notifications notifications){
+        repo.delete(notifications);
+    }
+    public boolean existsById(String id){
+        return repo.existsById(id);
     }
 
-    public void removeNotification(String recieverId, String notification){
-        List<Notifications> recieverNotifications = notifications.get(recieverId);
-        if (recieverNotifications != null) {
-            recieverNotifications.removeIf(n -> n.getMessage().equals(notification));
-        }
-    }
+    public List<Notifications> findByUserID(String userId) { return repo.findByUserId(userId); }
+    public List<Notifications> findByStoreID(String storeId) { return repo.findByStoreId(storeId); }
 
-    public void clearNotifications(String recieverId) {
-        notifications.remove(recieverId);
-    }
-
-    public void clearAllNotifications() {
-        notifications.clear();
-    }
-
-    public List<String> getMyNotification(String recieverId) {
-        List<Notifications> recieverNotifications = notifications.get(recieverId);
-        if (recieverNotifications != null) {
-            return recieverNotifications.stream().map(Notifications::getMessage).toList();
-        }
-        return new ArrayList<>();
-    }
-
-
-
-    
 }

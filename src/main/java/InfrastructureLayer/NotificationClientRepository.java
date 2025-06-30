@@ -1,5 +1,6 @@
 package InfrastructureLayer;
 
+import DomainLayer.DomainServices.NotificationWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
@@ -24,7 +25,7 @@ public class NotificationClientRepository {
 
     public void connectToServer(String token) {
         try {
-            this.session = clientWebSocket.execute(notificationWebSocketHandler, URI.create("ws://localhost:8080/server?token=" + token).toString()).get();
+            this.session = clientWebSocket.execute(notificationWebSocketHandler, URI.create("ws://localhost:8080/ds-?token=" + token).toString()).get();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

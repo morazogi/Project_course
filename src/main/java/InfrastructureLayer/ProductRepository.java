@@ -2,180 +2,42 @@ package InfrastructureLayer;
 
 import DomainLayer.IProductRepository;
 import DomainLayer.Product;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.Optional;   // ← add this import
 
-public class ProductRepository implements IProductRepository {
+@Component
+public class ProductRepository implements IRepo<Product> {
+    @Autowired
+    IProductRepository repo;
 
-    @Override
-    public Optional<Product> findById(String id) {
-        return Optional.empty();
+    public Product save(Product product) {
+        return repo.save(product);
     }
-
-    @Override
-    public boolean existsById(String s) {
-        return false;
+    public Product update(Product product) {
+        return repo.save(product);
     }
-
-    @Override
-    public Optional<Product> findByName(String name) {
-        return Optional.empty();
+    public Product getById(String productID) {
+        return repo.findById(productID).orElse(null);
     }
-
-    @Override
-    public List<Product> findByCategory(String category) {
-        return List.of();
+    public List<Product> getAll() {
+        return repo.findAll();
     }
-
-    @Override
-    public List<Product> findByStoreId(String storeId) {
-        return List.of();
+    public void delete(Product product) {
+        repo.delete(product);
     }
-
-    @Override
-    public void flush() {
-
+    public void deleteById(String productID) {
+        repo.deleteById(productID);
     }
-
-    @Override
-    public <S extends Product> S saveAndFlush(S entity) {
-        return null;
+    public boolean existsById(String id){
+        return repo.existsById(id);
     }
-
-    @Override
-    public <S extends Product> List<S> saveAllAndFlush(Iterable<S> entities) {
-        return List.of();
+    public Product getProductByName(String productName) {return repo.findByNameContaining(productName); }
+    public Optional<Product> findById(String productID) {
+        return repo.findById(productID);   // Spring Data already returns Optional
     }
+    public List<Product> findAll() { return repo.findAll(); }
 
-    @Override
-    public void deleteAllInBatch(Iterable<Product> entities) {
 
-    }
-
-    @Override
-    public void deleteAllByIdInBatch(Iterable<String> strings) {
-
-    }
-
-    @Override
-    public void deleteAllInBatch() {
-
-    }
-
-    @Override
-    public Product getOne(String s) {
-        return null;
-    }
-
-    @Override
-    public Product getById(String s) {
-        return null;
-    }
-
-    @Override
-    public Product getReferenceById(String s) {
-        return null;
-    }
-
-    @Override
-    public <S extends Product> Optional<S> findOne(Example<S> example) {
-        return Optional.empty();
-    }
-
-    @Override
-    public <S extends Product> List<S> findAll(Example<S> example) {
-        return List.of();
-    }
-
-    @Override
-    public <S extends Product> List<S> findAll(Example<S> example, Sort sort) {
-        return List.of();
-    }
-
-    @Override
-    public <S extends Product> Page<S> findAll(Example<S> example, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public <S extends Product> long count(Example<S> example) {
-        return 0;
-    }
-
-    @Override
-    public <S extends Product> boolean exists(Example<S> example) {
-        return false;
-    }
-
-    @Override
-    public <S extends Product, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-        return null;
-    }
-
-    @Override
-    public <S extends Product> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends Product> List<S> saveAll(Iterable<S> entities) {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> findAll() {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> findAllById(Iterable<String> strings) {
-        return List.of();
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(String s) {
-
-    }
-
-    @Override
-    public void delete(Product entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends String> strings) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<? extends Product> entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
-    @Override
-    public List<Product> findAll(Sort sort) {
-        return List.of();
-    }
-
-    @Override
-    public Page<Product> findAll(Pageable pageable) {
-        return null;
-    }
 }

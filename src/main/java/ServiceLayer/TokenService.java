@@ -26,6 +26,8 @@ public class TokenService implements IToken {
     private final Set<String> suspendedUsers = new HashSet<>();
 
     public String generateToken(String username) {
+        if (suspendedUsers.contains(username))               // ← NEW: block suspended users
+            throw new IllegalArgumentException("User is suspended");
         EventLogger.logEvent(username ,"TokenService");
         String JWT = Jwts.builder()
                 .setSubject(username)
@@ -55,7 +57,7 @@ public class TokenService implements IToken {
     }
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+       return extractClaim(token, Claims::getSubject);
     }
 
     public Date extractExpiration(String token) {
@@ -63,6 +65,7 @@ public class TokenService implements IToken {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -76,14 +79,12 @@ public class TokenService implements IToken {
     }
 
     public void invalidateToken(String token) {
-        if (token == null || token.isEmpty()) {
-            throw new IllegalArgumentException("Token cannot be null or empty");
-        }
+        requireNonEmpty(token);
         if (blacklistedTokens.contains(token)) {
             throw new IllegalArgumentException("user not logged in");
         }
         blacklistedTokens.add(token);
-        activeTokens.remove(extractUsername(token) , token);
+        activeTokens.remove(token);     // ← remove by key (the token itself)
     }
 
     private static void requireNonEmpty(String token) {
@@ -92,35 +93,42 @@ public class TokenService implements IToken {
     }
 
 
-    public void suspendUser(String username){
-        if (username == null || username.isEmpty()) {
+    /*────────────────── suspension API ──────────────────*/
+
+    public void suspendUser(String username) {               // unchanged
+        if (username == null || username.isEmpty())
             throw new IllegalArgumentException("Username cannot be null or empty");
-        }
-        if (suspendedUsers.contains(username)) {
-            throw new IllegalArgumentException("User is already suspended");
-        }
-        suspendedUsers.add(username);
-        EventLogger.logEvent(username , "User suspended");
+
+        /* already suspended → nothing to do */
+        if (!suspendedUsers.add(username))
+            return;
+
+        /* log out every active session of this user */
+        activeTokens.entrySet().removeIf(e -> {
+            boolean sameUser = e.getValue().equals(username);
+            if (sameUser) blacklistedTokens.add(e.getKey());
+            return sameUser;
+        });
+
+        EventLogger.logEvent(username, "User suspended");
     }
 
-    public void unsuspendUser(String username) {
-        if (username == null || username.isEmpty()) {
+    public void unsuspendUser(String username) {             // ★ REWRITTEN
+        if (username == null || username.isEmpty())
             throw new IllegalArgumentException("Username cannot be null or empty");
+
+        /* if the user wasn’t suspended, just ignore */
+        if (!suspendedUsers.remove(username)) {
+            return;      // silently succeed instead of throwing
         }
-        if (!suspendedUsers.contains(username)) {
-            throw new IllegalArgumentException("User is not suspended");
-        }
-        suspendedUsers.remove(username);
-        EventLogger.logEvent(username , "User unsuspended");
+
+        EventLogger.logEvent(username, "User unsuspended");
     }
 
-    public List<String> showSuspended() {
-        List<String> suspendedList = new ArrayList<>();
-        for (String username : suspendedUsers) {
-            suspendedList.add(username);
-        }
-        return suspendedList;
+    public List<String> showSuspended() {                    // unchanged
+        return new ArrayList<>(suspendedUsers);
     }
+
 
     public String getToken(String username) {
         for(String token : activeTokens.keySet()) {

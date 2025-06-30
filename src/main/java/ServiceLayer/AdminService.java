@@ -4,16 +4,16 @@ import DomainLayer.DomainServices.AdminOperationsMicroservice;
 import DomainLayer.DomainServices.QueryMicroservice;
 import DomainLayer.IStoreRepository;
 import DomainLayer.IUserRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
 import jakarta.transaction.Transactional;
 
 public class AdminService {
     // Add new microservice
     private final AdminOperationsMicroservice adminService;
-    private final QueryMicroservice notificationService;
     private final TokenService tokenService;
 
-    public AdminService(IUserRepository userRepository, IStoreRepository storeRepository, QueryMicroservice notificationService, TokenService tokenService) {
-        this.notificationService = notificationService;
+    public AdminService(UserRepository userRepository, StoreRepository storeRepository, TokenService tokenService) {
         this.tokenService = tokenService;
         // Initialize new admin microservice
         this.adminService = new AdminOperationsMicroservice(userRepository, storeRepository);

@@ -15,7 +15,7 @@ public class ProductKeyDes extends KeyDeserializer {
                 key,   // id
                 "",    // storeId  (not needed for cart logic)
                 key,   // name     (also not needed)
-                "", 0, 0, 0.0 , ""     // description, price, qty, rating
+                 0, 0, 0.0 , ""     // description, price, qty, rating
         );
     }
 }

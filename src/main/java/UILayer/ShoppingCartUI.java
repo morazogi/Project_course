@@ -1,75 +1,62 @@
 package UILayer;
 
 import DomainLayer.IToken;
-import DomainLayer.IUserRepository;
-import DomainLayer.Roles.RegisteredUser;
-import DomainLayer.ShoppingCart;
-import ServiceLayer.ProductService;
+import InfrastructureLayer.UserRepository;
+import PresentorLayer.ButtonPresenter;
+import PresentorLayer.ProductPresenter;
 import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route("/shoppingcart")
 public class ShoppingCartUI extends VerticalLayout {
 
-    private final RegisteredService registeredService;
-    private final ProductService productService;
-    private final UserService userService;
-    private final IToken tokenService;
-    private final IUserRepository userRepository;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ProductPresenter productPresenter;
+    private final ButtonPresenter buttonPresenter;
 
     @Autowired
-    public ShoppingCartUI(RegisteredService configuredRegisteredService, ProductService configuredProductService, UserService configuredUserService, IToken configuredTokenService, IUserRepository configuredUserRepository) {
-        this.registeredService = configuredRegisteredService;
-        this.productService = configuredProductService;
-        this.userService = configuredUserService;
-        Button signOut = new Button("Sign out", e -> {
-            try {
-                String token = (String) UI.getCurrent().getSession().getAttribute("token");
-                UI.getCurrent().getSession().setAttribute("token", registeredService.logoutRegistered(token));
-                UI.getCurrent().navigate("");
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
-        }
-        );
+    public ShoppingCartUI(RegisteredService configuredRegisteredService, UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService,configuredUserRepository);
+        buttonPresenter = new ButtonPresenter(configuredRegisteredService, configuredTokenService);
 
-        Button homePage = new Button("Home page", e -> {
-            UI.getCurrent().navigate("");
-        });
+    }
 
-        add(new HorizontalLayout(signOut, new H1("Shopping cart"), homePage));
+    @PostConstruct
+    public void init() {
+        String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
 
-        this.tokenService = configuredTokenService;
-        this.userRepository = configuredUserRepository;
-        String token = (String) UI.getCurrent().getSession().getAttribute("user");
-        String username = tokenService.extractUsername(token);
-        String jsonUser = userRepository.getUser(username);
-        RegisteredUser user = null;
-        try {
-            user = mapper.readValue(jsonUser, RegisteredUser.class);
-        } catch (Exception e) {
+        add(new HorizontalLayout(buttonPresenter.signOutButton(token), new H1("Shopping cart"), buttonPresenter.homePageButton(token)));
 
-        }
+        add(productPresenter.getShoppingCart(token));
 
-        ShoppingCart shoppingCart = user.getShoppingCart();
-
-        add(new ProductListUI(shoppingCart, productService, userService));
-
-        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecart");}));
+        add(new Button("purchase cart", e -> {UI.getCurrent().navigate("/purchasecartfinal");}));
 
         setPadding(true);
         setAlignItems(Alignment.CENTER);
 
+    }
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

@@ -1,6 +1,8 @@
 package ServiceLayer;
 import DomainLayer.*;
 import DomainLayer.DomainServices.ShippingConnectivity;
+import InfrastructureLayer.GuestRepository;
+import InfrastructureLayer.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -10,21 +12,33 @@ public class ShippingService {
     private final ShippingConnectivity shippingConnectivity;
     private final IToken tokenService;
 
-    public ShippingService(IShipping ProxyShipping, IToken tokenService, IUserRepository userRepository) {
-        this.shippingConnectivity = new ShippingConnectivity(ProxyShipping, userRepository);
+    public ShippingService(IShipping ProxyShipping, IToken tokenService, UserRepository userRepository, GuestRepository guestRepository) {
+        this.shippingConnectivity = new ShippingConnectivity(ProxyShipping, userRepository, guestRepository);
         this.tokenService = tokenService;
     }
 
     @Transactional
-    public boolean processShipping(String token, String state, String city, String street, String homeNumber) {
+    public String processShipping(String token, String state, String city, String address, String name, String zip) {
         try {
             String username = tokenService.extractUsername(token);
-            shippingConnectivity.processShipping(username, state, city, street, homeNumber);
+            String result = shippingConnectivity.processShipping(username, state, city, address, name, zip);
             EventLogger.logEvent(username, "Shipping successful");
-            return true;
+            return result;
         } catch (Exception e) {
             ErrorLogger.logError(tokenService.extractUsername(token), "Error in shipping", e.getMessage());
-            return false;
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public String cancelShipping(String token, String id) {
+        try {
+            String response = shippingConnectivity.cancelShipping(tokenService.extractUsername(token), id);
+            EventLogger.logEvent(tokenService.extractUsername(token), "Successfully canceled shipping for cart");
+            return response;
+        } catch (Exception e) {
+            ErrorLogger.logError(tokenService.extractUsername(token), "Failed to cancel shipping" , e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 

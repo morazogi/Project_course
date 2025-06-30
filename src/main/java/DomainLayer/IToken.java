@@ -1,13 +1,8 @@
 package DomainLayer;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 
-import javax.crypto.SecretKey;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public interface IToken {
@@ -21,4 +16,5 @@ public interface IToken {
     public void suspendUser(String token);
     public void unsuspendUser(String token);
     public List<String> showSuspended();
+    public String getToken(String username);
 }

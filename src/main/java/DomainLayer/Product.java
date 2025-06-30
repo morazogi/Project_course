@@ -8,11 +8,12 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "product_id", nullable = false, updatable = false)
+    private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "storeID", referencedColumnName = "id")
+    // todo should there be a one to many annotation here?
+    @Column(name = "store_id", nullable = false)
     private String storeId;
 
     @Column(name = "name", nullable = false)
@@ -34,9 +35,9 @@ public class Product {
     private String category;
 
     // Constructors
-    public Product(String id, String storeId, String name, String description, float price , int quantity, double rating, String category) {
+    public Product(String storeId, String name, String description, float price , int quantity, double rating, String category) {
         if(quantity > 0) {
-            this.id = id;
+            // id is not needed because we are working with UUID
             this.storeId = storeId;
             this.name = name;
             this.description = description;
@@ -88,6 +89,14 @@ public class Product {
     }
 
     public boolean addRating(String username, double rate) {
-        return false;
+        if (rate < 1 || rate > 5) return false;
+
+        /* ignore default −1 / 0 when computing the first real vote */
+        if (this.rating <= 0)
+            this.rating = rate;
+        else
+            this.rating = (this.rating + rate) / 2.0;
+
+        return true;
     }
 }

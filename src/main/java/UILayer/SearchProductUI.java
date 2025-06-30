@@ -1,8 +1,13 @@
 package UILayer;
 
+import DomainLayer.IToken;
+import DomainLayer.IUserRepository;
 import DomainLayer.Product;
 import DomainLayer.Store;
-import ServiceLayer.ProductService;
+import InfrastructureLayer.UserRepository;
+import PresentorLayer.ButtonPresenter;
+import PresentorLayer.ProductPresenter;
+import ServiceLayer.RegisteredService;
 import ServiceLayer.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,21 +22,18 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Route("/searchproduct")
 public class SearchProductUI extends VerticalLayout {
 
-    private final ProductService productService;
-    private final UserService userService;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ProductPresenter productPresenter;
 
     @Autowired
-    public SearchProductUI(ProductService configuredProductService, UserService configuredUserService) {
-        this.productService = configuredProductService;
-        this.userService = configuredUserService;
+    public SearchProductUI(UserService configuredUserService, IToken configuredTokenService, UserRepository configuredUserRepository) {
+        productPresenter = new ProductPresenter(configuredUserService, configuredTokenService, configuredUserRepository);
         String token = (String) UI.getCurrent().getSession().getAttribute("token");
+        connectToWebSocket(token);
+
         TextField lowestPrice = new TextField("lowest price");
         TextField highestPrice = new TextField("highest price");
         TextField lowestProductRating = new TextField("lowest product rating");
@@ -42,85 +44,30 @@ public class SearchProductUI extends VerticalLayout {
 
         TextField productName = new TextField("product name");
         Button searchProduct = new Button("search product by name", e -> {
-            try {
-                Optional<Product> items = productService.getProductByName(productName.getValue());
-                List<Product> products = items.stream().map(item -> {
-                    try {
-                        return item;
-                    } catch (Exception exception) {
-                        return null;
-                    }
-                }).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating.getValue()))
-                        .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating.getValue()))
-                        .filter(item -> category.equals("") ? true : item.getCategory().equals(category.getValue()))
-                        .filter(item -> {
-                            try {
-                                return lowestStoreRating.equals("") ? true : mapper.readValue(userService.getStoreById(item.getStoreId(), token), Store.class).getRating() >= Integer.valueOf(lowestStoreRating.getValue());
-                            } catch (JsonProcessingException ex) {
-                                Notification.show(ex.getMessage());
-                                return false;
-                            }
-                        })
-                        .filter(item -> {
-                            try {
-                                return highestStoreRating.equals("") ? true : mapper.readValue(userService.getStoreById(item.getStoreId(), token), Store.class).getRating() <= Integer.valueOf(highestStoreRating.getValue());
-                            } catch (JsonProcessingException ex) {
-                                Notification.show(ex.getMessage());
-                                return false;
-                            }
-                        })
-                        .toList();
-                for (Product product : products) {
-                    add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
-                }
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
+            add(productPresenter.searchProductByName(token, productName.getValue(), lowestPrice.getValue(), highestPrice.getValue(), lowestProductRating.getValue(), highestProductRating.getValue(), category.getValue(),lowestStoreRating.getValue(), highestStoreRating.getValue()));
         });
 
         TextField categoryName = new TextField("category name");
         Button searchProductByCategory = new Button("search product by category", e -> {
-            try {
-                List<Product> items = productService.getProductByCategory(categoryName.getValue());
-                List<Product> products = items.stream().map(item -> {
-                            try {
-                                return item;
-                            } catch (Exception exception) {
-                                return null;
-                            }
-                        }).filter(item -> lowestPrice.equals("") ? true : item.getPrice() >= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> highestPrice.equals("") ? true : item.getPrice() <= Integer.valueOf(lowestPrice.getValue()))
-                        .filter(item -> lowestProductRating.equals("") ? true : item.getRating() >= Integer.valueOf(lowestProductRating.getValue()))
-                        .filter(item -> highestProductRating.equals("") ? true : item.getRating() <= Integer.valueOf(highestProductRating.getValue()))
-                        .filter(item -> category.equals("") ? true : item.getCategory().equals(category.getValue()))
-                        .filter(item -> {
-                            try {
-                                return lowestStoreRating.equals("") ? true : mapper.readValue(userService.getStoreById(item.getStoreId(), token), Store.class).getRating() >= Integer.valueOf(lowestStoreRating.getValue());
-                            } catch (JsonProcessingException ex) {
-                                Notification.show(ex.getMessage());
-                                return false;
-                            }
-                        })
-                        .filter(item -> {
-                            try {
-                                return highestStoreRating.equals("") ? true : mapper.readValue(userService.getStoreById(item.getStoreId(), token), Store.class).getRating() <= Integer.valueOf(highestStoreRating.getValue());
-                            } catch (JsonProcessingException ex) {
-                                Notification.show(ex.getMessage());
-                                return false;
-                            }
-                        })
-                        .toList();
-                for (Product product : products) {
-                    add(new Button(product.getName() + "\n" + product.getPrice(), choose -> {UI.getCurrent().navigate("/product/" + product.getId() + "/" + product.getStoreId());}));
-                }
-            } catch (Exception exception) {
-                Notification.show(exception.getMessage());
-            }
+            add(productPresenter.searchProductByCategory(token, productName.getValue(), lowestPrice.getValue(), highestPrice.getValue(), lowestProductRating.getValue(), highestProductRating.getValue(), category.getValue(),lowestStoreRating.getValue(), highestStoreRating.getValue()));
         });
 
 
         add(new H1("search products"), new HorizontalLayout(lowestPrice, highestPrice, lowestProductRating, highestProductRating, category, lowestStoreRating, highestStoreRating), new HorizontalLayout(productName, searchProduct), new HorizontalLayout(categoryName, searchProductByCategory));
+    }
+    public void connectToWebSocket(String token) {
+        UI.getCurrent().getPage().executeJs("""
+                window._shopWs?.close();
+                window._shopWs = new WebSocket('ws://'+location.host+'/ws?token='+$0);
+                window._shopWs.onmessage = ev => {
+                  const txt = (()=>{try{return JSON.parse(ev.data).message}catch(e){return ev.data}})();
+                  const n = document.createElement('vaadin-notification');
+                  n.renderer = r => r.textContent = txt;
+                  n.duration = 5000;
+                  n.position = 'top-center';
+                  document.body.appendChild(n);
+                  n.opened = true;
+                };
+                """, token);
     }
 }

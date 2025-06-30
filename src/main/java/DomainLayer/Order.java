@@ -1,17 +1,16 @@
 package DomainLayer;
 
-import java.util.*;
 import jakarta.persistence.*;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true)
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     @Column(name = "info", nullable = false, columnDefinition = "TEXT")
     private final String info;

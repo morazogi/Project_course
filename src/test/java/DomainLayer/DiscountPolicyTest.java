@@ -1,280 +1,311 @@
-//package DomainLayer;
-//
-//import DomainLayer.*;
-//import DomainLayer.DomainServices.DiscountPolicyMicroservice;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//
-//import java.util.*;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//
-//public class DiscountPolicyTest {
-//
-//    /* ───────────────────────── In-memory stub repositories ───────────────────────── */
-//
-//    private static final class InMemoryStoreRepository implements IStoreRepository {
-//        private final Map<String, String> stores = new HashMap<>();
-//
-//        @Override public void addStore(String id, String json)     { stores.put(id, json); }
-//        @Override public void removeStore(String id)               { stores.remove(id); }
-//        @Override public void updateStore(String id, String json)  { stores.put(id, json); }
-//        @Override public String getStore(String id)                { return stores.get(id); }
-//        @Override public List<String> findAll()                    { return new ArrayList<>(stores.keySet()); }
-//        @Override public Map<String, String> getStores()           { return stores; }
-//    }
-//
-//    private static final class InMemoryProductRepository implements IProductRepository {
-//        private final Map<String, Product> products = new HashMap<>();
-//
-//        /* mandatory interface methods */
-//        @Override public void            save(Product product)                   { products.put(product.getId(), product); }
-//        @Override public Optional<Product> findById(String id)                   { return Optional.ofNullable(products.get(id)); }
-//        @Override public Optional<Product> findByName(String name)               {
-//            return products.values().stream().filter(p -> p.getName().equals(name)).findFirst();
-//        }
-//        @Override public List<Product>   findAll()                               { return new ArrayList<>(products.values()); }
-//        @Override public void            deleteById(String id)                   { products.remove(id); }
-//        @Override public Product         getProduct(String id)                   { return products.get(id); }
-//
-//        /* convenience helper for the test fixture */
-//        void add(Product p) { save(p); }
-//    }
-//
-//    private static final class InMemoryDiscountRepository implements IDiscountRepository {
-//        private final Map<String, Discount> map = new HashMap<>();
-//
-//        @Override public boolean  add   (Discount d) { return map.putIfAbsent(d.getId(), d) == null; }
-//        @Override public boolean  update(Discount d) { return map.replace(d.getId(), d) != null; }
-//        @Override public Discount remove(String id)  { return map.remove(id); }
-//        @Override public Discount find  (String id)  { return map.get(id); }
-//        @Override public Map<String, Discount> getAll() { return Collections.unmodifiableMap(map); }
-//    }
-//
-//    private static final class InMemoryUserRepository implements IUserRepository {
-//        private final Map<String, String> usersJson  = new HashMap<>();
-//        private final Map<String, String> usersPass  = new HashMap<>();
-//
-//        @Override public boolean addUser(String username, String password, String json) {
-//            boolean fresh = !usersJson.containsKey(username);
-//            usersJson.put(username, json);
-//            usersPass.put(username, password);
-//            return fresh;
-//        }
-//        @Override public String  getUserPass(String username)             { return usersPass.get(username); }
-//        @Override public boolean isUserExist(String username)             { return usersJson.containsKey(username); }
-//        @Override public boolean update(String name, String json)         {
-//            if (!usersJson.containsKey(name)) return false;
-//            usersJson.put(name, json);
-//            return true;
-//        }
-//        @Override public String  getUser(String username)                 { return usersJson.get(username); }
-//    }
-//
-//    /* ───────────────────────────── Test-wide fixtures ───────────────────────────── */
-//
-//    private Product tablet;
-//    private Product phone;
-//
-//    private InMemoryStoreRepository    storeRepo;
-//    private InMemoryProductRepository  productRepo;
-//    private InMemoryDiscountRepository discountRepo;
-//    private InMemoryUserRepository     userRepo;
-//
-//    private DiscountPolicyMicroservice svc;
-//    private Store  store;
-//    private String storeId;
-//    private String ownerId;
-//
-//    /* ───────────────────────────────── set-up ──────────────────────────────────── */
-//
-//    @BeforeEach
-//    void setUp() throws Exception {
-//        storeRepo    = new InMemoryStoreRepository();
-//        productRepo  = new InMemoryProductRepository();
-//        discountRepo = new InMemoryDiscountRepository();
-//        userRepo     = new InMemoryUserRepository();
-//
-//        /* test products */
-//        tablet = new Product(UUID.randomUUID().toString(), "store123",
-//                "Tablet", "High-end gaming tablet",
-//                100, 10, 4.5, "Electronics");
-//        phone  = new Product(UUID.randomUUID().toString(), "store123",
-//                "Phone", "Flagship smartphone",
-//                100, 10, 4.5, "Electronics");
-//        productRepo.add(tablet);
-//        productRepo.add(phone);
-//
-//        /* test store + owner */
-//        store   = new Store("founder", "TestStore");
-//        ownerId = store.getFounder();
-//        storeId = store.getId();
-//        storeRepo.addStore(storeId, new ObjectMapper().writeValueAsString(store));
-//
-//        /* service under test */
-//        svc = new DiscountPolicyMicroservice(storeRepo, userRepo, productRepo, discountRepo);
-//    }
-//
-//    /* ───────────────────────────── helper methods ───────────────────────────── */
-//
-//    private void add(String discId,
-//                     float level, float logicComp, float numericComp,
-//                     List<String> nested, float pct, String target,
-//                     float conditional, float limiter, String conditionalTarget) {
-//        boolean added = svc.addDiscountToDiscountPolicy(
-//                ownerId, storeId, discId,
-//                discId, level, logicComp, numericComp,
-//                nested, pct, target,
-//                conditional, limiter, conditionalTarget
-//        );
-//
-//        /* if permission plumbing blocks the call, insert directly */
-//        if (!added) {
-//            Discount d = new Discount(
-//                    discId, storeId,
-//                    level, logicComp, numericComp,
-//                    nested, pct, target,
-//                    conditional, limiter, conditionalTarget
-//            );
-//            discountRepo.add(d);
-//            store.getDiscountPolicy().add(discId);
-//            try {
-//                storeRepo.updateStore(storeId, new ObjectMapper().writeValueAsString(store));
-//            } catch (JsonProcessingException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
-//
-//    private float price(Map<Product, Integer> cart) {
-//        Map<String, Integer> idQty = new HashMap<>();
-//        for (var e : cart.entrySet()) idQty.put(e.getKey().getId(), e.getValue());
-//        return svc.calculatePrice(storeId, idQty);
-//    }
-//
-//    /* ─────────────────────────────────  tests  ───────────────────────────────── */
-//
-//    @Test
-//    void stackedProductDiscounts() {
-//        add("d1", 1, -1, 2, List.of(), 0.10f, "Tablet", -1, -1, "");
-//        add("d2", 1, -1, 2, List.of(), 0.20f, "Tablet", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1, phone, 1);
-//
-//        assertEquals(172.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void categoryDiscount() {
-//        add("d3", 2, -1, 2, List.of(), 0.15f, "Electronics", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1, phone, 2);
-//
-//        assertEquals(255.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void quantityConditionalDiscount() {
-//        add("d4", 1, -1, 2, List.of(), 0.20f, "Phone", 2, 3, "Phone");
-//
-//        Map<Product, Integer> cart = Map.of(phone, 3, tablet, 1);
-//
-//        assertEquals(340.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void storeWideDiscount() {
-//        add("d5", 3, -1, 2, List.of(), 0.10f, "", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 2, phone, 2);
-//
-//        assertEquals(360.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void orLogicDiscount() {
-//        add("n1", 1, -1, -1, List.of(), 0f, "Tablet", 2, 1, "Tablet");
-//        add("n2", 1, -1, -1, List.of(), 0f, "Phone", 2, 1, "Phone");
-//        add("d6", 1, 3, 2, List.of("n1", "n2"), 0.10f, "", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1);
-//
-//        assertEquals(90.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void andLogicDiscount() {
-//        add("n3", -1, -1, -1, List.of(), 0f, "", 2, 2, "Tablet");
-//        add("n4", -1, -1, -1, List.of(), 0f, "", 1, 250, "");
-//        add("d7", 3, 2, -1, List.of("n3", "n4"), 0.10f, "", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 2, phone, 1);
-//
-//        assertEquals(270.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void storeWideMinTotal() {
-//        add("d8", 3, -1, -1, List.of(), 0.10f, "", 1, 300, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 3);
-//
-//        assertEquals(270.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void categoryProductStacking() {
-//        add("d9", 2, -1, 2, List.of(), 0.10f, "Electronics", -1, -1, "");
-//        add("d10", 1, -1, 2, List.of(), 0.05f, "Tablet", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1);
-//
-//        assertEquals(85.5f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void conditionalQuantityNotMet() {
-//        add("d11", 1, -1, 2, List.of(), 0.20f, "Phone", 2, 3, "Phone");
-//
-//        Map<Product, Integer> cart = Map.of(phone, 2, tablet, 1);
-//
-//        assertEquals(300.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void maximumNestedDiscount() {
-//        add("n5", 1, -1, 2, List.of(), 0.10f, "Tablet", -1, -1, "");
-//        add("n6", 1, -1, 2, List.of(), 0.20f, "Tablet", -1, -1, "");
-//        add("d12", 1, -1, 1, List.of("n5", "n6"), 0f, "Tablet", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1);
-//
-//        assertEquals(52.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void removeDiscount() {
-//        add("d13", 1, -1, 2, List.of(), 0.10f, "Tablet", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1);
-//        assertEquals(90.0f, price(cart), 0.001f);
-//
-//        svc.removeDiscountFromDiscountPolicy(ownerId, storeId, "d13");
-//        assertEquals(100.0f, price(cart), 0.001f);
-//    }
-//
-//    @Test
-//    void removeNestedDiscount() {
-//        add("n7", 1, -1, 2, List.of(), 0.20f, "Tablet", -1, -1, "");
-//        add("d14", 1, -1, 1, List.of("n7"), 0f, "Tablet", -1, -1, "");
-//
-//        Map<Product, Integer> cart = Map.of(tablet, 1);
-//        assertEquals(60.0f, price(cart), 0.001f);
-//
-//        svc.removeDiscountFromDiscountPolicy(ownerId, storeId, "n7");
-//        assertEquals(100.0f, price(cart), 0.001f);
-//    }
-//}
+package DomainLayer;
+
+import DomainLayer.DomainServices.DiscountPolicyMicroservice;
+import InfrastructureLayer.DiscountRepository;
+import InfrastructureLayer.ProductRepository;
+import InfrastructureLayer.StoreRepository;
+import InfrastructureLayer.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class DiscountPolicyTest {
+
+    /* ------------ mocked repositories ------------ */
+    @Mock StoreRepository    storeRepo;
+    @Mock UserRepository     userRepo;
+    @Mock ProductRepository  productRepo;
+    @Mock DiscountRepository discountRepo;
+
+    private DiscountPolicyMicroservice service;
+
+    /* ------------ domain helpers ------------ */
+    private Store   store;
+    private Product p1;
+    private Product p2;
+
+    /* ------------ discount IDs ------------ */
+    private final String productDiscId   = "disc-prod";
+    private final String innerCatDiscId1 = "disc-cat-10";
+    private final String innerCatDiscId2 = "disc-cat-20";
+    private final String catDiscId       = "disc-cat";
+    private final String storeDiscId     = "disc-store";
+    private final String qMin3Id         = "disc-qMin3";
+    private final String qMax6AndId      = "disc-qMax6";
+
+    @BeforeEach
+    void init() {
+        service = new DiscountPolicyMicroservice(
+                storeRepo, userRepo, productRepo, discountRepo);
+
+        store = new Store("store-1", "owner-1");
+        when(storeRepo.getById(store.getId())).thenReturn(store);
+
+        p1 = new Product(store.getId(), "Apple", "", 15f, 100, 0d, "Food");
+        p1.setId("p1");
+        p2 = new Product(store.getId(), "Headphones", "", 22f, 100, 0d, "Tech");
+        p2.setId("p2");
+        when(productRepo.getById(p1.getId())).thenReturn(p1);
+        when(productRepo.getById(p2.getId())).thenReturn(p2);
+
+        Discount productDisc = new Discount(
+                store.getId(), 1, 0, 2,
+                List.of(), .10f, "Apple",
+                0, 0, "");
+        productDisc.setId(productDiscId);
+        when(discountRepo.getById(productDiscId)).thenReturn(productDisc);
+
+        Discount inner10 = new Discount(store.getId(), 1,0,0,
+                List.of(), .10f, "", 0,0,"");
+        inner10.setId(innerCatDiscId1);
+        Discount inner20 = new Discount(store.getId(), 1,0,0,
+                List.of(), .20f, "", 0,0,"");
+        inner20.setId(innerCatDiscId2);
+        when(discountRepo.getById(innerCatDiscId1)).thenReturn(inner10);
+        when(discountRepo.getById(innerCatDiscId2)).thenReturn(inner20);
+
+        Discount catDisc = new Discount(
+                store.getId(), 2, 0, 1,
+                List.of(innerCatDiscId1, innerCatDiscId2),
+                .05f, "Food",
+                0, 0, "");
+        catDisc.setId(catDiscId);
+        when(discountRepo.getById(catDiscId)).thenReturn(catDisc);
+
+        Discount storeDisc = new Discount(
+                store.getId(), 3, 0, 2,
+                List.of(), .15f, "",
+                1, 50, "");
+        storeDisc.setId(storeDiscId);
+        when(discountRepo.getById(storeDiscId)).thenReturn(storeDisc);
+
+        Discount qMin3 = new Discount(
+                store.getId(), 1, 0, 2,
+                List.of(),
+                .10f, "Apple",
+                2, 3, "Apple");
+        qMin3.setId(qMin3Id);
+        when(discountRepo.getById(qMin3Id)).thenReturn(qMin3);
+
+        Discount qMax6And = new Discount(
+                store.getId(), 1, 2, 2,
+                List.of(qMin3Id),
+                .15f, "Apple",
+                3, 6, "Apple");
+        qMax6And.setId(qMax6AndId);
+        when(discountRepo.getById(qMax6AndId)).thenReturn(qMax6And);
+    }
+
+    @Test
+    void calculatePrice_noDiscounts_returnsFullPrice() {
+        store.setDiscountPolicy(List.of());
+        float total = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1, p2.getId(), 1));
+        assertEquals(37f, total);
+    }
+
+    @Test
+    void calculatePrice_productLevelMultiplication_appliesOnlyToThatProduct() {
+        store.setDiscountPolicy(List.of(productDiscId));
+        float total = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 2, p2.getId(), 1));
+        assertEquals(49f, total);
+    }
+
+    @Test
+    void calculatePrice_categoryLevelMaximum_takesHighestOfNested() {
+        store.setDiscountPolicy(List.of(catDiscId));
+        float total = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1, p2.getId(), 1));
+        assertEquals(34f, total);
+    }
+
+    @Test
+    void calculatePrice_storeWideMinPriceCondition_onlyIfThresholdMet() {
+        store.setDiscountPolicy(List.of(storeDiscId));
+
+        float below = service.calculatePrice(store.getId(),
+                Map.of(p1.getId(), 1));
+        assertEquals(15f, below);
+
+        float above = service.calculatePrice(store.getId(),
+                Map.of(p1.getId(), 2, p2.getId(), 1));
+        assertEquals(52f * 0.85f, above);
+    }
+
+    @Test
+    void compositeMinAndMaxQuantity_onlyBetweenThreeAndSix() {
+        store.setDiscountPolicy(List.of(qMax6AndId));
+
+        float twoApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 2));
+        assertEquals(30f, twoApples);
+
+        float fourApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 4));
+        assertEquals(4 * 15f * 0.765f, fourApples, 0.001);
+
+        float sixApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 6));
+        assertEquals(6 * 15f * 0.765f, sixApples, 0.001);
+
+        float sevenApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 7));
+        assertEquals(105f, sevenApples);
+    }
+
+    @Test
+    void orComposition_allDiscountsApplyWhenAnyConditionTrue() {
+        Discount d10 = new Discount(store.getId(), 1, 0, 2,
+                List.of(), .10f, "Apple", 2, 2, "Apple");
+        d10.setId("d10or");
+        when(discountRepo.getById("d10or")).thenReturn(d10);
+
+        Discount d15 = new Discount(store.getId(), 1, 0, 2,
+                List.of(), .15f, "Apple", 2, 5, "Apple");
+        d15.setId("d15or");
+        when(discountRepo.getById("d15or")).thenReturn(d15);
+
+        Discount orGroup = new Discount(store.getId(), 1, 3, 2,
+                List.of("d10or", "d15or"), 0f, "", 0,0,"");
+        orGroup.setId("or");
+        when(discountRepo.getById("or")).thenReturn(orGroup);
+
+        store.setDiscountPolicy(List.of("or"));
+
+        float threeApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 3));
+        assertEquals(3 * 15f * 0.9f * 0.85f, threeApples, 0.001);
+
+        float oneApple = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1));
+        assertEquals(15f, oneApple);
+    }
+
+    @Test
+    void xorComposition_allDiscountsApplyOnlyWhenExactlyOneConditionTrue() {
+        Discount d10 = new Discount(store.getId(), 1, 0, 2,
+                List.of(), .10f, "Apple", 2, 2, "Apple");
+        d10.setId("d10");
+        when(discountRepo.getById("d10")).thenReturn(d10);
+
+        Discount d15 = new Discount(store.getId(), 1, 0, 2,
+                List.of(), .15f, "Apple", 2, 5, "Apple");
+        d15.setId("d15");
+        when(discountRepo.getById("d15")).thenReturn(d15);
+
+        Discount xorGroup = new Discount(store.getId(), 1, 1, 2,
+                List.of("d10", "d15"), 0f, "", 0,0,"");
+        xorGroup.setId("xor");
+        when(discountRepo.getById("xor")).thenReturn(xorGroup);
+
+        store.setDiscountPolicy(List.of("xor"));
+
+        float threeApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 3));
+        assertEquals(3 * 15f * 0.9f * 0.85f, threeApples, 0.001);
+
+        float fiveApples = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 5));
+        assertEquals(75f, fiveApples);
+    }
+
+    @Test
+    void andComposition_allDiscountsApplyWhenAllConditionsTrue() {
+        Discount d10 = new Discount(store.getId(), 1, 0, 2,
+                List.of(), .10f, "Apple", 2, 1, "Apple");
+        d10.setId("and10");
+        when(discountRepo.getById("and10")).thenReturn(d10);
+
+        Discount d15 = new Discount(store.getId(), 3, 0, 2,
+                List.of(), .15f, "", 1, 20, "");
+        d15.setId("and15");
+        when(discountRepo.getById("and15")).thenReturn(d15);
+
+        Discount andGroup = new Discount(store.getId(), 1, 2, 2,
+                List.of("and10", "and15"), 0f, "", 0,0,"");
+        andGroup.setId("and");
+        when(discountRepo.getById("and")).thenReturn(andGroup);
+
+        store.setDiscountPolicy(List.of("and"));
+
+        float price = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 2, p2.getId(), 1));
+        assertEquals((2 * 15f + 22f) * 0.9f * 0.85f, price, 0.001);
+    }
+
+    @Test
+    void andComposition_noDiscountWhenAnyConditionFalse() {
+        Discount d10 = new Discount(store.getId(), 1, 0, 2,
+                List.of(), .10f, "Apple", 2, 5, "Apple");
+        d10.setId("andFalse10");
+        when(discountRepo.getById("andFalse10")).thenReturn(d10);
+
+        Discount d15 = new Discount(store.getId(), 3, 0, 2,
+                List.of(), .15f, "", 1, 100, "");
+        d15.setId("andFalse15");
+        when(discountRepo.getById("andFalse15")).thenReturn(d15);
+
+        Discount andGroup = new Discount(store.getId(), 1, 2, 2,
+                List.of("andFalse10", "andFalse15"), 0f, "", 0,0,"");
+        andGroup.setId("andFalse");
+        when(discountRepo.getById("andFalse")).thenReturn(andGroup);
+
+        store.setDiscountPolicy(List.of("andFalse"));
+
+        float price = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1));
+        assertEquals(15f, price);
+    }
+
+    @Test
+    void undefinedSingleDiscount_conditionFalse_noDiscount() {
+        Discount big = new Discount(store.getId(), 3, 0, 2,
+                List.of(), .30f, "", 1, 100, "");
+        big.setId("single");
+        when(discountRepo.getById("single")).thenReturn(big);
+
+        store.setDiscountPolicy(List.of("single"));
+
+        float price = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1));
+        assertEquals(15f, price);
+    }
+
+    @Test
+    void additiveClamp_totalCannotGoBelowZero() {
+        Discount d70 = new Discount(store.getId(), 1, 0, 0,
+                List.of(), .70f, "Apple", 0,0,"");
+        d70.setId("d70");
+        when(discountRepo.getById("d70")).thenReturn(d70);
+
+        Discount d40 = new Discount(store.getId(), 1, 0, 0,
+                List.of(), .40f, "Apple", 0,0,"");
+        d40.setId("d40");
+        when(discountRepo.getById("d40")).thenReturn(d40);
+
+        Discount group = new Discount(store.getId(), 1, 3, 0,
+                List.of("d70", "d40"), 0f, "", 0,0,"");
+        group.setId("addClamp");
+        when(discountRepo.getById("addClamp")).thenReturn(group);
+
+        store.setDiscountPolicy(List.of("addClamp"));
+
+        float price = service.calculatePrice(
+                store.getId(), Map.of(p1.getId(), 1));
+        assertEquals(0f, price);
+    }
+
+}
