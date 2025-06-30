@@ -8,8 +8,10 @@ import DomainLayer.Roles.RegisteredUser;
 import InfrastructureLayer.StoreRepository;
 import InfrastructureLayer.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import DomainLayer.Roles.RegisteredUser;                 // ★ NEW
 
 import static DomainLayer.ManagerPermissions.PERM_MANAGE_STAFF;
+import static DomainLayer.ManagerPermissions.PERM_UPDATE_POLICY;   // ★ NEW
 
 
 public class StoreManagementMicroservice {
@@ -418,6 +420,58 @@ public class StoreManagementMicroservice {
             }
             return true;
         }
+        return false;
+    }
+
+
+
+
+
+
+    /**
+     * Authorises a user to edit the discount-/purchase-policy of {@code storeId}.
+     * <p>Rule:
+     * <ul>
+     *   <li>founder or owner → allowed,</li>
+     *   <li>otherwise a manager <em>with</em> the {@code PERM_UPDATE_POLICY} flag.</li>
+     * </ul>
+     */
+
+
+
+
+    public boolean isFounderOwnerOrManager(String userId, String storeId) {
+        Store           store = getStoreById(storeId);
+        RegisteredUser  user  = null;
+        try { user = getUserById(userId); } catch (Exception ignore) {}
+
+        return
+                (store != null && (store.isFounder(userId) || store.userIsOwner(userId) || store.userIsManager(userId)))
+                        || (user  != null && (user.isOwnerOf(storeId)   || user.isManagerOf(storeId)));
+    }
+
+    /**
+     * True iff user may update discount / purchase policy:<br>
+     * • founder or owner → always yes<br>
+     * • manager → only if {@code PERM_UPDATE_POLICY} flag is set.
+     */
+    public boolean canUpdateDiscountPolicy(String userId, String storeId) {
+        Store           store = getStoreById(storeId);
+        RegisteredUser  user  = null;
+        try { user = getUserById(userId); } catch (Exception ignore) {}
+
+        /* ① founders / owners */
+        if (store != null && (store.isFounder(userId) || store.userIsOwner(userId)))
+            return true;
+        if (user != null && user.isOwnerOf(storeId))
+            return true;
+
+        /* ② managers need flag */
+        if (store != null && store.userIsManager(userId))
+            return store.userHasPermissions(userId, PERM_UPDATE_POLICY);
+        if (user != null && user.isManagerOf(storeId))
+            return store != null && store.userHasPermissions(userId, PERM_UPDATE_POLICY);
+
         return false;
     }
 

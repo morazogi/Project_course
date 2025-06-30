@@ -488,4 +488,127 @@ public class UserConnectivityPresenter {
         return userRepository.getById(tokenService.extractUsername(token)).getShoppingCart().getUserId();
     }
 
+
+    /**
+     * Permission check that uses the caller’s shopping-cart UUID.
+     * Identical behaviour to the dashboard, but tolerant to lazy
+     * collections that may be closed outside a transaction.
+     */
+    public String addDiscountByInternalId(String token,
+                                          String storeNameOrId,
+                                          float discountLevel,
+                                          float logicComposition,
+                                          float numericalComposition,
+                                          float percentDiscount,
+                                          String discountedItem,
+                                          float discountCondition,
+                                          float discountLimiter,
+                                          float conditional,
+                                          String conditionalDiscounted,
+                                          List<String> discountsId) {
+
+        /* ---------- caller ids ---------- */
+        String internalId = getUserId(token);          // shopping-cart UUID
+        String loginName  = tokenService.extractUsername(token);
+
+        /* ---------- resolve store ---------- */
+        Store  store   = getStore(token, storeNameOrId);
+        String storeId = storeNameOrId;
+
+        if (store == null) {                                   // maybe a name
+            try {
+                for (Store s : getUserStoresName(token)) {
+                    if (s.getName().equals(storeNameOrId)) {
+                        store   = s;
+                        storeId = s.getId();
+                        break;
+                    }
+                }
+            } catch (Exception ignore) {}
+        }
+        if (store == null) return "Store not found";
+
+        /* ---------- permission check ---------- */
+        boolean allowed = false;
+
+        /* ① direct founder/owner check (might throw due to lazy-init) */
+        try { allowed = ownerManagerService.isFounderOrOwner(internalId, storeId); }
+        catch (Exception ignore) {}
+
+        if (!allowed) {
+            try { allowed = ownerManagerService.isFounderOrOwner(loginName, storeId); }
+            catch (Exception ignore) {}
+        }
+
+        /* ② manager permission map (may also lazy-init) */
+        if (!allowed) {
+            try {
+                Map<String,Boolean> perms =
+                        ownerManagerService.getManagerPermissions(internalId, storeId, internalId);
+                allowed = perms != null && Boolean.TRUE.equals(perms.get("PERM_UPDATE_POLICY"));
+            } catch (Exception ignore) {}
+        }
+
+        if (!allowed) {
+            try {
+                Map<String,Boolean> perms =
+                        ownerManagerService.getManagerPermissions(loginName, storeId, loginName);
+                allowed = perms != null && Boolean.TRUE.equals(perms.get("PERM_UPDATE_POLICY"));
+            } catch (Exception ignore) {}
+        }
+
+        /* ③ final fallback – if the user dashboard already lists this store */
+        if (!allowed) {
+            try {
+                RegisteredUser u = userRepository.getById(loginName);
+                allowed =  (u.getOwnedStores()   != null && u.getOwnedStores().contains(storeId))
+                        || (u.getManagedStores() != null && u.getManagedStores().contains(storeId));
+            } catch (Exception ignore) {}
+        }
+
+        if (!allowed) return "User is not allowed to add discount";
+
+        /* ---------- sanitise ---------- */
+        if (conditional != 1 && conditional != 2 && conditional != 3)
+            conditional = -1;
+
+        /* ---------- service call ---------- */
+        boolean ok = ownerManagerService.defineDiscountPolicy(
+                internalId, storeId,
+                "", "",                       // parentId, ownId
+                discountLevel,
+                logicComposition, numericalComposition,
+                discountsId,
+                percentDiscount, discountedItem,
+                discountCondition, discountLimiter,
+                conditionalDiscounted);
+
+        if (ok) {
+            EventLogger.logEvent(internalId, "Discount successfully added");
+            return "Discount successfully added";
+        }
+        return "Did not manage to add discount";
+    }
+
+
+
+
+    public String addDiscountByInternalId(String token,
+                                          String storeNameOrId,
+                                          float discountLevel,
+                                          float logicComposition,
+                                          float numericalComposition,
+                                          float percentDiscount,
+                                          String discountedItem,
+                                          float discountCondition,
+                                          float discountLimiter,
+                                          float conditional,
+                                          String conditionalDiscounted) {
+
+        return addDiscountByInternalId(token, storeNameOrId, discountLevel,
+                logicComposition, numericalComposition, percentDiscount,
+                discountedItem, discountCondition, discountLimiter,
+                conditional, conditionalDiscounted, List.of());
+    }
+
 }

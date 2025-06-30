@@ -773,4 +773,11 @@ public class OwnerManagerService {
     public boolean isFounderOrOwner(String userId, String storeId) {
         return storeManagementService.isFounderOrOwner(userId, storeId);
     }
+
+    public boolean canUpdateDiscountPolicy(String userId, String storeId) {
+        return storeManagementService.canUpdateDiscountPolicy(userId, storeId);
+    }
+    public boolean isFounderOwnerOrManager(String userId, String storeId) {
+        return storeManagementService.isFounderOwnerOrManager(userId, storeId);
+    }
 }
