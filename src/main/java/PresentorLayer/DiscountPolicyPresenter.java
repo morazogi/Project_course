@@ -2,16 +2,14 @@ package PresentorLayer;
 
 import DomainLayer.Store;
 import ServiceLayer.OwnerManagerService;
-
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class DiscountPolicyPresenter {
 
     private final UserConnectivityPresenter userConn;
-    private final OwnerManagerService ownerMgr;
-    private final PermissionsPresenter perms;
+    private final OwnerManagerService       ownerMgr;
+    private final PermissionsPresenter      perms;   // kept for any other screens
 
     public DiscountPolicyPresenter(UserConnectivityPresenter userConn,
                                    OwnerManagerService ownerMgr,
@@ -21,27 +19,38 @@ public class DiscountPolicyPresenter {
         this.perms    = perms;
     }
 
-    /* ---------------- stores current user can update -------------------- */
+    /* ------------------------------------------------------------------ */
+    /*  Which stores should appear in the ComboBox?                       */
+    /* ------------------------------------------------------------------ */
     public List<Store> updatableStores(String token) {
         try {
+            /* ① fetch the **internal** user-ID (shopping-cart ID), not login name */
+            String userId = userConn.getUserId(token);              // ←★ FIX
+
             return userConn.getUserStoresName(token).stream()
-                    .filter(s -> {
-                        Map<String,Boolean> p = perms.getPremissions(token, s.getId());
-                        return p != null && Boolean.TRUE.equals(p.get("PERM_UPDATE_POLICY"));
-                    })
+                    .filter(s -> ownerMgr.canUpdateDiscountPolicy(userId, s.getId()))
                     .toList();
+
         } catch (Exception e) {
             return Collections.emptyList();
         }
     }
 
-    /* ---------------- fetch discount IDs for a store -------------------- */
+    public List<Store> homepageStores(String token) {            // ★ NEW
+        try {
+            return userConn.getUserStoresName(token);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
+
+    /* ---------------- rest of the presenter unchanged ----------------- */
+
     public List<String> storeDiscountIds(String token, String storeId) {
         Store s = userConn.getStore(token, storeId);
         return s == null ? List.of() : s.getDiscountPolicy();
     }
 
-    /* ---------------- simple voucher ------------------------------------ */
     public String addDiscount(String token,
                               String storeName,
                               float level,
@@ -53,38 +62,33 @@ public class DiscountPolicyPresenter {
                               float limiter,
                               float conditional,
                               String conditionalDiscounted) {
-        return userConn.addDiscount(token, storeName, level, logicComp, numComp, percent,
-                discounted, discountCondition, limiter, conditional, conditionalDiscounted);
+
+        return userConn.addDiscountByInternalId(
+                token, storeName, level, logicComp, numComp, percent,
+                discounted, discountCondition, limiter,
+                conditional, conditionalDiscounted);
     }
 
-    /* ---------------- composite (parent) block -------------------------- */
+
     public String addCompositeDiscount(String token,
                                        String storeName,
                                        float logicComp,
                                        float numComp,
                                        List<String> children) {
 
-        /* Level 0 → UNDEFINED (treated as STORE);  percent = 0;  no condition */
-        return userConn.addDiscount(
-                token,
-                storeName,
-                0f,                // level
-                logicComp,
-                numComp,
-                0f,                // percent
-                "",                // discounted item
-                -1f,               // discountCondition
-                -1f,               // limiter
-                -1f,               // conditional
-                "",                // conditionalDiscounted
-                children           // nested children
-        );
+        /* level 0, percent 0, no conditions */
+        return userConn.addDiscountByInternalId(
+                token, storeName,
+                0f, logicComp, numComp, 0f,
+                "", -1f, -1f, -1f, "", children);
     }
 
-    /* ---------------- removal ------------------------------------------- */
+
     public String removeDiscount(String token, String storeId, String discountId) {
-        String user = userConn.getUsername(token);
-        boolean ok  = ownerMgr.removeDiscountFromDiscountPolicy(user, storeId, discountId);
+        String internalId = userConn.getUserId(token);           // internal UUID
+        boolean ok = ownerMgr.removeDiscountFromDiscountPolicy(
+                internalId, storeId, discountId);
         return ok ? "Discount removed" : "Failed to remove discount";
     }
+
 }
